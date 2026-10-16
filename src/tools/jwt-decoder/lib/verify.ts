@@ -36,10 +36,23 @@ export async function verifyJwt(token: string, alg: string, secret: string, enco
     const result = await jwtVerify(token, key, { algorithms: [alg] });
     return { status: "verified", payload: result.payload };
   } catch (error) {
+    const matched = signedButOutOfWindow(error);
+    if (matched) return { status: "verified", payload: matched };
     const message = error instanceof Error ? error.message : "Invalid signature";
     if (/alg|algorithm|unsupported/i.test(message)) return { status: "unsupported", message };
     return { status: "invalid", message: "Invalid signature" };
   }
+}
+
+function signedButOutOfWindow(error: unknown): JWTPayload | null {
+  if (!error || typeof error !== "object") return null;
+  const code = "code" in error ? String(error.code) : "";
+  const claim = "claim" in error ? String(error.claim) : "";
+  const timeClaim = code === "ERR_JWT_EXPIRED" || (code === "ERR_JWT_CLAIM_VALIDATION_FAILED" && (claim === "exp" || claim === "nbf"));
+  if (!timeClaim) return null;
+  const payload = "payload" in error ? error.payload : null;
+  if (!payload || typeof payload !== "object") return {};
+  return payload as JWTPayload;
 }
 
 async function importPublic(secret: string, alg: string) {

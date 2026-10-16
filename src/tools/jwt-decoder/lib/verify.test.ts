@@ -1,8 +1,14 @@
 import { exportSPKI, generateKeyPair, SignJWT } from "jose";
 import { describe, expect, it } from "vitest";
+import { EXAMPLE_SECRET, EXAMPLE_TOKEN } from "@/tools/jwt-decoder/lib/jwt";
 import { signHs, verifyJwt } from "@/tools/jwt-decoder/lib/verify";
 
 describe("verifyJwt", () => {
+  it("verifies the benchline example token", async () => {
+    const result = await verifyJwt(EXAMPLE_TOKEN, "HS256", EXAMPLE_SECRET, "utf8");
+    expect(result.status).toBe("verified");
+  });
+
   it("verifies HS256 and rejects a wrong secret", async () => {
     const token = await signHs(
       JSON.stringify({ typ: "JWT" }),
@@ -24,6 +30,17 @@ describe("verifyJwt", () => {
       const result = await verifyJwt(token, alg, pem, "utf8");
       expect(result.status).toBe("verified");
     }
+  });
+
+  it("accepts a valid signature on an expired token", async () => {
+    const token = await signHs(
+      JSON.stringify({ typ: "JWT" }),
+      JSON.stringify({ sub: "ada", exp: 1_700_000_000 }),
+      "benchline-example",
+      "HS256",
+    );
+    const result = await verifyJwt(token, "HS256", "benchline-example", "utf8");
+    expect(result.status).toBe("verified");
   });
 
   it("reports alg none as unsupported", async () => {

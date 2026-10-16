@@ -7,18 +7,16 @@ export function Segmented<T extends string>({
   onChange,
   options,
   label,
+  className,
 }: {
   value: T;
   onChange: (value: T) => void;
   options: { value: T; label: string }[];
   label: string;
+  className?: string;
 }) {
   return (
-    <div
-      role="radiogroup"
-      aria-label={label}
-      className="flex max-w-full gap-1 overflow-x-auto rounded-lg border border-border bg-muted p-1"
-    >
+    <div role="radiogroup" aria-label={label} className={cn("seg max-w-full overflow-x-auto", className)}>
       {options.map((option) => {
         const selected = value === option.value;
         return (
@@ -28,10 +26,7 @@ export function Segmented<T extends string>({
             role="radio"
             aria-checked={selected}
             onClick={() => onChange(option.value)}
-            className={cn(
-              "shrink-0 rounded-md px-2.5 py-1 text-sm whitespace-nowrap focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none",
-              selected ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
-            )}
+            className="shrink-0 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none max-[699px]:h-11"
           >
             {option.label}
           </button>
