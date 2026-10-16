@@ -7,7 +7,7 @@ import { useTheme } from "next-themes";
 import { ArrowRight, Eye, Lock, Search, Zap } from "lucide-react";
 import { Cover } from "@/components/site/cover";
 import { GithubMark } from "@/components/site/github-mark";
-import { openCommandK } from "@/components/site/command-k";
+import { openCommandK } from "@/components/site/open-command";
 import { GITHUB_URL } from "@/lib/site";
 
 const BenchCanvas = dynamic(() => import("@/components/home/bench-canvas").then((mod) => mod.BenchCanvas), {
@@ -56,7 +56,7 @@ function useClient() {
   );
 }
 
-export function HeroStage({ toolCount }: { toolCount: number }) {
+export function HeroStage({ toolCount, still }: { toolCount: number; still: React.ReactNode }) {
   const { resolvedTheme } = useTheme();
   const mounted = useClient();
   const mobile = useMedia("(max-width: 699px)");
@@ -81,9 +81,10 @@ export function HeroStage({ toolCount }: { toolCount: number }) {
   const ready3d = useDeferred3d(mounted && !reducedMotion && !mobile);
   const showCanvas = ready3d && !mobile;
   return (
-    <section className="relative isolate overflow-hidden border-b border-border max-[699px]:pb-10 min-[700px]:h-[860px]">
+    <section className="relative isolate overflow-hidden border-b border-border">
+      <div className="frame relative max-[699px]:pb-10 min-[700px]:h-[860px]">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] min-[700px]:inset-0 min-[700px]:h-auto" aria-hidden>
-        <Poster />
+        {still}
         {showCanvas ? (
           <BenchCanvas dark={dark} still={idle} solid={reducedTransparency} mobile={mobile} />
         ) : null}
@@ -148,6 +149,7 @@ export function HeroStage({ toolCount }: { toolCount: number }) {
         <PreviewRow hue={75} icon="Coins" name="AI token counter" meta="AI dev" />
         <PreviewRow hue={300} icon="Image" name="OG image generator" meta="Social" />
       </div>
+      </div>
     </section>
   );
 }
@@ -162,19 +164,3 @@ function PreviewRow({ hue, icon, name, meta, selected = false }: { hue: number; 
   );
 }
 
-function Poster() {
-  return (
-    <div className="absolute inset-0 grid place-items-center opacity-30 min-[700px]:justify-end min-[700px]:pr-[12%]">
-      <svg viewBox="0 0 32 32" className="w-40 text-foreground" aria-hidden>
-        <rect width="32" height="32" rx="8" fill="currentColor" opacity="0.08" />
-        <g transform="translate(0,-2.5)">
-          <rect x="6" y="19" width="20" height="2.6" rx="0.6" fill="currentColor" />
-          <rect x="8.5" y="21" width="2.4" height="5" rx="0.5" fill="currentColor" />
-          <rect x="21.1" y="21" width="2.4" height="5" rx="0.5" fill="currentColor" />
-          <rect x="16" y="11" width="7" height="7" rx="1" fill="var(--accent-brand)" />
-          <rect x="8.5" y="15.4" width="5" height="2.6" rx="0.6" fill="currentColor" opacity="0.45" />
-        </g>
-      </svg>
-    </div>
-  );
-}

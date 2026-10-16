@@ -6,7 +6,8 @@ import { categories, tools } from "@/registry";
 export function Footer() {
   const featured = tools.slice(0, 5);
   return (
-    <footer className="relative overflow-hidden border-t border-border px-4 pt-12 pb-7 min-[700px]:px-12 min-[700px]:pt-[72px] min-[700px]:pb-10">
+    <footer className="relative overflow-hidden border-t border-border">
+      <div className="page-x pt-12 pb-7 min-[700px]:pt-[72px] min-[700px]:pb-10">
       <div className="grid gap-8 min-[700px]:grid-cols-[1.6fr_repeat(4,1fr)]">
         <div>
           <Logo />
@@ -22,6 +23,7 @@ export function Footer() {
         </div>
         <div>
           <b className="mb-3.5 block text-[13px] font-medium">Tools</b>
+          <Link href="/explore" className="mt-2 block text-[13.5px] text-muted-foreground">Explore</Link>
           {featured.map((tool) => (
             <Link key={tool.slug} href={`/t/${tool.slug}`} className="mt-2 block text-[13.5px] text-muted-foreground">
               {tool.name}
@@ -30,6 +32,7 @@ export function Footer() {
         </div>
         <div>
           <b className="mb-3.5 block text-[13px] font-medium">Categories</b>
+          <Link href="/categories" className="mt-2 block text-[13.5px] text-muted-foreground">All categories</Link>
           {categories.slice(0, 5).map((category) => (
             <Link key={category.slug} href={`/${category.slug}`} className="mt-2 block text-[13.5px] text-muted-foreground">
               {category.name}
@@ -56,6 +59,7 @@ export function Footer() {
       <div className="mt-7 flex flex-col gap-1.5 border-t border-border pt-5 text-[12.5px] text-faint min-[700px]:flex-row min-[700px]:items-center min-[700px]:justify-between">
         <span>© 2026 Benchline · Made by Waseem Anjum</span>
         <span className="font-mono">0 trackers · 0 bytes stored</span>
+      </div>
       </div>
     </footer>
   );

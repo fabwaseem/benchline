@@ -2,7 +2,7 @@
 
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { openCommandK } from "@/components/site/command-k";
+import { openCommandK } from "@/components/site/open-command";
 
 export function OpenSearch() {
   return (

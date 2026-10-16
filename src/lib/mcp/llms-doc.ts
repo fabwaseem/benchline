@@ -38,6 +38,8 @@ ${agents}
 
 ## Optional
 
+- [Explore](${absoluteUrl("/explore")}): every tool, with search, category, and tag filters.
+- [Categories](${absoluteUrl("/categories")}): the category index, with hue, description, and the top tools.
 - [About](${absoluteUrl("/about")}): who built the bench and what stays in the browser.
 - [AI access](${absoluteUrl("/ai")}): Cursor, Claude, and ChatGPT setup.
 `;

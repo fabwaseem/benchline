@@ -202,6 +202,12 @@
 }
 
 @layer components {
+  .frame,
+  .page-x {
+    width: 100%;
+    max-width: 1440px;
+    margin-inline: auto;
+  }
   .page-x {
     padding-left: 16px;
     padding-right: 16px;

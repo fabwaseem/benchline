@@ -24,6 +24,7 @@ export default function HomePage() {
           items: tools.map((tool) => ({ name: tool.name, url: absoluteUrl(`/t/${tool.slug}`) })),
         })}
       />
+      <link rel="preload" as="image" href="/hero/bench-still.avif" fetchPriority="high" type="image/avif" />
       <HomeView categories={[...categories]} tools={tools} />
     </>
   );

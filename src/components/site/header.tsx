@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { Menu, Search } from "lucide-react";
 import { GithubMark } from "@/components/site/github-mark";
 import { Logo } from "@/components/site/logo";
-import { openCommandK } from "@/components/site/command-k";
+import { openCommandK } from "@/components/site/open-command";
 import { ThemeToggle } from "@/components/site/theme-toggle";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { GITHUB_URL } from "@/lib/site";
@@ -14,15 +14,15 @@ import { cn } from "@/lib/utils";
 
 const links = [
   { href: "/", label: "Tools", match: (path: string) => path === "/" },
-  { href: "/#explore", label: "Categories", match: (path: string) => categories.some((item) => path === `/${item.slug}`) },
-  { href: "/ai", label: "AI access", match: (path: string) => path === "/ai" },
-  { href: "/about", label: "About", match: (path: string) => path.startsWith("/about") },
+  { href: "/explore", label: "Explore", match: (path: string) => path === "/explore" },
+  { href: "/categories", label: "Categories", match: (path: string) => path === "/categories" || categories.some((item) => path === `/${item.slug}`) },
 ];
 
 export function Header() {
   const path = usePathname();
   return (
-    <header className="site-header sticky top-0 z-40 flex h-[60px] items-center gap-3 border-b border-border px-4 glass min-[700px]:gap-7 min-[700px]:px-12">
+    <header className="site-header sticky top-0 z-40 border-b border-border glass">
+      <div className="page-x flex h-[60px] items-center gap-3 min-[700px]:gap-7">
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-surface focus:px-2 focus:py-1">
         Skip to content
       </a>
@@ -75,6 +75,7 @@ export function Header() {
           </nav>
         </SheetContent>
       </Sheet>
+      </div>
     </header>
   );
 }

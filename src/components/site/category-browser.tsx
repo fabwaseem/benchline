@@ -37,7 +37,8 @@ export function CategoryBrowser({
 
   return (
     <>
-      <div className="sticky top-[60px] z-[5] flex flex-col gap-3 border-b border-border bg-background px-4 py-3 min-[700px]:flex-row min-[700px]:flex-wrap min-[700px]:items-center min-[700px]:px-12">
+      <div className="sticky top-[60px] z-[5] border-b border-border bg-background">
+      <div className="page-x flex flex-col gap-3 py-3 min-[700px]:flex-row min-[700px]:flex-wrap min-[700px]:items-center">
         <div className="seg max-w-full overflow-x-auto" role="radiogroup" aria-label="Filter">
           {(
             [
@@ -71,6 +72,7 @@ export function CategoryBrowser({
         </div>
         </div>
       </div>
+      </div>
       {grid ? (
         <div className="page-x grid gap-4 py-8 sm:grid-cols-2 lg:grid-cols-3">
           {rows.map((tool) => (
@@ -82,7 +84,8 @@ export function CategoryBrowser({
           ))}
         </div>
       ) : (
-        <div className="card mx-4 my-8 overflow-hidden min-[700px]:mx-12">
+        <div className="page-x">
+        <div className="card my-8 overflow-hidden">
           <div className="hidden grid-cols-[52px_minmax(0,1.2fr)_minmax(0,2.2fr)_150px_110px_36px] gap-4 bg-well px-5 py-3 font-mono text-[11px] tracking-[0.07em] text-faint uppercase min-[900px]:grid">
             <span />
             <span>Tool</span>
@@ -108,6 +111,7 @@ export function CategoryBrowser({
             </Link>
           ))}
           {rows.length === 0 ? <p className="px-5 py-8 text-sm text-muted-foreground">Nothing matches that filter.</p> : null}
+        </div>
         </div>
       )}
     </>

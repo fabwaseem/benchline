@@ -16,16 +16,12 @@ import { classifyPaste, stagePaste, type PasteKind } from "@/lib/paste";
 import type { SearchRecord } from "@/registry/schema";
 import { categories } from "@/registry/categories";
 
-export function openCommandK() {
-  window.dispatchEvent(new Event("benchline:command"));
-}
-
 const hueFor = new Map<string, number>(categories.map((category) => [category.slug, category.hue]));
 const nameFor = new Map<string, string>(categories.map((category) => [category.slug, category.name]));
 
-export function CommandK({ tools }: { tools: SearchRecord[] }) {
+export function CommandK({ tools, startOpen = false }: { tools: SearchRecord[]; startOpen?: boolean }) {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(startOpen);
   const [query, setQuery] = useState("");
   const paste = useMemo(() => classifyPaste(query), [query]);
 
