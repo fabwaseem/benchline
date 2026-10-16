@@ -1,3 +1,4 @@
+import { toolCover } from "@/lib/assets";
 import { absoluteUrl, SITE_NAME, SITE_URL } from "@/lib/site";
 import type { ToolMeta } from "@/registry/schema";
 
@@ -34,7 +35,8 @@ export function toolGraph(tool: ToolMeta, categoryName: string) {
           priceCurrency: "USD",
           availability: "https://schema.org/InStock",
         },
-        author: { "@type": "Person", name: "Waseem Anjum", url: "https://www.fabwaseem.com" },
+        image: absoluteUrl(toolCover(tool.slug)),
+        author: { "@type": "Person", name: "Waseem Anjum" },
         provider: { "@id": `${SITE_URL}#organization` },
         isPartOf: { "@id": `${SITE_URL}#website` },
       },

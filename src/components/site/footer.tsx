@@ -12,10 +12,7 @@ export function Footer() {
           <Link href="/about" className="hover:text-foreground">
             About
           </Link>
-          <a href="https://www.fabwaseem.com" className="hover:text-foreground">
-            fabwaseem.com
-          </a>
-          <a href="https://github.com/fabwaseem" className="hover:text-foreground">
+          <a href="https://github.com/fabwaseem/toolsmith" className="hover:text-foreground">
             GitHub
           </a>
         </div>

@@ -8,6 +8,8 @@ import { FaqAccordion } from "@/components/kit/faq-accordion";
 import { JsonLd, toolGraph } from "@/lib/jsonld";
 import { asRecord } from "@/lib/records";
 import { absoluteUrl } from "@/lib/site";
+import Image from "next/image";
+import { COVER_SIZE, toolCover, toolLogo } from "@/lib/assets";
 import { getCategory, getTool, relatedTools, tools } from "@/registry";
 
 export function generateStaticParams() {
@@ -32,6 +34,13 @@ export async function generateMetadata({
       title,
       description: tool.seo.description,
       url: absoluteUrl(`/t/${tool.slug}`),
+      images: [{ url: toolCover(tool.slug), ...COVER_SIZE, alt: tool.name }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: tool.seo.description,
+      images: [toolCover(tool.slug)],
     },
   };
 }
@@ -55,7 +64,17 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
               { href: `/t/${tool.slug}`, label: tool.name },
             ]}
           />
-          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{tool.name}</h1>
+          <div className="flex items-center gap-4">
+            <Image
+              src={toolLogo(tool.slug)}
+              alt=""
+              width={56}
+              height={56}
+              priority
+              className="size-12 shrink-0 rounded-xl sm:size-14"
+            />
+            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{tool.name}</h1>
+          </div>
           <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">{tool.tagline}</p>
           <p className="text-xs text-muted-foreground">
             <span className="text-foreground">In</span> {tool.inputs}
