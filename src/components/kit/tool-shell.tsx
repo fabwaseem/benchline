@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 export function PrivacyBadge({ local }: { local: boolean }) {
@@ -25,19 +26,117 @@ export function Panel({
   );
 }
 
+export function ToolTabs<T extends string>({
+  value,
+  onChange,
+  options,
+  label,
+}: {
+  value: T;
+  onChange: (value: T) => void;
+  options: { value: T; label: string }[];
+  label: string;
+}) {
+  return (
+    <div
+      role="tablist"
+      aria-label={label}
+      className="flex h-12 items-center gap-5"
+      onKeyDown={(event) => {
+        if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+        event.preventDefault();
+        const index = options.findIndex((option) => option.value === value);
+        const next = event.key === "ArrowRight" ? (index + 1) % options.length : (index - 1 + options.length) % options.length;
+        const option = options[next];
+        if (!option) return;
+        onChange(option.value);
+        const tabs = event.currentTarget.querySelectorAll<HTMLElement>('[role="tab"]');
+        tabs[next]?.focus();
+      }}
+    >
+      {options.map((option) => {
+        const selected = value === option.value;
+        return (
+          <button
+            key={option.value}
+            type="button"
+            role="tab"
+            id={`tab-${option.value}`}
+            aria-selected={selected}
+            aria-controls={`panel-${option.value}`}
+            tabIndex={selected ? 0 : -1}
+            data-on={selected ? "true" : "false"}
+            className="utab bg-transparent"
+            onClick={() => onChange(option.value)}
+          >
+            {option.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 export function ToolShell({
   runsLocally,
   actions,
   input,
   output,
+  inspector,
   children,
+  tabs,
+  status,
+  layout,
 }: {
   runsLocally: boolean;
-  actions?: React.ReactNode;
-  input?: React.ReactNode;
-  output?: React.ReactNode;
-  children?: React.ReactNode;
+  actions?: ReactNode;
+  input?: ReactNode;
+  output?: ReactNode;
+  inspector?: ReactNode;
+  children?: ReactNode;
+  tabs?: ReactNode;
+  status?: ReactNode;
+  layout?: "single" | "split" | "split+inspector";
 }) {
+  if (layout) {
+    return (
+      <section className="flex min-w-0 flex-col bg-surface">
+        <div className="flex h-12 items-center gap-3 border-b border-border bg-gradient-to-b from-surface to-well px-3.5 min-[700px]:px-5 dark:from-raised dark:to-surface">
+          {tabs}
+          <div className="ml-auto flex items-center gap-2">
+            <span className="chip max-[699px]:hidden">
+              <span className={runsLocally ? "dot" : "dot dot-warn"} />
+              {runsLocally ? "Runs locally" : "Fetches the public URL"}
+            </span>
+            {actions}
+          </div>
+        </div>
+        <div
+          className={cn(
+            "grid",
+            layout === "split" && "min-[700px]:grid-cols-2",
+            layout === "split+inspector" && "min-[700px]:grid-cols-2 min-[1280px]:min-h-[620px] min-[1280px]:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)_340px]",
+          )}
+        >
+          {layout === "single" ? <div className="min-w-0">{children ?? input}</div> : null}
+          {layout === "split" ? (
+            <>
+              <div className="flex min-w-0 flex-col border-b border-border min-[700px]:border-r min-[700px]:border-b-0">{input}</div>
+              <div className="flex min-w-0 flex-col">{output}</div>
+            </>
+          ) : null}
+          {layout === "split+inspector" ? (
+            <>
+              <div className="flex min-w-0 flex-col border-b border-border min-[700px]:col-start-1 min-[700px]:border-r min-[1280px]:col-start-1 min-[1280px]:border-b-0">{input}</div>
+              <div className="flex min-w-0 flex-col border-b border-border min-[700px]:col-start-2 min-[700px]:row-span-2 min-[700px]:border-b-0 min-[1280px]:col-start-2 min-[1280px]:row-span-1 min-[1280px]:border-r">{output}</div>
+              <div className="flex min-w-0 flex-col min-[700px]:col-start-1 min-[700px]:border-r min-[700px]:border-border min-[1280px]:col-start-3 min-[1280px]:border-r-0">{inspector}</div>
+            </>
+          ) : null}
+        </div>
+        {status ? <div className="flex items-center gap-2 border-t border-border px-4 py-2.5 font-mono text-[12px] text-muted-foreground">{status}</div> : null}
+      </section>
+    );
+  }
   return (
     <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
       <div className="flex items-center gap-2 border-b border-border px-3 py-2">

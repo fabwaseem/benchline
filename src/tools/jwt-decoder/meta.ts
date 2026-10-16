@@ -33,4 +33,5 @@ export const meta = {
   inputs: "A signed JWT, plus an optional HMAC secret or public key.",
   outputs: "Header JSON, payload JSON, claim times, and a signature result. An encode tab signs test tokens.",
   runsLocally: true,
+  badges: ["HS · RS · PS · ES · EdDSA"],
 } satisfies ToolMeta;

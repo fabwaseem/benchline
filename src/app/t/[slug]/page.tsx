@@ -51,6 +51,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
   const siblings = toolsInCategory(tool.category);
   const related = relatedTools(slug);
   const mcp = mcpFor(tool.slug);
+  const badges = tool.badges ?? [];
   return (
     <>
       <JsonLd data={toolGraph(tool, categoryName)} />
@@ -60,7 +61,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           <span>/</span>
           <Link href={`/${tool.category}`}>{categoryName}</Link>
         </nav>
-        <Cover hue={hue} icon={tool.icon} size={76} className="lgcv shadow-[var(--in-hi),inset_0_0_0_1px_var(--border),var(--shadow-2)]" />
+        <Cover hue={hue} icon={tool.icon} size={badges.length ? 68 : 76} className="lgcv shadow-[var(--in-hi),inset_0_0_0_1px_var(--border),var(--shadow-2)]" />
         <div className="min-w-0 flex-1">
           <nav className="mb-3 hidden items-center gap-2 font-mono text-[12px] text-faint min-[700px]:flex" aria-label="Breadcrumb">
             <Link href="/">Home</Link>
@@ -69,7 +70,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
             <span>/</span>
             <b className="font-medium text-foreground">{tool.name}</b>
           </nav>
-          <h1 className="d2 text-[44px] min-[700px]:text-[72px]">{tool.name}</h1>
+          <h1 className={badges.length ? "d2 text-[40px] min-[700px]:text-[64px]" : "d2 text-[44px] min-[700px]:text-[72px]"}>{tool.name}</h1>
           <p className="lede mt-3 max-w-[62ch]">{tool.tagline}</p>
           {mcp ? (
             <p className="mt-3 font-mono text-[12px] text-faint">
@@ -79,35 +80,32 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           ) : null}
         </div>
         <div className="flex flex-col items-start gap-3">
-          <span className="chip">
-            <span className={tool.runsLocally ? "dot" : "dot dot-warn"} />
-            {tool.runsLocally ? "Runs locally" : "Fetches the URL you submit"}
-          </span>
+          {badges.length ? badges.map((badge) => (
+            <span key={badge} className="chip">{badge}</span>
+          )) : (
+            <span className="chip">
+              <span className={tool.runsLocally ? "dot" : "dot dot-warn"} />
+              {tool.runsLocally ? "Runs locally" : "Fetches the URL you submit"}
+            </span>
+          )}
           <ToolActions slug={tool.slug} title={tool.name} />
         </div>
       </header>
       <div className="win mx-4 min-[700px]:mx-12">
-        <div className="hidden border-r border-border bg-well min-[1280px]:block">
-          <div className="bench-layout grid min-[1280px]:grid-cols-[248px_minmax(0,1fr)]">
-            <nav className="border-r border-border bg-well p-3 dark:bg-sunken" aria-label="Tools in this category">
-              <div className="px-2.5 pt-2 pb-1 font-mono text-[10.5px] tracking-[0.08em] text-faint uppercase">{categoryName}</div>
-              {siblings.map((item) => (
-                <Link
-                  key={item.slug}
-                  href={`/t/${item.slug}`}
-                  className={item.slug === tool.slug ? "mt-0.5 flex items-center gap-2.5 rounded-lg bg-surface px-2.5 py-1.5 text-[13px] font-medium text-foreground shadow-[var(--in-hi),0_0_0_1px_var(--border),var(--shadow-1)] dark:bg-raised" : "mt-0.5 flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] text-muted-foreground"}
-                >
-                  <Cover hue={hue} icon={item.icon} size={20} />
-                  {item.name}
-                </Link>
-              ))}
-            </nav>
-            <Suspense fallback={<div className="h-48 animate-pulse bg-muted" />}>
-              <ToolHost slug={tool.slug} />
-            </Suspense>
-          </div>
-        </div>
-        <div className="min-[1280px]:hidden">
+        <div className="grid min-[1280px]:grid-cols-[248px_minmax(0,1fr)]">
+          <nav className="hidden border-r border-border bg-well p-3 min-[1280px]:block dark:bg-sunken" aria-label="Tools in this category">
+            <div className="px-2.5 pt-2 pb-1 font-mono text-[10.5px] tracking-[0.08em] text-faint uppercase">{categoryName}</div>
+            {siblings.map((item) => (
+              <Link
+                key={item.slug}
+                href={`/t/${item.slug}`}
+                className={item.slug === tool.slug ? "mt-0.5 flex items-center gap-2.5 rounded-lg bg-surface px-2.5 py-1.5 text-[13px] font-medium text-foreground shadow-[var(--in-hi),0_0_0_1px_var(--border),var(--shadow-1)] dark:bg-raised" : "mt-0.5 flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] text-muted-foreground"}
+              >
+                <Cover hue={hue} icon={item.icon} size={20} />
+                {item.name}
+              </Link>
+            ))}
+          </nav>
           <Suspense fallback={<div className="h-48 animate-pulse bg-muted" />}>
             <ToolHost slug={tool.slug} />
           </Suspense>

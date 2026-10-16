@@ -33,6 +33,12 @@
   --color-destructive: var(--destructive);
   --color-success: var(--success);
   --color-warning: var(--warning);
+  --color-status-ok: var(--status-ok);
+  --color-status-warn: var(--status-warn);
+  --color-status-bad: var(--status-bad);
+  --color-seg-header: var(--seg-header);
+  --color-seg-payload: var(--seg-payload);
+  --color-seg-signature: var(--seg-signature);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
   --color-input: var(--input);
@@ -78,6 +84,12 @@
   --success: oklch(60% 0.13 155);
   --warning: oklch(72% 0.14 75);
   --danger: oklch(60% 0.19 27);
+  --status-ok: oklch(42% 0.11 155);
+  --status-warn: oklch(42% 0.1 70);
+  --status-bad: oklch(46% 0.17 27);
+  --seg-header: oklch(48% 0.14 25);
+  --seg-payload: oklch(46% 0.14 295);
+  --seg-signature: oklch(46% 0.1 220);
   --in-hi: inset 0 1px 0 oklch(100% 0 0 / 0.9);
   --in-bd: inset 0 0 0 1px oklch(17.5% 0.006 265 / 0.06);
   --shadow-1: 0 1px 1px oklch(17% 0.01 265 / 0.04), 0 2px 4px -1px oklch(17% 0.01 265 / 0.04);
@@ -137,6 +149,14 @@
   --accent-brand-fg: oklch(15% 0.01 265);
   --ring: oklch(69% 0.19 44 / 0.6);
   --success: oklch(74% 0.14 155);
+  --warning: oklch(82% 0.12 85);
+  --danger: oklch(76% 0.14 27);
+  --status-ok: oklch(78% 0.13 155);
+  --status-warn: oklch(82% 0.12 85);
+  --status-bad: oklch(78% 0.14 25);
+  --seg-header: oklch(75% 0.13 25);
+  --seg-payload: oklch(78% 0.11 295);
+  --seg-signature: oklch(78% 0.08 220);
   --in-hi: inset 0 1px 0 oklch(100% 0 0 / 0.06);
   --in-bd: inset 0 0 0 1px oklch(100% 0 0 / 0.04);
   --shadow-1: 0 1px 2px oklch(0% 0 0 / 0.4);
@@ -411,10 +431,13 @@
     gap: 7px;
     height: 28px;
     padding: 0 11px;
+    border: 0;
     border-radius: 7px;
+    background: transparent;
     font-size: 13px;
     font-weight: 500;
     color: var(--muted-foreground);
+    cursor: pointer;
   }
   .seg > .on,
   .seg > button[aria-checked="true"] {
@@ -520,6 +543,39 @@
   }
 }
 
+.field-well textarea {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  background: var(--well);
+  box-shadow: inset 0 0 0 1px var(--border), inset 0 1px 2px oklch(0% 0 0 / 0.04);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 12.5px;
+  line-height: 1.8;
+}
+.dark .field-well textarea {
+  background: var(--sunken);
+}
+.field-well textarea:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--accent-brand), 0 0 0 3px color-mix(in oklch, var(--accent-brand) 16%, transparent);
+}
+.badseg {
+  color: var(--status-bad);
+  text-decoration: underline wavy color-mix(in srgb, var(--danger) 60%, transparent);
+  text-underline-offset: 3px;
+}
+.secret-mask {
+  -webkit-text-security: disc;
+}
+@keyframes notice-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.notice {
+  animation: notice-in 120ms var(--ease-out);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -528,6 +584,10 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  .notice {
+    animation-duration: 120ms !important;
+    animation-iteration-count: 1 !important;
   }
   .kc:active {
     transform: none;

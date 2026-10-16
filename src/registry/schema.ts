@@ -53,6 +53,7 @@ export const toolMetaSchema = z.object({
   inputs: z.string().min(1),
   outputs: z.string().min(1),
   runsLocally: z.boolean(),
+  badges: z.array(z.string().min(1)).optional(),
 });
 
 export type ToolStatus = z.infer<typeof toolStatusSchema>;
