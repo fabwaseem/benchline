@@ -29,7 +29,7 @@ export function exampleValues(type: SchemaType): SchemaValues {
     HowTo: { name: "Ship a Dockerfile", description: "Three steps.", steps: [{ name: "Pick Node", text: "Choose 22." }, { name: "Build", text: "docker build ." }] },
     Product: { name: "Bench lamp", description: "A small lamp.", price: "48", currency: "USD", brand: "Toolsmith", ratingValue: "4.8", ratingCount: "12", url: "https://example.com/lamp" },
     Organization: { name: "Toolsmith", url: "https://tools.fabwaseem.com", logo: "https://tools.fabwaseem.com/icon", sameAs: "https://github.com/fabwaseem" },
-    Person: { name: "Waseem Anjum", jobTitle: "Engineer", url: "https://www.fabwaseem.com" },
+    Person: { name: "Waseem Anjum", jobTitle: "Engineer", url: "https://example.com" },
     LocalBusiness: { name: "Bench Studio", street: "1 Paper Street", city: "Lahore", hours: "Mo-Fr 09:00-17:00", url: "https://example.com" },
     BreadcrumbList: { items: [{ name: "Home", url: "https://example.com" }, { name: "Tools", url: "https://example.com/tools" }] },
     SoftwareApplication: { name: "Toolsmith", operatingSystem: "Web", category: "DeveloperApplication", url: "https://tools.fabwaseem.com" },

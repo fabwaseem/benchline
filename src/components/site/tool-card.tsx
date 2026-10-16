@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import { toolLogo } from "@/lib/assets";
 import { ToolIcon } from "@/components/site/icons";
 import { toneFor } from "@/components/site/tones";
 import { cn } from "@/lib/utils";
@@ -34,9 +36,7 @@ export function ToolCard({
       className="group flex h-full flex-col gap-3 rounded-xl border border-border bg-card p-4 transition-colors hover:border-primary/40 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
     >
       <div className="flex items-start gap-3">
-        <span className={cn("flex size-9 shrink-0 items-center justify-center rounded-lg", toneFor(tool.category))}>
-          <ToolIcon name={tool.icon} className="size-4" />
-        </span>
+        <Image src={toolLogo(tool.slug)} alt="" width={40} height={40} className="size-10 shrink-0 rounded-lg" />
         <span className="min-w-0 flex-1">
           <span className="flex items-center gap-2">
             <span className="truncate text-sm font-semibold tracking-tight">{tool.name}</span>

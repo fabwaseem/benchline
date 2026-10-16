@@ -20,12 +20,8 @@ export default function AboutPage() {
         Toolsmith is a directory of small instruments for AI search, SEO, auth debugging, and shipping Next.js. Generators stay in the browser. Checkers fetch only the public URL you submit, with a short timeout and a hard stop on private addresses.
       </p>
       <p className="text-sm text-muted-foreground sm:text-base">
-        Built by Waseem Anjum. The portfolio lives at{" "}
-        <a className="text-foreground underline-offset-4 hover:underline" href="https://www.fabwaseem.com">
-          fabwaseem.com
-        </a>
-        . Source for this bench is on{" "}
-        <a className="text-foreground underline-offset-4 hover:underline" href="https://github.com/fabwaseem/fabwaseem-tools">
+        Made by Waseem Anjum. Source for this bench is on{" "}
+        <a className="text-foreground underline-offset-4 hover:underline" href="https://github.com/fabwaseem/toolsmith">
           GitHub
         </a>
         .

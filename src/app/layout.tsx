@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   },
   description,
   applicationName: SITE_NAME,
-  authors: [{ name: "Waseem Anjum", url: "https://www.fabwaseem.com" }],
+  authors: [{ name: "Waseem Anjum" }],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
@@ -66,7 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   "@id": `${SITE_URL}#organization`,
                   name: SITE_NAME,
                   url: SITE_URL,
-                  founder: { "@type": "Person", name: "Waseem Anjum", url: "https://www.fabwaseem.com" },
+                  founder: { "@type": "Person", name: "Waseem Anjum" },
                 },
               ],
             }}

@@ -1,6 +1,6 @@
-# Design brief — "Toolsmith" (working name; tools.fabwaseem.com)
+# Design brief — Toolsmith
 
-Deliberately different from the portfolio (dark, editorial). Toolsmith feels like a precise instrument: light-first, calm, dense where useful, workbench metaphor.
+Toolsmith feels like a precise instrument: light-first, calm, dense where useful, workbench metaphor.
 
 ## Palette (OKLCH tokens in globals.css, both themes)
 - Light: paper `oklch(0.985 0.004 95)`, surface white, ink `oklch(0.22 0.02 260)`, muted `oklch(0.55 0.015 260)`, hairline `oklch(0.91 0.006 95)`.
