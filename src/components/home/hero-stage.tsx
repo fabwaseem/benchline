@@ -26,6 +26,28 @@ function useMedia(query: string) {
   );
 }
 
+// Spec v2 §12–13: 3D is desktop/tablet only, skipped on low-end or save-data devices, and loads on idle after LCP.
+function useDeferred3d(enabled: boolean) {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    if (!enabled) return;
+    const nav = navigator as Navigator & { connection?: { saveData?: boolean }; deviceMemory?: number };
+    if (nav.connection?.saveData || (nav.hardwareConcurrency ?? 8) <= 4 || (nav.deviceMemory ?? 8) <= 2) return;
+    let handle = 0;
+    const schedule = () => {
+      const idle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 200));
+      handle = idle(() => setReady(true), { timeout: 2500 } as IdleRequestOptions) as number;
+    };
+    if (document.readyState === "complete") schedule();
+    else window.addEventListener("load", schedule, { once: true });
+    return () => {
+      window.removeEventListener("load", schedule);
+      (window.cancelIdleCallback ?? window.clearTimeout)(handle);
+    };
+  }, [enabled]);
+  return ready;
+}
+
 function useClient() {
   return useSyncExternalStore(
     () => () => {},
@@ -56,7 +78,8 @@ export function HeroStage({ toolCount }: { toolCount: number }) {
     };
   }, [reducedMotion]);
   const dark = mounted && resolvedTheme === "dark";
-  const showCanvas = mounted && !reducedMotion;
+  const ready3d = useDeferred3d(mounted && !reducedMotion && !mobile);
+  const showCanvas = ready3d && !mobile;
   return (
     <section className="relative isolate overflow-hidden border-b border-border max-[699px]:pb-10 min-[700px]:h-[860px]">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] min-[700px]:inset-0 min-[700px]:h-auto" aria-hidden>
@@ -92,7 +115,7 @@ export function HeroStage({ toolCount }: { toolCount: number }) {
           </span>
         </button>
         <div className="mt-3.5 flex flex-wrap gap-2.5">
-          <a className="btn-brand" href="#try">
+          <a className="btn btn-brand" href="#try">
             Open the bench <ArrowRight size={15} strokeWidth={1.75} />
           </a>
           <a className="btn btn-lg" href={GITHUB_URL}>
