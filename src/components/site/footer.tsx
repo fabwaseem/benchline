@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/site/logo";
-import { GITHUB_URL, MAKER_URL } from "@/lib/site";
+import { GITHUB_URL } from "@/lib/site";
 import { categories, tools } from "@/registry";
 
 export function Footer() {
@@ -52,13 +52,11 @@ export function Footer() {
           <Link href="/about" className="mt-2 block text-[13.5px] text-muted-foreground">About</Link>
           <Link href="/about#data" className="mt-2 block text-[13.5px] text-muted-foreground">Privacy</Link>
           <a href={GITHUB_URL} className="mt-2 block text-[13.5px] text-muted-foreground">GitHub</a>
-          <a href={MAKER_URL} className="mt-2 block text-[13.5px] text-muted-foreground">fabwaseem.com</a>
         </div>
       </div>
       <div className="wm" aria-hidden>benchline</div>
-      <div className="mt-7 flex flex-col gap-1.5 border-t border-border pt-5 text-[12.5px] text-faint min-[700px]:flex-row min-[700px]:items-center min-[700px]:justify-between">
-        <span>© 2026 Benchline · Made by Waseem Anjum</span>
-        <span className="font-mono">0 trackers · 0 bytes stored</span>
+      <div className="mt-7 border-t border-border pt-5 text-[12.5px] text-faint">
+        <span>© 2026 Benchline</span>
       </div>
       </div>
     </footer>

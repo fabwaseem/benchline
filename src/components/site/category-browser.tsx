@@ -6,7 +6,7 @@ import { ArrowRight, LayoutGrid, List, Search } from "lucide-react";
 import { Cover } from "@/components/site/cover";
 import type { SearchRecord } from "@/registry/schema";
 
-type Filter = "all" | "fetch" | "local" | "new";
+type Filter = "all" | "new";
 type Sort = "name" | "updated";
 
 export function CategoryBrowser({
@@ -26,8 +26,6 @@ export function CategoryBrowser({
     const needle = query.trim().toLowerCase();
     return tools
       .filter((tool) => {
-        if (filter === "fetch" && tool.runsLocally) return false;
-        if (filter === "local" && !tool.runsLocally) return false;
         if (filter === "new" && tool.status !== "new") return false;
         if (!needle) return true;
         return `${tool.name} ${tool.tagline} ${tool.slug}`.toLowerCase().includes(needle);
@@ -43,8 +41,6 @@ export function CategoryBrowser({
           {(
             [
               ["all", `All ${tools.length}`],
-              ["fetch", "Fetches URL"],
-              ["local", "In browser"],
               ["new", "New"],
             ] as const
           ).map(([value, label]) => (
@@ -86,26 +82,21 @@ export function CategoryBrowser({
       ) : (
         <div className="page-x">
         <div className="card my-8 overflow-hidden">
-          <div className="hidden grid-cols-[52px_minmax(0,1.2fr)_minmax(0,2.2fr)_150px_110px_36px] gap-4 bg-well px-5 py-3 font-mono text-[11px] tracking-[0.07em] text-faint uppercase min-[900px]:grid">
+          <div className="hidden grid-cols-[52px_minmax(0,1.2fr)_minmax(0,2.2fr)_110px_36px] gap-4 bg-well px-5 py-3 font-mono text-[11px] tracking-[0.07em] text-faint uppercase min-[900px]:grid">
             <span />
             <span>Tool</span>
             <span>What it does</span>
-            <span>Data</span>
             <span>Status</span>
             <span />
           </div>
           {rows.map((tool) => (
-            <Link key={tool.slug} href={`/t/${tool.slug}`} className="grid grid-cols-[44px_minmax(0,1fr)_30px] items-center gap-4 border-t border-border px-4 py-3.5 min-[900px]:grid-cols-[52px_minmax(0,1.2fr)_minmax(0,2.2fr)_150px_110px_36px] min-[900px]:px-5">
+            <Link key={tool.slug} href={`/t/${tool.slug}`} className="grid grid-cols-[44px_minmax(0,1fr)_30px] items-center gap-4 border-t border-border px-4 py-3.5 min-[900px]:grid-cols-[52px_minmax(0,1.2fr)_minmax(0,2.2fr)_110px_36px] min-[900px]:px-5">
               <Cover hue={hue} icon={tool.icon} size={40} />
               <span className="min-w-0">
                 <span className="block font-semibold tracking-[-0.015em]">{tool.name}</span>
                 <span className="font-mono text-[12px] text-faint">{tool.slug}</span>
               </span>
               <span className="hidden text-[13.5px] text-muted-foreground min-[900px]:block">{tool.tagline}</span>
-              <span className="chip hidden min-[900px]:inline-flex">
-                <span className={tool.runsLocally ? "dot" : "dot dot-warn"} />
-                {tool.runsLocally ? "In browser" : "Fetches URL"}
-              </span>
               <span className="hidden font-mono text-[12px] text-faint uppercase min-[900px]:inline">{tool.status}</span>
               <ArrowRight size={16} strokeWidth={1.75} className="text-faint" />
             </Link>

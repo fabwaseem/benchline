@@ -14,7 +14,6 @@ export function SearchView() {
   const initial = params.get("q") ?? "";
   const [query, setQuery] = useState(initial);
   const [category, setCategory] = useState("all");
-  const [localOnly, setLocalOnly] = useState(false);
   const kind = classifyPaste(query);
 
   const fuse = useMemo(
@@ -32,10 +31,9 @@ export function SearchView() {
       : tools.map((tool) => ({ tool }));
     return base.filter(({ tool }) => {
       if (category !== "all" && tool.category !== category) return false;
-      if (localOnly && !tool.runsLocally) return false;
       return true;
     });
-  }, [query, category, localOnly, fuse]);
+  }, [query, category, fuse]);
 
   const grouped = categories
     .map((cat) => ({ cat, items: results.filter((row) => row.tool.category === cat.slug) }))
@@ -93,9 +91,6 @@ export function SearchView() {
             {cat.name}
           </button>
         ))}
-        <button type="button" data-on={localOnly} className="chip" onClick={() => setLocalOnly((v) => !v)}>
-          In the browser
-        </button>
       </div>
 
       <div className="mt-8 grid gap-10">

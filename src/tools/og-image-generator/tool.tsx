@@ -24,7 +24,6 @@ export default function OgTool() {
   const [logoBytes, setLogoBytes] = useState(0);
   const [logoError, setLogoError] = useState("");
   const [png, setPng] = useState("");
-  const [drawMs, setDrawMs] = useState(0);
   const [tab, setTab] = useState<"code" | "meta">("code");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fit = titleFit(input.title);
@@ -36,7 +35,6 @@ export default function OgTool() {
     if (!canvas) return;
     let cancel = false;
     const draw = async () => {
-      const started = performance.now();
       await document.fonts.ready;
       if (cancel) return;
       const ctx = canvas.getContext("2d");
@@ -71,7 +69,6 @@ export default function OgTool() {
       const finish = () => {
         if (cancel) return;
         setPng(canvas.toDataURL("image/png"));
-        setDrawMs(performance.now() - started);
       };
       if (logo) {
         const image = new Image();
@@ -140,7 +137,7 @@ export default function OgTool() {
       ? "Title clipped at line 2"
       : pristine
         ? "Default card · edit any field"
-        : `Drawn in ${Math.max(1, Math.round(drawMs))} ms · ${input.template} · ${input.font} · ${logoBytes ? `${logoBytes.toLocaleString("en-US")} B` : "no logo"}`;
+        : `${input.template} · ${input.font} · ${logoBytes ? `${logoBytes.toLocaleString("en-US")} B` : "no logo"}`;
 
   return (
     <ToolShell

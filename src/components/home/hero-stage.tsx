@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
-import { ArrowRight, Eye, Lock, Search, Zap } from "lucide-react";
+import { ArrowRight, Eye, Search, Zap } from "lucide-react";
 import { Cover } from "@/components/site/cover";
 import { GithubMark } from "@/components/site/github-mark";
 import { openCommandK } from "@/components/site/open-command";
@@ -82,7 +82,6 @@ export function HeroStage({ toolCount, still }: { toolCount: number; still: Reac
   const showCanvas = ready3d && !mobile;
   return (
     <section className="relative isolate overflow-hidden border-b border-border">
-      <div className="frame relative max-[699px]:pb-10 min-[700px]:h-[860px]">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] min-[700px]:inset-0 min-[700px]:h-auto" aria-hidden>
         {still}
         {showCanvas ? (
@@ -93,6 +92,7 @@ export function HeroStage({ toolCount, still }: { toolCount: number; still: Reac
         className="pointer-events-none absolute inset-0 max-[699px]:bg-[linear-gradient(0deg,var(--background)_0,var(--background)_calc(100%-420px),transparent_calc(100%-300px))] min-[700px]:bg-[linear-gradient(90deg,var(--background)_0,color-mix(in_oklch,var(--background)_70%,transparent)_34%,transparent_52%),linear-gradient(0deg,var(--background)_0,transparent_18%)]"
         aria-hidden
       />
+      <div className="frame relative max-[699px]:pb-10 min-[700px]:h-[860px]">
       <div className="relative px-4 pt-[372px] min-[700px]:absolute min-[700px]:top-28 min-[700px]:left-12 min-[700px]:w-[760px] min-[700px]:px-0 min-[700px]:pt-0">
         <Link href="/t/ai-token-counter" className="plate inline-flex h-[30px] items-center gap-2.5 rounded-full pr-3 pl-1 text-[13px] text-fg2 shadow-[var(--in-hi),0_0_0_1px_var(--border),var(--shadow-1)]">
           <b className="rounded-full bg-foreground px-2 py-0.5 font-mono text-[10.5px] font-medium tracking-[0.06em] text-background">16 OCT</b>
@@ -116,7 +116,7 @@ export function HeroStage({ toolCount, still }: { toolCount: number; still: Reac
           </span>
         </button>
         <div className="mt-3.5 flex flex-wrap gap-2.5">
-          <a className="btn btn-brand" href="#try">
+          <a className="btn btn-brand" href="#bench">
             Open the bench <ArrowRight size={15} strokeWidth={1.75} />
           </a>
           <a className="btn btn-lg" href={GITHUB_URL}>
@@ -124,7 +124,6 @@ export function HeroStage({ toolCount, still }: { toolCount: number; still: Reac
           </a>
         </div>
         <div className="mt-7 flex flex-wrap gap-x-7 gap-y-2.5 text-[13px] text-muted-foreground">
-          <span className="inline-flex items-center gap-2"><Lock size={14} strokeWidth={1.75} /> Runs in your browser</span>
           <span className="inline-flex items-center gap-2"><Zap size={14} strokeWidth={1.75} /> No account</span>
           <span className="inline-flex items-center gap-2"><Eye size={14} strokeWidth={1.75} /> Open source</span>
         </div>
@@ -134,7 +133,7 @@ export function HeroStage({ toolCount, still }: { toolCount: number; still: Reac
           <span className="text-success">✓</span>
           <div>
             <div className="text-[13px] font-semibold">Signature verified</div>
-            <div className="font-mono text-[11px] text-faint">HS256 · in this tab</div>
+            <div className="font-mono text-[11px] text-faint">HS256</div>
           </div>
         </div>
       </div>

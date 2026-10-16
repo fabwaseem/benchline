@@ -68,7 +68,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   if (!category) notFound();
   const list = toolsInCategory(slug);
   const flagship = list[0];
-  const local = list.filter((tool) => tool.runsLocally).length;
   const updated = list.map((tool) => tool.updatedAt).sort().at(-1) ?? "";
   const related = categories.filter((item) => item.slug !== slug).slice(0, 4);
   const guide = guides[slug];
@@ -94,7 +93,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
           <p className="lede mt-5 max-w-[52ch]">{category.description}</p>
           <div className="mt-8 flex gap-7 border-t border-border pt-5 text-[13px] text-muted-foreground">
             <span><b className="mb-0.5 block font-mono text-[20px] font-medium tracking-[-0.04em] text-foreground">{String(list.length).padStart(2, "0")}</b>Tools</span>
-            <span><b className="mb-0.5 block font-mono text-[20px] font-medium tracking-[-0.04em] text-foreground">{local}</b>In browser</span>
             <span><b className="mb-0.5 block font-mono text-[20px] font-medium tracking-[-0.04em] text-foreground">{updated}</b>Updated</span>
           </div>
         </div>

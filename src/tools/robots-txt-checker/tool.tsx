@@ -88,7 +88,7 @@ export default function RobotsTool() {
 
   const status = mode === "paste"
     ? pasted.trim()
-      ? `Pasted file · audited locally${fails ? ` · ${fails} fails` : ""}`
+      ? `Pasted file${fails ? ` · ${fails} fails` : ""}`
       : "Waiting for a file"
     : busy
       ? `GET ${url}/robots.txt…`
