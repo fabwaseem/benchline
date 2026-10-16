@@ -10,6 +10,10 @@ export function generateStaticParams() {
   return allTags().map((tag) => ({ tag: tag.slug }));
 }
 
+// Cache Components rejects `dynamicParams`. `not-found` is the same closed set:
+// params outside generateStaticParams 404 before the page shell streams.
+export const unstable_paramMatching = { tag: "not-found" };
+
 function label(slug: string) {
   return slug.replace(/-/g, " ");
 }
@@ -17,7 +21,7 @@ function label(slug: string) {
 export async function generateMetadata({ params }: { params: Promise<{ tag: string }> }): Promise<Metadata> {
   const { tag } = await params;
   const known = allTags().find((item) => item.slug === tag);
-  if (!known) return {};
+  if (!known) notFound();
   const description = `Tools tagged ${label(tag)}.`;
   return {
     title: `#${label(tag)}`,
@@ -44,7 +48,8 @@ export default async function TagPage({ params }: { params: Promise<{ tag: strin
           items: list.map((tool) => ({ name: tool.name, url: absoluteUrl(`/t/${tool.slug}`) })),
         })}
       />
-      <header className="border-b border-border px-4 py-10 min-[700px]:px-12 min-[700px]:py-16">
+      <header className="border-b border-border">
+      <div className="page-x py-10 min-[700px]:py-16">
         <nav className="flex items-center gap-2 font-mono text-[12px] text-faint">
           <Link href="/">Home</Link>
           <span>/</span>
@@ -62,6 +67,7 @@ export default async function TagPage({ params }: { params: Promise<{ tag: strin
             ))}
           </div>
         ) : null}
+      </div>
       </header>
       <CategoryBrowser
         hue={200}

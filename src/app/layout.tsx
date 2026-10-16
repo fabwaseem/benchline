@@ -1,10 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { CommandK } from "@/components/site/command-k";
+import { DeferredChrome } from "@/components/site/deferred-chrome";
 import { Footer } from "@/components/site/footer";
 import { Header } from "@/components/site/header";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
 import { JsonLd, websiteNode } from "@/lib/jsonld";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { searchRecords } from "@/registry";
@@ -13,11 +12,17 @@ import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
+  preload: true,
+  adjustFontFallback: true,
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
+  preload: false,
+  adjustFontFallback: true,
 });
 
 const description = "Exact tools for people who ship the web. Free, in the browser, and honest about what each checker fetches.";
@@ -79,8 +84,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
           </main>
           <Footer />
-          <CommandK tools={searchRecords()} />
-          <Toaster />
+          <DeferredChrome tools={searchRecords()} />
         </ThemeProvider>
       </body>
     </html>

@@ -15,10 +15,14 @@ export function generateStaticParams() {
   return categories.map((category) => ({ category: category.slug }));
 }
 
+// Cache Components rejects `dynamicParams`. `not-found` is the same closed set:
+// params outside generateStaticParams 404 before the page shell streams.
+export const unstable_paramMatching = { category: "not-found" };
+
 export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
   const { category: slug } = await params;
   const category = getCategory(slug);
-  if (!category) return {};
+  if (!category) notFound();
   return {
     title: category.name,
     description: category.description,
@@ -78,7 +82,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
           items: list.map((tool) => ({ name: tool.name, url: absoluteUrl(`/t/${tool.slug}`) })),
         })}
       />
-      <header className="gridbg grid items-end gap-10 border-b border-border px-4 py-10 min-[900px]:grid-cols-[1fr_520px] min-[900px]:px-12 min-[900px]:py-16">
+      <header className="gridbg border-b border-border">
+      <div className="page-x grid items-end gap-10 py-10 min-[900px]:grid-cols-[1fr_520px] min-[900px]:py-16">
         <div>
           <nav className="flex items-center gap-2 font-mono text-[12px] text-faint" aria-label="Breadcrumb">
             <Link href="/">Home</Link>
@@ -98,6 +103,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
             <Flagship category={slug} href={`/t/${flagship.slug}`} name={flagship.name} />
           </Suspense>
         ) : null}
+      </div>
       </header>
       <CategoryBrowser
         hue={category.hue}
@@ -117,7 +123,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
         }))}
       />
       {flagship ? (
-        <section className="card mx-4 grid overflow-hidden min-[900px]:mx-12 min-[900px]:grid-cols-2">
+        <section className="page-x">
+        <div className="card grid overflow-hidden min-[900px]:grid-cols-2">
           <div className="flex flex-col p-6 min-[700px]:p-10">
             <Cover hue={category.hue} icon={flagship.icon} size={56} />
             <h2 className="h-panel mt-7">{flagship.name}</h2>
@@ -138,6 +145,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
             <div className="mt-4 text-faint">Out</div>
             <p className="mt-1 text-foreground">{flagship.outputs}</p>
           </div>
+        </div>
         </section>
       ) : null}
       <section className="page-x pt-16 min-[700px]:pt-24">

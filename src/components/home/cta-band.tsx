@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { openCommandK } from "@/components/site/command-k";
+import { openCommandK } from "@/components/site/open-command";
 import { GITHUB_URL } from "@/lib/site";
 
 export function CtaBand() {
@@ -18,7 +18,7 @@ export function CtaBand() {
           </h2>
           <p className="lede mt-5 max-w-[40ch]">Every tool is two keystrokes away, on every page. No account, no tracking, no limits.</p>
           <div className="mt-7 flex flex-wrap gap-2.5">
-            <Link href="/#explore" className="btn-ink btn btn-lg">
+            <Link href="/explore" className="btn-ink btn btn-lg">
               Browse all tools <ArrowRight size={15} strokeWidth={1.75} />
             </Link>
             <a className="btn btn-lg" href={`${GITHUB_URL}/issues/new`}>

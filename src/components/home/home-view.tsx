@@ -2,8 +2,8 @@ import { Suspense } from "react";
 import { CtaBand } from "@/components/home/cta-band";
 import { Bento } from "@/components/home/bento";
 import { DemoWindow } from "@/components/home/demo-window";
-import { Explorer } from "@/components/home/explorer";
 import { HeroStage } from "@/components/home/hero-stage";
+import { HeroStill } from "@/components/home/hero-still";
 import type { Category, SearchRecord } from "@/registry/schema";
 
 export function HomeView({ categories, tools }: { categories: Category[]; tools: SearchRecord[] }) {
@@ -16,8 +16,9 @@ export function HomeView({ categories, tools }: { categories: Category[]; tools:
   ];
   return (
     <>
-      <HeroStage toolCount={tools.length} />
-      <div className="grid grid-cols-2 border-b border-border min-[700px]:grid-cols-4">
+      <HeroStage toolCount={tools.length} still={<HeroStill />} />
+      <div className="border-b border-border">
+      <div className="frame grid grid-cols-2 min-[700px]:grid-cols-4">
         {stats.map((stat) => (
           <div key={stat.label} className="border-r border-b border-border px-4 py-6 last:border-r-0 min-[700px]:border-b-0 min-[700px]:px-12 min-[700px]:py-9">
             <div className="font-mono text-[32px] leading-none font-medium tracking-[-0.06em] min-[700px]:text-[44px]">{stat.value}</div>
@@ -25,14 +26,13 @@ export function HomeView({ categories, tools }: { categories: Category[]; tools:
           </div>
         ))}
       </div>
+      </div>
       <Section n="01" kicker="Try it" title="Real tools." dim="Right here." lede="Every tool is a full instrument, not a demo. Paste a token and it decodes and verifies here, inside this tab." />
       <Suspense fallback={<div className="page-x h-80" />}>
         <DemoWindow />
       </Suspense>
       <Section n="02" kicker="On the bench" title="Every tool," dim="sharpened." lede="From OG cards to robots.txt. Each one is fast, keyboard-first, and honest about what it touches." />
       <Bento />
-      <Section id="explore" n="03" kicker="Explore" title="Built to hold" dim="thousands." lede="Sections, categories, and tags, with ⌘K on top. Find any tool in two keystrokes." />
-      <Explorer categories={categories} tools={tools} />
       <CtaBand />
       <div className="h-16 min-[700px]:h-[120px]" />
     </>
