@@ -6,6 +6,7 @@ const group = z.object({
   agents: z.array(z.string()),
   allow: z.array(z.string()),
   disallow: z.array(z.string()),
+  crawlDelay: z.string().optional(),
 });
 
 export const inputSchema = z.object({

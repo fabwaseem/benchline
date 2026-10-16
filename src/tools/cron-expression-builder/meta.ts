@@ -34,4 +34,5 @@ export const meta = {
   inputs: "A cron expression, a dialect, a timezone, and field chips for minute, hour, day, month, and weekday.",
   outputs: "Plain English, the next 10 runs, a field breakdown, and snippets for crontab, GitHub Actions, Vercel, Kubernetes, and node-cron.",
   runsLocally: true,
+  badges: ["Standard · Seconds · Quartz · Hosted"],
 } satisfies ToolMeta;

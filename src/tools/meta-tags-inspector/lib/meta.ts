@@ -66,6 +66,12 @@ export function inspectHtml(html: string, finalUrl: string): Inspection {
   };
 }
 
+export function characterBudget(value: string, min: number, max: number) {
+  const length = value.length;
+  const state = length === 0 ? "empty" : length < min || length > max ? "warn" : "ok";
+  return { length, min, max, state, label: `${length} / ${max}` };
+}
+
 function lengthCheck(label: string, value: string, min: number, max: number, required: boolean): MetaCheck {
   if (!value) return { level: required ? "fail" : "warn", label, detail: "Missing." };
   if (value.length < min || value.length > max) return { level: "warn", label, detail: `${value.length} characters. Usual range is ${min}–${max}.` };

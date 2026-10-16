@@ -6,7 +6,7 @@ export const meta = {
   tagline: "Count tokens and estimate the API cost of a prompt for GPT, Claude, and Gemini models.",
   description:
     "Free LLM token counter and API cost calculator. Paste text to count tokens with OpenAI's tokenizers and estimate input and output cost across GPT, Claude, Gemini, and other models. Runs in your browser.",
-  category: "ai",
+  category: "ai-dev",
   tags: ["tokens", "llm"],
   keywords: ["token counter", "LLM token counter", "OpenAI token counter", "tiktoken", "AI cost calculator"],
   status: "new",
@@ -34,4 +34,5 @@ export const meta = {
   inputs: "Prompt text or a text file, selected models, expected output tokens, requests per day, and a cached-input share.",
   outputs: "Token, character, and word counts, a token boundary preview, and a cost table per model.",
   runsLocally: true,
+  badges: ["11 models · prices 2026-10-16"],
 } satisfies ToolMeta;

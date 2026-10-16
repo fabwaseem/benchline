@@ -12,7 +12,8 @@ export async function POST(request: Request) {
   if (blocked) return blocked;
   try {
     const body = (await readBody(request)) as { mode?: string; url?: string; urls?: string };
-    const pages = body.mode === "urls" ? await fromList(body.urls ?? "") : await fromSite(body.url ?? "");
+    const fetched = body.mode === "urls" ? { pages: await fromList(body.urls ?? ""), sources: ["pasted URLs"] } : await fromSite(body.url ?? "");
+    const pages = fetched.pages;
     if (pages.length === 0) throw new PublicUrlError("No public HTML pages were found.");
     const name = siteName(pages[0]!.url);
     const summary = pages[0]?.description || `Index of ${name}.`;
@@ -20,6 +21,7 @@ export async function POST(request: Request) {
       pages: pages.length,
       llms: renderLlmsTxt(name, summary, pages),
       full: renderLlmsFull(name, summary, pages),
+      sources: fetched.sources,
     });
   } catch (error) {
     return toolError(error);
@@ -29,16 +31,18 @@ export async function POST(request: Request) {
 async function fromSite(input: string) {
   const root = parsePublicHttpUrl(input);
   const origin = root.origin;
-  const warnings: string[] = [];
   let robots = "";
+  let robotsRead = false;
   try {
     const file = await fetchPublic(new URL("/robots.txt", origin).toString(), { accept: "text/plain" });
+    robotsRead = file.status < 400;
     if (file.status < 400 && !looksLikeHtml(file.text)) robots = file.text;
   } catch {
-    warnings.push("robots.txt");
+    robotsRead = false;
   }
   const seeds = [...sitemapUrls(robots).map((item) => new URL(item, origin).toString()), new URL("/sitemap.xml", origin).toString()];
   const pageUrls = new Set<string>();
+  let sitemap = false;
   for (const seed of seeds) {
     if (pageUrls.size >= PAGE_CAP) break;
     try {
@@ -47,6 +51,7 @@ async function fromSite(input: string) {
       const locs = parseSitemapLocs(file.text);
       const lists = isSitemapIndex(file.text) ? locs.slice(0, 5) : [];
       const pages = isSitemapIndex(file.text) ? [] : locs;
+      if (pages.length > 0 || lists.length > 0) sitemap = true;
       for (const page of pages) pageUrls.add(page);
       for (const list of lists) {
         const nested = await fetchPublic(list, { accept: "application/xml,text/xml" });
@@ -56,12 +61,15 @@ async function fromSite(input: string) {
       continue;
     }
   }
+  let homepage = false;
   if (pageUrls.size === 0) {
+    homepage = true;
     const home = await fetchPublic(origin);
     pageUrls.add(home.url);
     for (const link of sameOriginLinks(home.text, home.url)) pageUrls.add(link);
   }
-  return collect([...pageUrls].slice(0, PAGE_CAP));
+  const sources = [robotsRead ? "robots.txt" : "", sitemap ? "sitemap" : "", homepage ? "homepage" : ""].filter(Boolean);
+  return { pages: await collect([...pageUrls].slice(0, PAGE_CAP)), sources };
 }
 
 async function fromList(raw: string) {

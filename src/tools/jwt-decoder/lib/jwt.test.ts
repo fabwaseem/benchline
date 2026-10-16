@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { claimRows, claimViews, decodeJwt, EXAMPLE_TOKEN, formatUtc, isDecoded } from "@/tools/jwt-decoder/lib/jwt";
 
 const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZGEiLCJuYW1lIjoiQWRhIExvdmVsYWNlIiwiaXNzIjoidG9vbHNtaXRoIiwiYXVkIjoiYmVuY2giLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MTkwMDAwMDAwMH0.signature";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZGEiLCJuYW1lIjoiQWRhIExvdmVsYWNlIiwiaXNzIjoiYmVuY2hsaW5lIiwiYXVkIjoiYmVuY2giLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MTkwMDAwMDAwMH0.signature";
 
 describe("decodeJwt", () => {
   it("decodes a bearer token and unicode payload", () => {

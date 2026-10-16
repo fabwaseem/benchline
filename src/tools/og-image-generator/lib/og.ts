@@ -81,6 +81,22 @@ export default function Image() {
 `;
 }
 
+export const TITLE_LIMIT = 60;
+
+export function titleFit(title: string) {
+  const length = title.length;
+  const clipped = length > TITLE_LIMIT;
+  return {
+    length,
+    limit: TITLE_LIMIT,
+    clipped,
+    counter: `${length} / ${TITLE_LIMIT}`,
+    notice: clipped
+      ? "Title runs past two lines. The card cuts it at line 2. Aim for 60 characters or fewer."
+      : "Title fits in two lines.",
+  };
+}
+
 function escapeAttr(value: string) {
   return value.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 }

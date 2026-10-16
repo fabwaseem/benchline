@@ -7,17 +7,21 @@ export function Dropzone({
   accept,
   label,
   onFile,
+  invalid = false,
 }: {
   accept: string;
   label: string;
   onFile: (file: File) => void;
+  invalid?: boolean;
 }) {
   const [over, setOver] = useState(false);
   return (
     <label
+      aria-invalid={invalid || undefined}
       className={cn(
-        "flex cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-border px-3 py-6 text-center text-sm text-muted-foreground",
-        over && "border-primary bg-primary/5 text-foreground",
+        "flex min-h-11 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-border px-3 py-6 text-center text-sm text-muted-foreground",
+        over && "border-foreground bg-muted text-foreground",
+        invalid && "border-destructive",
       )}
       onDragOver={(event) => {
         event.preventDefault();

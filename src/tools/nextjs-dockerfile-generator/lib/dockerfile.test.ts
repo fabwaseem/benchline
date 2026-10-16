@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildCompose, buildDockerfile, dockerfileDefaults, estimatedSize } from "@/tools/nextjs-dockerfile-generator/lib/dockerfile";
+import { buildArgWarnings, buildCompose, buildDockerfile, dockerfileDefaults, estimatedSize } from "@/tools/nextjs-dockerfile-generator/lib/dockerfile";
 
 describe("buildDockerfile", () => {
   it.each(["npm", "pnpm", "yarn", "bun"] as const)("writes a multi-stage file for %s", (packageManager) => {
@@ -12,5 +12,10 @@ describe("buildDockerfile", () => {
     expect(file).toContain(packageManager === "npm" ? "npm ci" : packageManager);
     expect(buildCompose({ ...dockerfileDefaults, prisma: true })).toContain("postgres");
     expect(estimatedSize({ ...dockerfileDefaults, base: "alpine" })).toContain("150");
+  });
+
+  it("warns when a build arg is not a NEXT_PUBLIC_ name", () => {
+    expect(buildArgWarnings(["NEXT_PUBLIC_SITE", "DATABASE_URL"])).toEqual(["DATABASE_URL would be baked into the image."]);
+    expect(buildArgWarnings(["NEXT_PUBLIC_SITE"])).toEqual([]);
   });
 });

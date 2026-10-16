@@ -1,32 +1,27 @@
 "use client";
 
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Clock, Copy } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 import { CodeOutput } from "@/components/kit/code-output";
+import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
-import { ResultStat } from "@/components/kit/result-stat";
+import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
-import { ToolShell } from "@/components/kit/tool-shell";
+import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { Input } from "@/components/ui/input";
 import { dialects, explainCron, presets, setField, type Dialect } from "@/tools/cron-expression-builder/lib/cron";
 
-const ZONES = ["UTC", "America/New_York", "America/Los_Angeles", "Europe/London", "Europe/Paris", "Asia/Kolkata", "Asia/Singapore", "Asia/Tokyo", "Australia/Sydney"];
-
-function subscribeZone() {
-  return () => {};
-}
-
-function browserZone() {
-  return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
-}
+const ZONES = ["UTC", "America/New_York", "America/Los_Angeles", "Europe/London", "Europe/Paris", "Asia/Karachi", "Asia/Kolkata", "Asia/Singapore", "Asia/Tokyo", "Australia/Sydney"];
+const LIMITS: Record<string, number> = { second: 59, minute: 59, hour: 23, "day of month": 31, month: 12, "day of week": 7 };
 
 export default function CronTool() {
   const params = useSearchParams();
-  const [expr, setExpr] = useState(params.get("expr") || "*/5 * * * *");
+  const [expr, setExpr] = useState(params.get("expr") || "0 9 * * 1-5");
   const [dialect, setDialect] = useState<Dialect>("standard");
-  const detected = useSyncExternalStore(subscribeZone, browserZone, () => "UTC");
-  const [override, setOverride] = useState<string | null>(null);
-  const zone = override ?? detected;
+  const [zone, setZone] = useState("Asia/Karachi");
+  const [snippet, setSnippet] = useState("crontab");
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -36,73 +31,130 @@ export default function CronTool() {
   }, [expr]);
 
   const result = useMemo(() => explainCron(expr, dialect, zone), [dialect, expr, zone]);
-  const zones = zone && !ZONES.includes(zone) ? [zone, ...ZONES] : ZONES;
+  const zones = ZONES.includes(zone) ? ZONES : [zone, ...ZONES];
+  const reboot = expr.trim() === "@reboot";
+  const activeSnippet = result.snippets.find((item) => item.label === snippet) ?? result.snippets[0];
+
+  useWorkbenchKeys({
+    onCopy: () => {
+      void navigator.clipboard.writeText(expr).then(() => toast.success("Expression copied"));
+    },
+    onEscape: () => setExpr("0 9 * * 1-5"),
+  });
+
+  const status = reboot
+    ? "no calendar times"
+    : result.valid
+      ? `Valid · ${dialect} · ${result.fields.length} fields · ${zone}`
+      : `Invalid · ${result.error}`;
 
   return (
-    <ToolShell runsLocally>
-      <div className="grid gap-4 p-4 lg:grid-cols-2 [&>*]:min-w-0">
-        <div className="flex flex-col gap-3">
-          <FieldRow label="Expression" htmlFor="cron" error={result.valid ? undefined : result.error} help={result.hostedNote}>
-            <Input id="cron" value={expr} onChange={(event) => setExpr(event.target.value)} className="font-mono" aria-invalid={!result.valid} />
+    <ToolShell
+      runsLocally
+      layout="split+inspector"
+      flow="band"
+      columns="min-[1280px]:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_340px]"
+      tabs={<ToolTabs label="Mode" value="build" onChange={() => {}} options={[{ value: "build", label: "Build" }]} />}
+      actions={<InkButton icon={<Copy size={15} />} onClick={() => void navigator.clipboard.writeText(expr).then(() => toast.success("Expression copied"))}>Copy expression</InkButton>}
+      status={
+        <>
+          <span className={result.valid ? "dot" : "dot dot-warn"} />
+          <span>{status}</span>
+          <span className="ml-auto hidden min-[700px]:inline">⌘⇧C copy expression · esc reset</span>
+        </>
+      }
+      input={
+        <Panel title="Expression">
+          <FieldRow label="Expression" htmlFor="cron" error={result.valid ? undefined : result.error} help="Minute, hour, day of month, month, day of week.">
+            <Input id="cron" value={expr} onChange={(event) => setExpr(event.target.value)} className="font-mono max-[699px]:h-11" aria-invalid={!result.valid} />
           </FieldRow>
+          {reboot ? null : (
+            <div className="grid grid-cols-5 gap-2">
+              {result.fields.map((field) => {
+                const bad = fieldOutOfRange(field.name, field.value);
+                return (
+                  <div key={field.name} className={bad ? "rounded-lg border border-destructive px-2 py-2" : "rounded-lg border border-border px-2 py-2"}>
+                    <p className="font-mono text-[10px] text-faint uppercase">{field.name}</p>
+                    <p className="font-mono text-[18px]">{field.value || "—"}</p>
+                  </div>
+                );
+              })}
+            </div>
+          )}
           <Segmented label="Dialect" value={dialect} onChange={setDialect} options={dialects.map((item) => ({ value: item, label: item }))} />
           <div className="flex flex-wrap gap-1.5">
             {presets.map((preset) => (
-              <button key={preset.id} type="button" onClick={() => setExpr(preset.expr)} className="shrink-0 rounded-full border border-border px-2 py-1 text-xs">{preset.label}</button>
+              <button key={preset.id} type="button" data-on={expr === preset.expr ? "true" : "false"} className="chip" onClick={() => setExpr(preset.expr)}>{preset.label}</button>
             ))}
           </div>
-          <FieldRow label="Minute" htmlFor="cron-minute">
-            <div className="flex flex-wrap gap-1.5">
-              {["*", "*/5", "*/15", "*/30", "0"].map((value) => (
-                <button key={value} type="button" className="shrink-0 rounded-md border border-border px-2 py-1 font-mono text-xs" onClick={() => setExpr(setField(expr, expr.trim().split(/\s+/).length >= 6 ? 1 : 0, value))}>{value}</button>
-              ))}
-            </div>
-          </FieldRow>
-          <FieldRow label="Hour" htmlFor="cron-hour">
-            <div className="flex flex-wrap gap-1.5">
-              {["*", "0", "9", "12", "18"].map((value) => (
-                <button key={value} type="button" className="shrink-0 rounded-md border border-border px-2 py-1 font-mono text-xs" onClick={() => setExpr(setField(expr, expr.trim().split(/\s+/).length >= 6 ? 2 : 1, value))}>{value}</button>
-              ))}
-            </div>
-          </FieldRow>
-          <FieldRow label="Weekday" htmlFor="cron-dow">
-            <div className="flex flex-wrap gap-1.5">
-              {["*", "1-5", "1", "0"].map((value) => (
-                <button key={value} type="button" className="shrink-0 rounded-md border border-border px-2 py-1 font-mono text-xs" onClick={() => setExpr(setField(expr, expr.trim().split(/\s+/).length >= 6 ? 5 : 4, value))}>{value}</button>
-              ))}
-            </div>
-          </FieldRow>
+          <FieldChips label="Minute" values={["*", "*/5", "*/15", "*/30", "0"]} onPick={(value) => setExpr(setField(expr, expr.trim().split(/\s+/).length >= 6 ? 1 : 0, value))} />
+          <FieldChips label="Hour" values={["*", "0", "9", "12", "18"]} onPick={(value) => setExpr(setField(expr, expr.trim().split(/\s+/).length >= 6 ? 2 : 1, value))} />
+          <FieldChips label="Weekday" values={["*", "1-5", "1", "0"]} onPick={(value) => setExpr(setField(expr, expr.trim().split(/\s+/).length >= 6 ? 5 : 4, value))} />
+        </Panel>
+      }
+      output={
+        <div aria-live="polite" className="min-h-[240px]">
+          {reboot ? (
+            <Panel title="English">
+              <Notice tone="warn" title="Run once when the machine starts. This is not a calendar schedule." />
+            </Panel>
+          ) : result.valid ? (
+            <Panel title="Next runs">
+              <p className="text-[16px] font-medium tracking-[-0.02em]">{result.english}</p>
+              <ul className="text-sm">
+                {result.runs.map((run) => (
+                  <li key={run.utc} className="grid grid-cols-[1fr_auto] gap-3 border-t border-border py-2">
+                    <span>{run.local}</span>
+                    <span className="font-mono text-[12px] text-muted-foreground">{run.utc} UTC</span>
+                  </li>
+                ))}
+              </ul>
+            </Panel>
+          ) : (
+            <Panel>
+              <Notice tone="bad" role="alert" title={result.error || "That expression is not valid."} />
+              <EmptyState art={<Clock size={22} />} title="No runs" hint="Fix the field that is out of range." />
+            </Panel>
+          )}
+        </div>
+      }
+      inspector={
+        <Panel title="Snippets">
           <FieldRow label="Timezone" htmlFor="cron-tz">
-            <select id="cron-tz" value={zone} onChange={(event) => setOverride(event.target.value)} className="h-8 rounded-lg border border-input bg-transparent px-2 text-sm">
+            <select id="cron-tz" value={zone} onChange={(event) => setZone(event.target.value)} className="h-11 rounded-lg border border-input bg-transparent px-2 text-sm min-[700px]:h-8">
               {zones.map((item) => <option key={item} value={item}>{item}</option>)}
             </select>
           </FieldRow>
-        </div>
-        <div className="flex flex-col gap-3" aria-live="polite">
-          <ResultStat label={result.valid ? "Valid" : "Invalid"} value={result.valid ? "Yes" : "No"} hint={result.english || result.error} />
-          <ul className="text-sm">
-            {result.runs.map((run) => (
-              <li key={run.utc} className="flex justify-between gap-3 border-t border-border py-1.5">
-                <span>{run.local}</span>
-                <span className="text-muted-foreground">{run.relative} · {run.utc} UTC</span>
-              </li>
-            ))}
-          </ul>
-          <table className="text-sm">
-            <tbody>
-              {result.fields.map((field) => (
-                <tr key={field.name} className="border-t border-border">
-                  <td className="py-1 pr-3 text-muted-foreground">{field.name}</td>
-                  <td className="font-mono">{field.value}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {result.snippets.map((snippet) => (
-            <CodeOutput key={snippet.label} code={snippet.code} label={snippet.label} />
-          ))}
-        </div>
-      </div>
-    </ToolShell>
+          {result.valid && activeSnippet ? (
+            <>
+              <Segmented label="Snippet" value={activeSnippet.label} onChange={setSnippet} options={result.snippets.map((item) => ({ value: item.label, label: item.label }))} />
+              <CodeOutput code={activeSnippet.code} label={activeSnippet.label} />
+              <Notice tone="warn" title="GitHub Actions and Vercel Cron run in UTC." />
+            </>
+          ) : (
+            <p className="text-sm text-muted-foreground">Snippets wait for a valid expression.</p>
+          )}
+        </Panel>
+      }
+    />
   );
+}
+
+function FieldChips({ label, values, onPick }: { label: string; values: string[]; onPick: (value: string) => void }) {
+  return (
+    <div className="flex flex-wrap items-center gap-1.5">
+      <span className="w-16 text-[12px] text-muted-foreground">{label}</span>
+      {values.map((value) => (
+        <button key={value} type="button" className="chip font-mono" onClick={() => onPick(value)}>{value}</button>
+      ))}
+    </div>
+  );
+}
+
+function fieldOutOfRange(name: string, value: string) {
+  if (!value || value === "*" || /[*/,-]/.test(value)) return false;
+  const limit = LIMITS[name];
+  if (limit === undefined) return false;
+  const number = Number(value);
+  return Number.isFinite(number) && (number < 0 || number > limit);
 }

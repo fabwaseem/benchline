@@ -12,6 +12,8 @@ export async function checkRobotsUrl(input: string) {
   return {
     finalUrl: response.url,
     status: response.status,
+    contentType: (response.contentType.split(";")[0] ?? "").trim(),
+    bytes: response.bytes,
     text: response.status === 404 ? "" : response.text.slice(0, 100_000),
     document,
     issues: robotsIssues(document, { html, status: response.status }),

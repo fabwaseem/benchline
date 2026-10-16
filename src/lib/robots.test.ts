@@ -25,6 +25,13 @@ describe("parseRobots", () => {
     expect(accessFor(document, "OtherBot", "/admin/public")).toBe("allow");
   });
 
+  it("records Crawl-delay as an info row", () => {
+    const document = parseRobots("User-agent: *\nCrawl-delay: 10\nDisallow: /admin\n");
+    expect(document.groups[0]?.crawlDelay).toBe("10");
+    const issues = robotsIssues(document);
+    expect(issues.some((issue) => issue.level === "info" && issue.detail.includes("Major crawlers ignore Crawl-delay"))).toBe(true);
+  });
+
   it("flags a relative sitemap and a full-site block", () => {
     const issues = robotsIssues(parseRobots(sample));
     expect(issues.some((issue) => issue.level === "fail" && issue.label.includes("absolute"))).toBe(true);
