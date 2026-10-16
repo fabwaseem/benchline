@@ -54,10 +54,10 @@ export default function JwtTool() {
       <div className="flex flex-col gap-4 p-4">
         <Segmented label="Mode" value={tab} onChange={setTab} options={[{ value: "decode", label: "Decode" }, { value: "encode", label: "Encode" }]} />
         {tab === "decode" ? (
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div className="grid gap-4 lg:grid-cols-2 [&>*]:min-w-0">
             <div className="flex flex-col gap-3">
               <FieldRow label="JSON Web Token" htmlFor="jwt" help="A Bearer prefix is fine. The token stays in this browser.">
-                <Textarea id="jwt" value={token} onChange={(event) => setToken(event.target.value)} className="min-h-32 font-mono text-xs" />
+                <Textarea id="jwt" value={token} onChange={(event) => setToken(event.target.value)} className="min-h-32 font-mono text-xs break-all" />
               </FieldRow>
               <div className="flex gap-2">
                 <Button type="button" variant="outline" onClick={() => setToken(EXAMPLE)}>Load an example</Button>
@@ -92,7 +92,7 @@ export default function JwtTool() {
             </div>
           </div>
         ) : (
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div className="grid gap-4 lg:grid-cols-2 [&>*]:min-w-0">
             <div className="flex flex-col gap-3">
               <Segmented label="Algorithm" value={signAlg} onChange={setSignAlg} options={[{ value: "HS256", label: "HS256" }, { value: "HS384", label: "HS384" }, { value: "HS512", label: "HS512" }]} />
               <FieldRow label="Header JSON" htmlFor="jwt-header"><Textarea id="jwt-header" value={headerJson} onChange={(event) => setHeaderJson(event.target.value)} className="min-h-24 font-mono text-xs" /></FieldRow>
