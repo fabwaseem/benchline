@@ -41,7 +41,7 @@ export default function SchemaTool() {
         </>
       }
     >
-      <div className="grid lg:grid-cols-2 lg:divide-x lg:divide-border">
+      <div className="grid lg:grid-cols-2 lg:divide-x lg:divide-border [&>*]:min-w-0">
         <div className="flex flex-col gap-3 p-4">
           <FieldRow label="Type" htmlFor="schema-type">
             <div className="flex gap-1 overflow-x-auto">

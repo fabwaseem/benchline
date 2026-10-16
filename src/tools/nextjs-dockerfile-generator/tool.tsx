@@ -44,7 +44,7 @@ export default function DockerTool() {
 
   return (
     <ToolShell runsLocally actions={<Button type="button" onClick={downloadZip}>Download all (.zip)</Button>}>
-      <div className="grid gap-4 p-4 lg:grid-cols-[minmax(0,20rem)_1fr]">
+      <div className="grid gap-4 p-4 lg:grid-cols-[minmax(0,20rem)_1fr] [&>*]:min-w-0">
         <div className="flex flex-col gap-3">
           <FieldRow label="Package manager" htmlFor="pm">
             <Segmented label="Package manager" value={options.packageManager} onChange={(packageManager) => setOptions({ ...options, packageManager })} options={(["npm", "pnpm", "yarn", "bun"] as PackageManager[]).map((value) => ({ value, label: value }))} />

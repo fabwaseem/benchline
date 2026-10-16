@@ -88,7 +88,7 @@ export default function OgTool() {
         </>
       }
     >
-      <div className="grid lg:grid-cols-[minmax(0,22rem)_1fr]">
+      <div className="grid lg:grid-cols-[minmax(0,22rem)_1fr] [&>*]:min-w-0">
         <div className="flex flex-col gap-3 border-b border-border p-4 lg:border-r lg:border-b-0">
           <FieldRow label="Template" htmlFor="og-template">
             <Segmented label="Template" value={input.template} onChange={(template) => setInput({ ...input, template })} options={templates.map((template) => ({ value: template as OgTemplate, label: template }))} />

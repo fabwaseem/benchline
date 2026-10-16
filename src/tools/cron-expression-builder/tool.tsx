@@ -40,33 +40,33 @@ export default function CronTool() {
 
   return (
     <ToolShell runsLocally>
-      <div className="grid gap-4 p-4 lg:grid-cols-2">
+      <div className="grid gap-4 p-4 lg:grid-cols-2 [&>*]:min-w-0">
         <div className="flex flex-col gap-3">
           <FieldRow label="Expression" htmlFor="cron" error={result.valid ? undefined : result.error} help={result.hostedNote}>
             <Input id="cron" value={expr} onChange={(event) => setExpr(event.target.value)} className="font-mono" aria-invalid={!result.valid} />
           </FieldRow>
           <Segmented label="Dialect" value={dialect} onChange={setDialect} options={dialects.map((item) => ({ value: item, label: item }))} />
-          <div className="flex gap-1 overflow-x-auto">
+          <div className="flex flex-wrap gap-1.5">
             {presets.map((preset) => (
               <button key={preset.id} type="button" onClick={() => setExpr(preset.expr)} className="shrink-0 rounded-full border border-border px-2 py-1 text-xs">{preset.label}</button>
             ))}
           </div>
           <FieldRow label="Minute" htmlFor="cron-minute">
-            <div className="flex gap-1 overflow-x-auto">
+            <div className="flex flex-wrap gap-1.5">
               {["*", "*/5", "*/15", "*/30", "0"].map((value) => (
                 <button key={value} type="button" className="shrink-0 rounded-md border border-border px-2 py-1 font-mono text-xs" onClick={() => setExpr(setField(expr, expr.trim().split(/\s+/).length >= 6 ? 1 : 0, value))}>{value}</button>
               ))}
             </div>
           </FieldRow>
           <FieldRow label="Hour" htmlFor="cron-hour">
-            <div className="flex gap-1 overflow-x-auto">
+            <div className="flex flex-wrap gap-1.5">
               {["*", "0", "9", "12", "18"].map((value) => (
                 <button key={value} type="button" className="shrink-0 rounded-md border border-border px-2 py-1 font-mono text-xs" onClick={() => setExpr(setField(expr, expr.trim().split(/\s+/).length >= 6 ? 2 : 1, value))}>{value}</button>
               ))}
             </div>
           </FieldRow>
           <FieldRow label="Weekday" htmlFor="cron-dow">
-            <div className="flex gap-1 overflow-x-auto">
+            <div className="flex flex-wrap gap-1.5">
               {["*", "1-5", "1", "0"].map((value) => (
                 <button key={value} type="button" className="shrink-0 rounded-md border border-border px-2 py-1 font-mono text-xs" onClick={() => setExpr(setField(expr, expr.trim().split(/\s+/).length >= 6 ? 5 : 4, value))}>{value}</button>
               ))}

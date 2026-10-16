@@ -45,7 +45,7 @@ export default function TokenTool() {
 
   return (
     <ToolShell runsLocally>
-      <div className="grid gap-4 p-4 lg:grid-cols-2">
+      <div className="grid gap-4 p-4 lg:grid-cols-2 [&>*]:min-w-0">
         <div className="flex flex-col gap-3">
           <FieldRow label="Prompt" htmlFor="tokens" help="Nothing is uploaded. The tokenizer runs in a worker.">
             <Textarea id="tokens" value={text} onChange={(event) => setText(event.target.value)} className="min-h-40" />
@@ -54,11 +54,11 @@ export default function TokenTool() {
             void file.text().then(setText);
           }} />
           <Segmented label="Tokenizer" value={encoding} onChange={setEncoding} options={[{ value: "o200k", label: "o200k_base" }, { value: "cl100k", label: "cl100k_base" }]} />
-          <div className="flex gap-1 overflow-x-auto">
+          <div className="flex flex-wrap gap-1.5">
             {MODELS.map((model) => {
               const on = ids.includes(model.id);
               return (
-                <button key={model.id} type="button" aria-pressed={on} onClick={() => setIds(on ? ids.filter((id) => id !== model.id) : [...ids, model.id])} className={`shrink-0 rounded-full border px-2 py-1 text-xs ${on ? "border-primary bg-primary text-primary-foreground" : "border-border"}`}>
+                <button key={model.id} type="button" aria-pressed={on} onClick={() => setIds(on ? ids.filter((id) => id !== model.id) : [...ids, model.id])} className={`shrink-0 rounded-full border px-2.5 py-1 text-xs ${on ? "border-primary bg-primary text-primary-foreground" : "border-border"}`}>
                   {model.label}
                 </button>
               );
@@ -73,7 +73,7 @@ export default function TokenTool() {
           </FieldRow>
         </div>
         <div className="flex flex-col gap-3" aria-live="polite">
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-2 [&>*]:min-w-0">
             <ResultStat label="Tokens" value={String(count.count)} />
             <ResultStat label="Characters" value={String(count.chars)} />
             <ResultStat label="Words" value={String(count.words)} hint={count.count ? `${(count.chars / count.count).toFixed(2)} chars/token` : ""} />
