@@ -1,0 +1,218 @@
+[
+  {
+    "slug": "llms-txt-generator",
+    "name": "llms.txt generator",
+    "tagline": "Read a public sitemap and write an llms.txt index, plus an optional llms-full.txt.",
+    "description": "Generate a spec-compliant llms.txt and an optional llms-full.txt from a public sitemap, with an editable preview.",
+    "category": "ai-search",
+    "tags": [
+      "llms-txt",
+      "sitemap",
+      "ai-crawlers"
+    ],
+    "keywords": [
+      "llms.txt",
+      "llms.txt generator",
+      "llms-full.txt",
+      "llmstxt",
+      "AI crawlers"
+    ],
+    "status": "stable",
+    "icon": "FileText",
+    "runsLocally": false
+  },
+  {
+    "slug": "ai-seo-checker",
+    "name": "AI SEO checker",
+    "tagline": "Score crawler access, llms.txt, structured data, and the on-page signals AI search uses.",
+    "description": "Score a public URL for AI crawlers, llms.txt, sitemap, JSON-LD, metadata, headings, and answer-first content.",
+    "category": "ai-search",
+    "tags": [
+      "ai-crawlers",
+      "llms-txt",
+      "seo"
+    ],
+    "keywords": [
+      "AI SEO checker",
+      "GPTBot",
+      "llms.txt",
+      "JSON-LD",
+      "robots.txt",
+      "AI crawlers"
+    ],
+    "status": "stable",
+    "icon": "Search",
+    "runsLocally": false
+  },
+  {
+    "slug": "og-image-generator",
+    "name": "OG image generator",
+    "tagline": "Compose a 1200×630 card, watch it update, then download the PNG or copy the Next.js file.",
+    "description": "Design a 1200×630 Open Graph image in the browser. Choose a template, set type and colors, download a PNG, or copy a Next.js opengraph-image.tsx file.",
+    "category": "social",
+    "tags": [
+      "open-graph",
+      "social-preview"
+    ],
+    "keywords": [
+      "Open Graph",
+      "og:image",
+      "OG image generator",
+      "twitter card",
+      "1200x630"
+    ],
+    "status": "stable",
+    "icon": "Image",
+    "runsLocally": true
+  },
+  {
+    "slug": "jwt-decoder",
+    "name": "JWT decoder",
+    "tagline": "Paste a JSON Web Token, read the claims, and verify the signature in the browser.",
+    "description": "Decode a JWT and verify HS, RS, PS, ES, and EdDSA signatures in the browser. The token and keys are not uploaded.",
+    "category": "auth",
+    "tags": [
+      "jwt",
+      "auth"
+    ],
+    "keywords": [
+      "JWT decoder",
+      "JWT verify",
+      "JSON Web Token",
+      "JWKS",
+      "base64url"
+    ],
+    "status": "stable",
+    "icon": "KeyRound",
+    "runsLocally": true
+  },
+  {
+    "slug": "robots-txt-checker",
+    "name": "robots.txt checker",
+    "tagline": "Read allow and disallow rules, sitemap links, and the mistakes that make a robots.txt file lie.",
+    "description": "Fetch a public robots.txt, list Allow and Disallow rules and sitemap links, and flag common mistakes. Private addresses are blocked.",
+    "category": "ai-search",
+    "tags": [
+      "robots-txt",
+      "sitemap",
+      "ai-crawlers"
+    ],
+    "keywords": [
+      "robots.txt checker",
+      "robots.txt",
+      "sitemap",
+      "disallow",
+      "crawler rules"
+    ],
+    "status": "new",
+    "icon": "Shield",
+    "runsLocally": false
+  },
+  {
+    "slug": "meta-tags-inspector",
+    "name": "Meta tags inspector",
+    "tagline": "Read title, description, canonical, robots, Open Graph, Twitter, and JSON-LD types from one public URL.",
+    "description": "Inspect a public page for title, description, canonical, robots, Open Graph, Twitter cards, and JSON-LD types. A checklist marks what social previews and AI search need.",
+    "category": "social",
+    "tags": [
+      "meta-tags",
+      "open-graph",
+      "social-preview"
+    ],
+    "keywords": [
+      "meta tags inspector",
+      "Open Graph",
+      "twitter card",
+      "canonical",
+      "JSON-LD",
+      "og:image"
+    ],
+    "status": "new",
+    "icon": "Tags",
+    "runsLocally": false
+  },
+  {
+    "slug": "schema-generator",
+    "name": "JSON-LD schema generator",
+    "tagline": "Fill a form, get valid schema.org JSON-LD for Article, FAQ, Product, Organization, and more.",
+    "description": "Free JSON-LD schema markup generator. Build Article, BlogPosting, FAQPage, HowTo, Product, Organization, Person, LocalBusiness, BreadcrumbList, SoftwareApplication, WebSite, and Event schema, then copy the script tag or a Next.js component.",
+    "category": "seo",
+    "tags": [
+      "json-ld",
+      "seo"
+    ],
+    "keywords": [
+      "JSON-LD generator",
+      "schema markup generator",
+      "FAQ schema",
+      "structured data",
+      "schema.org"
+    ],
+    "status": "new",
+    "icon": "Braces",
+    "runsLocally": true
+  },
+  {
+    "slug": "ai-token-counter",
+    "name": "AI token counter",
+    "tagline": "Count tokens and estimate the API cost of a prompt for GPT, Claude, and Gemini models.",
+    "description": "Free LLM token counter and API cost calculator. Paste text to count tokens with OpenAI's tokenizers and estimate input and output cost across GPT, Claude, Gemini, and other models. Runs in your browser.",
+    "category": "ai",
+    "tags": [
+      "tokens",
+      "llm"
+    ],
+    "keywords": [
+      "token counter",
+      "LLM token counter",
+      "OpenAI token counter",
+      "tiktoken",
+      "AI cost calculator"
+    ],
+    "status": "new",
+    "icon": "Coins",
+    "runsLocally": true
+  },
+  {
+    "slug": "cron-expression-builder",
+    "name": "Cron expression builder",
+    "tagline": "Build or paste a cron schedule, read it in plain English, and see the next run times.",
+    "description": "Free cron expression generator and explainer. Build a schedule visually or paste one to translate it into plain English, validate it, and preview the next 10 run times in any timezone. Supports standard 5-field cron, seconds, Quartz, and macros.",
+    "category": "developer",
+    "tags": [
+      "cron",
+      "scheduling"
+    ],
+    "keywords": [
+      "cron expression generator",
+      "cron translator",
+      "crontab",
+      "cron validator",
+      "vercel cron"
+    ],
+    "status": "new",
+    "icon": "Clock",
+    "runsLocally": true
+  },
+  {
+    "slug": "nextjs-dockerfile-generator",
+    "name": "Next.js Dockerfile generator",
+    "tagline": "Generate a production multi-stage Dockerfile for Next.js, plus .dockerignore and compose.",
+    "description": "Free Next.js Dockerfile generator. Pick your package manager, Node version, standalone output, Prisma, and healthcheck, and get a small multi-stage Dockerfile with .dockerignore, docker-compose.yml, and next.config settings.",
+    "category": "nextjs",
+    "tags": [
+      "docker",
+      "nextjs"
+    ],
+    "keywords": [
+      "nextjs dockerfile",
+      "next.js docker",
+      "standalone",
+      "pnpm",
+      "docker compose"
+    ],
+    "status": "new",
+    "icon": "Container",
+    "runsLocally": true
+  }
+]
