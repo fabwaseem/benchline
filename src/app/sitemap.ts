@@ -6,6 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const pages: MetadataRoute.Sitemap = [
     { url: absoluteUrl("/"), changeFrequency: "weekly", priority: 1 },
     { url: absoluteUrl("/about"), changeFrequency: "monthly", priority: 0.4 },
+    { url: absoluteUrl("/ai"), changeFrequency: "monthly", priority: 0.6 },
   ];
   for (const category of categories) {
     pages.push({

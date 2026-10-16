@@ -26,6 +26,7 @@ export const categorySchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1),
   icon: z.string().min(1),
+  hue: z.number().int().min(0).max(359),
 });
 
 export const toolMetaSchema = z.object({

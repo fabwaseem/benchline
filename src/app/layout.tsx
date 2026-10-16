@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { CommandK } from "@/components/site/command-k";
 import { Footer } from "@/components/site/footer";
@@ -20,40 +20,43 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const description =
-  "A precise bench of developer tools for AI search, SEO, tokens, and shipping Next.js.";
+const description = "Exact tools for people who ship the web. Free, in the browser, and honest about what each checker fetches.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — developer tools`,
+    default: `${SITE_NAME} — exact tools for the web`,
     template: `%s · ${SITE_NAME}`,
   },
   description,
   applicationName: SITE_NAME,
-  authors: [{ name: "Waseem Anjum" }],
+  authors: [{ name: "Waseem Anjum", url: "https://fabwaseem.com" }],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
-    title: `${SITE_NAME} — developer tools`,
+    title: `${SITE_NAME} — a quiet bench for exact work`,
     description,
     url: SITE_URL,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} — developer tools`,
+    title: `${SITE_NAME} — a quiet bench for exact work`,
     description,
   },
+  manifest: "/manifest.webmanifest",
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "oklch(98.9% 0.0015 250)" },
+    { media: "(prefers-color-scheme: dark)", color: "oklch(15.2% 0.006 265)" },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col bg-background text-foreground">
         <ThemeProvider>
           <JsonLd
@@ -66,13 +69,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   "@id": `${SITE_URL}#organization`,
                   name: SITE_NAME,
                   url: SITE_URL,
-                  founder: { "@type": "Person", name: "Waseem Anjum" },
+                  founder: { "@type": "Person", name: "Waseem Anjum", url: "https://fabwaseem.com" },
                 },
               ],
             }}
           />
           <Header />
-          <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
+          <main id="main" className="flex-1">
             {children}
           </main>
           <Footer />

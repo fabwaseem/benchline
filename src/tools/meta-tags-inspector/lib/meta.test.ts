@@ -20,7 +20,7 @@ describe("inspectHtml", () => {
       description: "A card",
       url: "https://example.com",
       image: "https://example.com/card.png",
-      siteName: "Toolsmith",
+      siteName: "Benchline",
       card: "summary_large_image",
     }).next).toContain("summary_large_image");
   });

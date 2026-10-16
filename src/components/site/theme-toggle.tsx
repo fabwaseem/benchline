@@ -3,7 +3,6 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useSyncExternalStore } from "react";
-import { Button } from "@/components/ui/button";
 
 function subscribe() {
   return () => {};
@@ -14,14 +13,21 @@ export function ThemeToggle() {
   const mounted = useSyncExternalStore(subscribe, () => true, () => false);
   const dark = mounted && resolvedTheme === "dark";
   return (
-    <Button
+    <button
       type="button"
-      variant="outline"
-      size="icon"
+      className="btn-ghost btn size-9 px-0"
       aria-label={dark ? "Switch to light" : "Switch to dark"}
-      onClick={() => setTheme(dark ? "light" : "dark")}
+      onClick={() => {
+        const next = dark ? "light" : "dark";
+        const apply = () => setTheme(next);
+        if (typeof document !== "undefined" && "startViewTransition" in document && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          document.startViewTransition(apply);
+          return;
+        }
+        apply();
+      }}
     >
-      {dark ? <Sun /> : <Moon />}
-    </Button>
+      {dark ? <Sun size={16} strokeWidth={1.75} /> : <Moon size={16} strokeWidth={1.75} />}
+    </button>
   );
 }

@@ -1,12 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { ogColors, oklchToRgb } from "@/lib/og-color";
+import { OG_INK, OG_PAPER, oklchToRgb } from "@/lib/og-color";
 
 describe("oklchToRgb", () => {
-  it("keeps paper near white and cobalt in the blue range", () => {
-    expect(ogColors.paper.startsWith("rgb(")).toBe(true);
-    expect(oklchToRgb(0.985, 0.004, 95)).toBe(ogColors.paper);
-    const cobalt = ogColors.cobalt.match(/\d+/g)?.map(Number) ?? [];
-    expect(cobalt[2]).toBeGreaterThan(cobalt[0] ?? 0);
-    expect(cobalt[2]).toBeGreaterThan(cobalt[1] ?? 0);
+  it("keeps paper near white and ink dark", () => {
+    const paper = oklchToRgb(OG_PAPER.l, OG_PAPER.c, OG_PAPER.h);
+    const ink = oklchToRgb(OG_INK.l, OG_INK.c, OG_INK.h);
+    expect(paper.r).toBeGreaterThan(240);
+    expect(paper.g).toBeGreaterThan(240);
+    expect(paper.b).toBeGreaterThan(240);
+    expect(ink.r).toBeLessThan(80);
+    expect(ink.g).toBeLessThan(80);
+    expect(ink.b).toBeLessThan(90);
   });
 });

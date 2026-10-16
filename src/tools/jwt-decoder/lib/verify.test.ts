@@ -7,10 +7,10 @@ describe("verifyJwt", () => {
     const token = await signHs(
       JSON.stringify({ typ: "JWT" }),
       JSON.stringify({ sub: "ada" }),
-      "toolsmith-example",
+      "benchline-example",
       "HS256",
     );
-    const ok = await verifyJwt(token, "HS256", "toolsmith-example", "utf8");
+    const ok = await verifyJwt(token, "HS256", "benchline-example", "utf8");
     const bad = await verifyJwt(token, "HS256", "other-secret", "utf8");
     expect(ok.status).toBe("verified");
     expect(bad.status).toBe("invalid");

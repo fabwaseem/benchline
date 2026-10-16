@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
-import { Directory } from "@/components/site/directory";
+import { HomeView } from "@/components/home/home-view";
 import { JsonLd, collectionGraph } from "@/lib/jsonld";
 import { absoluteUrl, SITE_NAME, SITE_URL } from "@/lib/site";
-import { allTags, categories, searchRecords } from "@/registry";
+import { categories, searchRecords } from "@/registry";
 
-const description =
-  "Ten instruments for AI search, previews, tokens, and the files a Next.js deploy needs.";
+const description = "A quiet bench of precise, free browser tools for people who ship the web.";
 
 export const metadata: Metadata = {
-  title: `${SITE_NAME} — developer tools`,
+  title: `${SITE_NAME} — exact tools for the web`,
   description,
   alternates: { canonical: "/" },
 };
@@ -20,12 +19,12 @@ export default function HomePage() {
       <JsonLd
         data={collectionGraph({
           url: SITE_URL,
-          name: "Toolsmith directory",
+          name: "Benchline",
           description,
           items: tools.map((tool) => ({ name: tool.name, url: absoluteUrl(`/t/${tool.slug}`) })),
         })}
       />
-      <Directory tools={tools} categories={[...categories]} tags={allTags()} showHero />
+      <HomeView categories={[...categories]} tools={tools} />
     </>
   );
 }
