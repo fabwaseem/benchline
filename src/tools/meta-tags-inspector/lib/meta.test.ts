@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { inspectHtml, tagsFromDraft } from "@/tools/meta-tags-inspector/lib/meta";
+import { characterBudget, inspectHtml, tagsFromDraft } from "@/tools/meta-tags-inspector/lib/meta";
 
 const html = `<html lang="en"><head>
 <title>Bench</title>
@@ -23,5 +23,12 @@ describe("inspectHtml", () => {
       siteName: "Benchline",
       card: "summary_large_image",
     }).next).toContain("summary_large_image");
+  });
+
+  it("counts title and description against the snippet ranges", () => {
+    expect(characterBudget("Short", 15, 60).state).toBe("warn");
+    expect(characterBudget("A title that still fits the snippet", 15, 60)).toMatchObject({ state: "ok", max: 60 });
+    expect(characterBudget("x".repeat(161), 50, 160).state).toBe("warn");
+    expect(characterBudget("", 50, 160).state).toBe("empty");
   });
 });

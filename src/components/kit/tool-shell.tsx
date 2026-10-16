@@ -1,10 +1,10 @@
-import type { ReactNode } from "react";
+import { useEffect, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 export function PrivacyBadge({ local }: { local: boolean }) {
   return (
     <span className="inline-flex shrink-0 items-center rounded-full border border-border bg-background px-2 py-0.5 text-[11px] tracking-tight text-muted-foreground">
-      {local ? "Runs locally" : "Fetches the public URL"}
+      {local ? "Runs locally" : "Fetches URL"}
     </span>
   );
 }
@@ -77,6 +77,46 @@ export function ToolTabs<T extends string>({
   );
 }
 
+export function useWorkbenchKeys(map: { onEnter?: () => void; onCopy?: () => void; onEscape?: () => void }) {
+  const { onEnter, onCopy, onEscape } = map;
+  useEffect(() => {
+    function onKey(event: globalThis.KeyboardEvent) {
+      const meta = event.metaKey || event.ctrlKey;
+      if (meta && event.key === "Enter") {
+        event.preventDefault();
+        onEnter?.();
+      } else if (meta && event.shiftKey && event.key.toLowerCase() === "c") {
+        event.preventDefault();
+        onCopy?.();
+      } else if (event.key === "Escape" && onEscape) {
+        event.preventDefault();
+        onEscape();
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onEnter, onCopy, onEscape]);
+}
+
+export function InkButton({
+  children,
+  icon,
+  className,
+  ...props
+}: ButtonHTMLAttributes<HTMLButtonElement> & { icon?: ReactNode }) {
+  const label = typeof children === "string" ? children : props["aria-label"];
+  return (
+    <>
+      <button type="button" {...props} className={cn("btn btn-ink hidden h-[30px] min-[700px]:inline-flex", className)}>
+        {children}
+      </button>
+      <button type="button" {...props} aria-label={label} className="btn btn-ink inline-flex size-11 p-0 min-[700px]:hidden">
+        {icon ?? children}
+      </button>
+    </>
+  );
+}
+
 export function ToolShell({
   runsLocally,
   actions,
@@ -87,6 +127,9 @@ export function ToolShell({
   tabs,
   status,
   layout,
+  flow = "rail",
+  columns,
+  busy = false,
 }: {
   runsLocally: boolean;
   actions?: ReactNode;
@@ -97,6 +140,9 @@ export function ToolShell({
   tabs?: ReactNode;
   status?: ReactNode;
   layout?: "single" | "split" | "split+inspector";
+  flow?: "rail" | "band";
+  columns?: string;
+  busy?: boolean;
 }) {
   if (layout) {
     return (
@@ -106,16 +152,19 @@ export function ToolShell({
           <div className="ml-auto flex items-center gap-2">
             <span className="chip max-[699px]:hidden">
               <span className={runsLocally ? "dot" : "dot dot-warn"} />
-              {runsLocally ? "Runs locally" : "Fetches the public URL"}
+              {runsLocally ? "Runs locally" : "Fetches URL"}
             </span>
             {actions}
           </div>
         </div>
+        {busy ? <div aria-hidden className="h-px w-full bg-foreground/40" /> : null}
         <div
           className={cn(
             "grid",
             layout === "split" && "min-[700px]:grid-cols-2",
-            layout === "split+inspector" && "min-[700px]:grid-cols-2 min-[1280px]:min-h-[620px] min-[1280px]:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)_340px]",
+            layout === "split+inspector" && flow === "rail" && "min-[700px]:grid-cols-2 min-[1280px]:min-h-[620px] min-[1280px]:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)_340px]",
+            layout === "split+inspector" && flow === "band" && "min-[700px]:grid-cols-2 min-[1280px]:min-h-[620px]",
+            layout === "split+inspector" && flow === "band" && (columns ?? "min-[1280px]:grid-cols-[360px_minmax(0,1fr)_320px]"),
           )}
         >
           {layout === "single" ? <div className="min-w-0">{children ?? input}</div> : null}
@@ -125,11 +174,18 @@ export function ToolShell({
               <div className="flex min-w-0 flex-col">{output}</div>
             </>
           ) : null}
-          {layout === "split+inspector" ? (
+          {layout === "split+inspector" && flow === "rail" ? (
             <>
               <div className="flex min-w-0 flex-col border-b border-border min-[700px]:col-start-1 min-[700px]:border-r min-[1280px]:col-start-1 min-[1280px]:border-b-0">{input}</div>
               <div className="flex min-w-0 flex-col border-b border-border min-[700px]:col-start-2 min-[700px]:row-span-2 min-[700px]:border-b-0 min-[1280px]:col-start-2 min-[1280px]:row-span-1 min-[1280px]:border-r">{output}</div>
               <div className="flex min-w-0 flex-col min-[700px]:col-start-1 min-[700px]:border-r min-[700px]:border-border min-[1280px]:col-start-3 min-[1280px]:border-r-0">{inspector}</div>
+            </>
+          ) : null}
+          {layout === "split+inspector" && flow === "band" ? (
+            <>
+              <div className="flex min-w-0 flex-col border-b border-border min-[700px]:border-r min-[700px]:border-b-0">{input}</div>
+              <div className="flex min-w-0 flex-col border-b border-border min-[1280px]:border-r min-[1280px]:border-b-0">{output}</div>
+              <div className="flex min-w-0 flex-col min-[700px]:col-span-2 min-[1280px]:col-span-1">{inspector}</div>
             </>
           ) : null}
         </div>

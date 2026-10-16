@@ -73,7 +73,7 @@ export default function AboutPage() {
           </h1>
         </div>
         <p className="lede self-end">
-          {SITE_NAME} replaces Toolsmith. Same domain, {SITE_URL.replace("https://", "")}, new name.
+          {SITE_NAME} is a directory of exact tools at {SITE_URL.replace("https://", "")}.
           {` ${tools.length} tools, ${categories.length} categories, ${local} of them entirely in the browser.`}
         </p>
       </header>
@@ -140,8 +140,8 @@ export default function AboutPage() {
           <FaqAccordion
             faqs={[
               {
-                q: "What changed from Toolsmith?",
-                a: "The name, the visual system, and an AI access layer. The tools are the same pure functions. The domain did not move.",
+                q: "What is Benchline?",
+                a: "A directory of exact, local, current developer tools, plus an AI access layer. The tools are pure functions. The domain is tools.fabwaseem.com.",
               },
               {
                 q: "How current are the model prices?",

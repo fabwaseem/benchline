@@ -34,4 +34,5 @@ export const meta = {
   inputs: "Template, title, subtitle, author, colors, font, and an optional logo file.",
   outputs: "A 1200×630 PNG, meta tags, and an opengraph-image.tsx file.",
   runsLocally: true,
+  badges: ["1200 × 630 · PNG"],
 } satisfies ToolMeta;

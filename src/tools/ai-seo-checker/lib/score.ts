@@ -129,6 +129,16 @@ function lengthRow(id: string, label: string, value: string, min: number, max: n
   return row(id, "pass", label, `${value.length} characters.`, weight);
 }
 
+const COUNT_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+
+export function seoVerdict(score: number, checks: { level: string }[]) {
+  const fixes = checks.filter((check) => check.level === "fail" || check.level === "warn").length;
+  if (score < 70) return "Needs work";
+  if (fixes === 0) return "Good";
+  const word = COUNT_WORDS[fixes] ?? String(fixes);
+  return `Good, with ${word} ${fixes === 1 ? "fix" : "fixes"}`;
+}
+
 export function robotsFromText(text: string | null) {
   if (!text) return null;
   return parseRobots(text);

@@ -34,4 +34,5 @@ export const meta = {
   inputs: "Package manager, Node version, base image, standalone, Prisma, healthcheck, port, and build-time env names.",
   outputs: "Dockerfile, .dockerignore, docker-compose.yml, a next.config snippet, and build commands. A zip of the files.",
   runsLocally: true,
+  badges: ["npm · pnpm · yarn · bun"],
 } satisfies ToolMeta;

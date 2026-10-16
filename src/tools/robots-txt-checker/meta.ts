@@ -32,4 +32,5 @@ export const meta = {
   inputs: "A public domain, a robots.txt URL, or a pasted robots.txt file.",
   outputs: "User-agent groups, sitemap links, and pass, warn, or fail rows for common mistakes.",
   runsLocally: false,
+  badges: ["Fetch or paste"],
 } satisfies ToolMeta;

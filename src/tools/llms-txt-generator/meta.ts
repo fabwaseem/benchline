@@ -49,4 +49,5 @@ export const meta = {
   inputs: "A public site URL, or up to 30 page URLs pasted by hand.",
   outputs: "An editable llms.txt index and an llms-full.txt file with short excerpts.",
   runsLocally: false,
+  badges: ["llms.txt · llms-full.txt"],
 } satisfies ToolMeta;

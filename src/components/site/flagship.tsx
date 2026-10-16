@@ -31,7 +31,7 @@ export function Flagship({ category, href, name }: { category: string; href: str
         {category === "nextjs" ? <DockerMini /> : null}
         {category === "seo" ? <SchemaMini /> : null}
         {category === "social" ? <OgMini /> : null}
-        {category === "ai" ? <p className="text-sm text-muted-foreground">Counts tokens with o200k and prices the models on the bench. The count stays in this browser.</p> : null}
+        {category === "ai-dev" ? <p className="text-sm text-muted-foreground">Counts tokens with o200k and prices the models on the bench. The count stays in this browser.</p> : null}
       </div>
     </div>
   );

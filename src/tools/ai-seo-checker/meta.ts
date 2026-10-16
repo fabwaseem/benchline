@@ -44,4 +44,5 @@ export const meta = {
   inputs: "One public page URL. A bare domain is accepted.",
   outputs: "A score and a pass, warn, or fail row for each signal, plus a copyable report.",
   runsLocally: false,
+  badges: ["8 crawlers · 8 signals"],
 } satisfies ToolMeta;

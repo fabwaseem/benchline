@@ -1,21 +1,28 @@
 "use client";
 
-import { useState } from "react";
-import { CodeOutput } from "@/components/kit/code-output";
+import { useRef, useState } from "react";
+import { Download, FileText } from "lucide-react";
+import { toast } from "sonner";
+import { CopyButton } from "@/components/kit/copy-button";
+import { downloadText } from "@/components/kit/download-button";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
+import { Notice } from "@/components/kit/notice";
+import { CheckRows } from "@/components/kit/check-row";
+import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
-import { ToolShell } from "@/components/kit/tool-shell";
+import { SkeletonRows } from "@/components/kit/skeleton-rows";
+import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { postTool } from "@/lib/post-tool";
 
-type Result = { pages: number; llms: string; full: string };
+type Result = { pages: number; llms: string; full: string; sources?: string[] };
 
 export default function LlmsTool() {
   const [mode, setMode] = useState<"site" | "urls">("site");
-  const [url, setUrl] = useState("https://example.com");
+  const [url, setUrl] = useState("");
   const [urls, setUrls] = useState("");
   const [llms, setLlms] = useState("");
   const [full, setFull] = useState("");
@@ -23,58 +30,180 @@ export default function LlmsTool() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [pages, setPages] = useState(0);
+  const [sources, setSources] = useState<string[]>([]);
+  const [elapsed, setElapsed] = useState(0);
+  const [fetchedUrl, setFetchedUrl] = useState("");
+  const abortRef = useRef<AbortController | null>(null);
+  const urlRef = useRef<HTMLInputElement>(null);
+  const text = file === "llms" ? llms : full;
+  const ready = mode === "site" ? url.trim().length > 0 : urls.trim().length > 0;
+  const blocked = /private/i.test(error);
 
   async function run() {
+    if (!ready) return;
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
     setBusy(true);
     setError("");
+    const started = performance.now();
     try {
-      const result = await postTool<Result>("/api/tools/llms-txt", { mode, url, urls });
+      const result = await postTool<Result>("/api/tools/llms-txt", { mode, url, urls }, controller.signal);
       setLlms(result.llms);
       setFull(result.full);
       setPages(result.pages);
+      setSources(result.sources ?? []);
+      setFetchedUrl(mode === "site" ? url.trim() : "pasted URLs");
+      setElapsed(performance.now() - started);
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "The generator failed.");
+      if (isAbort(cause)) return;
+      setLlms("");
+      setFull("");
+      setError(shownError(cause, "The generator failed."));
     } finally {
-      setBusy(false);
+      if (abortRef.current === controller) setBusy(false);
     }
   }
 
-  const text = file === "llms" ? llms : full;
+  function cancel() {
+    abortRef.current?.abort();
+    setBusy(false);
+    urlRef.current?.focus();
+  }
+
+  useWorkbenchKeys({
+    onEnter: () => void run(),
+    onCopy: () => {
+      if (!text) return;
+      void navigator.clipboard.writeText(text).then(() => toast.success("File copied"));
+    },
+    onEscape: cancel,
+  });
+
+  const status = busy
+    ? `GET ${url || "pasted URLs"}…`
+    : error
+      ? blocked
+        ? "Refused · private address"
+        : "Failed"
+      : text
+        ? `${fetchedUrl} · ${pages.toLocaleString("en-US")} pages · ${(elapsed / 1000).toFixed(1)} s`
+        : "Waiting for a site URL";
 
   return (
     <ToolShell
       runsLocally={false}
+      busy={busy}
+      layout="split+inspector"
+      flow="band"
+      columns="min-[1280px]:grid-cols-[340px_minmax(0,1fr)_320px]"
+      tabs={<ToolTabs label="Mode" value="generate" onChange={() => {}} options={[{ value: "generate", label: "Generate" }]} />}
       actions={
-        <Button type="button" onClick={() => void run()} disabled={busy}>
-          {busy ? "Reading" : "Generate"}
-        </Button>
+        busy ? (
+          <Button type="button" variant="outline" className="h-[30px]" onClick={cancel}>Cancel</Button>
+        ) : (
+          <InkButton onClick={() => downloadText(file === "llms" ? "llms.txt" : "llms-full.txt", text)} disabled={!text} icon={<Download size={15} />}>
+            Download llms.txt
+          </InkButton>
+        )
+      }
+      status={
+        <>
+          <span className={error ? "dot dot-warn" : "dot"} style={error ? undefined : text ? { background: "var(--success)" } : { background: "var(--warning)" }} />
+          <span>{status}</span>
+          <span className="ml-auto hidden min-[700px]:inline">⌘↵ generate · ⌘⇧C copy file · esc cancel</span>
+        </>
       }
       input={
-        <>
+        <Panel title="Source">
+          <p className="text-[12.5px] text-muted-foreground">Submit a public site, or paste page URLs. You can edit the preview before you copy it.</p>
           <Segmented label="Source" value={mode} onChange={setMode} options={[{ value: "site", label: "Site URL" }, { value: "urls", label: "Paste URLs" }]} />
           {mode === "site" ? (
-            <FieldRow label="Site URL" htmlFor="llms-url" help="A bare domain is fine. Up to 30 pages. Private addresses are refused.">
-              <Input id="llms-url" value={url} onChange={(event) => setUrl(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") void run(); }} />
+            <FieldRow label="Site URL" htmlFor="llms-url" help="A bare domain is fine. Up to 30 pages. Private addresses are refused." error={blocked ? error : undefined}>
+              <Input ref={urlRef} id="llms-url" value={url} aria-invalid={blocked || undefined} onChange={(event) => setUrl(event.target.value)} className="max-[699px]:h-11" autoFocus />
             </FieldRow>
           ) : (
             <FieldRow label="Page URLs" htmlFor="llms-urls" help="One URL per line, up to 30.">
-              <Textarea id="llms-urls" value={urls} onChange={(event) => setUrls(event.target.value)} className="min-h-40" />
+              <Textarea id="llms-urls" value={urls} onChange={(event) => setUrls(event.target.value)} className="min-h-40 max-[699px]:min-h-11" />
             </FieldRow>
           )}
-        </>
+          <Button type="button" className="btn btn-ink h-11" aria-busy={busy} disabled={!ready || busy} onClick={() => void run()}>
+            {busy ? "Cancel" : "Generate"}
+          </Button>
+          {busy ? <Button type="button" variant="outline" onClick={cancel}>Cancel</Button> : null}
+          <Notice tone="neutral" title="What is fetched" body="The server reads robots.txt and sitemap.xml, including Sitemap lines in robots.txt. If those are missing, it collects links from the homepage. Private addresses are refused." />
+          <Segmented label="File" value={file} onChange={setFile} options={[{ value: "llms", label: "llms.txt" }, { value: "full", label: "llms-full.txt" }]} />
+        </Panel>
       }
       output={
-        text ? (
-          <div className="flex flex-col gap-3">
-            <p className="text-xs text-muted-foreground tabular-nums" aria-live="polite">{pages} pages</p>
-            <Segmented label="File" value={file} onChange={setFile} options={[{ value: "llms", label: "llms.txt" }, { value: "full", label: "llms-full.txt" }]} />
-            <Textarea aria-label="Editable preview" value={text} onChange={(event) => (file === "llms" ? setLlms(event.target.value) : setFull(event.target.value))} className="min-h-64 font-mono text-xs" />
-            <CodeOutput code={text} filename={file === "llms" ? "llms.txt" : "llms-full.txt"} label={file === "llms" ? "llms.txt" : "llms-full.txt"} />
-          </div>
-        ) : (
-          <EmptyState title={error || "The file shows up here"} hint="Submit a public site, or paste page URLs. You can edit the preview before you copy it." />
-        )
+        <div className="flex min-h-[280px] flex-col" aria-live="polite">
+          {busy ? <SkeletonRows /> : text ? (
+            <Panel title="Preview">
+              <Textarea aria-label="Editable preview" value={text} onChange={(event) => (file === "llms" ? setLlms(event.target.value) : setFull(event.target.value))} className="min-h-64 font-mono text-xs" />
+              <div className="flex flex-wrap gap-2">
+                <CopyButton value={text} label="Copy" toastMessage="File copied" />
+                <Button type="button" variant="outline" onClick={() => downloadText(file === "llms" ? "llms.txt" : "llms-full.txt", text)}>Download</Button>
+              </div>
+            </Panel>
+          ) : (
+            <EmptyState art={<FileText size={22} />} title={error && !blocked ? "The generator failed." : blocked ? "Nothing fetched" : "The file shows up here"} hint={error || "Submit a public site, or paste page URLs. You can edit the preview before you copy it."} />
+          )}
+        </div>
+      }
+      inspector={
+        <Panel title="Sources">
+          {text ? (
+            <>
+              <CheckRows
+                rows={(sources.length ? sources : ["Not recorded"]).map((source) => ({
+                  level: "info" as const,
+                  label: source,
+                  detail: source === "pasted URLs" ? "The list was sent as written." : `Read during this fetch.`,
+                }))}
+              />
+              <p className="px-4 text-[12.5px] font-medium">Sections</p>
+              <ul className="px-4 text-[13px]">
+                {sectionsIn(llms).map((section) => (
+                  <li key={section.name} className="flex justify-between border-t border-border py-2">
+                    <span>{section.name}</span>
+                    <span className="font-mono text-muted-foreground">{section.count}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="grid grid-cols-2 gap-2 px-4">
+                <ResultStat variant="well" label="Pages" value={pages.toLocaleString("en-US")} />
+                <ResultStat variant="well" label="Duration" value={`${(elapsed / 1000).toFixed(1)} s`} />
+              </div>
+            </>
+          ) : (
+            <p className="px-4 text-sm text-muted-foreground">{busy ? "Reading the sitemap…" : "Not run yet."}</p>
+          )}
+          {blocked ? <Notice className="mx-4" tone="bad" role="alert" title="Private addresses are refused." /> : null}
+        </Panel>
       }
     />
   );
+}
+
+function sectionsIn(text: string) {
+  const sections: { name: string; count: number }[] = [];
+  let current: { name: string; count: number } | null = null;
+  for (const line of text.split("\n")) {
+    if (line.startsWith("## ")) {
+      current = { name: line.slice(3).trim(), count: 0 };
+      sections.push(current);
+    } else if (current && line.startsWith("- ")) current.count += 1;
+  }
+  return sections;
+}
+
+function isAbort(error: unknown) {
+  return error instanceof DOMException && error.name === "AbortError";
+}
+
+function shownError(error: unknown, fallback: string) {
+  const message = error instanceof Error ? error.message : fallback;
+  if (/private address/i.test(message)) return "Private addresses are refused.";
+  if (message === "The check failed.") return fallback;
+  return message || fallback;
 }

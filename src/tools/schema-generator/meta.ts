@@ -34,4 +34,5 @@ export const meta = {
   inputs: "A schema type and the fields that type needs, including repeaters for FAQ, steps, and breadcrumbs.",
   outputs: "A script tag, raw JSON, a Next.js snippet, and a pass or warn checklist.",
   runsLocally: true,
+  badges: ["12 schema types"],
 } satisfies ToolMeta;

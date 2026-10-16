@@ -34,4 +34,5 @@ export const meta = {
   inputs: "A public page URL, or title, description, image, and card fields in the editor.",
   outputs: "Platform previews, a checklist, and copy-ready meta tags plus a Next.js metadata object.",
   runsLocally: false,
+  badges: ["Google · X · LinkedIn · Slack"],
 } satisfies ToolMeta;

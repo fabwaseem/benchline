@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { parseRobots } from "@/lib/robots";
-import { scoreSeo } from "@/tools/ai-seo-checker/lib/score";
+import { scoreSeo, seoVerdict } from "@/tools/ai-seo-checker/lib/score";
 
 describe("scoreSeo", () => {
   it("scores a complete page higher than a bare http page", () => {
@@ -42,5 +42,7 @@ describe("scoreSeo", () => {
     });
     expect(rich.score).toBeGreaterThan(bare.score);
     expect(bare.checks.find((check) => check.id === "robots-meta")?.level).toBe("fail");
+    expect(seoVerdict(bare.score, bare.checks)).toBe("Needs work");
+    expect(seoVerdict(78, [{ level: "fail" }, { level: "warn" }])).toBe("Good, with two fixes");
   });
 });

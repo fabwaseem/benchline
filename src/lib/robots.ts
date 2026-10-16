@@ -2,6 +2,7 @@ export type RobotGroup = {
   agents: string[];
   allow: string[];
   disallow: string[];
+  crawlDelay?: string;
 };
 
 export type RobotsDocument = {
@@ -28,7 +29,7 @@ export function parseRobots(text: string): RobotsDocument {
     const field = line.slice(0, split).trim().toLowerCase();
     const value = line.slice(split + 1).trim();
     if (field === "user-agent") {
-      if (!current || current.allow.length > 0 || current.disallow.length > 0) {
+      if (!current || current.allow.length > 0 || current.disallow.length > 0 || current.crawlDelay) {
         current = { agents: [], allow: [], disallow: [] };
         groups.push(current);
       }
@@ -39,6 +40,9 @@ export function parseRobots(text: string): RobotsDocument {
     } else if (field === "disallow") {
       current ??= pushGroup(groups);
       current.disallow.push(value);
+    } else if (field === "crawl-delay") {
+      current ??= pushGroup(groups);
+      current.crawlDelay = value;
     } else if (field === "sitemap" && value) {
       sitemaps.push(value);
     }
@@ -143,6 +147,14 @@ export function robotsIssues(document: RobotsDocument, options?: { html?: boolea
         detail: sitemap,
       });
     }
+  }
+  for (const group of document.groups) {
+    if (!group.crawlDelay) continue;
+    issues.push({
+      level: "info",
+      label: "Crawl-delay",
+      detail: `${group.agents.join(", ") || "*"} sets Crawl-delay: ${group.crawlDelay}. Major crawlers ignore Crawl-delay.`,
+    });
   }
   if (document.groups.length === 0 && !options?.html) {
     issues.push({

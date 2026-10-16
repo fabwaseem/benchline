@@ -34,7 +34,7 @@ export const categories = [
     hue: 255,
   },
   {
-    slug: "ai",
+    slug: "ai-dev",
     name: "AI dev",
     description: "Token counts and the cost of a prompt before you send it.",
     icon: "Sparkles",

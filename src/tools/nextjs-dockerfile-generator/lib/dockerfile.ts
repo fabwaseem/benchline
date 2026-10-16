@@ -170,6 +170,14 @@ export default nextConfig;
 `;
 }
 
+export function buildArgWarnings(names: string[]) {
+  return names
+    .map((name) => name.trim())
+    .filter(Boolean)
+    .filter((name) => !name.startsWith("NEXT_PUBLIC_"))
+    .map((name) => `${name} would be baked into the image.`);
+}
+
 export function buildCommands(options: DockerfileOptions) {
   const args = options.publicEnvs.filter(Boolean).map((name) => `--build-arg ${name}=...`).join(" ");
   return [`docker build -t app ${args}`.trim(), `docker run --rm -p ${options.port}:${options.port} app`].join("\n");
