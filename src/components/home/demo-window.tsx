@@ -33,7 +33,7 @@ export function DemoWindow() {
           </span>
           <div className="seg ml-2 max-w-full overflow-x-auto" role="tablist" aria-label="Try a tool">
             {tabs.map((item) => (
-              <button key={item.id} type="button" role="tab" aria-selected={tab === item.id} className={tab === item.id ? "on" : ""} onClick={() => setTab(item.id)}>
+              <button key={item.id} type="button" role="tab" aria-label={item.label} aria-selected={tab === item.id} className={tab === item.id ? "on" : ""} onClick={() => setTab(item.id)}>
                 <Cover hue={item.hue} icon={item.icon} size={18} />
                 <span className={item.id === "og" || item.id === "tokens" ? "max-[699px]:hidden" : ""}>{item.label}</span>
               </button>

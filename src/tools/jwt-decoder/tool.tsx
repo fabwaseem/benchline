@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { useMemo, useRef, useState, useSyncExternalStore, type KeyboardEvent } from "react";
 import { Check, Clock, Copy, Eye, EyeOff, KeyRound, ShieldCheck, X } from "lucide-react";
 import { toast } from "sonner";
 import { CopyButton } from "@/components/kit/copy-button";
@@ -39,6 +39,11 @@ function measureDecode(value: string) {
 }
 
 const initialMs = measureDecode(EXAMPLE_TOKEN);
+const noopSubscribe = () => () => {};
+// Timing and clock text differ between server and browser, so it only renders after hydration.
+function useHydrated() {
+  return useSyncExternalStore(noopSubscribe, () => true, () => false);
+}
 const TOKEN_HELP = "A Bearer prefix is stripped. The token stays in this browser.";
 const KEY_HELP = "No JWKS URL is fetched. Paste the document instead.";
 const SIGN_HELP = "For testing only. Asymmetric private keys are not accepted here.";
@@ -60,6 +65,7 @@ export default function JwtTool() {
   const [signed, setSigned] = useState("");
   const [signError, setSignError] = useState("");
   const [view, setView] = useState<"claims" | "json">("claims");
+  const hydrated = useHydrated();
   const tokenRef = useRef<HTMLTextAreaElement>(null);
   const alertTimer = useRef<number | null>(null);
   const result = useMemo(() => decodeJwt(token), [token]);
@@ -150,7 +156,7 @@ export default function JwtTool() {
         status={
           <>
             <span className="dot" style={{ background: status.color }} />
-            <span>{status.text}</span>
+            <span>{hydrated ? status.text : "Decoding…"}</span>
             <span className="ml-auto hidden min-[700px]:inline">⌘↵ verify · ⌘⇧C copy payload · esc clear</span>
           </>
         }
