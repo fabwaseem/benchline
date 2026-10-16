@@ -34,7 +34,7 @@ export default function JwtTool() {
 
   async function encode() {
     try {
-      setSigned(await signHs(headerJson, payloadJson, secret || "toolsmith-example", signAlg));
+      setSigned(await signHs(headerJson, payloadJson, secret || "benchline-example", signAlg));
       setSignError("");
     } catch (error) {
       setSigned("");

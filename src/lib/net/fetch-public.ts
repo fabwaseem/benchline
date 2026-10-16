@@ -42,7 +42,7 @@ export async function fetchPublic(
       signal: AbortSignal.timeout(FETCH_LIMITS.timeoutMs),
       headers: {
         accept: init?.accept ?? "text/html,application/xhtml+xml,text/plain,application/xml;q=0.9,*/*;q=0.5",
-        "user-agent": "Toolsmith/1.0 (+https://tools.fabwaseem.com)",
+        "user-agent": "Benchline/1.0 (+https://tools.fabwaseem.com)",
       },
     });
 

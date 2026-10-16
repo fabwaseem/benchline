@@ -16,6 +16,9 @@ export function assertRegistry(metas: unknown[], cats: unknown[], order: readonl
     if (!iconNames.has(category.icon)) {
       throw new Error(`Unknown icon ${category.icon} on category ${category.slug}`);
     }
+    if (category.hue >= 25 && category.hue <= 60) {
+      throw new Error(`Category ${category.slug} uses a reserved orange hue`);
+    }
   }
 
   const slugs = new Set<string>();

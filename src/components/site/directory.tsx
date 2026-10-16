@@ -69,7 +69,7 @@ export function Directory({
             }}
           />
           <div className="relative max-w-2xl">
-            <p className="text-xs font-medium tracking-[0.16em] text-primary uppercase">Toolsmith</p>
+            <p className="text-xs font-medium tracking-[0.16em] text-primary uppercase">Benchline</p>
             <h1 className="mt-3 max-w-xl text-4xl font-semibold tracking-tight sm:text-6xl sm:leading-[0.95]">
               A quiet bench for exact work.
             </h1>

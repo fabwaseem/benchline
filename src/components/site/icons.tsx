@@ -1,61 +1,14 @@
-import {
-  Bot,
-  Box,
-  Braces,
-  Clock,
-  Coins,
-  Container,
-  FileText,
-  Image as ImageIcon,
-  KeyRound,
-  Search,
-  Share2,
-  Shield,
-  Sparkles,
-  Tags,
-  Terminal,
-} from "lucide-react";
+import { createElement } from "react";
+import { iconFor } from "@/lib/icons";
 
 export function ToolIcon({
   name,
   className,
+  size = 16,
 }: {
   name: string;
   className?: string;
+  size?: number;
 }) {
-  const props = { className, "aria-hidden": true as const };
-  switch (name) {
-    case "Bot":
-      return <Bot {...props} />;
-    case "Box":
-      return <Box {...props} />;
-    case "Braces":
-      return <Braces {...props} />;
-    case "Clock":
-      return <Clock {...props} />;
-    case "Coins":
-      return <Coins {...props} />;
-    case "Container":
-      return <Container {...props} />;
-    case "FileText":
-      return <FileText {...props} />;
-    case "Image":
-      return <ImageIcon {...props} />;
-    case "KeyRound":
-      return <KeyRound {...props} />;
-    case "Search":
-      return <Search {...props} />;
-    case "Share2":
-      return <Share2 {...props} />;
-    case "Shield":
-      return <Shield {...props} />;
-    case "Sparkles":
-      return <Sparkles {...props} />;
-    case "Tags":
-      return <Tags {...props} />;
-    case "Terminal":
-      return <Terminal {...props} />;
-    default:
-      return <FileText {...props} />;
-  }
+  return createElement(iconFor(name), { className, size, strokeWidth: 1.75, "aria-hidden": true });
 }
