@@ -1,14 +1,6 @@
 import { useEffect, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-export function PrivacyBadge({ local }: { local: boolean }) {
-  return (
-    <span className="inline-flex shrink-0 items-center rounded-full border border-border bg-background px-2 py-0.5 text-[11px] tracking-tight text-muted-foreground">
-      {local ? "Runs locally" : "Fetches URL"}
-    </span>
-  );
-}
-
 export function Panel({
   title,
   children,
@@ -118,7 +110,6 @@ export function InkButton({
 }
 
 export function ToolShell({
-  runsLocally,
   actions,
   input,
   output,
@@ -150,10 +141,6 @@ export function ToolShell({
         <div className="flex h-12 items-center gap-3 border-b border-border bg-gradient-to-b from-surface to-well px-3.5 min-[700px]:px-5 dark:from-raised dark:to-surface">
           {tabs}
           <div className="ml-auto flex items-center gap-2">
-            <span className="chip max-[699px]:hidden">
-              <span className={runsLocally ? "dot" : "dot dot-warn"} />
-              {runsLocally ? "Runs locally" : "Fetches URL"}
-            </span>
             {actions}
           </div>
         </div>
@@ -195,10 +182,11 @@ export function ToolShell({
   }
   return (
     <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
-      <div className="flex items-center gap-2 border-b border-border px-3 py-2">
-        <PrivacyBadge local={runsLocally} />
-        {actions ? <div className="ml-auto flex shrink-0 items-center gap-2">{actions}</div> : null}
-      </div>
+      {actions ? (
+        <div className="flex items-center gap-2 border-b border-border px-3 py-2">
+          <div className="ml-auto flex shrink-0 items-center gap-2">{actions}</div>
+        </div>
+      ) : null}
       {children ?? (
         <div className="grid lg:grid-cols-2 lg:divide-x lg:divide-border">
           <Panel title="Input">{input}</Panel>

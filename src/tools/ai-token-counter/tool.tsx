@@ -31,18 +31,15 @@ export default function TokenTool() {
   const [requests, setRequests] = useState(100);
   const [cached, setCached] = useState(0);
   const [showTokens, setShowTokens] = useState(true);
-  const [countMs, setCountMs] = useState(0);
   const [fileName, setFileName] = useState("");
   const [count, setCount] = useState<Count>({ count: 0, chars: SAMPLE.length, words: SAMPLE.split(/\s+/).filter(Boolean).length, segments: [] });
 
   useEffect(() => {
     const worker = new Worker(new URL("./tokenizer.worker.ts", import.meta.url));
     const id = 1;
-    const started = performance.now();
     worker.onmessage = (event: MessageEvent<Count & { id: number }>) => {
       if (event.data.id !== id) return;
       setCount(event.data);
-      setCountMs(performance.now() - started);
     };
     worker.postMessage({ id, text, encoding, preview: showTokens ? 2000 : 0 });
     return () => worker.terminate();
@@ -68,7 +65,7 @@ export default function TokenTool() {
   });
 
   const status = text.trim()
-    ? `${count.count.toLocaleString("en-US")} tokens · ${encoding === "o200k" ? "o200k_base" : "cl100k_base"} · ${countMs.toFixed(1)} ms`
+    ? `${count.count.toLocaleString("en-US")} tokens · ${encoding === "o200k" ? "o200k_base" : "cl100k_base"}`
     : "Waiting for a prompt";
 
   return (

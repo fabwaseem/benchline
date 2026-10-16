@@ -32,13 +32,6 @@ import { signHs, verifyJwt, type VerifyResult } from "@/tools/jwt-decoder/lib/ve
 const IDLE: VerifyResult = { status: "idle", message: "Add a secret or public key to check the signature." };
 const openedAt = Date.now();
 
-function measureDecode(value: string) {
-  const start = performance.now();
-  decodeJwt(value);
-  return performance.now() - start;
-}
-
-const initialMs = measureDecode(EXAMPLE_TOKEN);
 const noopSubscribe = () => () => {};
 // Timing and clock text differ between server and browser, so it only renders after hydration.
 function useHydrated() {
@@ -52,7 +45,6 @@ const FIELD = "min-h-[150px] w-full resize-y border-0 bg-transparent px-3.5 py-3
 export default function JwtTool() {
   const [tab, setTab] = useState<"decode" | "encode">("decode");
   const [token, setToken] = useState(EXAMPLE_TOKEN);
-  const [decodeMs, setDecodeMs] = useState(initialMs);
   const [secret, setSecret] = useState("");
   const [secretVisible, setSecretVisible] = useState(false);
   const [encoding, setEncoding] = useState<"utf8" | "base64">("utf8");
@@ -91,7 +83,6 @@ export default function JwtTool() {
   }
 
   function updateToken(value: string) {
-    setDecodeMs(measureDecode(value));
     setToken(value);
     setVerify(IDLE);
     scheduleAlert(value);
@@ -139,7 +130,7 @@ export default function JwtTool() {
     }
   }
 
-  const status = statusLine({ result, ms: decodeMs, alg, verify, expired, now: openedAt });
+  const status = statusLine({ result, alg, verify, expired, now: openedAt });
 
   return (
     <div onKeyDown={onWindowKey}>
@@ -396,14 +387,12 @@ function verifiedBody(alg: string) {
 
 function statusLine({
   result,
-  ms,
   alg,
   verify,
   expired,
   now,
 }: {
   result: ReturnType<typeof decodeJwt>;
-  ms: number;
   alg: string;
   verify: VerifyResult;
   expired: boolean;
@@ -414,12 +403,12 @@ function statusLine({
     return { text: result.segment ? `Could not decode segment ${result.segment}` : result.error, color: "var(--status-bad)" };
   }
   if (alg === "none") return { text: "alg none · no signature", color: "var(--status-bad)" };
-  if (verify.status === "invalid") return { text: `Decoded in ${ms.toFixed(1)} ms · ${alg} · signature rejected`, color: "var(--status-bad)" };
+  if (verify.status === "invalid") return { text: `${alg} · signature rejected`, color: "var(--status-bad)" };
   if (verify.status === "unsupported") return { text: verify.message, color: "var(--faint)" };
   if (expired && typeof result.payload.exp === "number") {
-    return { text: `Decoded · expired ${relativeTo(new Date(result.payload.exp * 1000), now)}`, color: "var(--warning)" };
+    return { text: `Expired ${relativeTo(new Date(result.payload.exp * 1000), now)}`, color: "var(--warning)" };
   }
-  return { text: `Decoded in ${ms.toFixed(1)} ms · ${alg || "unsigned"} · 3 segments`, color: "var(--success)" };
+  return { text: `${alg || "unsigned"} · 3 segments`, color: "var(--success)" };
 }
 
 function tokenParts(value: string) {

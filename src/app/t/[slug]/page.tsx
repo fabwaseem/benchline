@@ -84,14 +84,9 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           ) : null}
         </div>
         <div className="flex flex-col items-start gap-3">
-          {badges.length ? badges.map((badge) => (
+          {badges.map((badge) => (
             <span key={badge} className="chip">{badge}</span>
-          )) : (
-            <span className="chip">
-              <span className={tool.runsLocally ? "dot" : "dot dot-warn"} />
-              {tool.runsLocally ? "Runs locally" : "Fetches the URL you submit"}
-            </span>
-          )}
+          ))}
           <ToolActions slug={tool.slug} title={tool.name} />
         </div>
       </header>

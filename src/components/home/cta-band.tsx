@@ -16,7 +16,7 @@ export function CtaBand() {
             <br />
             <span className="text-faint">Skip the rest.</span>
           </h2>
-          <p className="lede mt-5 max-w-[40ch]">Every tool is two keystrokes away, on every page. No account, no tracking, no limits.</p>
+          <p className="lede mt-5 max-w-[40ch]">Every tool is two keystrokes away, on every page.</p>
           <div className="mt-7 flex flex-wrap gap-2.5">
             <Link href="/explore" className="btn-ink btn btn-lg">
               Browse all tools <ArrowRight size={15} strokeWidth={1.75} />

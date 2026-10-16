@@ -60,10 +60,6 @@ export function Explorer({
               <div className="text-[14.5px] font-semibold tracking-[-0.015em]">{tool.name}</div>
               <div className="mt-0.5 truncate text-[13px] text-muted-foreground">{tool.tagline}</div>
             </div>
-            <span className="chip hidden min-[700px]:inline-flex">
-              <span className={tool.runsLocally ? "dot" : "dot dot-warn"} />
-              {tool.runsLocally ? "In browser" : "Fetches URL"}
-            </span>
             <ArrowRight size={15} strokeWidth={1.75} className="text-faint" />
           </Link>
         ))}
