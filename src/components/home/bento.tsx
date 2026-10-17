@@ -62,7 +62,7 @@ export function Bento() {
           <div className="relative flex aspect-[1200/630] flex-col overflow-hidden rounded-xl bg-foreground p-6 text-background">
             <div className="font-mono text-[11px] tracking-[0.06em] text-background/60">BENCHLINE · BLOG</div>
             <div className="mt-auto max-w-[13ch] text-[clamp(22px,2.4vw,34px)] leading-none font-semibold tracking-[-0.045em]">How we ship OG cards that never break.</div>
-            <div className="mt-3.5 flex gap-2.5 font-mono text-[12px] text-background/55"><span>Waseem Anjum</span><span>·</span><span>Sample card</span></div>
+            <div className="mt-3.5 flex gap-2.5 font-mono text-[12px] text-background/55"><span>Benchline</span><span>·</span><span>Sample card</span></div>
           </div>
           <div className="hidden flex-col min-[800px]:flex">
             <div className="font-mono text-[11px] tracking-[0.07em] text-faint uppercase">Card</div>

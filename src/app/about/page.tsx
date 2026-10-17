@@ -4,7 +4,7 @@ import { categories } from "@/registry/categories";
 import { tools } from "@/registry";
 import { FaqAccordion } from "@/components/kit/faq-accordion";
 import { JsonLd } from "@/lib/jsonld";
-import { MAKER_URL, SITE_NAME, SITE_URL } from "@/lib/site";
+import { GITHUB_URL, SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About",
@@ -40,10 +40,13 @@ export default function AboutPage() {
           "@context": "https://schema.org",
           "@graph": [
             {
-              "@type": "Person",
-              name: "Waseem Anjum",
-              url: MAKER_URL,
-              sameAs: ["https://github.com/fabwaseem"],
+              "@type": "AboutPage",
+              "@id": `${SITE_URL}/about#page`,
+              url: `${SITE_URL}/about`,
+              name: `About ${SITE_NAME}`,
+              about: { "@id": `${SITE_URL}#organization` },
+              publisher: { "@id": `${SITE_URL}#organization` },
+              isPartOf: { "@id": `${SITE_URL}#website` },
             },
             {
               "@type": "FAQPage",
@@ -125,14 +128,14 @@ export default function AboutPage() {
 
       <section className="mt-16 grid gap-8 lg:grid-cols-2">
         <div className="card p-7">
-          <p className="eyebrow">Maker</p>
-          <h2 className="mt-3 text-[28px] font-medium tracking-[-0.03em]">Waseem Anjum</h2>
+          <p className="eyebrow">Open bench</p>
+          <h2 className="mt-3 text-[28px] font-medium tracking-[-0.03em]">{SITE_NAME}</h2>
           <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
-            Built and maintained by one person. The source is public, the registry is generated, and
-            the prices say when they were last checked.
+            An independent tool bench. The source is public, the registry is generated, and the
+            prices say when they were last checked.
           </p>
-          <a href={MAKER_URL} className="btn btn-ink mt-5">
-            fabwaseem.com
+          <a href={GITHUB_URL} className="btn btn-ink mt-5">
+            Read the source
           </a>
         </div>
         <div>
@@ -141,7 +144,7 @@ export default function AboutPage() {
             faqs={[
               {
                 q: "What is Benchline?",
-                a: "A directory of exact, local, current developer tools, plus an AI access layer. The tools are pure functions. The domain is tools.fabwaseem.com.",
+                a: "A directory of exact, local, current developer tools, plus an AI access layer. The tools are pure functions.",
               },
               {
                 q: "How current are the model prices?",

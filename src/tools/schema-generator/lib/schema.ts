@@ -23,13 +23,13 @@ const iso = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}(:\d{2})?(Z|[+-]\d{2}:\d{2})?)?$/;
 
 export function exampleValues(type: SchemaType): SchemaValues {
   const shared = {
-    Article: { headline: "How a bench stays precise", description: "A short article.", image: "https://example.com/cover.png", datePublished: "2026-10-16", author: "Waseem Anjum", url: "https://example.com/article" },
-    BlogPosting: { headline: "Notes from the bench", description: "A blog post.", image: "https://example.com/cover.png", datePublished: "2026-10-16", author: "Waseem Anjum", url: "https://example.com/blog/notes" },
+    Article: { headline: "How a bench stays precise", description: "A short article.", image: "https://example.com/cover.png", datePublished: "2026-10-16", author: "Ada Lovelace", url: "https://example.com/article" },
+    BlogPosting: { headline: "Notes from the bench", description: "A blog post.", image: "https://example.com/cover.png", datePublished: "2026-10-16", author: "Ada Lovelace", url: "https://example.com/blog/notes" },
     FAQPage: { name: "Benchline FAQ", faqs: [{ q: "Does it store the page?", a: "No." }] },
     HowTo: { name: "Ship a Dockerfile", description: "Three steps.", steps: [{ name: "Pick Node", text: "Choose 22." }, { name: "Build", text: "docker build ." }] },
     Product: { name: "Bench lamp", description: "A small lamp.", price: "48", currency: "USD", brand: "Benchline", ratingValue: "4.8", ratingCount: "12", url: "https://example.com/lamp" },
-    Organization: { name: "Benchline", url: "https://tools.fabwaseem.com", logo: "https://tools.fabwaseem.com/icon", sameAs: "https://github.com/fabwaseem" },
-    Person: { name: "Waseem Anjum", jobTitle: "Engineer", url: "https://example.com" },
+    Organization: { name: "Benchline", url: "https://tools.fabwaseem.com", logo: "https://tools.fabwaseem.com/icon", sameAs: "https://example.com/benchline" },
+    Person: { name: "Ada Lovelace", jobTitle: "Engineer", url: "https://example.com" },
     LocalBusiness: { name: "Bench Studio", street: "1 Paper Street", city: "Lahore", hours: "Mo-Fr 09:00-17:00", url: "https://example.com" },
     BreadcrumbList: { items: [{ name: "Home", url: "https://example.com" }, { name: "Tools", url: "https://example.com/tools" }] },
     SoftwareApplication: { name: "Benchline", operatingSystem: "Web", category: "DeveloperApplication", url: "https://tools.fabwaseem.com" },

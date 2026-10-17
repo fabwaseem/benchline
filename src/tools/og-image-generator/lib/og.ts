@@ -19,7 +19,7 @@ export const ogExample: OgInput = {
   template: "blog",
   title: "Ship the note people actually share",
   subtitle: "A 1200×630 card with a title you can still read in the preview.",
-  author: "Waseem Anjum",
+  author: "Benchline",
   background: "oklch(0.22 0.02 260)",
   foreground: "oklch(0.96 0.005 95)",
   accent: "oklch(0.68 0.16 262)",
