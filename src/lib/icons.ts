@@ -1,4 +1,6 @@
 import {
+  Aperture,
+  AppWindow,
   ArrowLeftRight,
   Binary,
   Bot,
@@ -8,7 +10,9 @@ import {
   Clock,
   Coins,
   Container,
+  Crop,
   Diff,
+  Eraser,
   FileCode,
   FileImage,
   FileText,
@@ -27,6 +31,8 @@ import {
   QrCode,
   RotateCw,
   Scaling,
+  ScanBarcode,
+  ScanText,
   Scissors,
   Search,
   Share2,
@@ -40,6 +46,8 @@ import {
 } from "lucide-react";
 
 export const ICONS = {
+  Aperture,
+  AppWindow,
   ArrowLeftRight,
   Binary,
   Bot,
@@ -49,7 +57,9 @@ export const ICONS = {
   Clock,
   Coins,
   Container,
+  Crop,
   Diff,
+  Eraser,
   FileCode,
   FileImage,
   FileText,
@@ -68,6 +78,8 @@ export const ICONS = {
   QrCode,
   RotateCw,
   Scaling,
+  ScanBarcode,
+  ScanText,
   Scissors,
   Search,
   Share2,

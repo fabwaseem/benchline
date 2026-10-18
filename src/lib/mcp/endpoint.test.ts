@@ -137,6 +137,13 @@ describe("MCP endpoint", () => {
       protect_pdf: { data: pdf, action: "protect", password: "secret" },
       convert_markdown_html: { text: "# Hi\n", to: "html" },
       fetch_page_markdown: { url: "https://1.1.1.1/" },
+      read_barcode: { file: image },
+      optimize_svg: { svg: "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"10\" height=\"10\" viewBox=\"0 0 10 10\"><rect width=\"10\" height=\"10\" fill=\"#ffffff\"/></svg>" },
+      read_exif: { file: image, action: "read" },
+      crop_image: { file: image, x: 0, y: 0, width: 1, height: 1 },
+      generate_favicon: { text: "B", background: "#111111", color: "#ffffff" },
+      read_image_text: { file: image, language: "eng" },
+      remove_background: { file: image, tolerance: 24, feather: false },
     };
 
     const missing = mcpTools.map((tool) => tool.name).filter((name) => !(name in samples));

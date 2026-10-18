@@ -42,6 +42,13 @@ const views: Record<string, ComponentType> = {
   "pdf-protect-unlock": dynamic(() => import("@/tools/pdf-protect-unlock/tool")),
   "markdown-html": dynamic(() => import("@/tools/markdown-html/tool")),
   "html-to-markdown-url": dynamic(() => import("@/tools/html-to-markdown-url/tool")),
+  "qr-code-reader": dynamic(() => import("@/tools/qr-code-reader/tool")),
+  "svg-optimizer": dynamic(() => import("@/tools/svg-optimizer/tool")),
+  "exif-viewer-remover": dynamic(() => import("@/tools/exif-viewer-remover/tool")),
+  "image-crop": dynamic(() => import("@/tools/image-crop/tool")),
+  "favicon-generator": dynamic(() => import("@/tools/favicon-generator/tool")),
+  "ocr-image-to-text": dynamic(() => import("@/tools/ocr-image-to-text/tool")),
+  "background-remover": dynamic(() => import("@/tools/background-remover/tool")),
 };
 
 export function ToolHost({ slug }: { slug: string }) {

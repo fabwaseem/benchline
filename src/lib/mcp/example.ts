@@ -43,6 +43,7 @@ function sampleString(key: string | undefined, checks: Check[]) {
   if (key === "token" || key === "jwt") return "eyJhbGciOiJub25lIn0.eyJzdWIiOiJhZGEifQ.";
   if (key === "expression" || key === "cron") return "0 * * * *";
   if (key === "html" || key === "source") return "<p>Hello</p>";
+  if (key === "svg") return `<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"></svg>`;
   const min = checks.find((check) => check.check === "min_length")?.minimum ?? 1;
   const text = "example";
   if (text.length >= min) return text;
@@ -105,10 +106,43 @@ function sketch(schema: z.ZodType, key?: string): unknown {
   return undefined;
 }
 
+function unwrap(schema: z.ZodType): z.ZodType {
+  let current = schema;
+  for (let i = 0; i < 6; i += 1) {
+    const def = defOf(current);
+    if ((def.type === "optional" || def.type === "default" || def.type === "nullable" || def.type === "prefault") && def.innerType) {
+      current = def.innerType;
+      continue;
+    }
+    return current;
+  }
+  return current;
+}
+
+function withOneOptionalString(schema: z.ZodType, drafted: unknown) {
+  if (!drafted || typeof drafted !== "object" || Array.isArray(drafted)) return undefined;
+  const shape = defOf(schema).shape;
+  if (!shape) return undefined;
+  const record = drafted as Record<string, unknown>;
+  for (const [name, field] of Object.entries(shape)) {
+    if (record[name] !== undefined) continue;
+    const inner = unwrap(field);
+    const def = defOf(inner);
+    if (def.type !== "string") continue;
+    return { ...record, [name]: sampleString(name, checksOf(def)) };
+  }
+  return undefined;
+}
+
 export function exampleArguments(schema: z.ZodType): unknown {
   const drafted = sketch(schema);
   const parsed = schema.safeParse(drafted);
   if (parsed.success) return parsed.data;
+  const recovered = withOneOptionalString(schema, drafted);
+  if (recovered) {
+    const retry = schema.safeParse(recovered);
+    if (retry.success) return retry.data;
+  }
   const message = parsed.error.issues.map((issue) => `${issue.path.join(".") || "(root)"}: ${issue.message}`).join("; ");
   throw new Error(`Example does not match the input schema (${message})`);
 }
