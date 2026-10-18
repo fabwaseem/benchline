@@ -115,6 +115,14 @@ export const categories = [
     parent: "data",
   },
   {
+    slug: "markup",
+    name: "Markup",
+    description: "Markdown and HTML, converted in either direction.",
+    icon: "FileCode",
+    hue: 218,
+    parent: "data",
+  },
+  {
     slug: "ai-search",
     name: "AI search",
     description: "Files and checks that decide what an AI crawler can fetch, cite, and skip.",
@@ -244,4 +252,10 @@ export const toolOrder = [
   "pdf-compress",
   "image-to-pdf",
   "qr-code-generator",
+  "pdf-to-text",
+  "pdf-rotate-organize",
+  "pdf-to-image",
+  "pdf-protect-unlock",
+  "markdown-html",
+  "html-to-markdown-url",
 ] as const;

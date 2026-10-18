@@ -644,5 +644,119 @@
     "status": "new",
     "icon": "QrCode",
     "runsLocally": true
+  },
+  {
+    "slug": "pdf-to-text",
+    "name": "PDF to Text",
+    "tagline": "Read the selectable text of a PDF, with a markdown heading when the type is larger.",
+    "description": "Free PDF to text tool. Pull the text layer from each page, keep a rough markdown heading, and count tokens. Scanned pages without a text layer are left blank. This tool does not OCR. The file stays in the browser.",
+    "category": "pdf",
+    "tags": [
+      "pdf",
+      "text"
+    ],
+    "keywords": [
+      "pdf to text",
+      "pdf to markdown",
+      "extract pdf text"
+    ],
+    "status": "new",
+    "icon": "FileType",
+    "runsLocally": true
+  },
+  {
+    "slug": "pdf-rotate-organize",
+    "name": "Rotate PDF",
+    "tagline": "Reorder, rotate, or drop pages, then download the PDF.",
+    "description": "Free rotate and organize PDF tool. Drag pages into a new order, turn a page by 90 degrees, or delete a page. Thumbnails are drawn in the browser. The file is not uploaded.",
+    "category": "pdf",
+    "tags": [
+      "pdf",
+      "rotate"
+    ],
+    "keywords": [
+      "rotate pdf",
+      "reorder pdf pages",
+      "delete pdf pages"
+    ],
+    "status": "new",
+    "icon": "RotateCw",
+    "runsLocally": true
+  },
+  {
+    "slug": "pdf-to-image",
+    "name": "PDF to Image",
+    "tagline": "Render PDF pages to PNG or JPEG, then download one image or a ZIP.",
+    "description": "Free PDF to image tool. Pick PNG or JPEG, a DPI from 72 to 216, and a page range. One page downloads as an image. Several pages download as a ZIP. The render runs in this browser.",
+    "category": "pdf",
+    "tags": [
+      "pdf",
+      "image"
+    ],
+    "keywords": [
+      "pdf to jpg",
+      "pdf to png",
+      "pdf to image"
+    ],
+    "status": "new",
+    "icon": "FileImage",
+    "runsLocally": true
+  },
+  {
+    "slug": "pdf-protect-unlock",
+    "name": "Protect PDF",
+    "tagline": "Add an AES password, or unlock a PDF when you already know the password.",
+    "description": "Free protect and unlock PDF tool. Set a user password and optional owner password, and choose print, copy, and edit permissions. Unlock writes a copy that opens without the password. The password has to be one you know. The file stays in this browser.",
+    "category": "pdf",
+    "tags": [
+      "pdf",
+      "password"
+    ],
+    "keywords": [
+      "protect pdf",
+      "unlock pdf",
+      "pdf password"
+    ],
+    "status": "new",
+    "icon": "Lock",
+    "runsLocally": true
+  },
+  {
+    "slug": "markdown-html",
+    "name": "Markdown HTML",
+    "tagline": "Convert Markdown to HTML, or HTML back to Markdown, with a live preview.",
+    "description": "Free Markdown and HTML converter. GitHub-flavored Markdown in, HTML out, or the other way with Turndown. A sanitize switch strips scripts from the text output. The preview is always sanitized. Nothing is uploaded.",
+    "category": "markup",
+    "tags": [
+      "markdown",
+      "html"
+    ],
+    "keywords": [
+      "markdown to html",
+      "html to markdown",
+      "gfm converter"
+    ],
+    "status": "new",
+    "icon": "FileCode",
+    "runsLocally": true
+  },
+  {
+    "slug": "html-to-markdown-url",
+    "name": "Page to Markdown",
+    "tagline": "Fetch a public page and turn the article into Markdown.",
+    "description": "Free HTML to Markdown tool for a public URL. The page is fetched on the server, private addresses are refused, and Readability keeps the article. Navigation and scripts are stripped. The result includes a token count.",
+    "category": "ai-search",
+    "tags": [
+      "markdown",
+      "html"
+    ],
+    "keywords": [
+      "url to markdown",
+      "html to markdown",
+      "readability markdown"
+    ],
+    "status": "new",
+    "icon": "Globe",
+    "runsLocally": false
   }
 ]
