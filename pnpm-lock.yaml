@@ -170,6 +170,9 @@ importers:
       tesseract.js:
         specifier: ^7.0.0
         version: 7.0.0
+      tesseract.js-core:
+        specifier: ^7.0.0
+        version: 7.0.0
       three:
         specifier: ^0.186.1
         version: 0.186.1
