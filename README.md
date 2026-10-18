@@ -113,7 +113,7 @@ Markup, crawlers, and the files an AI search engine can cite.
 
 **Social previews.** Open Graph cards, meta tags, and the picture a shared link unfurls into.
 
-- [OG image generator](https://tools.fabwaseem.com/t/og-image-generator) — Compose a 1200×630 card, watch it update, then download the PNG or copy the Next.js file.
+- [OG image generator](https://tools.fabwaseem.com/t/og-image-generator) — Pick a template, watch the card update, then download the PNG or copy the Next.js file.
 - [Meta tags inspector](https://tools.fabwaseem.com/t/meta-tags-inspector) — Read title, description, canonical, robots, Open Graph, Twitter, and JSON-LD types from one public URL.
 
 ### Image & Media
@@ -232,6 +232,8 @@ DNS, certificates, response headers, and the URLs a request is built from.
 ## Use from your AI agent
 
 The server is `https://tools.fabwaseem.com/mcp`. It speaks JSON-RPC over Streamable HTTP and answers with JSON (`enableJsonResponse`). There is no session id. `POST` is the only method. A human-readable setup page is at [/mcp/guide](https://tools.fabwaseem.com/mcp/guide).
+
+Open Graph is two calls. `list_og_templates` returns the template ids, categories, defaults, and field schemas. `build_open_graph` takes a template id, the fields that template uses, colors, a size, and optional images, and returns a PNG plus the Next.js file. The input schema is in [docs/MCP.md](docs/MCP.md).
 
 ### Cursor
 
@@ -415,7 +417,7 @@ docker build -t benchline .
 docker run --rm -p 3000:3000 benchline
 ```
 
-The runner copies `pdfjs-dist`, `zxing-wasm`, `tesseract.js`, and `tesseract.js-core` next to the standalone server so the PDF, barcode, and OCR tools can load them.
+The runner copies `pdfjs-dist`, `zxing-wasm`, `tesseract.js`, `tesseract.js-core` and its worker dependencies, `satori`, and `@resvg/resvg-js` next to the standalone server so the PDF, barcode, OCR, and Open Graph tools can load them.
 
 ### Environment
 

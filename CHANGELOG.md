@@ -8,6 +8,8 @@ Entries are the merged pull requests that built the directory.
 
 ### Added
 
+- 18 Open Graph templates, a visual picker, PNG export, and the `build_open_graph` and `list_og_templates` MCP tools (#19).
+- Shiki code viewer and editor for code blocks across the tools, with light and dark themes (#19).
 - MIT license, community health files, generated tool and MCP docs, and issue templates.
 
 ## [0.1.0] - 2026-10-18

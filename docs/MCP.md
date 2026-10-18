@@ -14,7 +14,7 @@ File fields take either `url` or `data`, not both. `data` is base64 or a data UR
 
 The handler validates with the input schema, runs the tool, and validates the output. A thrown error comes back as `isError: true` and a text message. It is not a successful result.
 
-61 tools.
+62 tools.
 
 ## `generate_llms_txt`
 
@@ -52,9 +52,9 @@ Fetch a public page plus its robots.txt, sitemap, and llms.txt, then score how r
 
 ## `build_open_graph`
 
-**Build Open Graph tags**
+**Build an Open Graph card**
 
-Build the meta tags and a Next.js opengraph-image.tsx source file for a 1200 by 630 card. Use this when a page needs share tags, not when you only need to inspect a live URL.
+Render one of the Open Graph templates as a PNG and a Next.js opengraph-image.tsx file. Pass a template id from list_og_templates, the fields that template uses, colors, a size, and optional base64 images.
 
 - Page: https://tools.fabwaseem.com/t/og-image-generator
 - HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/og-image-generator`
@@ -62,15 +62,57 @@ Build the meta tags and a Next.js opengraph-image.tsx source file for a 1200 by 
 
 ### Input
 
-- `template` (`blog` \| `product` \| `minimal` \| `gradient` \| `code` \| `profile`, optional, default `blog`)
-- `title` (string, required, min length 1)
-- `subtitle` (string, optional, default `""`)
-- `author` (string, optional, default `""`)
-- `background` (string, optional, default `oklch(0.22 0.02 260)`)
-- `foreground` (string, optional, default `oklch(0.96 0.005 95)`)
-- `accent` (string, optional, default `oklch(0.68 0.16 262)`)
-- `font` (`sans` \| `mono`, optional, default `sans`)
-- `imageUrl` (string, optional, default `https://example.com/opengraph-image`)
+- `template` (`editorial` \| `aurora` \| `blueprint` \| `terminal` \| `split` \| `brutalist` \| `launch` \| `profile` \| `stat` \| `quote` \| `event` \| `podcast` \| `changelog` \| `glass` \| `minimal-mono` \| `product` \| `tutorial` \| `before-after`, optional, default `editorial`) — Template id from list_og_templates.
+- `size` (`1200x630` \| `1600x900` \| `1080x1080`, optional, default `1200x630`)
+- `title` (string, optional)
+- `subtitle` (string, optional)
+- `author` (string, optional)
+- `role` (string, optional)
+- `eyebrow` (string, optional)
+- `badge` (string, optional)
+- `date` (string, optional)
+- `time` (string, optional)
+- `price` (string, optional)
+- `cta` (string, optional)
+- `url` (string, optional)
+- `stat` (string, optional)
+- `statLabel` (string, optional)
+- `quote` (string, optional)
+- `episode` (string, optional)
+- `readTime` (string, optional)
+- `meta` (string, optional)
+- `command` (string, optional)
+- `steps` (string, optional) — One step per line.
+- `versions` (string, optional) — One version per line, as v2.3 | Note.
+- `beforeValue` (string, optional)
+- `afterValue` (string, optional)
+- `caption` (string, optional)
+- `brand` (string, optional) — Brand name shown on templates that have a brand row.
+- `colors` (object, optional)
+  - `background` (string, optional)
+  - `foreground` (string, optional)
+  - `accent` (string, optional)
+  - `muted` (string, optional)
+- `logo` (string, optional) — Logo image as base64, a data URI, or a public URL. Private addresses are refused. 10 MB cap.
+- `avatar` (string, optional) — Portrait image as base64, a data URI, or a public URL.
+- `hero` (string, optional) — Hero image as base64, a data URI, or a public URL.
+- `before` (string, optional) — Before image as base64, a data URI, or a public URL.
+- `after` (string, optional) — After image as base64, a data URI, or a public URL.
+- `imageUrl` (string, optional) — Public URL written into og:image. This does not fetch the file.
+
+## `list_og_templates`
+
+**List Open Graph templates**
+
+List Open Graph card templates with ids, names, categories, defaults, color presets, and field schemas.
+
+- Page: https://tools.fabwaseem.com/t/og-image-generator
+- HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/og-image-generator`
+- Fetches the network: no
+
+### Input
+
+- `category` (`Blog` \| `Product` \| `Dev` \| `Social` \| `Event`, optional)
 
 ## `decode_jwt`
 
