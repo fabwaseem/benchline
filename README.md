@@ -9,6 +9,7 @@
   <a href="https://tools.fabwaseem.com"><img src="https://img.shields.io/badge/live-tools.fabwaseem.com-111111" alt="Live site" /></a>
   <a href="https://tools.fabwaseem.com/mcp/guide"><img src="https://img.shields.io/badge/MCP-tools.fabwaseem.com%2Fmcp-111111" alt="MCP endpoint" /></a>
   <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen" alt="PRs welcome" /></a>
+  <a href="https://glama.ai/mcp/servers/fabwaseem/benchline"><img src="https://glama.ai/mcp/servers/fabwaseem/benchline/badges/score.svg" alt="fabwaseem/benchline MCP server" /></a>
 </p>
 
 Benchline is a free directory of browser tools for the small, exact jobs around shipping software: JSON, PDFs, images, tokens, headers, and the files a crawler can cite. Each tool is a pure function with a page on the site and the same function on a stateless MCP server. Nothing is stored. A tool runs in the browser unless its job is to read a public URL.
