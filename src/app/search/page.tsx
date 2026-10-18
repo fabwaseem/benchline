@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
-import { SearchView } from "@/components/site/search-view";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Search",
@@ -9,9 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function SearchPage() {
-  return (
-    <Suspense>
-      <SearchView />
-    </Suspense>
-  );
+  redirect("/");
 }

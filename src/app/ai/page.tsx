@@ -26,10 +26,10 @@ export default function AiPage() {
         <p className="eyebrow">
           <span className="font-mono">AI</span> Access
         </p>
-        <h1 className="d2 mt-4">The same functions, for an agent.</h1>
+        <h1 className="mt-4 text-[40px] font-semibold tracking-[-0.045em]">The same functions, for an agent.</h1>
         <p className="lede mt-5">
           {mcpIndex.length} tools are registered on a stateless MCP endpoint and on a JSON API. No key. Sixty calls a minute per address.{" "}
-          <Link href="/mcp" className="underline">Setup for Claude Desktop, Cursor, and VS Code</Link>.
+          <Link href="/mcp/guide" className="underline">Setup for Claude Desktop, Cursor, and VS Code</Link>.
         </p>
       </header>
 

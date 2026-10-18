@@ -1,67 +1,47 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DirectoryFrame } from "@/components/shell/directory-frame";
 import { Cover } from "@/components/site/cover";
+import { directoryCatalog } from "@/lib/catalog";
 import { absoluteUrl } from "@/lib/site";
-import { categories, toolsInCategory } from "@/registry";
 
 export const metadata: Metadata = {
   title: "Categories",
-  description: "Every Benchline category, with its hue, icon, description, and the tools that live in it.",
+  description: "Browse Benchline tools by category.",
   alternates: { canonical: "/categories" },
   openGraph: {
     url: absoluteUrl("/categories"),
     title: "Categories",
-    description: "Every Benchline category, with its hue, icon, description, and the tools that live in it.",
+    description: "Browse Benchline tools by category.",
   },
 };
 
 export default function CategoriesPage() {
+  const { categories, tools } = directoryCatalog();
   return (
-    <div className="page-x pb-20">
-      <header className="py-10 min-[700px]:py-16">
-        <p className="eyebrow">Directory</p>
-        <h1 className="d2 mt-4">Categories.</h1>
-        <p className="lede mt-4 max-w-[48ch]">
-          Each category has a hue, an icon, and the tools that belong there.
+    <DirectoryFrame categories={categories} total={tools.length} active="categories">
+      <div className="px-4 py-6 lg:px-8">
+        <h1 className="text-[28px] font-semibold tracking-[-0.04em]">Categories</h1>
+        <p className="mt-1 max-w-[62ch] text-[14px] text-muted-foreground">
+          {categories.length} categories. {tools.length} tools.
         </p>
-      </header>
-      <div className="grid gap-4">
-        {categories.map((category) => {
-          const list = toolsInCategory(category.slug);
-          const top = list.slice(0, 3);
-          return (
-            <article key={category.slug} className="card grid gap-6 p-5 min-[800px]:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] min-[800px]:p-7">
-              <div>
-                <Cover hue={category.hue} icon={category.icon} size={48} />
-                <h2 className="mt-4 text-[22px] font-semibold tracking-[-0.03em]">
-                  <Link href={`/${category.slug}`} className="hover:underline">
-                    {category.name}
-                  </Link>
-                </h2>
-                <p className="mt-2 max-w-[46ch] text-[14px] leading-relaxed text-muted-foreground">{category.description}</p>
-                <p className="mt-4 font-mono text-[12px] text-faint">
-                  hue {category.hue}
-                  <span className="mx-2 text-border">·</span>
-                  {String(list.length).padStart(2, "0")} {list.length === 1 ? "tool" : "tools"}
-                </p>
-              </div>
-              <ul className="flex flex-col justify-center gap-1">
-                {top.map((tool) => (
-                  <li key={tool.slug}>
-                    <Link href={`/t/${tool.slug}`} className="flex items-center gap-3 rounded-[10px] px-2 py-2 hover:bg-well">
-                      <Cover hue={category.hue} icon={tool.icon} size={32} />
-                      <span className="min-w-0">
-                        <span className="block text-[14px] font-semibold tracking-[-0.02em]">{tool.name}</span>
-                        <span className="block truncate text-[12.5px] text-muted-foreground">{tool.tagline}</span>
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </article>
-          );
-        })}
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          {categories.map((category) => (
+            <Link
+              key={category.slug}
+              href={`/${category.slug}`}
+              className="flex items-start gap-3 rounded-xl border border-border bg-surface p-4 transition-colors duration-150 hover:border-border-strong focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            >
+              <Cover hue={category.hue} icon={category.icon} size={40} />
+              <span className="min-w-0">
+                <span className="block text-[15px] font-medium tracking-[-0.02em]">{category.name}</span>
+                <span className="mt-1 line-clamp-2 block text-[13px] leading-5 text-muted-foreground">{category.description}</span>
+                <span className="mt-2 block font-mono text-[12px] text-faint">{category.count} {category.count === 1 ? "tool" : "tools"}</span>
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
-    </div>
+    </DirectoryFrame>
   );
 }

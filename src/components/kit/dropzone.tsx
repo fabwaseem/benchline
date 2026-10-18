@@ -3,6 +3,17 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
+export function FileDropzone(props: {
+  accept: string;
+  label: string;
+  onFile?: (file: File) => void;
+  onFiles?: (files: File[]) => void;
+  multiple?: boolean;
+  invalid?: boolean;
+}) {
+  return <Dropzone {...props} />;
+}
+
 export function Dropzone({
   accept,
   label,

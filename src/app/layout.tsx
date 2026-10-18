@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { AppShell } from "@/components/shell/top-bar";
 import { DeferredChrome } from "@/components/site/deferred-chrome";
 import { Footer } from "@/components/site/footer";
-import { Header } from "@/components/site/header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { JsonLd, websiteNode } from "@/lib/jsonld";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
@@ -25,12 +25,12 @@ const geistMono = Geist_Mono({
   adjustFontFallback: true,
 });
 
-const description = "Exact tools for people who ship the web. Free, in the browser, and honest about what each checker fetches.";
+const description = "Free browser tools for PDF, images, JSON, security, and SEO. Search the directory, run a tool on your device, or call the same tool over MCP.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — exact tools for the web`,
+    default: `${SITE_NAME} — free browser tools`,
     template: `%s · ${SITE_NAME}`,
   },
   description,
@@ -42,13 +42,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
-    title: `${SITE_NAME} — a quiet bench for exact work`,
+    title: `${SITE_NAME} — free browser tools`,
     description,
     url: SITE_URL,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} — a quiet bench for exact work`,
+    title: `${SITE_NAME} — free browser tools`,
     description,
   },
   manifest: "/manifest.webmanifest",
@@ -56,8 +56,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "oklch(98.9% 0.0015 250)" },
-    { media: "(prefers-color-scheme: dark)", color: "oklch(15.2% 0.006 265)" },
+    { media: "(prefers-color-scheme: light)", color: "#F6F4EF" },
+    { media: "(prefers-color-scheme: dark)", color: "#141210" },
   ],
 };
 
@@ -81,10 +81,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               ],
             }}
           />
-          <Header />
-          <main id="main" className="flex-1">
-            {children}
-          </main>
+          <AppShell toolCount={searchRecords().length}>{children}</AppShell>
           <Footer />
           <DeferredChrome tools={searchRecords()} />
         </ThemeProvider>

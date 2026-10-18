@@ -2,6 +2,24 @@ import { cn } from "@/lib/utils";
 import { CopyButton } from "@/components/kit/copy-button";
 import { DownloadButton } from "@/components/kit/download-button";
 
+export function CodePanel(props: {
+  code: string;
+  filename?: string;
+  label?: string;
+  className?: string;
+}) {
+  return <CodeOutput {...props} />;
+}
+
+export function CodeEditor(props: {
+  code: string;
+  filename?: string;
+  label?: string;
+  className?: string;
+}) {
+  return <CodeOutput {...props} />;
+}
+
 export function CodeOutput({
   code,
   filename,

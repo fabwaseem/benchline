@@ -30,6 +30,7 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-brand: var(--accent-brand);
   --color-brand-foreground: var(--accent-brand-fg);
+  --color-brand-text: var(--accent-text);
   --color-destructive: var(--destructive);
   --color-success: var(--success);
   --color-warning: var(--warning);
@@ -67,20 +68,21 @@
 }
 
 :root {
-  --background: oklch(98.9% 0.0015 250);
-  --surface: oklch(100% 0 0);
-  --raised: oklch(100% 0 0);
-  --sunken: oklch(96.6% 0.003 250);
-  --well: oklch(97.8% 0.002 250);
-  --foreground: oklch(17.5% 0.006 265);
-  --fg2: oklch(32% 0.008 265);
-  --muted-foreground: oklch(47% 0.009 265);
-  --faint: oklch(53.5% 0.008 265);
-  --border: oklch(91.8% 0.004 265);
-  --border-strong: oklch(86.5% 0.006 265);
-  --accent-brand: oklch(58% 0.19 40);
-  --accent-brand-fg: oklch(100% 0 0);
-  --ring: oklch(58% 0.19 40 / 0.55);
+  --background: #F6F4EF;
+  --surface: #FFFcf8;
+  --raised: #FFFcf8;
+  --sunken: #EFEBE3;
+  --well: #F3F0E9;
+  --foreground: #16130F;
+  --fg2: #3A342C;
+  --muted-foreground: #4A453E;
+  --faint: #5C564E;
+  --border: #E3DDD4;
+  --border-strong: #D2CBC0;
+  --accent-brand: #E8590C;
+  --accent-brand-fg: #16130F;
+  --accent-text: #9A3412;
+  --ring: #E8590C;
   --success: oklch(60% 0.13 155);
   --warning: oklch(72% 0.14 75);
   --danger: oklch(60% 0.19 27);
@@ -98,7 +100,7 @@
   --glass: oklch(100% 0 0 / 0.72);
   --glass-border: oklch(100% 0 0 / 0.8);
   --grid-line: oklch(17.5% 0.006 265 / 0.045);
-  --grain: 0.035;
+  --grain: 0;
   --cover-glyph-l: 50%;
   --cover-glyph-c: 0.11;
   --card: var(--surface);
@@ -134,20 +136,21 @@
 }
 
 .dark {
-  --background: oklch(15.2% 0.006 265);
-  --surface: oklch(18.2% 0.007 265);
-  --raised: oklch(20.6% 0.008 265);
-  --sunken: oklch(13.4% 0.006 265);
-  --well: oklch(16.4% 0.006 265);
-  --foreground: oklch(96.8% 0.003 265);
-  --fg2: oklch(86% 0.005 265);
-  --muted-foreground: oklch(69% 0.008 265);
-  --faint: oklch(60% 0.008 265);
-  --border: oklch(100% 0 0 / 0.075);
-  --border-strong: oklch(100% 0 0 / 0.13);
-  --accent-brand: oklch(69% 0.19 44);
-  --accent-brand-fg: oklch(15% 0.01 265);
-  --ring: oklch(69% 0.19 44 / 0.6);
+  --background: #141210;
+  --surface: #1C1916;
+  --raised: #24201C;
+  --sunken: #100E0C;
+  --well: #181512;
+  --foreground: #F6F4EF;
+  --fg2: #E7E1D8;
+  --muted-foreground: #C8C1B6;
+  --faint: #A39C91;
+  --border: rgb(246 244 239 / 0.1);
+  --border-strong: rgb(246 244 239 / 0.16);
+  --accent-brand: #E8590C;
+  --accent-brand-fg: #16130F;
+  --accent-text: #FF9A55;
+  --ring: #E8590C;
   --success: oklch(74% 0.14 155);
   --warning: oklch(82% 0.12 85);
   --danger: oklch(76% 0.14 27);
@@ -165,7 +168,7 @@
   --glass: oklch(20% 0.008 265 / 0.66);
   --glass-border: oklch(100% 0 0 / 0.09);
   --grid-line: oklch(100% 0 0 / 0.04);
-  --grain: 0.05;
+  --grain: 0;
   --cover-glyph-l: 78%;
   --cover-glyph-c: 0.1;
   --primary: var(--foreground);
@@ -256,8 +259,8 @@
   .card {
     position: relative;
     background: var(--surface);
-    border-radius: 16px;
-    box-shadow: var(--in-hi), 0 0 0 1px var(--border), var(--shadow-1);
+    border-radius: 12px;
+    box-shadow: 0 0 0 1px var(--border);
   }
   .well {
     background: var(--well);
@@ -275,9 +278,9 @@
     place-items: center;
     flex: none;
     position: relative;
-    color: oklch(var(--cover-glyph-l) var(--cover-glyph-c) var(--h));
-    background: linear-gradient(180deg, var(--surface), var(--well));
-    box-shadow: var(--in-hi), inset 0 0 0 1px var(--border), 0 1px 2px oklch(0% 0 0 / 0.06);
+    color: oklch(42% 0.12 var(--h));
+    background: oklch(94% 0.03 var(--h));
+    box-shadow: inset 0 0 0 1px oklch(42% 0.12 var(--h) / 0.16);
   }
   .btn {
     display: inline-flex;
@@ -292,8 +295,9 @@
     letter-spacing: -0.01em;
     background: var(--surface);
     color: var(--foreground);
-    box-shadow: var(--in-hi), 0 0 0 1px var(--border-strong), var(--shadow-1);
+    box-shadow: 0 0 0 1px var(--border-strong);
     white-space: nowrap;
+    transition: background-color 150ms var(--ease-out), border-color 150ms var(--ease-out), color 150ms var(--ease-out);
   }
   .btn:focus-visible {
     outline: none;
@@ -304,15 +308,18 @@
     color: var(--background);
     box-shadow: inset 0 1px 0 oklch(100% 0 0 / 0.18), 0 0 0 1px var(--foreground), var(--shadow-1);
   }
-  .btn-brand {
+  .btn-brand,
+  .btn-accent {
     background: var(--accent-brand);
     color: var(--accent-brand-fg);
-    height: 44px;
-    padding: 0 18px;
-    border-radius: 11px;
-    font-size: 14.5px;
-    font-weight: 500;
-    box-shadow: inset 0 1px 0 oklch(100% 0 0 / 0.28), inset 0 -1px 0 oklch(0% 0 0 / 0.12), 0 0 0 1px oklch(48% 0.16 38), var(--shadow-1);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-brand) 70%, #16130F);
+  }
+  .btn-brand {
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
   }
   .btn-lg {
     height: 44px;
@@ -497,13 +504,19 @@
 }
 
 .dark .card {
-  background: linear-gradient(180deg, oklch(19.5% 0.007 265), oklch(17.5% 0.007 265));
+  background: var(--surface);
+}
+.dark .cover {
+  color: oklch(88% 0.06 var(--h));
+  background: oklch(32% 0.05 var(--h));
+  box-shadow: inset 0 0 0 1px oklch(88% 0.06 var(--h) / 0.18);
 }
 .dark .well {
   background: var(--sunken);
 }
-.dark .cover {
-  background: linear-gradient(180deg, oklch(24% 0.008 265), oklch(19% 0.007 265));
+.dark .btn-brand,
+.dark .btn-accent {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-brand) 80%, #000);
 }
 .dark .field {
   background: var(--sunken);
@@ -511,9 +524,6 @@
 .dark .seg > .on,
 .dark .seg > button[aria-checked="true"] {
   background: var(--raised);
-}
-.dark .btn-brand {
-  box-shadow: inset 0 1px 0 oklch(100% 0 0 / 0.3), 0 0 0 1px oklch(60% 0.19 40), var(--shadow-1);
 }
 .dark .spot::before {
   background: radial-gradient(260px circle at var(--mx, -999px) var(--my, -999px), oklch(100% 0 0 / 0.28), transparent 70%);

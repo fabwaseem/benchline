@@ -23,7 +23,7 @@ const principles = [
   },
   {
     t: "Fast",
-    d: "The bench is static HTML plus a small client for the tool you opened. The 3D hero is a separate chunk.",
+    d: "The directory is static HTML. Each tool loads as its own chunk when you open it.",
   },
   {
     t: "Current",
@@ -69,7 +69,7 @@ export default function AboutPage() {
           <p className="eyebrow">
             <span className="font-mono">01</span> The bench
           </p>
-          <h1 className="d1 mt-4">
+          <h1 className="mt-4 text-[40px] font-semibold tracking-[-0.045em]">
             A directory,
             <br />
             kept exact.
@@ -148,7 +148,7 @@ export default function AboutPage() {
               },
               {
                 q: "How current are the model prices?",
-                a: "Each price row carries the date it was checked. The home page prints that date on the model pill.",
+                a: "Each price row in the token counter carries the date it was checked.",
               },
               {
                 q: "Can an agent call a tool?",

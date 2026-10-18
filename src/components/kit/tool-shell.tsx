@@ -1,4 +1,5 @@
 import { useEffect, type ButtonHTMLAttributes, type ReactNode } from "react";
+import { StatusBar } from "@/components/kit/status-bar";
 import { cn } from "@/lib/utils";
 
 export function Panel({
@@ -11,9 +12,11 @@ export function Panel({
   className?: string;
 }) {
   return (
-    <div className={cn("flex min-w-0 flex-col gap-4 p-4", className)}>
-      {title ? <p className="text-xs font-medium tracking-tight text-muted-foreground">{title}</p> : null}
-      {children}
+    <div className={cn("flex min-w-0 flex-col", className)}>
+      {title ? (
+        <p className="border-b border-border px-3 py-2 font-mono text-[11px] tracking-[0.08em] text-muted-foreground uppercase">{title}</p>
+      ) : null}
+      <div className="flex min-w-0 flex-1 flex-col gap-3 p-3">{children}</div>
     </div>
   );
 }
@@ -138,7 +141,7 @@ export function ToolShell({
   if (layout) {
     return (
       <section className="flex min-w-0 flex-col bg-surface">
-        <div className="flex h-12 items-center gap-3 border-b border-border bg-gradient-to-b from-surface to-well px-3.5 min-[700px]:px-5 dark:from-raised dark:to-surface">
+        <div className="flex h-12 items-center gap-3 border-b border-border px-3 min-[700px]:px-4">
           {tabs}
           <div className="ml-auto flex items-center gap-2">
             {actions}
@@ -176,12 +179,12 @@ export function ToolShell({
             </>
           ) : null}
         </div>
-        {status ? <div className="flex items-center gap-2 border-t border-border px-4 py-2.5 font-mono text-[12px] text-muted-foreground">{status}</div> : null}
+        {status ? <StatusBar>{status}</StatusBar> : null}
       </section>
     );
   }
   return (
-    <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+    <section className="flex min-w-0 flex-col bg-surface">
       {actions ? (
         <div className="flex items-center gap-2 border-b border-border px-3 py-2">
           <div className="ml-auto flex shrink-0 items-center gap-2">{actions}</div>

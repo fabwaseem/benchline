@@ -19,6 +19,10 @@ import { categories } from "@/registry/categories";
 const hueFor = new Map<string, number>(categories.map((category) => [category.slug, category.hue]));
 const nameFor = new Map<string, string>(categories.map((category) => [category.slug, category.name]));
 
+export function CommandPalette({ tools, startOpen = false }: { tools: SearchRecord[]; startOpen?: boolean }) {
+  return <CommandK tools={tools} startOpen={startOpen} />;
+}
+
 export function CommandK({ tools, startOpen = false }: { tools: SearchRecord[]; startOpen?: boolean }) {
   const router = useRouter();
   const [open, setOpen] = useState(startOpen);

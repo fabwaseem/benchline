@@ -15,7 +15,7 @@ export function ThemeToggle() {
   return (
     <button
       type="button"
-      className="btn-ghost btn size-9 px-0"
+      className="btn-ghost btn size-9 px-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
       aria-label={dark ? "Switch to light" : "Switch to dark"}
       onClick={() => {
         const next = dark ? "light" : "dark";

@@ -2,6 +2,16 @@
 
 import { cn } from "@/lib/utils";
 
+export function SegmentedControl<T extends string>(props: {
+  value: T;
+  onChange: (value: T) => void;
+  options: { value: T; label: string }[];
+  label: string;
+  className?: string;
+}) {
+  return <Segmented {...props} />;
+}
+
 export function Segmented<T extends string>({
   value,
   onChange,
