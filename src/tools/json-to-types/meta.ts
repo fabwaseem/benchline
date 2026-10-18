@@ -18,6 +18,7 @@ export const meta = {
     { q: "How are optional fields detected?", a: "When the top level is an array of objects, a property missing from any item becomes optional. A property present everywhere stays required." },
     { q: "What happens with null values?", a: "Null becomes nullable in every target: `| null` in TypeScript, `.nullable()` in Zod, Optional in Python, and `any` in Go." },
     { q: "How are empty arrays typed?", a: "An empty array has no items to learn from, so it becomes unknown[] (or Any). Fill it in for a precise type; a warning is shown." },
+    { q: "What about very large numbers?", a: "A number that does not fit in a JavaScript number still generates a number type, and a warning names the original digits. The type cannot store those digits exactly." },
     { q: "Is my JSON sent anywhere?", a: "No. Conversion runs entirely in the browser on this page." },
   ],
   seo: {

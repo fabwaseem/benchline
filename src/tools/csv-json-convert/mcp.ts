@@ -33,7 +33,7 @@ export const tool: BenchTool = {
   slug: "csv-json-convert",
   name: "convert_csv_json",
   title: "Convert CSV and JSON",
-  description: "Convert CSV to JSON or JSON to CSV. Supports comma, tab, semicolon, and pipe delimiters, an optional header, type inference, and dotted flattening.",
+  description: "Convert CSV to JSON or JSON to CSV. Supports comma, tab, semicolon, and pipe delimiters, an optional header, type inference, and dotted flattening. Inferred numbers that do not fit in a JavaScript number keep their digits.",
   openWorld: false,
   inputSchema,
   outputSchema,

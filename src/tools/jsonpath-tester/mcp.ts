@@ -11,6 +11,7 @@ export const inputSchema = z.object({
 export const outputSchema = z.object({
   count: z.number().int(),
   truncated: z.boolean(),
+  warning: z.string(),
   matches: z.array(
     z.object({
       path: z.string(),
@@ -30,7 +31,7 @@ export const tool: BenchTool = {
   slug: "jsonpath-tester",
   name: "query_jsonpath",
   title: "Run a JSONPath query",
-  description: "Evaluate a JSONPath Plus query against a JSON document and return the matches with their paths.",
+  description: "Evaluate a JSONPath Plus query against a JSON document and return the matches with their paths. A number that does not fit in a JavaScript number is returned as its original digits, with a precision warning.",
   openWorld: false,
   inputSchema,
   outputSchema,

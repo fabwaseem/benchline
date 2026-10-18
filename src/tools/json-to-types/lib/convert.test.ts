@@ -76,6 +76,15 @@ describe("convertJsonToTypes", () => {
     expect(go).toContain("Nick any");
   });
 
+  it("warns when a number does not fit in a JavaScript number", () => {
+    const result = convertJsonToTypes('{"id":9007199254740993,"ratio":0.10000000000000000001}', { targets: ["typescript"] });
+    expect("error" in result).toBe(false);
+    if ("error" in result) return;
+    expect(result.warnings.join(" ")).toContain("9007199254740993");
+    expect(result.warnings.join(" ")).toContain("0.10000000000000000001");
+    expect(result.outputs.typescript).toContain("id: number;");
+  });
+
   it("warns on empty arrays", () => {
     const result = convertJsonToTypes('{"tags":[]}', { targets: ["typescript"] });
     expect("error" in result).toBe(false);

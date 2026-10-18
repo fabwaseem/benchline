@@ -16,7 +16,7 @@ export const meta = {
   related: ["json-formatter", "csv-json-convert", "diff-checker", "base64-codec"],
   faqs: [
     { q: "Which direction does this convert?", a: "Any of JSON, YAML, TOML, and XML can be the source or the target. Auto reads the first line and picks JSON, XML, TOML, or YAML." },
-    { q: "Is the conversion lossless?", a: "JSON, YAML, and TOML round-trip objects, arrays, strings, numbers, and booleans. TOML has no null and no array or scalar at the document root, so those documents are refused instead of being dropped. XML attributes come back as @name and mixed text as #text." },
+    { q: "Is the conversion lossless?", a: "JSON, YAML, TOML, and XML round-trip objects, arrays, strings, numbers, and booleans, including integers and decimals that do not fit in a JavaScript number. TOML has no null and no array or scalar at the document root, so those documents are refused instead of being dropped. XML attributes come back as @name and mixed text as #text." },
     { q: "Why does yes stay a string?", a: "YAML is read with the JSON schema, so yes, no, and dates stay strings. That keeps a config from changing type on the way to JSON." },
     { q: "Where does the error line come from?", a: "JSON, YAML, TOML, and XML parsers each report a line and column, counted from 1. The message is the parser's reason, not a guess." },
   ],

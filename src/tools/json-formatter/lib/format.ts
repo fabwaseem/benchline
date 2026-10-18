@@ -1,4 +1,5 @@
 import { parse, printParseErrorCode, type ParseError, type ParseErrorCode } from "jsonc-parser";
+import { parseJsonLossless, rawJsonNumberSource, stringifyJsonLossless } from "@/lib/json-lossless";
 
 export const indents = ["2", "4", "tab"] as const;
 
@@ -46,8 +47,8 @@ export function formatJson(input: string, options: FormatOptions): FormatResult 
     return { valid: false, output: "", errors, tree: null };
   }
   try {
-    const value = sortIfNeeded(JSON.parse(text) as unknown, options.sortKeys);
-    const output = options.minify ? JSON.stringify(value) : JSON.stringify(value, null, gap(options.indent));
+    const value = sortIfNeeded(parseJsonLossless(text), options.sortKeys);
+    const output = stringifyJsonLossless(value, options.minify ? undefined : gap(options.indent));
     return { valid: true, output, errors: [], tree: treeOf(value, "root") };
   } catch (error) {
     const issue = issueFromSyntax(text, error);
@@ -158,6 +159,7 @@ function sortIfNeeded(value: unknown, sortKeys: boolean): unknown {
 }
 
 function sortValue(value: unknown): unknown {
+  if (rawJsonNumberSource(value) !== null) return value;
   if (Array.isArray(value)) return value.map(sortValue);
   if (value && typeof value === "object") {
     const sorted: Record<string, unknown> = {};
@@ -170,6 +172,8 @@ function sortValue(value: unknown): unknown {
 }
 
 function treeOf(value: unknown, key: string): JsonTreeNode {
+  const raw = rawJsonNumberSource(value);
+  if (raw !== null) return { key, type: "number", preview: raw, children: [] };
   if (value === null) return { key, type: "null", preview: "null", children: [] };
   if (Array.isArray(value)) {
     return {

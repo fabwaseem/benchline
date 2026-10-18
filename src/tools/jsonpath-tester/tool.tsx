@@ -98,9 +98,13 @@ export default function JsonPathTesterTool() {
           ) : "error" in result ? (
             <Notice tone="bad" role="alert" title="Query error" body={result.error} />
           ) : result.count === 0 ? (
-            <EmptyState art={<Braces size={22} />} title="No matches" hint="The query is valid but matched nothing in this document." />
+            <>
+              {result.warning ? <Notice tone="warn" title="Precision" body={result.warning} /> : null}
+              <EmptyState art={<Braces size={22} />} title="No matches" hint="The query is valid but matched nothing in this document." />
+            </>
           ) : (
             <>
+              {result.warning ? <Notice tone="warn" title="Precision" body={result.warning} /> : null}
               {result.truncated ? (
                 <Notice tone="warn" title="Large result set" body={`Showing the first 500 of ${result.count} matches.`} />
               ) : null}

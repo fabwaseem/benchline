@@ -1,4 +1,5 @@
 import { JSONPath } from "jsonpath-plus";
+import { inexactJsonNumberTokens, parseJsonLossless, rawJsonNumberSource, stringifyJsonLossless } from "@/lib/json-lossless";
 
 // Pure JSONPath evaluation with friendly syntax checking. jsonpath-plus v11
 // is lenient about malformed queries, so a structural pre-check reports the
@@ -12,7 +13,7 @@ export type JsonPathMatch = {
 };
 
 export type JsonPathEvaluation =
-  | { matches: JsonPathMatch[]; count: number; truncated: boolean }
+  | { matches: JsonPathMatch[]; count: number; truncated: boolean; warning: string }
   | { error: string };
 
 type Bracket = { char: "[" | "(" | "{"; index: number };
@@ -70,6 +71,12 @@ export function evaluateJsonPath(jsonText: string, query: string, maxMatches: nu
     const message = error instanceof Error ? error.message : "Invalid JSON.";
     return { error: `The JSON is invalid: ${message}` };
   }
+  let lossless: unknown = data;
+  try {
+    lossless = parseJsonLossless(jsonText);
+  } catch {
+    lossless = data;
+  }
   let raw: unknown;
   try {
     raw = JSONPath({ path: query.trim(), json: data, resultType: "all" });
@@ -77,20 +84,67 @@ export function evaluateJsonPath(jsonText: string, query: string, maxMatches: nu
     const message = error instanceof Error ? error.message : String(error);
     return { error: `The query failed: ${message}` };
   }
-  const rows = (Array.isArray(raw) ? raw : [raw]) as Array<{ path?: string; value?: unknown }>;
-  const matches: JsonPathMatch[] = rows.map((row) => ({
-    path: typeof row?.path === "string" ? row.path : "$",
-    value: row && typeof row === "object" && "value" in row ? row.value : row,
-  }));
+  const rows = (Array.isArray(raw) ? raw : [raw]) as Array<{ path?: string; value?: unknown; pointer?: string }>;
+  const matches: JsonPathMatch[] = rows.map((row) => {
+    const value = row && typeof row === "object" && "value" in row ? row.value : row;
+    const pointer = row && typeof row.pointer === "string" ? row.pointer : "";
+    return {
+      path: typeof row?.path === "string" ? row.path : "$",
+      value: restoreDigits(value, atPointer(lossless, pointer)),
+    };
+  });
   const truncated = matches.length > maxMatches;
-  return { matches: matches.slice(0, maxMatches), count: matches.length, truncated };
+  return { matches: matches.slice(0, maxMatches), count: matches.length, truncated, warning: precisionWarning(jsonText) };
 }
 
 export function formatValue(value: unknown): string {
   if (typeof value === "string") return value;
+  const raw = rawJsonNumberSource(value);
+  if (raw !== null) return raw;
   try {
-    return JSON.stringify(value) ?? String(value);
+    return stringifyJsonLossless(value);
   } catch {
     return String(value);
   }
+}
+
+function precisionWarning(text: string): string {
+  const lost = inexactJsonNumberTokens(text);
+  if (lost.length === 0) return "";
+  const sample = lost.slice(0, 3).join(", ");
+  const more = lost.length > 3 ? `, and ${lost.length - 3} more` : "";
+  return `${sample}${more} ${lost.length === 1 ? "does" : "do"} not fit in a JavaScript number. The original digits are kept as text.`;
+}
+
+function atPointer(root: unknown, pointer: string): unknown {
+  if (!pointer) return root;
+  let current = root;
+  for (const part of pointer.split("/").slice(1).map(unescapePointer)) {
+    if (Array.isArray(current)) {
+      const index = Number(part);
+      current = Number.isInteger(index) ? current[index] : undefined;
+    } else if (current && typeof current === "object") {
+      current = (current as Record<string, unknown>)[part];
+    } else {
+      return undefined;
+    }
+  }
+  return current;
+}
+
+function unescapePointer(part: string): string {
+  return part.replace(/~1/g, "/").replace(/~0/g, "~");
+}
+
+function restoreDigits(value: unknown, lossless: unknown): unknown {
+  const raw = rawJsonNumberSource(lossless);
+  if (raw !== null) return raw;
+  if (Array.isArray(value) && Array.isArray(lossless)) return value.map((item, index) => restoreDigits(item, lossless[index]));
+  if (value && lossless && typeof value === "object" && typeof lossless === "object" && !Array.isArray(value)) {
+    const source = lossless as Record<string, unknown>;
+    const out: Record<string, unknown> = {};
+    for (const key of Object.keys(value as Record<string, unknown>)) out[key] = restoreDigits((value as Record<string, unknown>)[key], source[key]);
+    return out;
+  }
+  return value;
 }

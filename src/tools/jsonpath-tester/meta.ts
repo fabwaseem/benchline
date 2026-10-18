@@ -19,6 +19,7 @@ export const meta = {
     { q: "Why does my query return nothing?", a: "Check the root: queries start with $. Property names are case sensitive, and array indexes start at 0. The syntax check flags unbalanced brackets and quotes." },
     { q: "Is my JSON sent anywhere?", a: "No. Evaluation runs in the browser with the document you pasted." },
     { q: "What does the path column show?", a: "The normalized path of each match, like $['store']['book'][0]['author'], so you can see exactly where a value came from." },
+    { q: "What if a number is too large?", a: "A number that does not fit in a JavaScript number is shown with its original digits, as text, and a precision warning names it. Filters still run on the numbers JavaScript can store." },
   ],
   seo: {
     title: "JSONPath tester",

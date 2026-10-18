@@ -74,6 +74,34 @@ describe("convertData", () => {
     expect(JSON.parse(result.output)).toEqual({ yes: "yes" });
   });
 
+  it("keeps digits that do not fit in a JavaScript number", () => {
+    const source = '{"id":9007199254740993,"ratio":0.10000000000000000001}';
+    const json = convertData(source, "json", "json");
+    expect(json.output).toContain("9007199254740993");
+    expect(json.output).toContain("0.10000000000000000001");
+    const yaml = convertData(source, "json", "yaml");
+    expect(yaml.output).toContain("9007199254740993");
+    expect(yaml.output).toContain("0.10000000000000000001");
+    expect(yaml.output).not.toContain("!!");
+    const yamlBack = convertData(yaml.output, "yaml", "json");
+    expect(yamlBack.output).toContain("9007199254740993");
+    expect(yamlBack.output).toContain("0.10000000000000000001");
+    const toml = convertData(source, "json", "toml");
+    expect(toml.output).toContain("9007199254740993");
+    expect(toml.output).toContain("0.10000000000000000001");
+    expect(toml.output).not.toContain('"9007199254740993"');
+    const tomlBack = convertData(toml.output, "toml", "json");
+    expect(tomlBack.output).toContain("9007199254740993");
+    expect(tomlBack.output).toContain("0.10000000000000000001");
+    const xml = convertData("<root><id>9007199254740993</id><ratio>0.10000000000000000001</ratio></root>", "xml", "json");
+    expect(xml.output).toContain("9007199254740993");
+    expect(xml.output).toContain("0.10000000000000000001");
+    expect(xml.output).not.toContain("9007199254740992");
+    const xmlBack = convertData(xml.output, "json", "xml");
+    expect(xmlBack.output).toContain(">9007199254740993<");
+    expect(xmlBack.output).toContain(">0.10000000000000000001<");
+  });
+
   it("converts the example", () => {
     const result = convertData(exampleYaml, "auto", "json");
     expect(result.detected).toBe("yaml");

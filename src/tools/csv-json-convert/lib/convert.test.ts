@@ -28,6 +28,17 @@ describe("csvToJson", () => {
     expect(JSON.parse(result.output)).toEqual([{ name: "Ada", year: 1843 }]);
   });
 
+  it("keeps digits that do not fit in a JavaScript number", () => {
+    const result = csvToJson("id,ratio\n9007199254740993,0.10000000000000000001\n", { delimiter: ",", header: true, inferTypes: true });
+    expect(result.ok).toBe(true);
+    expect(result.output).toContain("9007199254740993");
+    expect(result.output).toContain("0.10000000000000000001");
+    expect(result.output).not.toContain("9007199254740992");
+    const csv = jsonToCsv(result.output, { delimiter: ",", header: true, flatten: false });
+    expect(csv.output).toContain("9007199254740993");
+    expect(csv.output).toContain("0.10000000000000000001");
+  });
+
   it("reports an unclosed quote", () => {
     const result = csvToJson('"Ada,1843\n', { delimiter: ",", header: false, inferTypes: false });
     expect(result.ok).toBe(false);

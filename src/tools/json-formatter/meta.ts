@@ -19,6 +19,7 @@ export const meta = {
     { q: "How exact is the error position?", a: "The parser reports the first problem at a line and column, counted from 1, plus the source line. A trailing comma, a comment, and a truncated value each get their own position." },
     { q: "What does sort keys change?", a: "Object keys are ordered by UTF-16 code unit. Array order stays as written. Nested objects are sorted too." },
     { q: "Will comments or trailing commas pass?", a: "No. This checks strict JSON. Comments and trailing commas are reported as errors instead of being stripped." },
+    { q: "Do large integers stay exact?", a: "Yes. A number that does not fit in a JavaScript number, such as an id past 2^53 or a long decimal, is printed with the digits you pasted. A number that does fit is still written in ordinary JSON form, so 1.0 becomes 1." },
   ],
   seo: {
     title: "JSON formatter and validator",
