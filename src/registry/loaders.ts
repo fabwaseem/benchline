@@ -28,4 +28,9 @@ export const toolLoaders: Record<string, () => Promise<{ default: ComponentType 
   "url-codec": () => import("@/tools/url-codec/tool"),
   "password-generator": () => import("@/tools/password-generator/tool"),
   "chmod-calculator": () => import("@/tools/chmod-calculator/tool"),
+  "pdf-merge": () => import("@/tools/pdf-merge/tool"),
+  "pdf-split": () => import("@/tools/pdf-split/tool"),
+  "pdf-compress": () => import("@/tools/pdf-compress/tool"),
+  "image-to-pdf": () => import("@/tools/image-to-pdf/tool"),
+  "qr-code-generator": () => import("@/tools/qr-code-generator/tool"),
 };

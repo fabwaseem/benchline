@@ -25,11 +25,16 @@ import { meta as uuidGenerator } from "@/tools/uuid-generator/meta";
 import { meta as urlCodec } from "@/tools/url-codec/meta";
 import { meta as passwordGenerator } from "@/tools/password-generator/meta";
 import { meta as chmodCalculator } from "@/tools/chmod-calculator/meta";
+import { meta as pdfMerge } from "@/tools/pdf-merge/meta";
+import { meta as pdfSplit } from "@/tools/pdf-split/meta";
+import { meta as pdfCompress } from "@/tools/pdf-compress/meta";
+import { meta as imageToPdf } from "@/tools/image-to-pdf/meta";
+import { meta as qrCodeGenerator } from "@/tools/qr-code-generator/meta";
 import { categories, toolOrder } from "@/registry/categories";
 import type { SearchRecord } from "@/registry/schema";
 import { assertRegistry } from "@/registry/validate";
 
-const tools = assertRegistry([llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator], [...categories], toolOrder);
+const tools = assertRegistry([llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator], [...categories], toolOrder);
 
 export { categories, tools };
 

@@ -62,6 +62,13 @@ export const categories = [
     hue: 174,
   },
   {
+    slug: "pdf",
+    name: "PDF",
+    description: "Merge, split, compress, and build PDFs in the browser. The files stay on this device.",
+    icon: "FileText",
+    hue: 12,
+  },
+  {
     slug: "design",
     name: "Design",
     description: "Color values, contrast, and the numbers a layout is built from.",
@@ -97,4 +104,9 @@ export const toolOrder = [
   "url-codec",
   "password-generator",
   "chmod-calculator",
+  "pdf-merge",
+  "pdf-split",
+  "pdf-compress",
+  "image-to-pdf",
+  "qr-code-generator",
 ] as const;

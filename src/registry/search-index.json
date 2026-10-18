@@ -548,5 +548,101 @@
     "status": "new",
     "icon": "Binary",
     "runsLocally": true
+  },
+  {
+    "slug": "pdf-merge",
+    "name": "Merge PDF",
+    "tagline": "Combine PDFs in the browser. Reorder them, keep a page range from each file, and download one document.",
+    "description": "Free PDF merger. Combine PDFs in the browser, drag them into order, and keep a page range such as 1-3,5 from each file. The merge runs on this device. The files are not uploaded.",
+    "category": "pdf",
+    "tags": [
+      "pdf",
+      "merge"
+    ],
+    "keywords": [
+      "pdf merger",
+      "merge pdf",
+      "combine pdf"
+    ],
+    "status": "new",
+    "icon": "Files",
+    "runsLocally": true
+  },
+  {
+    "slug": "pdf-split",
+    "name": "Split PDF",
+    "tagline": "Extract a page range, or split a PDF into single pages or chunks, then download a PDF or a ZIP.",
+    "description": "Free split PDF tool. Extract pages with a range such as 1-3,5, save every page as its own PDF, or split every N pages. The work runs in the browser and the file is not uploaded. Several files download as a ZIP.",
+    "category": "pdf",
+    "tags": [
+      "pdf",
+      "split"
+    ],
+    "keywords": [
+      "split pdf",
+      "extract pdf pages",
+      "pdf splitter"
+    ],
+    "status": "new",
+    "icon": "Scissors",
+    "runsLocally": true
+  },
+  {
+    "slug": "pdf-compress",
+    "name": "Compress PDF",
+    "tagline": "Shrink a PDF in the browser. Pick a preset or a target size and compare the file before and after.",
+    "description": "Free PDF compressor. Shrink a PDF for an upload limit without sending it anywhere. Light, medium, and strong presets recompress embedded images and clear document info. Text stays selectable. A target of 100 KB, 200 KB, or 500 KB tries harder until the file fits or the smallest result is reached.",
+    "category": "pdf",
+    "tags": [
+      "pdf",
+      "compress"
+    ],
+    "keywords": [
+      "pdf compressor",
+      "compress pdf",
+      "online pdf compressor"
+    ],
+    "status": "new",
+    "icon": "Shrink",
+    "runsLocally": true
+  },
+  {
+    "slug": "image-to-pdf",
+    "name": "Image to PDF",
+    "tagline": "Turn JPG, PNG, and WebP images into one PDF. Set the page size, orientation, margin, and order.",
+    "description": "Free JPG to PDF and image to PDF converter. Drop JPG, PNG, or WebP pictures, put them in order, and choose A4, Letter, or a page that fits the picture. Portrait, landscape, or automatic orientation, with a margin. The PDF is built in the browser and the images are not uploaded.",
+    "category": "pdf",
+    "tags": [
+      "pdf",
+      "image",
+      "convert"
+    ],
+    "keywords": [
+      "jpg to pdf converter",
+      "image to pdf converter",
+      "png to pdf"
+    ],
+    "status": "new",
+    "icon": "FileImage",
+    "runsLocally": true
+  },
+  {
+    "slug": "qr-code-generator",
+    "name": "QR code generator",
+    "tagline": "Make a static QR code for text, a URL, Wi-Fi, or a vCard. Set the colors and error correction, then download SVG or PNG.",
+    "description": "Free QR code generator for a URL, plain text, a Wi-Fi network, or a vCard. Pick the colors and the error-correction level, then download SVG and PNG. The code is static: it does not track scans, and it is drawn in this browser.",
+    "category": "design",
+    "tags": [
+      "qr",
+      "barcode"
+    ],
+    "keywords": [
+      "qr code generator",
+      "free qr code generator",
+      "wifi qr code"
+    ],
+    "status": "new",
+    "icon": "QrCode",
+    "runsLocally": true
   }
 ]
