@@ -37,6 +37,8 @@
     "fast-xml-parser": "^5.11.2",
     "fflate": "^0.8.3",
     "fuse.js": "^7.5.0",
+    "hash-wasm": "^4.12.0",
+    "ip-address": "^10.7.4",
     "jose": "^6.2.12",
     "jpeg-js": "^0.4.4",
     "js-tiktoken": "^1.0.21",

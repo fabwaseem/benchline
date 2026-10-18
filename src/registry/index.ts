@@ -52,11 +52,19 @@ import { meta as jsonSchemaValidate } from "@/tools/json-schema-validate/meta";
 import { meta as loanEmiCalculator } from "@/tools/loan-emi-calculator/meta";
 import { meta as percentageCalculator } from "@/tools/percentage-calculator/meta";
 import { meta as unitConverter } from "@/tools/unit-converter/meta";
+import { meta as dnsLookup } from "@/tools/dns-lookup/meta";
+import { meta as ipCidrCalculator } from "@/tools/ip-cidr-calculator/meta";
+import { meta as htpasswdBcrypt } from "@/tools/htpasswd-bcrypt/meta";
+import { meta as rsaKeypair } from "@/tools/rsa-keypair/meta";
+import { meta as cspGenerator } from "@/tools/csp-generator/meta";
+import { meta as sitemapValidator } from "@/tools/sitemap-validator/meta";
+import { meta as httpHeadersChecker } from "@/tools/http-headers-checker/meta";
+import { meta as sslChecker } from "@/tools/ssl-checker/meta";
 import { categories, parents, toolOrder } from "@/registry/categories";
 import type { SearchRecord } from "@/registry/schema";
 import { assertRegistry } from "@/registry/validate";
 
-const tools = assertRegistry([llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator, pdfToText, pdfRotateOrganize, pdfToImage, pdfProtectUnlock, markdownHtml, htmlToMarkdownUrl, qrCodeReader, svgOptimizer, exifViewerRemover, imageCrop, faviconGenerator, ocrImageToText, backgroundRemover, wordCounter, caseConverter, loremIpsum, regexTester, sqlFormatter, jsonSchemaValidate, loanEmiCalculator, percentageCalculator, unitConverter], [...categories], toolOrder, [...parents]);
+const tools = assertRegistry([llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator, pdfToText, pdfRotateOrganize, pdfToImage, pdfProtectUnlock, markdownHtml, htmlToMarkdownUrl, qrCodeReader, svgOptimizer, exifViewerRemover, imageCrop, faviconGenerator, ocrImageToText, backgroundRemover, wordCounter, caseConverter, loremIpsum, regexTester, sqlFormatter, jsonSchemaValidate, loanEmiCalculator, percentageCalculator, unitConverter, dnsLookup, ipCidrCalculator, htpasswdBcrypt, rsaKeypair, cspGenerator, sitemapValidator, httpHeadersChecker, sslChecker], [...categories], toolOrder, [...parents]);
 
 export { categories, parents, tools };
 

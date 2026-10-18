@@ -1067,5 +1067,163 @@
     "status": "new",
     "icon": "Ruler",
     "runsLocally": true
+  },
+  {
+    "slug": "dns-lookup",
+    "name": "DNS lookup",
+    "tagline": "Query A, AAAA, MX, TXT, CNAME, and CAA over DNS-over-HTTPS.",
+    "description": "Free DNS lookup. Ask Cloudflare or Google for A, AAAA, MX, TXT, CNAME, and CAA records, and read SPF and DMARC from the TXT answers. Queries run on the server. Private names are refused.",
+    "category": "dns",
+    "tags": [
+      "dns",
+      "network"
+    ],
+    "keywords": [
+      "dns lookup",
+      "mx lookup",
+      "dmarc lookup",
+      "spf check"
+    ],
+    "status": "new",
+    "icon": "Globe",
+    "runsLocally": false
+  },
+  {
+    "slug": "ip-cidr-calculator",
+    "name": "CIDR calculator",
+    "tagline": "Network, broadcast, host range, and membership for IPv4 and IPv6.",
+    "description": "Free subnet calculator. Enter an IPv4 or IPv6 CIDR and see the network, mask, broadcast, first and last host, and the address count. Test whether an address is inside, split the block, or merge adjacent networks.",
+    "category": "ip",
+    "tags": [
+      "ip",
+      "cidr",
+      "subnet"
+    ],
+    "keywords": [
+      "subnet calculator",
+      "cidr calculator",
+      "ip calculator"
+    ],
+    "status": "new",
+    "icon": "Network",
+    "runsLocally": true
+  },
+  {
+    "slug": "htpasswd-bcrypt",
+    "name": "Bcrypt hash",
+    "tagline": "Hash and verify passwords with bcrypt or argon2id. Nothing is stored.",
+    "description": "Free bcrypt and argon2id generator. Hash a password in the browser, copy an htpasswd line, or verify an existing hash. The password is not sent, logged, or stored.",
+    "category": "crypto",
+    "tags": [
+      "bcrypt",
+      "argon2",
+      "password"
+    ],
+    "keywords": [
+      "bcrypt generator",
+      "bcrypt hash",
+      "htpasswd bcrypt",
+      "argon2 hash"
+    ],
+    "status": "new",
+    "icon": "Lock",
+    "runsLocally": true
+  },
+  {
+    "slug": "rsa-keypair",
+    "name": "Key pair",
+    "tagline": "Generate RSA, EC, and Ed25519 keys, and convert PEM and JWK.",
+    "description": "Free key pair generator. Create an RSA, ECDSA, or Ed25519 key in the browser and copy PEM, JWK, and a JWKS. Convert between PEM and JWK. The private key is not sent, logged, or stored.",
+    "category": "crypto",
+    "tags": [
+      "rsa",
+      "jwk",
+      "pem",
+      "keys"
+    ],
+    "keywords": [
+      "rsa key generator",
+      "pem to jwk",
+      "ed25519 key generator"
+    ],
+    "status": "new",
+    "icon": "Key",
+    "runsLocally": true
+  },
+  {
+    "slug": "csp-generator",
+    "name": "CSP builder",
+    "tagline": "Build a Content-Security-Policy and a Next.js headers snippet.",
+    "description": "Free Content-Security-Policy generator. Fill in directives or paste a policy, then copy the header and a next.config headers() snippet. Warnings call out wildcards, unsafe-inline, and a missing object-src or frame-ancestors.",
+    "category": "headers",
+    "tags": [
+      "csp",
+      "headers"
+    ],
+    "keywords": [
+      "csp generator",
+      "content security policy generator"
+    ],
+    "status": "new",
+    "icon": "Shield",
+    "runsLocally": true
+  },
+  {
+    "slug": "sitemap-validator",
+    "name": "Sitemap validator",
+    "tagline": "Check a sitemap URL or XML, or generate a urlset from a list.",
+    "description": "Free XML sitemap checker. Fetch a public sitemap, or paste XML, and see URL counts, lastmod problems, and a sample of HTTP statuses. Generate a urlset from a list of URLs. Private addresses are refused.",
+    "category": "seo",
+    "tags": [
+      "sitemap",
+      "seo"
+    ],
+    "keywords": [
+      "sitemap checker",
+      "sitemap generator",
+      "xml sitemap validator"
+    ],
+    "status": "new",
+    "icon": "FileSearch",
+    "runsLocally": false
+  },
+  {
+    "slug": "http-headers-checker",
+    "name": "HTTP headers",
+    "tagline": "Follow redirects and grade the security headers on a public URL.",
+    "description": "Free HTTP header checker. Fetch a public URL, list the redirect chain, and grade HSTS, Content-Security-Policy, framing, nosniff, and Referrer-Policy. Private addresses are refused. The body is discarded.",
+    "category": "http",
+    "tags": [
+      "http",
+      "headers",
+      "security"
+    ],
+    "keywords": [
+      "check http headers",
+      "security headers",
+      "hsts checker"
+    ],
+    "status": "new",
+    "icon": "Waypoints",
+    "runsLocally": false
+  },
+  {
+    "slug": "ssl-checker",
+    "name": "SSL checker",
+    "tagline": "Expiry, names, and the chain for a certificate on port 443.",
+    "description": "Free SSL certificate checker. Connect to a public host on port 443 and report days until expiry, the subject, issuer, subject alternative names, protocol, and chain. Private addresses are refused.",
+    "category": "tls",
+    "tags": [
+      "ssl",
+      "tls"
+    ],
+    "keywords": [
+      "ssl checker",
+      "certificate expiry",
+      "tls checker"
+    ],
+    "status": "new",
+    "icon": "ShieldCheck",
+    "runsLocally": false
   }
 ]

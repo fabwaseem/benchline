@@ -67,7 +67,7 @@ export const parents = [
   {
     slug: "network",
     name: "Network",
-    description: "Encode and decode the URLs a request is built from.",
+    description: "DNS, certificates, response headers, and the URLs a request is built from.",
     icon: "Link",
     hue: 190,
   },
@@ -266,6 +266,46 @@ export const categories = [
     hue: 262,
     parent: "math",
   },
+  {
+    slug: "dns",
+    name: "DNS",
+    description: "Look up public DNS records over HTTPS.",
+    icon: "Globe",
+    hue: 188,
+    parent: "network",
+  },
+  {
+    slug: "ip",
+    name: "IP & subnets",
+    description: "Subnet math for IPv4 and IPv6.",
+    icon: "Network",
+    hue: 196,
+    parent: "network",
+  },
+  {
+    slug: "http",
+    name: "HTTP",
+    description: "Response headers, redirects, and a grade for the security headers.",
+    icon: "Waypoints",
+    hue: 204,
+    parent: "network",
+  },
+  {
+    slug: "tls",
+    name: "TLS",
+    description: "Certificate expiry, the chain, and the names on a public host.",
+    icon: "ShieldCheck",
+    hue: 168,
+    parent: "network",
+  },
+  {
+    slug: "headers",
+    name: "Headers",
+    description: "Content-Security-Policy and the headers a browser enforces.",
+    icon: "Shield",
+    hue: 156,
+    parent: "security",
+  },
 ] as const satisfies readonly Category[];
 
 export const toolOrder = [
@@ -322,4 +362,12 @@ export const toolOrder = [
   "loan-emi-calculator",
   "percentage-calculator",
   "unit-converter",
+  "dns-lookup",
+  "ip-cidr-calculator",
+  "htpasswd-bcrypt",
+  "rsa-keypair",
+  "csp-generator",
+  "sitemap-validator",
+  "http-headers-checker",
+  "ssl-checker",
 ] as const;

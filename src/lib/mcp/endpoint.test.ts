@@ -7,6 +7,44 @@ import { handleMcpRequest } from "@/lib/mcp/handler";
 import { resetRateLimit } from "@/lib/net/rate-limit";
 import { mcpTools } from "@/registry/mcp-registry";
 
+vi.mock("@/tools/ssl-checker/lib/socket", () => ({
+  openTls: () => {
+    const listeners = new Map<string, Array<() => void>>();
+    const certificate = {
+      subject: { CN: "1.1.1.1" },
+      issuer: { CN: "Benchline Test" },
+      subjectaltname: "IP Address:1.1.1.1",
+      valid_from: "Jan 1 00:00:00 2026 GMT",
+      valid_to: "Jan 1 00:00:00 2028 GMT",
+      fingerprint256: "AA:BB:CC",
+      serialNumber: "01",
+      bits: 256,
+    };
+    const socket = {
+      authorized: true,
+      authorizationError: "",
+      once(event: string, listener: () => void) {
+        const list = listeners.get(event) ?? [];
+        list.push(listener);
+        listeners.set(event, list);
+        return socket;
+      },
+      destroy() {},
+      end() {},
+      getProtocol() {
+        return "TLSv1.3";
+      },
+      getPeerCertificate() {
+        return certificate;
+      },
+    };
+    queueMicrotask(() => {
+      for (const listener of listeners.get("secureConnect") ?? []) listener();
+    });
+    return socket;
+  },
+}));
+
 const token = "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiJhZGEiLCJleHAiOjIwMDAwMDAwMDB9.e30";
 const png = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
 const page = `<!doctype html><html lang="en"><head><title>Example page title</title>
@@ -30,6 +68,25 @@ async function blankPdf() {
 function installFetch() {
   vi.stubGlobal("fetch", async (input: RequestInfo | URL) => {
     const url = input instanceof Request ? input.url : String(input);
+    if (url.includes("dns-query") || url.includes("dns.google")) {
+      const parsed = new URL(url);
+      const type = parsed.searchParams.get("type") ?? "A";
+      const name = parsed.searchParams.get("name") ?? "example.com";
+      const rows: Record<string, { type: number; data: string }> = {
+        A: { type: 1, data: "1.1.1.1" },
+        AAAA: { type: 28, data: "2606:4700:4700::1111" },
+        MX: { type: 15, data: "10 mail.example.com." },
+        TXT: { type: 16, data: name.startsWith("_dmarc.") ? '"v=DMARC1; p=reject"' : '"v=spf1 mx ~all"' },
+        CNAME: { type: 5, data: "example.com." },
+        CAA: { type: 257, data: '0 issue "letsencrypt.org"' },
+      };
+      const row = rows[type] ?? rows.A;
+      const body = JSON.stringify({
+        Status: 0,
+        Answer: [{ name, type: row?.type ?? 1, TTL: 300, data: row?.data ?? "1.1.1.1" }],
+      });
+      return new Response(body, { status: 200, headers: { "content-type": "application/dns-json" } });
+    }
     if (url.includes(".pdf")) {
       const bytes = Buffer.from(pdf, "base64");
       return new Response(bytes, {
@@ -153,12 +210,21 @@ describe("MCP endpoint", () => {
       calculate_emi: { principal: "100000", annualRate: "10", months: 12 },
       calculate_percentage: { mode: "of", a: "10", b: "200" },
       convert_units: { category: "length", from: "m", to: "cm", value: "1", precision: 2 },
+      lookup_dns: { name: "example.com", resolver: "cloudflare", mail: true },
+      calculate_cidr: { cidr: "192.168.1.0/24" },
+      hash_password: { password: "correct horse", algorithm: "bcrypt", cost: 4 },
+      generate_keypair: { action: "generate", alg: "ES256" },
+      build_csp: { policy: "default-src 'none'; object-src 'none'; base-uri 'none'" },
+      validate_sitemap: { url: "https://1.1.1.1/sitemap.xml", probe: true },
+      check_http_headers: { url: "https://1.1.1.1/" },
+      check_ssl: { host: "1.1.1.1" },
     };
 
     const missing = mcpTools.map((tool) => tool.name).filter((name) => !(name in samples));
     expect(missing).toEqual([]);
 
-    for (const tool of mcpTools) {
+    for (const [index, tool] of mcpTools.entries()) {
+      if (index % 40 === 0) resetRateLimit();
       const args = samples[tool.name] ?? {};
       let result: Awaited<ReturnType<Client["callTool"]>>;
       try {
@@ -173,6 +239,7 @@ describe("MCP endpoint", () => {
   }, 120_000);
 
   it("fetches a public PDF URL and refuses a private one", async () => {
+    resetRateLimit();
     const ok = await client.callTool({ name: "split_pdf", arguments: { url: "https://1.1.1.1/a.pdf" } });
     expect(ok.isError, textOf(ok)).not.toBe(true);
     const blocked = await client.callTool({ name: "split_pdf", arguments: { url: "http://127.0.0.1/secret.pdf" } });
@@ -181,6 +248,7 @@ describe("MCP endpoint", () => {
   });
 
   it("rejects an unsupported protocol version and a foreign origin", async () => {
+    resetRateLimit();
     const headers = {
       "content-type": "application/json",
       accept: "application/json, text/event-stream",
