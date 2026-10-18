@@ -29,7 +29,19 @@ RUN --mount=from=build,source=/app/node_modules,target=/mnt/nm \
   && cp -aL /mnt/nm/zxing-wasm node_modules/zxing-wasm \
   && cp -aL /mnt/nm/tesseract.js node_modules/tesseract.js \
   && cp -aL /mnt/nm/tesseract.js-core node_modules/tesseract.js-core \
-  && chown -R nextjs:nextjs node_modules/pdfjs-dist node_modules/zxing-wasm node_modules/tesseract.js node_modules/tesseract.js-core
+  && mkdir -p node_modules/@resvg \
+  && cp -aL /mnt/nm/@resvg/resvg-js node_modules/@resvg/resvg-js \
+  && cp -aL /mnt/nm/satori node_modules/satori \
+  && for pkg in /mnt/nm/.pnpm/node_modules/@resvg/resvg-js-linux-*; do \
+       if [ -d "$pkg" ]; then cp -aL "$pkg" "node_modules/@resvg/$(basename "$pkg")"; fi; \
+     done \
+  && chown -R nextjs:nextjs \
+       node_modules/pdfjs-dist \
+       node_modules/zxing-wasm \
+       node_modules/tesseract.js \
+       node_modules/tesseract.js-core \
+       node_modules/@resvg \
+       node_modules/satori
 USER nextjs
 EXPOSE 3000
 CMD ["node", "server.js"]

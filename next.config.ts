@@ -6,6 +6,12 @@ const mcpNativeAssets = [
   "./node_modules/tesseract.js/**/*",
   "./node_modules/tesseract.js-core/**/*",
   "./node_modules/@napi-rs/canvas/**/*",
+  "./node_modules/@resvg/resvg-js/**/*",
+  "./node_modules/.pnpm/@resvg+resvg-js@*/**/*",
+  "./node_modules/.pnpm/@resvg+resvg-js-linux-*/**/*",
+  "./node_modules/.pnpm/node_modules/@resvg/**/*",
+  "./node_modules/satori/**/*",
+  "./public/fonts/og/**/*",
 ];
 
 const nextConfig: NextConfig = {
@@ -13,6 +19,7 @@ const nextConfig: NextConfig = {
   serverExternalPackages: [
     "@napi-rs/canvas",
     "@resvg/resvg-js",
+    "satori",
     "pdfjs-dist",
     "tesseract.js",
     "tesseract.js-core",

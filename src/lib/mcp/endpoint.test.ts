@@ -159,7 +159,7 @@ describe("MCP endpoint", () => {
         pages: [{ url: "https://example.com/docs", title: "Docs" }],
       },
       score_ai_seo: { url: "https://1.1.1.1/" },
-      build_open_graph: { title: "Ship notes" },
+      build_open_graph: { template: "editorial", title: "Ship notes" },
       list_og_templates: {},
       decode_jwt: { token },
       check_robots_txt: { url: "https://1.1.1.1/" },
