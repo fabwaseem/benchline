@@ -31,6 +31,11 @@ const views: Record<string, ComponentType> = {
   "url-codec": dynamic(() => import("@/tools/url-codec/tool")),
   "password-generator": dynamic(() => import("@/tools/password-generator/tool")),
   "chmod-calculator": dynamic(() => import("@/tools/chmod-calculator/tool")),
+  "pdf-merge": dynamic(() => import("@/tools/pdf-merge/tool")),
+  "pdf-split": dynamic(() => import("@/tools/pdf-split/tool")),
+  "pdf-compress": dynamic(() => import("@/tools/pdf-compress/tool")),
+  "image-to-pdf": dynamic(() => import("@/tools/image-to-pdf/tool")),
+  "qr-code-generator": dynamic(() => import("@/tools/qr-code-generator/tool")),
 };
 
 export function ToolHost({ slug }: { slug: string }) {

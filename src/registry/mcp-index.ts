@@ -34,6 +34,11 @@ export const mcpIndex: McpIndexEntry[] = [
   {"slug":"url-codec","name":"url_codec","title":"Encode, decode, or parse a URL","description":"Percent-encode or decode text, or parse a URL into its host, path, hash, and query parameters.","openWorld":false},
   {"slug":"password-generator","name":"generate_password","title":"Generate a password or passphrase","description":"Generate cryptographic passwords or EFF-wordlist passphrases and report the entropy in bits. Randomness comes from the platform CSPRNG.","openWorld":false},
   {"slug":"chmod-calculator","name":"explain_chmod","title":"Explain a chmod mode","description":"Convert an octal or symbolic file mode into octal, symbolic notation, and a chmod command, including setuid, setgid, and the sticky bit.","openWorld":false},
+  {"slug":"pdf-merge","name":"merge_pdf","title":"Merge PDF files","description":"Combine PDF files sent as base64. Each file can keep a page range such as 1-3,5. Returns one PDF as base64.","openWorld":false},
+  {"slug":"pdf-split","name":"split_pdf","title":"Split a PDF","description":"Extract a page range into one PDF, or split into single pages or chunks of N. Returns PDF base64 and a ZIP when there are several files.","openWorld":false},
+  {"slug":"pdf-compress","name":"compress_pdf","title":"Compress a PDF","description":"Recompress embedded images in a PDF sent as base64. Presets are light, medium, and strong. An optional target size tries harder. Returns the PDF and the sizes before and after.","openWorld":false},
+  {"slug":"image-to-pdf","name":"images_to_pdf","title":"Build a PDF from images","description":"Turn JPEG and PNG images, sent as base64 in order, into one PDF. Page size is A4, Letter, or fit. Returns the PDF as base64.","openWorld":false},
+  {"slug":"qr-code-generator","name":"generate_qr_code","title":"Generate a QR code","description":"Build a static QR code for text, a URL, Wi-Fi, or a vCard. Returns the payload, an SVG string, and a PNG as base64.","openWorld":false},
 ];
 
 export function mcpFor(slug: string) {

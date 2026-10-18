@@ -25,9 +25,14 @@ import { tool as uuidGenerator } from "@/tools/uuid-generator/mcp";
 import { tool as urlCodec } from "@/tools/url-codec/mcp";
 import { tool as passwordGenerator } from "@/tools/password-generator/mcp";
 import { tool as chmodCalculator } from "@/tools/chmod-calculator/mcp";
+import { tool as pdfMerge } from "@/tools/pdf-merge/mcp";
+import { tool as pdfSplit } from "@/tools/pdf-split/mcp";
+import { tool as pdfCompress } from "@/tools/pdf-compress/mcp";
+import { tool as imageToPdf } from "@/tools/image-to-pdf/mcp";
+import { tool as qrCodeGenerator } from "@/tools/qr-code-generator/mcp";
 import type { BenchTool } from "@/lib/mcp/types";
 
-export const mcpTools: BenchTool[] = [llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator];
+export const mcpTools: BenchTool[] = [llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator];
 
 export function mcpToolBySlug(slug: string) {
   return mcpTools.find((tool) => tool.slug === slug);
