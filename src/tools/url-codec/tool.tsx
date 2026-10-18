@@ -8,7 +8,7 @@ import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
-import { Panel, ToolShell, ToolTabs } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
 import { decodeUrl, encodeUrl, parseUrl, replaceQuery, serializeQuery, utmKeys, withUtm, type EncodeMode, type QueryParam } from "@/tools/url-codec/lib/url";
 
 export default function UrlCodecTool() {
@@ -30,19 +30,18 @@ export default function UrlCodecTool() {
     setParams(next);
   }
 
+  const note = tab === "parse" ? `${activeParams.length} parameters` : mode === "component" ? "Component encoding" : "Full encoding";
+
   return (
-    <ToolShell
-      runsLocally
-      layout="split"
-      tabs={<ToolTabs label="Mode" value={tab} onChange={setTab} options={[{ value: "encode", label: "Encode" }, { value: "decode", label: "Decode" }, { value: "parse", label: "Parse" }]} />}
-      status={
-        <>
-          <span className="dot" />
-          <span>{tab === "parse" ? `${activeParams.length} parameters` : mode === "component" ? "Component encoding" : "Full encoding"}</span>
-        </>
-      }
-      input={
-        <Panel title={tab === "parse" ? "URL" : "Text"}>
+    <ToolCard>
+      <ToolToolbar
+        label="Mode"
+        options={[{ value: "encode", label: "Encode" }, { value: "decode", label: "Decode" }, { value: "parse", label: "Parse" }]}
+        value={tab}
+        onChange={setTab}
+      />
+      <ToolPanes>
+        <Pane label={tab === "parse" ? "URL" : "Text"}>
           {tab === "parse" ? (
             <FieldRow label="URL or query string" htmlFor="url-input" error={"error" in parsed ? parsed.error : undefined}>
               <TextArea id="url-input" value={url} onChange={(event) => { setUrl(event.target.value); setParams(null); }} className="min-h-28 font-mono" aria-invalid={"error" in parsed} />
@@ -59,30 +58,25 @@ export default function UrlCodecTool() {
               )}
             </>
           )}
-        </Panel>
-      }
-      output={
-        <div aria-live="polite">
+        </Pane>
+        <Pane label={tab === "encode" ? "Encoded" : tab === "decode" ? "Decoded" : "Parts"}>
+          <div aria-live="polite" className="flex flex-col gap-3">
           {tab === "encode" ? (
-            <Panel title="Encoded">
               <div className="flex items-start justify-between gap-3">
-                <p className="font-mono text-[13px] break-all">{encoded || " "}</p>
+                <p className="min-w-0 flex-1 truncate font-mono text-[13px]" title={encoded}>{encoded || " "}</p>
                 <CopyButton value={encoded} />
               </div>
-            </Panel>
           ) : null}
           {tab === "decode" ? (
-            <Panel title="Decoded">
-              {"error" in decoded ? <Notice tone="bad" role="alert" title={decoded.error} /> : (
+              "error" in decoded ? <Notice tone="bad" role="alert" title={decoded.error} /> : (
                 <div className="flex items-start justify-between gap-3">
-                  <p className="font-mono text-[13px] break-all">{decoded.value || " "}</p>
+                  <p className="min-w-0 flex-1 truncate font-mono text-[13px]" title={decoded.value}>{decoded.value || " "}</p>
                   <CopyButton value={decoded.value} />
                 </div>
-              )}
-            </Panel>
+              )
           ) : null}
           {tab === "parse" ? (
-            <Panel title="Parts">
+            <>
               {"error" in parsed ? (
                 <EmptyState art={<Link size={22} />} title="No URL" hint="Paste a full URL or a query string such as a=1&b=2." />
               ) : (
@@ -126,11 +120,13 @@ export default function UrlCodecTool() {
                   ) : <Notice tone="bad" title={rebuilt.error} />}
                 </>
               )}
-            </Panel>
+            </>
           ) : null}
-        </div>
-      }
-    />
+          </div>
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={note} tone={"error" in parsed && tab === "parse" ? "warn" : "pass"} />
+    </ToolCard>
   );
 }
 
@@ -138,7 +134,7 @@ function Part({ name, value }: { name: string; value: string }) {
   return (
     <>
       <dt className="text-muted-foreground">{name}</dt>
-      <dd className="font-mono break-all">{value || "—"}</dd>
+      <dd className="truncate font-mono" title={value || undefined}>{value || "—"}</dd>
     </>
   );
 }

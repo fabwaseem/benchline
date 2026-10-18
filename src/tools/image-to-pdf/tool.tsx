@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { ActionButton } from "@/components/kit/controls";
-import { Download, FileImage } from "lucide-react";
+import { Download } from "lucide-react";
 import { FileList } from "@/components/kit/file-list";
 import { downloadBytes } from "@/components/kit/download-button";
 import { Dropzone } from "@/components/kit/dropzone";
@@ -11,7 +11,8 @@ import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { formatBytes } from "@/lib/image-format";
 import { imagesToPdf, type Orientation, type PageSizeName } from "@/tools/image-to-pdf/lib/images";
 
@@ -90,23 +91,12 @@ export default function ImageToPdfTool() {
   useWorkbenchKeys({ onEnter: () => { if (result) download(); else void build(); } });
 
   return (
-    <ToolShell
-      runsLocally
-      busy={busy}
-      layout="split+inspector"
-      flow="band"
-      columns="min-[1280px]:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)_300px]"
-      tabs={<ToolTabs label="Mode" value="images" onChange={() => undefined} options={[{ value: "images", label: "Images" }]} />}
-      actions={<InkButton icon={<FileImage size={15} />} onClick={() => void build()} disabled={busy || items.length === 0}>Create PDF</InkButton>}
-      status={
-        <>
-          <span className={error ? "dot dot-warn" : "dot"} />
-          <span>{error || (busy ? "Building the PDF in this browser" : "Images stay in this browser")}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘↵ create</span>
-        </>
-      }
-      input={
-        <Panel title="Images">
+    <ToolCard>
+      <ToolToolbar
+        actions={<ActionButton className="btn btn-ink" onClick={() => void build()} disabled={busy || items.length === 0}>{busy ? "Creating" : "Create PDF"}</ActionButton>}
+      />
+      <ToolPanes ratio="60/40">
+        <Pane label="Images">
           <Dropzone accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" multiple onFiles={(files) => void addFiles(files)} label="Drop JPG, PNG, or WebP. They stay in this browser." invalid={Boolean(error)} />
           {items.length === 0 ? <EmptyState title="No images yet" hint="The list order becomes the page order." /> : (
             <FileList
@@ -137,24 +127,6 @@ export default function ImageToPdfTool() {
               }))}
             />
           )}
-        </Panel>
-      }
-      output={
-        <Panel title="PDF">
-          {error ? <Notice tone="bad" role="alert" title="Could not build the PDF" body={error} /> : null}
-          {result ? (
-            <div className="flex flex-col gap-3">
-              <div className="grid grid-cols-2 gap-2">
-                <ResultStat label="Pages" value={String(items.length)} />
-                <ResultStat label="Size" value={formatBytes(result.byteLength)} />
-              </div>
-              <ActionButton type="button" onClick={download}><Download />Download PDF</ActionButton>
-            </div>
-          ) : <EmptyState title="No PDF yet" hint="WebP is converted in this browser, then embedded with the JPG and PNG files." />}
-        </Panel>
-      }
-      inspector={
-        <Panel title="Page">
           <FieldRow label="Size" htmlFor="page">
             <Segmented label="Page size" value={page} onChange={(value) => { setPage(value); setResult(null); }} options={[
               { value: "a4", label: "A4" },
@@ -173,9 +145,22 @@ export default function ImageToPdfTool() {
             <Segmented label="Margin" value={margin} onChange={(value) => { setMargin(value); setResult(null); }} options={[...margins]} />
           </FieldRow>
           <Notice tone="neutral" title="Nothing is uploaded." body="Each image becomes one page, in list order." />
-        </Panel>
-      }
-    />
+        </Pane>
+        <Pane label="PDF">
+          {error ? <Notice tone="bad" role="alert" title="Could not build the PDF" body={error} /> : null}
+          {result ? (
+            <div className="flex flex-col gap-3">
+              <div className="grid grid-cols-2 gap-2">
+                <ResultStat label="Pages" value={String(items.length)} />
+                <ResultStat label="Size" value={formatBytes(result.byteLength)} />
+              </div>
+              <ActionButton type="button" onClick={download}><Download />Download PDF</ActionButton>
+            </div>
+          ) : <EmptyState title="No PDF yet" hint="WebP is converted in this browser, then embedded with the JPG and PNG files." />}
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={error || (busy ? "Building the PDF in this browser" : "Images stay in this browser")} tone={error ? "warn" : "pass"} trailing="⌘↵ create" />
+    </ToolCard>
   );
 }
 

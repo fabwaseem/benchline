@@ -26,7 +26,7 @@ export function Segmented<T extends string>({
   className?: string;
 }) {
   return (
-    <div role="radiogroup" aria-label={label} className={cn("seg max-w-full overflow-x-auto", className)}>
+    <div role="radiogroup" aria-label={label} className={cn("seg max-w-full flex-wrap", className)}>
       {options.map((option) => {
         const selected = value === option.value;
         return (

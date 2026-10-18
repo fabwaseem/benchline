@@ -35,15 +35,13 @@ export function CheckRow({
 }) {
   const Icon = icon[level];
   return (
-    <li className="flex items-start gap-3 border-b border-border px-4 py-3 last:border-b-0">
+    <li className="flex items-center gap-3 border-b border-border px-4 py-2.5 last:border-b-0">
       <span className={cn("inline-flex w-[4.5rem] shrink-0 items-center gap-1.5 pt-0.5 text-[12px] font-medium", tone[level])}>
         <Icon size={14} strokeWidth={1.75} aria-hidden />
         {word[level]}
       </span>
-      <div className="min-w-0">
-        <p className="text-[13.5px] font-medium tracking-tight">{label}</p>
-        <p className="text-[12.5px] text-muted-foreground">{detail}</p>
-      </div>
+      <span className="w-36 shrink-0 truncate text-[13.5px] font-medium tracking-tight whitespace-nowrap min-[700px]:w-44" title={label}>{label}</span>
+      <span className="min-w-0 flex-1 truncate text-[12.5px] whitespace-nowrap text-muted-foreground" title={detail}>{detail}</span>
     </li>
   );
 }

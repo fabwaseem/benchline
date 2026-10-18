@@ -2,16 +2,15 @@
 
 import { useState } from "react";
 import { ActionButton, TextInput } from "@/components/kit/controls";
-import { Download, Scissors } from "lucide-react";
+import { Download } from "lucide-react";
 import { downloadBytes } from "@/components/kit/download-button";
 import { Dropzone } from "@/components/kit/dropzone";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { FileList } from "@/components/kit/file-list";
 import { Notice } from "@/components/kit/notice";
-import { ResultStat } from "@/components/kit/result-stat";
-import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { formatBytes } from "@/lib/image-format";
 import { inspectPdf, splitPdf, type SplitMode, type SplitResult } from "@/tools/pdf-split/lib/split";
 
@@ -62,33 +61,32 @@ export default function PdfSplitTool() {
 
   useWorkbenchKeys({ onEnter: () => { if (result) downloadAll(); else void split(); } });
 
+  const note = error || (busy ? "Splitting in this browser" : source ? `${source.name} · ${source.pageCount} pages` : "The PDF stays in this browser");
+
   return (
-    <ToolShell
-      runsLocally
-      busy={busy}
-      layout="split+inspector"
-      flow="band"
-      columns="min-[1280px]:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_300px]"
-      tabs={<ToolTabs label="Mode" value="split" onChange={() => undefined} options={[{ value: "split", label: "Split" }]} />}
-      actions={<InkButton icon={<Scissors size={15} />} onClick={() => void split()} disabled={busy || !source}>Split</InkButton>}
-      status={
-        <>
-          <span className={error ? "dot dot-warn" : "dot"} />
-          <span>{error || (busy ? "Splitting in this browser" : source ? `${source.name} · ${source.pageCount} pages` : "The PDF stays in this browser")}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘↵ split</span>
-        </>
-      }
-      input={
-        <Panel title="PDF">
+    <ToolCard>
+      <ToolToolbar
+        label="Mode"
+        options={[{ value: "extract", label: "One file" }, { value: "pages", label: "Every page" }, { value: "chunks", label: "Every N" }]}
+        value={mode}
+        onChange={(value) => { setMode(value); setResult(null); }}
+        actions={<ActionButton className="btn btn-ink" onClick={() => void split()} disabled={busy || !source}>{busy ? "Splitting" : "Split"}</ActionButton>}
+      />
+      <ToolPanes>
+        <Pane label="PDF">
           <Dropzone accept="application/pdf,.pdf" onFile={(file) => void addFile(file)} label={source ? source.name : "Drop a PDF. It stays in this browser."} invalid={Boolean(error) && !source} />
           <FieldRow label="Pages" htmlFor="range" help="Blank keeps every page. Example: 1-3,5">
             <TextInput id="range" value={range} placeholder="all pages" onChange={(event) => { setRange(event.target.value); setResult(null); }} />
           </FieldRow>
-          {source ? <p className="font-mono text-[12px] text-muted-foreground">{source.pageCount} {source.pageCount === 1 ? "page" : "pages"} · {formatBytes(source.bytes.byteLength)}</p> : null}
-        </Panel>
-      }
-      output={
-        <Panel title="Files">
+          {mode === "chunks" ? (
+            <FieldRow label="Pages per file" htmlFor="every" help="A whole number from 1 to 500.">
+              <TextInput id="every" inputMode="numeric" value={every} onChange={(event) => { setEvery(event.target.value); setResult(null); }} />
+            </FieldRow>
+          ) : null}
+          {source ? <p className="truncate font-mono text-[12px] text-muted-foreground" title={`${source.pageCount} pages · ${formatBytes(source.bytes.byteLength)}`}>{source.pageCount} {source.pageCount === 1 ? "page" : "pages"} · {formatBytes(source.bytes.byteLength)}</p> : null}
+          <Notice tone="neutral" title="Nothing is uploaded." body="The split runs in this tab." />
+        </Pane>
+        <Pane label="Files">
           {error ? <Notice tone="bad" role="alert" title="Could not split" body={error} /> : null}
           {result ? (
             <div className="flex flex-col gap-3">
@@ -104,26 +102,14 @@ export default function PdfSplitTool() {
               <ActionButton type="button" onClick={downloadAll}><Download />{result.zip ? "Download ZIP" : "Download PDF"}</ActionButton>
             </div>
           ) : <EmptyState title="Nothing split yet" hint="Choose a range and a mode, then split. Several files become a ZIP." />}
-        </Panel>
-      }
-      inspector={
-        <Panel title="How to split">
-          <FieldRow label="Mode" htmlFor="mode">
-            <Segmented label="Split mode" value={mode} onChange={(value) => { setMode(value); setResult(null); }} options={[
-              { value: "extract", label: "One file" },
-              { value: "pages", label: "Every page" },
-              { value: "chunks", label: "Every N" },
-            ]} />
-          </FieldRow>
-          {mode === "chunks" ? (
-            <FieldRow label="Pages per file" htmlFor="every" help="A whole number from 1 to 500.">
-              <TextInput id="every" inputMode="numeric" value={every} onChange={(event) => { setEvery(event.target.value); setResult(null); }} />
-            </FieldRow>
-          ) : null}
-          <ResultStat variant="well" label="Selected mode" value={mode === "extract" ? "One PDF" : mode === "pages" ? "A page each" : `Every ${every || "N"}`} />
-          <Notice tone="neutral" title="Nothing is uploaded." body="The split runs in this tab." />
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip
+        note={note}
+        tone={error ? "warn" : "pass"}
+        trailing="⌘↵ split"
+        items={[{ level: "info", label: "Mode", detail: mode === "extract" ? "One PDF" : mode === "pages" ? "A page each" : `Every ${every || "N"}` }]}
+      />
+    </ToolCard>
   );
 }

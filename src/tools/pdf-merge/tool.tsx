@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { ActionButton, TextInput } from "@/components/kit/controls";
-import { Download, Files } from "lucide-react";
+import { Download } from "lucide-react";
 import { FileList } from "@/components/kit/file-list";
 import { downloadBytes } from "@/components/kit/download-button";
 import { Dropzone } from "@/components/kit/dropzone";
@@ -10,7 +10,8 @@ import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { formatBytes } from "@/lib/image-format";
 import { inspectPdf, mergePdfs, type MergeResult } from "@/tools/pdf-merge/lib/merge";
 
@@ -69,24 +70,15 @@ export default function PdfMergeTool() {
 
   useWorkbenchKeys({ onEnter: () => { if (result) download(); else void merge(); } });
 
+  const pageTotal = items.reduce((sum, item) => sum + item.pageCount, 0);
+
   return (
-    <ToolShell
-      runsLocally
-      busy={busy}
-      layout="split+inspector"
-      flow="band"
-      columns="min-[1280px]:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)_300px]"
-      tabs={<ToolTabs label="Mode" value="merge" onChange={() => undefined} options={[{ value: "merge", label: "Merge" }]} />}
-      actions={<InkButton icon={<Files size={15} />} onClick={() => void merge()} disabled={busy || items.length < 2}>Merge</InkButton>}
-      status={
-        <>
-          <span className={error ? "dot dot-warn" : "dot"} />
-          <span>{error || (busy ? "Merging in this browser" : "Files stay in this browser")}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘↵ merge</span>
-        </>
-      }
-      input={
-        <Panel title="PDFs">
+    <ToolCard>
+      <ToolToolbar
+        actions={<ActionButton className="btn btn-ink" onClick={() => void merge()} disabled={busy || items.length < 2}>{busy ? "Merging" : "Merge"}</ActionButton>}
+      />
+      <ToolPanes ratio="60/40">
+        <Pane label="PDFs">
           <Dropzone accept="application/pdf,.pdf" multiple onFiles={(files) => void addFiles(files)} label="Drop PDFs. They stay in this browser." invalid={Boolean(error)} />
           {items.length === 0 ? <EmptyState title="No PDFs yet" hint="Add at least two. The list order is the page order." /> : (
             <FileList
@@ -122,10 +114,8 @@ export default function PdfMergeTool() {
               }))}
             />
           )}
-        </Panel>
-      }
-      output={
-        <Panel title="Merged PDF">
+        </Pane>
+        <Pane label="Merged PDF">
           {error ? <Notice tone="bad" role="alert" title="Could not merge" body={error} /> : null}
           {result ? (
             <div className="flex flex-col gap-3">
@@ -136,15 +126,16 @@ export default function PdfMergeTool() {
               <ActionButton type="button" onClick={download}><Download />Download PDF</ActionButton>
             </div>
           ) : <EmptyState title="Nothing merged yet" hint="Add two PDFs, then merge. The file is built in this browser." />}
-        </Panel>
-      }
-      inspector={
-        <Panel title="On this device">
-          <ResultStat variant="well" label="Files" value={String(items.length)} hint={items.length ? `${items.reduce((sum, item) => sum + item.pageCount, 0)} pages before ranges` : "Waiting for PDFs"} />
           <Notice tone="neutral" title="Nothing is uploaded." body="Page ranges and the merged file stay in this tab." />
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip
+        note={error || (busy ? "Merging in this browser" : "Files stay in this browser")}
+        tone={error ? "warn" : "pass"}
+        trailing="⌘↵ merge"
+        items={[{ level: "info", label: "Files", detail: items.length ? `${items.length} files · ${pageTotal} pages` : "Waiting for PDFs" }]}
+      />
+    </ToolCard>
   );
 }
 

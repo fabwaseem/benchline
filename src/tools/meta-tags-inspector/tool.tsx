@@ -2,16 +2,16 @@
 
 import { useMemo, useRef, useState } from "react";
 import { ActionButton, TextInput } from "@/components/kit/controls";
-import { Copy, Tags } from "lucide-react";
+import { Tags } from "lucide-react";
 import { toast } from "sonner";
-import { CheckRows } from "@/components/kit/check-row";
 import { CodeOutput } from "@/components/kit/code-output";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
 import { SkeletonRows } from "@/components/kit/skeleton-rows";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, ResultsTable, ScoreCard, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { postTool } from "@/lib/post-tool";
 import { characterBudget, tagsFromDraft, type Inspection, type TagDraft } from "@/tools/meta-tags-inspector/lib/meta";
 
@@ -107,94 +107,101 @@ export default function MetaTool() {
           ? "Failed"
           : "Waiting for a URL";
 
+  const writeRows = [
+    { level: titleBudget.state === "ok" ? "pass" as const : "warn" as const, label: "Title", detail: `${titleBudget.length} characters. Usual range is 15–60.` },
+    { level: descriptionBudget.state === "ok" ? "pass" as const : "warn" as const, label: "Description", detail: `${descriptionBudget.length} characters. Usual range is 50–160.` },
+    { level: draft.image ? "pass" as const : "fail" as const, label: "og:image", detail: draft.image || "Missing. Previews will have no image." },
+    { level: draft.card ? "pass" as const : "warn" as const, label: "twitter:card", detail: draft.card || "X will fall back to Open Graph." },
+  ];
+  const rows = mode === "url" && result ? result.checks : mode === "write" ? writeRows : [];
+  const fails = rows.filter((row) => row.level === "fail").length;
+
   return (
-    <ToolShell
-      runsLocally={mode === "write"}
-      busy={busy}
-      layout="split+inspector"
-      flow="band"
-      columns="min-[1280px]:grid-cols-[340px_minmax(0,1fr)_340px]"
-      tabs={<ToolTabs label="Mode" value="inspect" onChange={() => {}} options={[{ value: "inspect", label: "Inspect" }]} />}
-      actions={busy ? <ActionButton type="button" variant="outline" className="h-[30px]" onClick={cancel}>Cancel</ActionButton> : <InkButton disabled={!metaText} icon={<Copy size={15} />} onClick={() => void navigator.clipboard.writeText(metaText).then(() => toast.success("Meta tags copied"))}>Copy meta tags</InkButton>}
-      status={
-        <>
-          <span className={error ? "dot dot-warn" : "dot"} />
-          <span>{status}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘↵ inspect · ⌘⇧C copy meta tags</span>
-        </>
-      }
-      input={
-        <Panel title="Source">
-          <p className="text-[12.5px] text-muted-foreground">Title, description, canonical, robots, Open Graph, Twitter, and JSON-LD types.</p>
-          <Segmented label="Mode" value={mode} onChange={setMode} options={[{ value: "url", label: "Check a URL" }, { value: "write", label: "Write tags" }]} />
-          {mode === "url" ? (
-            <>
-              <FieldRow label="Page URL" htmlFor="meta-url" help="A bare domain is fine. The image itself is loaded in your browser." error={blocked ? error : undefined}>
-                <TextInput ref={urlRef} id="meta-url" value={url} autoFocus aria-invalid={blocked || undefined} onChange={(event) => setUrl(event.target.value)} className="max-[699px]:h-11" />
-              </FieldRow>
-              <ActionButton type="button" className="btn btn-ink h-11" aria-busy={busy} disabled={!url.trim() || busy} onClick={() => void run()}>Inspect</ActionButton>
-            </>
+    <ToolCard>
+      <ToolToolbar
+        label="Mode"
+        options={[{ value: "url" as const, label: "Check a URL" }, { value: "write" as const, label: "Write tags" }]}
+        value={mode}
+        onChange={setMode}
+        actions={
+          busy ? (
+            <ActionButton type="button" variant="outline" onClick={cancel}>Cancel</ActionButton>
           ) : (
+            <ActionButton type="button" className="btn btn-ink" disabled={!metaText} onClick={() => void navigator.clipboard.writeText(metaText).then(() => toast.success("Meta tags copied"))}>Copy meta tags</ActionButton>
+          )
+        }
+      />
+      {mode === "url" ? (
+        <div className="flex flex-col gap-3 border-b border-border p-3 min-[700px]:flex-row min-[700px]:items-end">
+          <FieldRow label="Page URL" htmlFor="meta-url" className="min-w-0 flex-1" help="A bare domain is fine. The image itself is loaded in your browser." error={blocked ? error : undefined}>
+            <TextInput ref={urlRef} id="meta-url" value={url} autoFocus aria-invalid={blocked || undefined} onChange={(event) => setUrl(event.target.value)} />
+          </FieldRow>
+          <ActionButton type="button" className="btn btn-ink" aria-busy={busy} disabled={!url.trim() || busy} onClick={() => void run()}>Inspect</ActionButton>
+        </div>
+      ) : null}
+      <ToolPanes ratio={mode === "write" ? "50/50" : "40/60"}>
+        <Pane label={mode === "write" ? "Fields" : "Preview"}>
+          {mode === "write" ? (
             <div className="grid gap-3">
               <FieldRow
                 label="Title"
                 htmlFor="meta-title"
                 help={titleBudget.state === "warn" ? `${titleBudget.length} characters. Usual range is 15–60.` : undefined}
-                actions={<span className={titleBudget.state === "ok" ? "font-mono text-[12px] text-faint" : "font-mono text-[12px] text-status-warn"}>{titleBudget.label}</span>}
+                actions={<span className="font-mono text-[12px] whitespace-nowrap text-faint">{titleBudget.label}</span>}
               >
-                <TextInput id="meta-title" value={draft.title} aria-invalid={titleBudget.state === "warn" || undefined} onChange={(event) => setDraft({ ...draft, title: event.target.value })} className="max-[699px]:h-11" />
+                <TextInput id="meta-title" value={draft.title} aria-invalid={titleBudget.state === "warn" || undefined} onChange={(event) => setDraft({ ...draft, title: event.target.value })} />
               </FieldRow>
               <FieldRow
                 label="Description"
                 htmlFor="meta-desc"
                 help={descriptionBudget.state === "warn" ? `${descriptionBudget.length} characters. Usual range is 50–160.` : undefined}
-                actions={<span className={descriptionBudget.state === "ok" ? "font-mono text-[12px] text-faint" : "font-mono text-[12px] text-status-warn"}>{descriptionBudget.label}</span>}
+                actions={<span className="font-mono text-[12px] whitespace-nowrap text-faint">{descriptionBudget.label}</span>}
               >
-                <TextInput id="meta-desc" value={draft.description} aria-invalid={descriptionBudget.state === "warn" || undefined} onChange={(event) => setDraft({ ...draft, description: event.target.value })} className="max-[699px]:h-11" />
+                <TextInput id="meta-desc" value={draft.description} aria-invalid={descriptionBudget.state === "warn" || undefined} onChange={(event) => setDraft({ ...draft, description: event.target.value })} />
               </FieldRow>
-              <FieldRow label="URL" htmlFor="meta-canonical"><TextInput id="meta-canonical" value={draft.url} onChange={(event) => setDraft({ ...draft, url: event.target.value })} className="max-[699px]:h-11" /></FieldRow>
-              <FieldRow label="Image URL" htmlFor="meta-image"><TextInput id="meta-image" value={draft.image} onChange={(event) => setDraft({ ...draft, image: event.target.value })} className="max-[699px]:h-11" /></FieldRow>
-              <FieldRow label="Site name" htmlFor="meta-site"><TextInput id="meta-site" value={draft.siteName} onChange={(event) => setDraft({ ...draft, siteName: event.target.value })} className="max-[699px]:h-11" /></FieldRow>
+              <FieldRow label="URL" htmlFor="meta-canonical"><TextInput id="meta-canonical" value={draft.url} onChange={(event) => setDraft({ ...draft, url: event.target.value })} /></FieldRow>
+              <FieldRow label="Image URL" htmlFor="meta-image"><TextInput id="meta-image" value={draft.image} onChange={(event) => setDraft({ ...draft, image: event.target.value })} /></FieldRow>
+              <FieldRow label="Site name" htmlFor="meta-site"><TextInput id="meta-site" value={draft.siteName} onChange={(event) => setDraft({ ...draft, siteName: event.target.value })} /></FieldRow>
               <Segmented label="Twitter card" value={draft.card} onChange={(card) => setDraft({ ...draft, card })} options={[{ value: "summary_large_image", label: "Large image" }, { value: "summary", label: "Summary" }]} />
             </div>
-          )}
-        </Panel>
-      }
-      output={
-        <div aria-live="polite" className="min-h-[240px]">
-          {busy ? <SkeletonRows /> : view ? (
-            <Panel title="Previews">
+          ) : busy ? <SkeletonRows /> : view ? (
+            <>
+              <ScoreCard
+                verdict={view.title || "No title"}
+                caption={view.description || "No description."}
+                stats={[
+                  { label: "Host", value: hostOf(view.url) || view.siteName || "—" },
+                  { label: "JSON-LD", value: result?.jsonLdTypes.join(", ") || "none" },
+                ]}
+              />
               <Segmented label="Preview" value={preview} onChange={setPreview} options={[{ value: "google", label: "Google" }, { value: "x", label: "X" }, { value: "linkedin", label: "LinkedIn" }, { value: "slack", label: "Slack" }]} />
               <Preview kind={preview} title={view.title} description={view.description} image={view.image} url={view.url} siteName={view.siteName} onSize={setImageSize} />
-              {imageSize ? <p className="font-mono text-[12px] text-muted-foreground">{imageSize}</p> : null}
-              <CodeOutput code={written.next} filename="metadata.ts" label="Next.js metadata" />
-            </Panel>
+              {imageSize ? <p className="truncate font-mono text-[12px] text-muted-foreground" title={imageSize}>{imageSize}</p> : null}
+            </>
           ) : (
             <EmptyState art={<Tags size={22} />} title={error || "Previews show up here"} hint="Title, description, canonical, robots, Open Graph, Twitter, and JSON-LD types." />
           )}
-        </div>
-      }
-      inspector={
-        <Panel title="Checklist">
-          {mode === "url" && result ? <CheckRows rows={result.checks} /> : mode === "write" ? (
-            <CheckRows
-              rows={[
-                { level: titleBudget.state === "ok" ? "pass" : "warn", label: "Title", detail: `${titleBudget.length} characters. Usual range is 15–60.` },
-                { level: descriptionBudget.state === "ok" ? "pass" : "warn", label: "Description", detail: `${descriptionBudget.length} characters. Usual range is 50–160.` },
-                { level: draft.image ? "pass" : "fail", label: "og:image", detail: draft.image || "Missing. Previews will have no image." },
-                { level: draft.card ? "pass" : "warn", label: "twitter:card", detail: draft.card || "X will fall back to Open Graph." },
-              ]}
-            />
-          ) : (
-            <p className="text-sm text-muted-foreground">{busy ? "Fetching the page…" : "Nothing inspected yet."}</p>
-          )}
-          {mode === "url" && result ? <p className="text-[12.5px] text-muted-foreground">JSON-LD: {result.jsonLdTypes.join(", ") || "none"}</p> : null}
-          {error && !blocked ? <Notice tone="bad" role="alert" title="The inspection failed." body={error} /> : null}
-          {metaText ? <CodeOutput code={metaText} filename="meta.html" label="meta tags" /> : null}
-        </Panel>
-      }
-    />
+        </Pane>
+        <Pane label="Checks" padded={false} scroll={false} bodyClassName="flex min-h-[280px] flex-col">
+          <div aria-live="polite" className="flex min-h-0 flex-1 flex-col">
+            {rows.length > 0 ? <ResultsTable rows={rows} /> : <p className="px-3 py-6 text-sm text-muted-foreground">{busy ? "Fetching the page…" : "Nothing inspected yet."}</p>}
+            {error && !blocked ? <Notice className="m-3" tone="bad" role="alert" title="The inspection failed." body={error} /> : null}
+            {metaText ? <div className="border-t border-border p-3"><CodeOutput code={metaText} filename="meta.html" label="meta tags" /></div> : null}
+            {mode === "write" && written.next ? <div className="border-t border-border p-3"><CodeOutput code={written.next} filename="metadata.ts" label="Next.js metadata" /></div> : null}
+          </div>
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={status} tone={error || fails ? "warn" : rows.length ? "pass" : "info"} trailing="⌘↵ inspect · ⌘⇧C copy meta tags" />
+    </ToolCard>
   );
+}
+
+function hostOf(value: string) {
+  try {
+    return new URL(value).hostname;
+  } catch {
+    return value;
+  }
 }
 
 function Preview({ kind, title, description, image, url, siteName, onSize }: { kind: PreviewName; title: string; description: string; image: string; url: string; siteName: string; onSize: (value: string) => void }) {

@@ -2,17 +2,14 @@
 
 import { useRef, useState } from "react";
 import { ActionButton, TextInput } from "@/components/kit/controls";
-import { Copy, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { toast } from "sonner";
-import { CheckRows } from "@/components/kit/check-row";
-import { CopyButton } from "@/components/kit/copy-button";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
-import { ResultStat } from "@/components/kit/result-stat";
-import { ScoreRing } from "@/components/kit/score-ring";
 import { SkeletonRows } from "@/components/kit/skeleton-rows";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, ResultsTable, ScoreCard, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { postTool } from "@/lib/post-tool";
 import { seoVerdict } from "@/tools/ai-seo-checker/lib/score";
 
@@ -81,69 +78,62 @@ export default function AiSeoTool() {
         : "Waiting for a URL";
 
   return (
-    <ToolShell
-      runsLocally={false}
-      busy={busy}
-      layout="split+inspector"
-      flow="band"
-      columns="min-[1280px]:grid-cols-[340px_minmax(0,1fr)_320px]"
-      tabs={<ToolTabs label="Mode" value="check" onChange={() => {}} options={[{ value: "check", label: "Check" }]} />}
-      actions={busy ? <ActionButton type="button" variant="outline" className="h-[30px]" onClick={cancel}>Cancel</ActionButton> : <InkButton onClick={() => void navigator.clipboard.writeText(reportText).then(() => toast.success("Report copied"))} disabled={!reportText} icon={<Copy size={15} />}>Copy report</InkButton>}
-      status={
-        <>
-          <span className={error ? "dot dot-warn" : "dot"} style={report && !error ? { background: "var(--success)" } : undefined} />
-          <span>{status}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘↵ check · ⌘⇧C copy report</span>
-        </>
-      }
-      input={
-        <Panel title="Page">
-          <p className="text-[12.5px] text-muted-foreground">Pass, warn, or fail for crawler access, llms.txt, structured data, and the on-page signals.</p>
-          <FieldRow label="Page URL" htmlFor="seo-url" help="A bare domain is fine. The check reads the page, robots.txt, llms.txt, and the sitemap." error={blocked ? "Private addresses are refused." : undefined}>
-            <TextInput ref={urlRef} id="seo-url" value={url} aria-invalid={blocked || undefined} autoFocus onChange={(event) => setUrl(event.target.value)} className="max-[699px]:h-11" />
-          </FieldRow>
-          <ActionButton type="button" className="btn btn-ink h-11" aria-busy={busy} disabled={!url.trim() || busy} onClick={() => void run()}>Check</ActionButton>
-          <div className="flex flex-wrap gap-1.5">
-            {CRAWLERS.map((name) => (
-              <span key={name} className="chip">{name}</span>
-            ))}
-          </div>
-        </Panel>
-      }
-      output={
-        <div aria-live="polite" className="min-h-[280px]">
-          {busy ? <SkeletonRows rows={8} /> : report ? (
-            <CheckRows rows={rows} />
+    <ToolCard>
+      <ToolToolbar
+        actions={
+          busy ? (
+            <ActionButton type="button" variant="outline" onClick={cancel}>Cancel</ActionButton>
           ) : (
-            <EmptyState art={<Search size={22} />} title={error && !blocked ? error : blocked ? "Nothing fetched" : "A score and a fix for each row"} hint="Pass, warn, or fail for crawler access, llms.txt, structured data, and the on-page signals." />
-          )}
-          {blocked ? <Notice className="m-4" tone="bad" role="alert" title="Private addresses are refused." /> : null}
+            <ActionButton type="button" className="btn btn-ink" disabled={!reportText} onClick={() => void navigator.clipboard.writeText(reportText).then(() => toast.success("Report copied"))}>Copy report</ActionButton>
+          )
+        }
+      />
+      <div className="flex flex-col gap-3 border-b border-border p-3">
+        <p className="text-[12.5px] text-muted-foreground">Pass, warn, or fail for crawler access, llms.txt, structured data, and the on-page signals.</p>
+        <div className="flex flex-col gap-2 min-[700px]:flex-row min-[700px]:items-end">
+          <FieldRow label="Page URL" htmlFor="seo-url" className="min-w-0 flex-1" help="A bare domain is fine. The check reads the page, robots.txt, llms.txt, and the sitemap." error={blocked ? "Private addresses are refused." : undefined}>
+            <TextInput ref={urlRef} id="seo-url" value={url} aria-invalid={blocked || undefined} autoFocus onChange={(event) => setUrl(event.target.value)} />
+          </FieldRow>
+          <ActionButton type="button" className="btn btn-ink" aria-busy={busy} disabled={!url.trim() || busy} onClick={() => void run()}>Check</ActionButton>
         </div>
-      }
-      inspector={
-        <Panel title="Score">
+        <div className="flex flex-wrap gap-1.5">
+          {CRAWLERS.map((name) => (
+            <span key={name} className="chip" title={name}>{name}</span>
+          ))}
+        </div>
+      </div>
+      <ToolPanes ratio="35/65">
+        <Pane label="Score">
           {report ? (
-            <>
-              <div className="flex items-center gap-4">
-                <ScoreRing score={report.score} />
-                <div>
-                  <p className="text-[18px] font-medium tracking-[-0.03em]">{seoVerdict(report.score, report.checks)}</p>
-                  <p className="mt-1 text-[12.5px] text-muted-foreground">Weighted across 8 signals. Not a ranking prediction.</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <ResultStat variant="well" label="Status" value={String(report.status)} />
-                <ResultStat variant="well" label="Final URL" value={hostOf(report.finalUrl)} />
-              </div>
-              <CopyButton value={reportText} label="Copy report" toastMessage="Report copied" />
+            <ScoreCard
+              score={report.score}
+              verdict={seoVerdict(report.score, report.checks)}
+              caption="Weighted across 8 signals. Not a ranking prediction."
+              stats={[
+                { label: "Status", value: String(report.status) },
+                { label: "Response", value: `${Math.round(elapsed)} ms` },
+                { label: "Final URL", value: hostOf(report.finalUrl) },
+              ]}
+            >
               <ActionButton type="button" variant="outline" onClick={() => void run()}>Re-run</ActionButton>
-            </>
+            </ScoreCard>
           ) : (
             <p className="text-sm text-muted-foreground">{busy ? "Scoring…" : "Not scored yet."}</p>
           )}
-        </Panel>
-      }
-    />
+        </Pane>
+        <Pane label="Checks" padded={false} scroll={false} bodyClassName="flex min-h-[280px] flex-col">
+          <div aria-live="polite" className="flex min-h-0 flex-1 flex-col">
+            {busy ? <SkeletonRows rows={8} /> : report ? (
+              <ResultsTable rows={rows} />
+            ) : (
+              <EmptyState art={<Search size={22} />} title={error && !blocked ? error : blocked ? "Nothing fetched" : "A score and a fix for each row"} hint="Pass, warn, or fail for crawler access, llms.txt, structured data, and the on-page signals." />
+            )}
+            {blocked ? <Notice className="m-4" tone="bad" role="alert" title="Private addresses are refused." /> : null}
+          </div>
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={status} tone={error || fails ? "warn" : report ? "pass" : "info"} trailing="⌘↵ check · ⌘⇧C copy report" />
+    </ToolCard>
   );
 }
 

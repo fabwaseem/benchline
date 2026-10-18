@@ -1,15 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ChipButton, ColorInput, TextInput } from "@/components/kit/controls";
-import { Palette } from "lucide-react";
+import { ActionButton, ChipButton, ColorInput, TextInput } from "@/components/kit/controls";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { CopyButton } from "@/components/kit/copy-button";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { contrastPair, convertColor } from "@/tools/color-converter/lib/color";
 
 const SAMPLES = ["#2563eb", "#ff0000", "rebeccapurple", "oklch(72% 0.14 160)", "cmyk(0%, 100%, 100%, 0%)"];
@@ -40,32 +40,23 @@ export default function ColorConverterTool() {
     : [];
 
   return (
-    <ToolShell
-      runsLocally
-      layout="split+inspector"
-      flow="band"
-      tabs={<ToolTabs label="Mode" value="convert" onChange={() => {}} options={[{ value: "convert", label: "Convert" }]} />}
-      actions={
-        <InkButton
-          icon={<Palette size={15} />}
-          disabled={!color}
-          onClick={() => {
-            if (!color) return;
-            void navigator.clipboard.writeText(color.hex).then(() => toast.success("HEX copied"));
-          }}
-        >
-          Copy HEX
-        </InkButton>
-      }
-      status={
-        <>
-          <span className={color ? "dot" : "dot dot-warn"} />
-          <span>{color ? `${color.hex} · ${color.tailwind || "no token"}` : "That color could not be read"}</span>
-          <span className="ml-auto hidden min-[700px]:inline">Runs in this browser</span>
-        </>
-      }
-      input={
-        <Panel title="Color">
+    <ToolCard>
+      <ToolToolbar
+        actions={
+          <ActionButton
+            className="btn btn-ink"
+            disabled={!color}
+            onClick={() => {
+              if (!color) return;
+              void navigator.clipboard.writeText(color.hex).then(() => toast.success("HEX copied"));
+            }}
+          >
+            Copy HEX
+          </ActionButton>
+        }
+      />
+      <ToolPanes ratio="40/60">
+        <Pane label="Color">
           <FieldRow label="Any color" htmlFor="color-input" error={color ? undefined : "Use HEX, rgb(), hsl(), oklch(), cmyk(), or a CSS name."} help="One value fills every format.">
             <div className="flex items-center gap-2">
               <ColorInput aria-label="Pick a color" value={color?.hex ?? "#000000"} onChange={(event) => setRaw(event.target.value)} />
@@ -92,10 +83,8 @@ export default function ColorConverterTool() {
           ) : (
             <Notice tone="bad" role="alert" title="That value is not a color this page can read." />
           )}
-        </Panel>
-      }
-      output={
-        <Panel title="Swatch">
+        </Pane>
+        <Pane label="Swatch">
           <div
             className="flex min-h-48 flex-col justify-end rounded-xl border border-border p-5"
             style={{ background: contrast?.foreground ?? "transparent" }}
@@ -105,14 +94,10 @@ export default function ColorConverterTool() {
             </p>
           </div>
           {color ? (
-            <p className="text-sm text-muted-foreground">
+            <p className="truncate text-sm text-muted-foreground" title={color.tailwind || "none"}>
               Nearest Tailwind token: <span className="font-mono text-foreground">{color.tailwind || "none"}</span>
             </p>
           ) : null}
-        </Panel>
-      }
-      inspector={
-        <Panel title="Contrast">
           <FieldRow label="Background" htmlFor="bg-input" error={back ? undefined : "The background is not a color."}>
             <div className="flex items-center gap-2">
               <ColorInput aria-label="Pick a background" value={back?.hex ?? "#ffffff"} onChange={(event) => setBackground(event.target.value)} />
@@ -127,7 +112,7 @@ export default function ColorConverterTool() {
                 style={{ background: contrast.background, color: contrast.foreground }}
               >
                 <p className="text-sm">The quick brown fox jumps over the lazy dog.</p>
-                <p className="text-2xl font-semibold tracking-tight">Large text</p>
+                <p className="text-2xl font-semibold tracking-tight whitespace-nowrap">Large text</p>
               </div>
               <ul className="grid grid-cols-2 gap-2 text-sm">
                 <Grade pass={contrast.aaNormal} label="AA normal" />
@@ -139,9 +124,10 @@ export default function ColorConverterTool() {
           ) : (
             <p className="text-sm text-muted-foreground">Contrast shows up when both colors can be read.</p>
           )}
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={color ? `${color.hex} · ${color.tailwind || "no token"}` : "That color could not be read"} tone={color ? "pass" : "warn"} trailing="Runs in this browser" />
+    </ToolCard>
   );
 }
 

@@ -2,18 +2,18 @@
 
 import { useRef, useState } from "react";
 import { ActionButton, TextInput, TextArea } from "@/components/kit/controls";
-import { Download, FileText } from "lucide-react";
+import { FileText } from "lucide-react";
 import { toast } from "sonner";
 import { CopyButton } from "@/components/kit/copy-button";
 import { downloadText } from "@/components/kit/download-button";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
-import { CheckRows } from "@/components/kit/check-row";
 import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
 import { SkeletonRows } from "@/components/kit/skeleton-rows";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, ResultsTable, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { postTool } from "@/lib/post-tool";
 
 type Result = { pages: number; llms: string; full: string; sources?: string[] };
@@ -88,98 +88,77 @@ export default function LlmsTool() {
         ? `${fetchedUrl} · ${pages.toLocaleString("en-US")} pages · ${(elapsed / 1000).toFixed(1)} s`
         : "Waiting for a site URL";
 
+  const sourceRows = (sources.length ? sources : ["Not recorded"]).map((source) => ({
+    level: "info" as const,
+    label: source,
+    detail: source === "pasted URLs" ? "The list was sent as written." : "Read during this fetch.",
+  }));
+
   return (
-    <ToolShell
-      runsLocally={false}
-      busy={busy}
-      layout="split+inspector"
-      flow="band"
-      columns="min-[1280px]:grid-cols-[340px_minmax(0,1fr)_320px]"
-      tabs={<ToolTabs label="Mode" value="generate" onChange={() => {}} options={[{ value: "generate", label: "Generate" }]} />}
-      actions={
-        busy ? (
-          <ActionButton type="button" variant="outline" className="h-[30px]" onClick={cancel}>Cancel</ActionButton>
-        ) : (
-          <InkButton onClick={() => downloadText(file === "llms" ? "llms.txt" : "llms-full.txt", text)} disabled={!text} icon={<Download size={15} />}>
-            Download llms.txt
-          </InkButton>
-        )
-      }
-      status={
-        <>
-          <span className={error ? "dot dot-warn" : "dot"} style={error ? undefined : text ? { background: "var(--success)" } : { background: "var(--warning)" }} />
-          <span>{status}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘↵ generate · ⌘⇧C copy file · esc cancel</span>
-        </>
-      }
-      input={
-        <Panel title="Source">
+    <ToolCard>
+      <ToolToolbar
+        label="File"
+        options={[{ value: "llms", label: "llms.txt" }, { value: "full", label: "llms-full.txt" }]}
+        value={file}
+        onChange={setFile}
+        actions={
+          busy ? (
+            <ActionButton type="button" variant="outline" onClick={cancel}>Cancel</ActionButton>
+          ) : (
+            <ActionButton className="btn btn-ink" disabled={!text} onClick={() => downloadText(file === "llms" ? "llms.txt" : "llms-full.txt", text)}>Download</ActionButton>
+          )
+        }
+      />
+      <ToolPanes ratio="40/60">
+        <Pane label="Source">
           <p className="text-[12.5px] text-muted-foreground">Submit a public site, or paste page URLs. You can edit the preview before you copy it.</p>
           <Segmented label="Source" value={mode} onChange={setMode} options={[{ value: "site", label: "Site URL" }, { value: "urls", label: "Paste URLs" }]} />
           {mode === "site" ? (
             <FieldRow label="Site URL" htmlFor="llms-url" help="A bare domain is fine. Up to 30 pages. Private addresses are refused." error={blocked ? error : undefined}>
-              <TextInput ref={urlRef} id="llms-url" value={url} aria-invalid={blocked || undefined} onChange={(event) => setUrl(event.target.value)} className="max-[699px]:h-11" autoFocus />
+              <TextInput ref={urlRef} id="llms-url" value={url} aria-invalid={blocked || undefined} onChange={(event) => setUrl(event.target.value)} autoFocus />
             </FieldRow>
           ) : (
             <FieldRow label="Page URLs" htmlFor="llms-urls" help="One URL per line, up to 30.">
-              <TextArea id="llms-urls" value={urls} onChange={(event) => setUrls(event.target.value)} className="min-h-40 max-[699px]:min-h-11" />
+              <TextArea id="llms-urls" value={urls} onChange={(event) => setUrls(event.target.value)} className="min-h-40" />
             </FieldRow>
           )}
           <ActionButton type="button" className="btn btn-ink h-11" aria-busy={busy} disabled={!ready || busy} onClick={() => void run()}>
-            {busy ? "Cancel" : "Generate"}
+            {busy ? "Working" : "Generate"}
           </ActionButton>
-          {busy ? <ActionButton type="button" variant="outline" onClick={cancel}>Cancel</ActionButton> : null}
           <Notice tone="neutral" title="What is fetched" body="The server reads robots.txt and sitemap.xml, including Sitemap lines in robots.txt. If those are missing, it collects links from the homepage. Private addresses are refused." />
-          <Segmented label="File" value={file} onChange={setFile} options={[{ value: "llms", label: "llms.txt" }, { value: "full", label: "llms-full.txt" }]} />
-        </Panel>
-      }
-      output={
-        <div className="flex min-h-[280px] flex-col" aria-live="polite">
-          {busy ? <SkeletonRows /> : text ? (
-            <Panel title="Preview">
-              <TextArea aria-label="Editable preview" value={text} onChange={(event) => (file === "llms" ? setLlms(event.target.value) : setFull(event.target.value))} className="min-h-64 font-mono text-xs" />
-              <div className="flex flex-wrap gap-2">
-                <CopyButton value={text} label="Copy" toastMessage="File copied" />
-                <ActionButton type="button" variant="outline" onClick={() => downloadText(file === "llms" ? "llms.txt" : "llms-full.txt", text)}>Download</ActionButton>
-              </div>
-            </Panel>
-          ) : (
-            <EmptyState art={<FileText size={22} />} title={error && !blocked ? "The generator failed." : blocked ? "Nothing fetched" : "The file shows up here"} hint={error || "Submit a public site, or paste page URLs. You can edit the preview before you copy it."} />
-          )}
+        </Pane>
+        <Pane label="Preview">
+          <div className="flex min-h-[280px] flex-col gap-3" aria-live="polite">
+            {busy ? <SkeletonRows /> : text ? (
+              <>
+                <TextArea aria-label="Editable preview" value={text} onChange={(event) => (file === "llms" ? setLlms(event.target.value) : setFull(event.target.value))} className="min-h-64 font-mono text-xs" />
+                <div className="flex flex-wrap gap-2">
+                  <CopyButton value={text} label="Copy" toastMessage="File copied" />
+                  <ActionButton type="button" variant="outline" onClick={() => downloadText(file === "llms" ? "llms.txt" : "llms-full.txt", text)}>Download</ActionButton>
+                </div>
+                <ul className="text-[13px]">
+                  {sectionsIn(llms).map((section) => (
+                    <li key={section.name} className="flex justify-between gap-3 border-t border-border py-2">
+                      <span className="truncate" title={section.name}>{section.name}</span>
+                      <span className="font-mono text-muted-foreground">{section.count}</span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <EmptyState art={<FileText size={22} />} title={error && !blocked ? "The generator failed." : blocked ? "Nothing fetched" : "The file shows up here"} hint={error || "Submit a public site, or paste page URLs. You can edit the preview before you copy it."} />
+            )}
+          </div>
+        </Pane>
+      </ToolPanes>
+      {text ? <ResultsTable rows={sourceRows} /> : null}
+      <StatusStrip note={status} tone={error || blocked ? "fail" : text ? "pass" : "warn"} trailing="⌘↵ generate · ⌘⇧C copy file · esc cancel">
+        <div className="grid w-full gap-2 min-[700px]:w-auto min-[700px]:grid-cols-2">
+          <ResultStat variant="well" label="Pages" value={pages.toLocaleString("en-US")} />
+          <ResultStat variant="well" label="Duration" value={`${(elapsed / 1000).toFixed(1)} s`} />
         </div>
-      }
-      inspector={
-        <Panel title="Sources">
-          {text ? (
-            <>
-              <CheckRows
-                rows={(sources.length ? sources : ["Not recorded"]).map((source) => ({
-                  level: "info" as const,
-                  label: source,
-                  detail: source === "pasted URLs" ? "The list was sent as written." : `Read during this fetch.`,
-                }))}
-              />
-              <p className="px-4 text-[12.5px] font-medium">Sections</p>
-              <ul className="px-4 text-[13px]">
-                {sectionsIn(llms).map((section) => (
-                  <li key={section.name} className="flex justify-between border-t border-border py-2">
-                    <span>{section.name}</span>
-                    <span className="font-mono text-muted-foreground">{section.count}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="grid grid-cols-2 gap-2 px-4">
-                <ResultStat variant="well" label="Pages" value={pages.toLocaleString("en-US")} />
-                <ResultStat variant="well" label="Duration" value={`${(elapsed / 1000).toFixed(1)} s`} />
-              </div>
-            </>
-          ) : (
-            <p className="px-4 text-sm text-muted-foreground">{busy ? "Reading the sitemap…" : "Not run yet."}</p>
-          )}
-          {blocked ? <Notice className="mx-4" tone="bad" role="alert" title="Private addresses are refused." /> : null}
-        </Panel>
-      }
-    />
+      </StatusStrip>
+    </ToolCard>
   );
 }
 

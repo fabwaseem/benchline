@@ -2,17 +2,15 @@
 
 import { useMemo, useRef, useState } from "react";
 import { ActionButton, TextInput, TextArea } from "@/components/kit/controls";
-import { Copy, Shield } from "lucide-react";
+import { Shield } from "lucide-react";
 import { toast } from "sonner";
-import { CheckRows } from "@/components/kit/check-row";
 import { CodeOutput } from "@/components/kit/code-output";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
-import { ResultStat } from "@/components/kit/result-stat";
-import { Segmented } from "@/components/kit/segmented";
 import { SkeletonRows } from "@/components/kit/skeleton-rows";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, ResultsTable, ScoreCard, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { postTool } from "@/lib/post-tool";
 import { parseRobots, robotsIssues, type RobotsDocument } from "@/lib/robots";
 
@@ -97,78 +95,80 @@ export default function RobotsTool() {
           : "Waiting for a domain";
 
   return (
-    <ToolShell
-      runsLocally={mode === "paste"}
-      busy={busy}
-      layout="split+inspector"
-      flow="band"
-      columns="min-[1280px]:grid-cols-[360px_minmax(0,1fr)_340px]"
-      tabs={<ToolTabs label="Mode" value="audit" onChange={() => {}} options={[{ value: "audit", label: "Audit" }]} />}
-      actions={busy ? <ActionButton type="button" variant="outline" className="h-[30px]" onClick={cancel}>Cancel</ActionButton> : <InkButton disabled={!report} icon={<Copy size={15} />} onClick={() => void navigator.clipboard.writeText(report).then(() => toast.success("Report copied"))}>Copy report</InkButton>}
-      status={
-        <>
-          <span className={fails || error ? "dot dot-warn" : "dot"} />
-          <span>{status}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘↵ fetch · ⌘⇧C copy report</span>
-        </>
-      }
-      input={
-        <Panel title="Source">
-          <p className="text-[12.5px] text-muted-foreground">Allow and Disallow paths, sitemap links, and the mistakes that change what crawlers fetch.</p>
-          <Segmented label="Source" value={mode} onChange={setMode} options={[{ value: "url", label: "Fetch URL" }, { value: "paste", label: "Paste file" }]} />
-          {mode === "url" ? (
-            <FieldRow label="Domain or robots.txt URL" htmlFor="robots-url" help="A bare domain is fetched at /robots.txt." error={blocked ? error : undefined}>
-              <TextInput ref={urlRef} id="robots-url" value={url} autoFocus aria-invalid={blocked || undefined} onChange={(event) => setUrl(event.target.value)} className="max-[699px]:h-11" />
-            </FieldRow>
+    <ToolCard>
+      <ToolToolbar
+        label="Source"
+        options={[{ value: "url" as const, label: "Fetch URL" }, { value: "paste" as const, label: "Paste file" }]}
+        value={mode}
+        onChange={setMode}
+        actions={
+          busy ? (
+            <ActionButton type="button" variant="outline" onClick={cancel}>Cancel</ActionButton>
           ) : (
-            <FieldRow label="robots.txt" htmlFor="robots-paste" help="Audited in the browser. Nothing is sent.">
-              <TextArea id="robots-paste" value={pasted} onChange={(event) => setPasted(event.target.value)} className="min-h-48 font-mono text-xs" />
+            <ActionButton type="button" className="btn btn-ink" disabled={!report} onClick={() => void navigator.clipboard.writeText(report).then(() => toast.success("Report copied"))}>Copy report</ActionButton>
+          )
+        }
+      />
+      <div className="flex flex-col gap-3 border-b border-border p-3">
+        <p className="text-[12.5px] text-muted-foreground">Allow and Disallow paths, sitemap links, and the mistakes that change what crawlers fetch.</p>
+        {mode === "url" ? (
+          <div className="flex flex-col gap-2 min-[700px]:flex-row min-[700px]:items-end">
+            <FieldRow label="Domain or robots.txt URL" htmlFor="robots-url" className="min-w-0 flex-1" help="A bare domain is fetched at /robots.txt." error={blocked ? error : undefined}>
+              <TextInput ref={urlRef} id="robots-url" value={url} autoFocus aria-invalid={blocked || undefined} onChange={(event) => setUrl(event.target.value)} />
             </FieldRow>
-          )}
-          {mode === "url" ? (
-            <ActionButton type="button" className="btn btn-ink h-11" aria-busy={busy} disabled={!url.trim() || busy} onClick={() => void run()}>Fetch</ActionButton>
-          ) : null}
-          {mode === "url" && result?.text ? <CodeOutput code={result.text} filename="robots.txt" label="Fetched file" /> : null}
-        </Panel>
-      }
-      output={
-        <div aria-live="polite" className="min-h-[240px]">
-          {busy ? <SkeletonRows /> : active ? (
-            <div className="flex flex-col">
-              {html ? <Notice className="m-4" tone="bad" role="alert" title="This is not a robots.txt file." body="The URL returned a web page instead of a robots.txt file." /> : null}
-              {active.document.groups.map((group) => (
-                <section key={group.agents.join(",") || "group"} className="border-b border-border px-4 py-3">
-                  <p className="font-mono text-[12.5px] font-medium">User-agent: {group.agents.join(", ")}</p>
-                  {group.crawlDelay ? <p className="mt-1 font-mono text-[12px] text-muted-foreground">Crawl-delay: {group.crawlDelay}</p> : null}
-                  {group.allow.map((rule) => <p key={`a-${rule}`} className="mt-1 font-mono text-[12.5px] text-status-ok">Allow: {rule || "—"}</p>)}
-                  {group.disallow.map((rule) => <p key={`d-${rule}`} className="mt-1 font-mono text-[12.5px] text-status-bad">Disallow: {rule || "—"}</p>)}
-                  {group.allow.length === 0 && group.disallow.length === 0 ? <p className="mt-1 text-[12.5px] text-muted-foreground">No path rules.</p> : null}
-                </section>
-              ))}
-              {active.document.sitemaps.map((sitemap) => (
-                <p key={sitemap} className="px-4 py-2 font-mono text-[12.5px]">Sitemap: {sitemap}</p>
-              ))}
-            </div>
-          ) : (
-            <EmptyState art={<Shield size={22} />} title={error || "Rules show up here"} hint="Allow and Disallow paths, sitemap links, and the mistakes that change what crawlers fetch." />
-          )}
-        </div>
-      }
-      inspector={
-        <Panel title="Checks">
+            <ActionButton type="button" className="btn btn-ink" aria-busy={busy} disabled={!url.trim() || busy} onClick={() => void run()}>Fetch</ActionButton>
+          </div>
+        ) : (
+          <FieldRow label="robots.txt" htmlFor="robots-paste" help="Audited in the browser. Nothing is sent.">
+            <TextArea id="robots-paste" value={pasted} onChange={(event) => setPasted(event.target.value)} className="min-h-40 font-mono text-xs" />
+          </FieldRow>
+        )}
+      </div>
+      <ToolPanes ratio="35/65">
+        <Pane label="Summary">
           {active ? (
-            <>
-              <CheckRows rows={active.issues} />
-              <div className="grid grid-cols-2 gap-2 px-4">
-                <ResultStat variant="well" label="Groups" value={String(active.document.groups.length)} />
-                <ResultStat variant="well" label="Sitemaps" value={String(active.document.sitemaps.length)} />
-              </div>
-            </>
+            <ScoreCard
+              verdict={fails ? `${fails} ${fails === 1 ? "failure" : "failures"}` : "No failures"}
+              caption={html ? "This response is HTML, not a robots.txt file." : "Allow, Disallow, and Sitemap lines."}
+              stats={[
+                { label: "Groups", value: String(active.document.groups.length) },
+                { label: "Sitemaps", value: String(active.document.sitemaps.length) },
+              ]}
+            />
           ) : (
             <p className="text-sm text-muted-foreground">{busy ? "Fetching robots.txt…" : "Nothing audited yet."}</p>
           )}
-        </Panel>
-      }
-    />
+          {mode === "url" && result?.text ? <CodeOutput code={result.text} filename="robots.txt" label="Fetched file" /> : null}
+          {active ? (
+            <div className="flex flex-col text-[12.5px]">
+              {active.document.groups.map((group) => (
+                <section key={group.agents.join(",") || "group"} className="border-t border-border py-2">
+                  <p className="truncate font-mono font-medium" title={`User-agent: ${group.agents.join(", ")}`}>User-agent: {group.agents.join(", ")}</p>
+                  {group.crawlDelay ? <p className="mt-1 font-mono text-muted-foreground">Crawl-delay: {group.crawlDelay}</p> : null}
+                  {group.allow.map((rule) => <p key={`a-${rule}`} className="mt-1 truncate font-mono text-status-ok" title={`Allow: ${rule || "—"}`}>Allow: {rule || "—"}</p>)}
+                  {group.disallow.map((rule) => <p key={`d-${rule}`} className="mt-1 truncate font-mono text-status-bad" title={`Disallow: ${rule || "—"}`}>Disallow: {rule || "—"}</p>)}
+                </section>
+              ))}
+              {active.document.sitemaps.map((sitemap) => (
+                <p key={sitemap} className="truncate border-t border-border py-2 font-mono" title={`Sitemap: ${sitemap}`}>Sitemap: {sitemap}</p>
+              ))}
+            </div>
+          ) : null}
+        </Pane>
+        <Pane label="Checks" padded={false} scroll={false} bodyClassName="flex min-h-[280px] flex-col">
+          <div aria-live="polite" className="flex min-h-0 flex-1 flex-col">
+            {busy ? <SkeletonRows /> : active ? (
+              <>
+                {html ? <Notice className="m-3" tone="bad" role="alert" title="This is not a robots.txt file." body="The URL returned a web page instead of a robots.txt file." /> : null}
+                <ResultsTable rows={active.issues} empty="No issues in this file." />
+              </>
+            ) : (
+              <EmptyState art={<Shield size={22} />} title={error || "Rules show up here"} hint="Allow and Disallow paths, sitemap links, and the mistakes that change what crawlers fetch." />
+            )}
+          </div>
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={status} tone={fails || error ? "warn" : active ? "pass" : "info"} trailing="⌘↵ fetch · ⌘⇧C copy report" />
+    </ToolCard>
   );
 }

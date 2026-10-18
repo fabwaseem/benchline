@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ChipButton, Select, TextInput } from "@/components/kit/controls";
-import { Clock, Copy } from "lucide-react";
+import { ActionButton, ChipButton, Select, TextInput } from "@/components/kit/controls";
+import { Clock } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { CodeOutput } from "@/components/kit/code-output";
@@ -10,7 +10,8 @@ import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { dialects, explainCron, presets, setField, type Dialect } from "@/tools/cron-expression-builder/lib/cron";
 
 const ZONES = ["UTC", "America/New_York", "America/Los_Angeles", "Europe/London", "Europe/Paris", "Asia/Karachi", "Asia/Kolkata", "Asia/Singapore", "Asia/Tokyo", "Australia/Sydney"];
@@ -49,22 +50,12 @@ export default function CronTool() {
       : `Invalid · ${result.error}`;
 
   return (
-    <ToolShell
-      runsLocally
-      layout="split+inspector"
-      flow="band"
-      columns="min-[1280px]:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_340px]"
-      tabs={<ToolTabs label="Mode" value="build" onChange={() => {}} options={[{ value: "build", label: "Build" }]} />}
-      actions={<InkButton icon={<Copy size={15} />} onClick={() => void navigator.clipboard.writeText(expr).then(() => toast.success("Expression copied"))}>Copy expression</InkButton>}
-      status={
-        <>
-          <span className={result.valid ? "dot" : "dot dot-warn"} />
-          <span>{status}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘⇧C copy expression · esc reset</span>
-        </>
-      }
-      input={
-        <Panel title="Expression">
+    <ToolCard>
+      <ToolToolbar
+        actions={<ActionButton className="btn btn-ink" onClick={() => void navigator.clipboard.writeText(expr).then(() => toast.success("Expression copied"))}>Copy expression</ActionButton>}
+      />
+      <ToolPanes>
+        <Pane label="Expression">
           <FieldRow label="Expression" htmlFor="cron" error={result.valid ? undefined : result.error} help="Minute, hour, day of month, month, day of week.">
             <TextInput id="cron" value={expr} onChange={(event) => setExpr(event.target.value)} className="font-mono max-[699px]:h-11" aria-invalid={!result.valid} />
           </FieldRow>
@@ -90,53 +81,48 @@ export default function CronTool() {
           <FieldChips label="Minute" values={["*", "*/5", "*/15", "*/30", "0"]} onPick={(value) => setExpr(setField(expr, expr.trim().split(/\s+/).length >= 6 ? 1 : 0, value))} />
           <FieldChips label="Hour" values={["*", "0", "9", "12", "18"]} onPick={(value) => setExpr(setField(expr, expr.trim().split(/\s+/).length >= 6 ? 2 : 1, value))} />
           <FieldChips label="Weekday" values={["*", "1-5", "1", "0"]} onPick={(value) => setExpr(setField(expr, expr.trim().split(/\s+/).length >= 6 ? 5 : 4, value))} />
-        </Panel>
-      }
-      output={
-        <div aria-live="polite" className="min-h-[240px]">
-          {reboot ? (
-            <Panel title="English">
-              <Notice tone="warn" title="Run once when the machine starts. This is not a calendar schedule." />
-            </Panel>
-          ) : result.valid ? (
-            <Panel title="Next runs">
-              <p className="text-[16px] font-medium tracking-[-0.02em]">{result.english}</p>
-              <ul className="text-sm">
-                {result.runs.map((run) => (
-                  <li key={run.utc} className="grid grid-cols-[1fr_auto] gap-3 border-t border-border py-2">
-                    <span>{run.local}</span>
-                    <span className="font-mono text-[12px] text-muted-foreground">{run.utc} UTC</span>
-                  </li>
-                ))}
-              </ul>
-            </Panel>
-          ) : (
-            <Panel>
-              <Notice tone="bad" role="alert" title={result.error || "That expression is not valid."} />
-              <EmptyState art={<Clock size={22} />} title="No runs" hint="Fix the field that is out of range." />
-            </Panel>
-          )}
-        </div>
-      }
-      inspector={
-        <Panel title="Snippets">
           <FieldRow label="Timezone" htmlFor="cron-tz">
             <Select id="cron-tz" value={zone} onChange={(event) => setZone(event.target.value)}>
               {zones.map((item) => <option key={item} value={item}>{item}</option>)}
             </Select>
           </FieldRow>
-          {result.valid && activeSnippet ? (
-            <>
-              <Segmented label="Snippet" value={activeSnippet.label} onChange={setSnippet} options={result.snippets.map((item) => ({ value: item.label, label: item.label }))} />
-              <CodeOutput code={activeSnippet.code} label={activeSnippet.label} />
-              <Notice tone="warn" title="GitHub Actions and Vercel Cron run in UTC." />
-            </>
-          ) : (
-            <p className="text-sm text-muted-foreground">Snippets wait for a valid expression.</p>
-          )}
-        </Panel>
-      }
-    />
+        </Pane>
+        <Pane label={reboot ? "English" : result.valid ? "Next runs" : "Error"}>
+          <div aria-live="polite" className="flex min-h-[240px] flex-col gap-3">
+            {reboot ? (
+              <Notice tone="warn" title="Run once when the machine starts. This is not a calendar schedule." />
+            ) : result.valid ? (
+              <>
+                <p className="text-[16px] font-medium tracking-[-0.02em]">{result.english}</p>
+                <ul className="text-sm">
+                  {result.runs.map((run) => (
+                    <li key={run.utc} className="grid grid-cols-[minmax(0,1fr)_auto] gap-3 border-t border-border py-2">
+                      <span className="truncate" title={run.local}>{run.local}</span>
+                      <span className="truncate font-mono text-[12px] text-muted-foreground" title={`${run.utc} UTC`}>{run.utc} UTC</span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <>
+                <Notice tone="bad" role="alert" title={result.error || "That expression is not valid."} />
+                <EmptyState art={<Clock size={22} />} title="No runs" hint="Fix the field that is out of range." />
+              </>
+            )}
+            {result.valid && activeSnippet ? (
+              <>
+                <Segmented label="Snippet" value={activeSnippet.label} onChange={setSnippet} options={result.snippets.map((item) => ({ value: item.label, label: item.label }))} />
+                <CodeOutput code={activeSnippet.code} label={activeSnippet.label} fill />
+                <Notice tone="warn" title="GitHub Actions and Vercel Cron run in UTC." />
+              </>
+            ) : (
+              <p className="text-sm text-muted-foreground">Snippets wait for a valid expression.</p>
+            )}
+          </div>
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={status} tone={result.valid ? "pass" : "warn"} trailing="⌘⇧C copy expression · esc reset" />
+    </ToolCard>
   );
 }
 

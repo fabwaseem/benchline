@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { ActionButton, TextArea, OptionRow } from "@/components/kit/controls";
-import { Binary, Copy } from "lucide-react";
+import { Binary } from "lucide-react";
 import { toast } from "sonner";
 import { CodeOutput } from "@/components/kit/code-output";
 import { Dropzone } from "@/components/kit/dropzone";
@@ -10,7 +10,8 @@ import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { decodeBase64, encodeBytes, encodeText, exampleText, type DecodeResult } from "@/tools/base64-codec/lib/codec";
 
 type Source = "text" | "file";
@@ -67,23 +68,20 @@ export default function Base64Tool() {
   const status = statusOf(source, action, fileName, bytes, encodedFile, decoded, urlSafe, dataUri);
 
   return (
-    <ToolShell
-      runsLocally
-      layout="split+inspector"
-      flow="band"
-      columns="min-[1280px]:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_280px]"
-      tabs={<ToolTabs label="Source" value={source} onChange={setSource} options={[{ value: "text", label: "Text" }, { value: "file", label: "File" }]} />}
-      actions={<InkButton icon={<Copy size={15} />} disabled={!copyTarget} onClick={() => void navigator.clipboard.writeText(copyTarget).then(() => toast.success("Copied"))}>Copy</InkButton>}
-      status={
-        <>
-          <span className={decoded && !decoded.ok ? "dot dot-warn" : "dot"} />
-          <span>{status}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘⇧C copy · esc reset</span>
-        </>
-      }
-      input={
-        <Panel title={source === "text" ? "Text" : "File"}>
+    <ToolCard>
+      <ToolToolbar
+        label="Source"
+        options={[{ value: "text", label: "Text" }, { value: "file", label: "File" }]}
+        value={source}
+        onChange={setSource}
+        actions={<ActionButton className="btn btn-ink" disabled={!copyTarget} onClick={() => void navigator.clipboard.writeText(copyTarget).then(() => toast.success("Copied"))}>Copy</ActionButton>}
+      />
+      <ToolPanes>
+        <Pane label={source === "text" ? "Text" : "File"}>
           <Segmented label="Action" value={action} onChange={setAction} options={[{ value: "encode", label: "Encode" }, { value: "decode", label: "Decode" }]} />
+          <OptionRow label="URL-safe" checked={urlSafe} onChange={setUrlSafe} />
+          <OptionRow label="Data URI" checked={dataUri} onChange={setDataUri} />
+          <p className="text-[12px] text-faint">URL-safe output uses - and _ and drops the padding. A data URI keeps the standard alphabet so a browser can read it.</p>
           {source === "file" && action === "encode" ? (
             <FieldRow label="File" help={fileName ? `${fileName} · ${(bytes?.byteLength ?? 0).toLocaleString("en-US")} bytes` : "The file is read in this browser."}>
               <Dropzone accept="*/*" label="Drop a file, or click to choose one" onFile={(file) => void onFile(file)} />
@@ -100,47 +98,33 @@ export default function Base64Tool() {
               />
             </FieldRow>
           )}
-        </Panel>
-      }
-      output={
-        <div aria-live="polite" className="min-h-[240px]">
+        </Pane>
+        <Pane label="Output">
+        <div aria-live="polite" className="flex min-h-[240px] flex-col gap-3">
           {source === "file" && action === "encode" && !bytes ? (
-            <Panel>
-              <EmptyState art={<Binary size={22} />} title="No file yet" hint="Choose a file to encode. It is not uploaded." />
-            </Panel>
+            <EmptyState art={<Binary size={22} />} title="No file yet" hint="Choose a file to encode. It is not uploaded." />
           ) : null}
           {action === "decode" && !decoded ? (
-            <Panel>
-              <EmptyState art={<Binary size={22} />} title="Nothing to decode" hint="Paste Base64 or a data URI. Whitespace is ignored." />
-            </Panel>
+            <EmptyState art={<Binary size={22} />} title="Nothing to decode" hint="Paste Base64 or a data URI. Whitespace is ignored." />
           ) : null}
           {action === "decode" && decoded && !decoded.ok ? (
-            <Panel>
-              <Notice tone="bad" role="alert" title={decoded.error} />
-            </Panel>
+            <Notice tone="bad" role="alert" title={decoded.error} />
           ) : null}
           {action === "decode" && decoded && decoded.ok ? (
-            <Panel title="Decoded">
+            <>
               <Notice tone="ok" title={decoded.mime} body={decoded.text === null ? "The bytes are not UTF-8. Download the file to keep them." : `${decoded.text.length.toLocaleString("en-US")} characters of text.`} />
-              {decoded.text !== null ? <CodeOutput code={decoded.text} filename={decoded.filename} label="Text" /> : null}
+              {decoded.text !== null ? <CodeOutput code={decoded.text} filename={decoded.filename} label="Text" fill /> : null}
               <ActionButton className="btn btn-ink h-[30px] self-start" onClick={() => downloadBytes(decoded.filename, decoded.bytes, decoded.mime)}>Download {decoded.filename}</ActionButton>
-            </Panel>
+            </>
           ) : null}
           {action === "encode" && output ? (
-            <Panel title={dataUri ? "Data URI" : "Base64"}>
-              <CodeOutput code={output} filename="encoded.txt" label={dataUri ? "Data URI" : "Base64"} />
-            </Panel>
+            <CodeOutput code={output} filename="encoded.txt" label={dataUri ? "Data URI" : "Base64"} fill />
           ) : null}
         </div>
-      }
-      inspector={
-        <Panel title="Options">
-          <OptionRow label="URL-safe" checked={urlSafe} onChange={setUrlSafe} />
-          <OptionRow label="Data URI" checked={dataUri} onChange={setDataUri} />
-          <p className="text-[12px] text-faint">URL-safe output uses - and _ and drops the padding. A data URI keeps the standard alphabet so a browser can read it.</p>
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={status} tone={decoded && !decoded.ok ? "warn" : "pass"} trailing="⌘⇧C copy · esc reset" />
+    </ToolCard>
   );
 }
 

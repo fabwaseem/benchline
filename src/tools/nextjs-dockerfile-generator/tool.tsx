@@ -1,17 +1,17 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { TextInput, OptionRow } from "@/components/kit/controls";
-import { Container, Download } from "lucide-react";
+import { ActionButton, TextInput, OptionRow } from "@/components/kit/controls";
+import { Download } from "lucide-react";
 import { zipSync, strToU8 } from "fflate";
 import { toast } from "sonner";
-import { CheckRows } from "@/components/kit/check-row";
 import { CodeOutput } from "@/components/kit/code-output";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { buildArgWarnings, buildCommands, buildCompose, buildDockerfile, buildDockerignore, buildNextConfig, dockerfileDefaults, estimatedSize, type BaseImage, type DockerfileOptions, type NodeVersion, type PackageManager } from "@/tools/nextjs-dockerfile-generator/lib/dockerfile";
 
 export default function DockerTool() {
@@ -69,22 +69,22 @@ export default function DockerTool() {
     : `${options.packageManager} · Node ${options.node} · ${options.base} · ${options.standalone ? "standalone" : "full"} · 3 stages · 5 files`;
 
   return (
-    <ToolShell
-      runsLocally
-      layout="split+inspector"
-      flow="band"
-      columns="min-[1280px]:grid-cols-[360px_minmax(0,1fr)_320px]"
-      tabs={<ToolTabs label="Mode" value="generate" onChange={() => {}} options={[{ value: "generate", label: "Generate" }]} />}
-      actions={<InkButton icon={<Download size={15} />} onClick={downloadZip}>Download all (.zip)</InkButton>}
-      status={
-        <>
-          <span className={warnings.length || !options.standalone ? "dot dot-warn" : "dot"} />
-          <span>{status}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘⇧C copy Dockerfile · ⌘↵ download zip</span>
-        </>
-      }
-      input={
-        <Panel title="Options">
+    <ToolCard>
+      <ToolToolbar
+        label="File"
+        options={[
+          { value: "Dockerfile", label: "Dockerfile" },
+          { value: "ignore", label: ".dockerignore" },
+          { value: "compose", label: "compose" },
+          { value: "config", label: "next.config" },
+          { value: "commands", label: "commands" },
+        ]}
+        value={tab}
+        onChange={setTab}
+        actions={<ActionButton className="btn btn-ink" onClick={downloadZip}><Download />Download ZIP</ActionButton>}
+      />
+      <ToolPanes ratio="40/60">
+        <Pane label="Options">
           <FieldRow label="Package manager" htmlFor="pm">
             <Segmented label="Package manager" value={options.packageManager} onChange={(packageManager) => setOptions({ ...options, packageManager })} options={(["npm", "pnpm", "yarn", "bun"] as PackageManager[]).map((value) => ({ value, label: value }))} />
           </FieldRow>
@@ -106,31 +106,23 @@ export default function DockerTool() {
           <FieldRow label="Build-time NEXT_PUBLIC_ names" htmlFor="envs" help="Comma-separated. They become ARG lines. Server secrets stay runtime env." error={warnings[0]}>
             <TextInput id="envs" value={envText} aria-invalid={warnings.length > 0 || undefined} onChange={(event) => setEnvText(event.target.value)} className="max-[699px]:h-11" />
           </FieldRow>
-        </Panel>
-      }
-      output={
-        <Panel title="Files">
+        </Pane>
+        <Pane label="Files" scroll={false} bodyClassName="flex min-h-[320px] flex-col gap-3 p-3">
           {!options.standalone ? <Notice tone="warn" title="Standalone is off." body="The image copies the whole app and is much larger." /> : null}
           {warnings.length > 0 ? <Notice tone="bad" role="alert" title={warnings[0] ?? "A server secret would be baked into the image."} /> : null}
-          <Segmented label="File" value={tab} onChange={setTab} options={[
-            { value: "Dockerfile", label: "Dockerfile" },
-            { value: "ignore", label: ".dockerignore" },
-            { value: "compose", label: "compose" },
-            { value: "config", label: "next.config" },
-            { value: "commands", label: "commands" },
-          ]} />
-          <CodeOutput code={code} filename={tab === "ignore" ? ".dockerignore" : tab === "compose" ? "docker-compose.yml" : tab === "config" ? "next.config.ts" : tab === "commands" ? "commands.txt" : "Dockerfile"} label={tab} />
-        </Panel>
-      }
-      inspector={
-        <Panel title="Summary">
-          <ResultStat variant="well" label="Estimated image size" value={estimatedSize(withEnvs)} hint="A static estimate, not a measurement." />
-          <CheckRows rows={checks} />
-          <p className="px-4 font-mono text-[12px] text-muted-foreground">{files.commands}</p>
-          <InkButton icon={<Container size={15} />} onClick={downloadZip}>Download all (.zip)</InkButton>
-        </Panel>
-      }
-    />
+          <CodeOutput code={code} filename={tab === "ignore" ? ".dockerignore" : tab === "compose" ? "docker-compose.yml" : tab === "config" ? "next.config.ts" : tab === "commands" ? "commands.txt" : "Dockerfile"} label={tab} fill />
+          <p className="truncate font-mono text-[12px] text-muted-foreground" title={files.commands}>{files.commands}</p>
+        </Pane>
+      </ToolPanes>
+      <StatusStrip
+        note={status}
+        tone={warnings.length ? "fail" : options.standalone ? "pass" : "warn"}
+        trailing="⌘⇧C copy Dockerfile · ⌘↵ download zip"
+        items={checks}
+      >
+        <ResultStat variant="well" label="Estimated image size" value={estimatedSize(withEnvs)} hint="A static estimate, not a measurement." />
+      </StatusStrip>
+    </ToolCard>
   );
 }
 

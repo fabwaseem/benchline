@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Slider, TextButton, TextInput } from "@/components/kit/controls";
+import { ActionButton, Slider, TextButton, TextInput } from "@/components/kit/controls";
 import { ImageDown } from "lucide-react";
 import { toast } from "sonner";
 import { BatchList } from "@/components/kit/batch-list";
@@ -11,7 +11,8 @@ import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { ResultStat, SizeStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { encoderSupports, fileToBitmap, renderToBlob } from "@/lib/client-image";
 import { downloadBlob } from "@/lib/download-blob";
 import { capBox, encoderQuality, formatBytes, IMAGE_ACCEPT, outputFilename, savings } from "@/lib/image-format";
@@ -176,22 +177,18 @@ export default function ImageCompressTool() {
   const outputNote = choice;
 
   return (
-    <ToolShell
-      runsLocally
-      busy={busy}
-      layout="split+inspector"
-      flow="band"
-      tabs={<ToolTabs label="Mode" value="compress" onChange={() => {}} options={[{ value: "compress", label: "Compress" }]} />}
-      actions={<InkButton icon={<ImageDown size={15} />} disabled={busy || jobs.length === 0} onClick={() => void compressAll()}>{busy ? "Compressing" : "Compress"}</InkButton>}
-      status={
-        <>
-          <span className="dot" />
-          <span>{finished === 0 ? `${jobs.length} images · quality ${quality}` : `${finished} compressed · quality ${quality}`}</span>
-          <span className="ml-auto hidden min-[700px]:inline">Files stay in this browser</span>
-        </>
-      }
-      input={
-        <Panel title="Images">
+    <ToolCard>
+      <ToolToolbar
+        actions={
+          <>
+            <TextButton onClick={clear}>Clear</TextButton>
+            <ActionButton variant="outline" disabled={finished === 0} onClick={() => void saveZip()}>Download ZIP</ActionButton>
+            <ActionButton className="btn btn-ink" disabled={busy || jobs.length === 0} onClick={() => void compressAll()}>{busy ? "Compressing" : "Compress"}</ActionButton>
+          </>
+        }
+      />
+      <ToolPanes ratio="40/60">
+        <Pane label="Images">
           <Notice tone="neutral" title="Nothing is uploaded." body="The quality slider applies to JPEG, WebP, and AVIF. PNG stays lossless unless you cap the long edge or change format." />
           <Segmented label="Format" value={choice} onChange={setChoice} options={compressChoices.map((item) => ({ value: item, label: LABELS[item] }))} />
           <Dropzone accept={IMAGE_ACCEPT} multiple label="Drop images, or click to choose a batch" onFiles={addFiles} />
@@ -199,12 +196,10 @@ export default function ImageCompressTool() {
             <Slider id="quality" value={[quality]} min={1} max={100} onValueChange={(value) => setQuality(value[0] ?? 80)} />
           </FieldRow>
           <FieldRow label="Max edge" htmlFor="max-edge" help="Longest side in pixels. Leave empty to keep the original size.">
-            <TextInput id="max-edge" inputMode="numeric" value={maxEdge} placeholder="1600" onChange={(event) => setMaxEdge(event.target.value)} className="max-[699px]:h-11" />
+            <TextInput id="max-edge" inputMode="numeric" value={maxEdge} placeholder="1600" onChange={(event) => setMaxEdge(event.target.value)} />
           </FieldRow>
-        </Panel>
-      }
-      output={
-        <Panel title="Compressed">
+        </Pane>
+        <Pane label="Compressed">
           {jobs.length === 0 ? (
             <EmptyState art={<ImageDown size={22} />} title="No images yet" hint="Drop a batch, set a quality, and compress. Each row shows the size before and after." />
           ) : (
@@ -231,20 +226,18 @@ export default function ImageCompressTool() {
               onSave={save}
             />
           )}
-        </Panel>
-      }
-      inspector={
-        <Panel title="Savings">
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={finished === 0 ? `${jobs.length} images · quality ${quality}` : `${finished} compressed · quality ${quality}`} tone="pass" trailing="Files stay in this browser">
+        <div className="grid w-full gap-2 min-[700px]:w-auto min-[700px]:grid-cols-[minmax(0,16rem)_8rem]">
           <SizeStat
             before={jobs.length ? formatBytes(before) : "—"}
             after={finished ? formatBytes(after) : "—"}
             hint={outputNote === "original" ? "Per file" : LABELS[outputNote]}
           />
           <ResultStat label="Saved" value={batchSavings ? formatBytes(Math.abs(batchSavings.savedBytes)) : "—"} hint={batchSavings ? `${batchSavings.label} across the batch` : "Shown after compression"} />
-          <InkButton icon={<ImageDown size={15} />} disabled={finished === 0} onClick={() => void saveZip()}>Download ZIP</InkButton>
-          <TextButton onClick={clear}>Clear the batch</TextButton>
-        </Panel>
-      }
-    />
+        </div>
+      </StatusStrip>
+    </ToolCard>
   );
 }

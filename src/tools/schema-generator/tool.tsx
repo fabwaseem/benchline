@@ -1,16 +1,16 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ActionButton, ChipButton, OptionRow, TextInput } from "@/components/kit/controls";
-import { Braces, Copy } from "lucide-react";
+import { ActionButton, OptionRow, TextInput } from "@/components/kit/controls";
+import { Braces } from "lucide-react";
 import { toast } from "sonner";
-import { CheckRows } from "@/components/kit/check-row";
 import { CodeOutput } from "@/components/kit/code-output";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar, type StripLevel } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { buildSchema, exampleValues, graphOf, nextSnippet, schemaTypes, scriptTag, validateSchema, type SchemaType, type SchemaValues } from "@/tools/schema-generator/lib/schema";
 
 export default function SchemaTool() {
@@ -56,60 +56,52 @@ export default function SchemaTool() {
       : `${type} · valid JSON-LD · ${bytes.toLocaleString("en-US")} B`;
 
   return (
-    <ToolShell
-      runsLocally
-      layout="split+inspector"
-      flow="band"
-      columns="min-[1280px]:grid-cols-[380px_minmax(0,1fr)_320px]"
-      tabs={<ToolTabs label="Mode" value="build" onChange={() => {}} options={[{ value: "build", label: "Build" }]} />}
-      actions={<InkButton icon={<Copy size={15} />} onClick={() => void navigator.clipboard.writeText(scriptTag(data)).then(() => toast.success("Script copied"))}>Copy script</InkButton>}
-      status={
-        <>
-          <span className={fails ? "dot dot-warn" : "dot"} />
-          <span>{status}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘⇧C copy script · ⌘↵ add to graph</span>
-        </>
-      }
-      input={
-        <Panel title="Fields">
-          <div className="flex flex-wrap gap-1.5" role="radiogroup" aria-label="Schema type">
-            {schemaTypes.map((item) => (
-              <ChipButton key={item} role="radio" pressed={item === type} className="h-8 max-[699px]:h-11" onClick={() => pick(item)}>
-                {item}
-              </ChipButton>
-            ))}
-          </div>
+    <ToolCard>
+      <ToolToolbar
+        label="Schema type"
+        options={schemaTypes.map((item) => ({ value: item, label: item }))}
+        value={type}
+        onChange={pick}
+        actions={
+          <>
+            <ActionButton type="button" variant="outline" onClick={() => setValues(exampleValues(type))}>Load example</ActionButton>
+            <ActionButton type="button" className="btn btn-ink" onClick={() => void navigator.clipboard.writeText(scriptTag(data)).then(() => toast.success("Script copied"))}>Copy script</ActionButton>
+          </>
+        }
+      />
+      <ToolPanes>
+        <Pane label="Fields">
           <OptionRow label={<>Combine into @graph ({graph.length} saved)</>} checked={combine} onChange={setCombine} />
           <Fields type={type} values={values} checks={checks} onChange={setValues} />
-          <div className="flex flex-wrap gap-2">
-            <ActionButton type="button" variant="outline" className="max-[699px]:h-11" onClick={() => setValues(exampleValues(type))}>Load example</ActionButton>
-            <ActionButton type="button" variant="outline" className="max-[699px]:h-11" onClick={addToGraph}>Add to graph</ActionButton>
-          </div>
-        </Panel>
-      }
-      output={
-        <Panel title="Output">
+          <ActionButton type="button" variant="outline" onClick={addToGraph}>Add to graph</ActionButton>
+        </Pane>
+        <Pane label="Output" scroll={false} bodyClassName="flex min-h-[320px] flex-col gap-3 p-3">
           {filled ? (
             <>
               <Segmented label="Output" value={tab} onChange={setTab} options={[{ value: "script", label: "Script" }, { value: "json", label: "JSON" }, { value: "next", label: "Next.js" }]} />
-              <CodeOutput code={code} filename={tab === "json" ? "schema.json" : "schema.html"} label="JSON-LD" />
-              <a className="text-[13px] underline-offset-2 hover:underline" href="https://search.google.com/test/rich-results" target="_blank" rel="noreferrer">Rich Results Test</a>
+              <CodeOutput code={code} filename={tab === "json" ? "schema.json" : "schema.html"} label="JSON-LD" fill className="min-h-0 flex-1" />
             </>
           ) : (
             <EmptyState art={<Braces size={22} />} title="The script shows up here" hint="Fill the required fields. The checklist names what is still missing." />
           )}
-        </Panel>
-      }
-      inspector={
-        <Panel title="Checklist">
-          <div aria-live="polite">
-            <CheckRows rows={checks} />
-          </div>
-          {warns > 0 && fails === 0 ? <Notice className="mx-4" tone="warn" title={checks.find((check) => check.level === "warn")?.detail || "Review the warnings."} /> : null}
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip
+        note={status}
+        tone={fails ? "fail" : warns ? "warn" : "pass"}
+        items={checks.map((check) => ({ level: stripLevel(check.level), label: check.label, detail: check.detail }))}
+        trailing="⌘⇧C copy script · ⌘↵ add to graph"
+      >
+        <a className="text-[13px] whitespace-nowrap underline-offset-2 hover:underline" href="https://search.google.com/test/rich-results" target="_blank" rel="noreferrer">Rich Results Test</a>
+        {warns > 0 && fails === 0 ? <Notice tone="warn" title={checks.find((check) => check.level === "warn")?.detail || "Review the warnings."} /> : null}
+      </StatusStrip>
+    </ToolCard>
   );
+}
+
+function stripLevel(level: string): StripLevel {
+  if (level === "pass" || level === "warn" || level === "fail" || level === "info") return level;
+  return "info";
 }
 
 function Fields({ type, values, checks, onChange }: { type: SchemaType; values: SchemaValues; checks: { level: string; label: string; detail: string }[]; onChange: (values: SchemaValues) => void }) {

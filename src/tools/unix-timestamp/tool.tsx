@@ -1,15 +1,16 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ChipButton, TextInput } from "@/components/kit/controls";
-import { Clock, Copy } from "lucide-react";
+import { ActionButton, ChipButton, TextInput } from "@/components/kit/controls";
+import { Clock } from "lucide-react";
 import { toast } from "sonner";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { commonTimeZones, convertToDate, convertToEpoch, relativeTime, timeZones, wallFromInputs, type UnitChoice } from "@/tools/unix-timestamp/lib/epoch";
 
 const units: { value: UnitChoice; label: string }[] = [
@@ -68,22 +69,19 @@ export default function UnixTimestampTool() {
     },
   });
 
+  const note = "error" in result ? result.error : `${result.timeZone} ${result.offset === "Z" ? "UTC" : result.offset}`;
+
   return (
-    <ToolShell
-      runsLocally
-      layout="split+inspector"
-      flow="band"
-      tabs={<ToolTabs label="Direction" value={tab} onChange={setTab} options={[{ value: "to-date", label: "Epoch to date" }, { value: "to-epoch", label: "Date to epoch" }]} />}
-      actions={<InkButton icon={<Copy size={15} />} onClick={() => copyValue && void navigator.clipboard.writeText(copyValue).then(() => toast.success("ISO time copied"))}>Copy ISO</InkButton>}
-      status={
-        <>
-          <span className={"error" in result ? "dot dot-warn" : "dot"} />
-          <span>{"error" in result ? result.error : `${result.timeZone} ${result.offset === "Z" ? "UTC" : result.offset}`}</span>
-          <span className="ml-auto hidden font-mono min-[700px]:inline">{now === null ? "" : `${Math.trunc(now / 1000)} now`}</span>
-        </>
-      }
-      input={
-        <Panel title={tab === "to-date" ? "Timestamp" : "Calendar time"}>
+    <ToolCard>
+      <ToolToolbar
+        label="Direction"
+        options={[{ value: "to-date", label: "Epoch to date" }, { value: "to-epoch", label: "Date to epoch" }]}
+        value={tab}
+        onChange={setTab}
+        actions={<ActionButton className="btn btn-ink" disabled={!copyValue} onClick={() => void navigator.clipboard.writeText(copyValue).then(() => toast.success("ISO time copied"))}>Copy ISO</ActionButton>}
+      />
+      <ToolPanes>
+        <Pane label={tab === "to-date" ? "Timestamp" : "Calendar time"}>
           {tab === "to-date" ? (
             <>
               <FieldRow label="Timestamp or date" htmlFor="epoch" error={"error" in result ? result.error : undefined} help="A number, ISO-8601, RFC 2822, or now.">
@@ -108,48 +106,44 @@ export default function UnixTimestampTool() {
               {zones.map((item) => <option key={item} value={item} />)}
             </datalist>
           </FieldRow>
-        </Panel>
-      }
-      output={
-        <div aria-live="polite">
-          {"error" in result ? (
-            <Panel>
-              <Notice tone="bad" role="alert" title={result.error} />
-              <EmptyState art={<Clock size={22} />} title="No instant" hint="Check the timestamp, the date, and the time zone." />
-            </Panel>
-          ) : (
-            <Panel title="Result">
-              <div className="grid grid-cols-2 gap-2">
-                <ResultStat label="Seconds" value={result.seconds} />
-                <ResultStat label="Milliseconds" value={result.milliseconds} />
-              </div>
-              <p className="font-mono text-[13px] break-all">{result.isoLocal}</p>
-              <p className="font-mono text-[13px] text-muted-foreground break-all">{result.isoUtc}</p>
-              <p className="text-sm">{result.weekday} · {result.rfc2822}</p>
-              {relative ? <p className="text-sm text-muted-foreground">{relative}</p> : null}
-              {result.alternateIsoUtc ? <Notice tone="warn" title="This local time happens twice." body={`The earlier instant is shown. The later one is ${result.alternateIsoUtc}.`} /> : null}
-            </Panel>
-          )}
-        </div>
-      }
-      inspector={
-        <Panel title="Other zones">
-          {"error" in result ? <p className="text-sm text-muted-foreground">A valid instant shows the same moment in other zones.</p> : (
-            <ul>
-              {commonTimeZones.map((item) => {
-                const local = convertToDate(String(result.ms), item, "ms", 0);
-                if ("error" in local) return null;
-                return (
-                  <li key={item} className="grid grid-cols-[minmax(0,1fr)_auto] gap-3 border-t border-border py-2 text-[12px]">
-                    <span className="font-mono text-muted-foreground">{item}</span>
-                    <span className="font-mono">{local.isoLocal.replace("T", " ")}</span>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </Panel>
-      }
-    />
+        </Pane>
+        <Pane label="Result">
+          <div aria-live="polite" className="flex flex-col gap-3">
+            {"error" in result ? (
+              <>
+                <Notice tone="bad" role="alert" title={result.error} />
+                <EmptyState art={<Clock size={22} />} title="No instant" hint="Check the timestamp, the date, and the time zone." />
+              </>
+            ) : (
+              <>
+                <div className="grid grid-cols-2 gap-2">
+                  <ResultStat label="Seconds" value={result.seconds} />
+                  <ResultStat label="Milliseconds" value={result.milliseconds} />
+                </div>
+                <p className="truncate font-mono text-[13px]" title={result.isoLocal}>{result.isoLocal}</p>
+                <p className="truncate font-mono text-[13px] text-muted-foreground" title={result.isoUtc}>{result.isoUtc}</p>
+                <p className="truncate text-sm" title={`${result.weekday} · ${result.rfc2822}`}>{result.weekday} · {result.rfc2822}</p>
+                {relative ? <p className="text-sm text-muted-foreground">{relative}</p> : null}
+                {result.alternateIsoUtc ? <Notice tone="warn" title="This local time happens twice." body={`The earlier instant is shown. The later one is ${result.alternateIsoUtc}.`} /> : null}
+                <ul>
+                  {commonTimeZones.map((item) => {
+                    const local = convertToDate(String(result.ms), item, "ms", 0);
+                    if ("error" in local) return null;
+                    const shown = local.isoLocal.replace("T", " ");
+                    return (
+                      <li key={item} className="grid grid-cols-[minmax(0,1fr)_auto] gap-3 border-t border-border py-2 text-[12px]">
+                        <span className="truncate font-mono text-muted-foreground" title={item}>{item}</span>
+                        <span className="truncate font-mono" title={shown}>{shown}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </>
+            )}
+          </div>
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={note} tone={"error" in result ? "warn" : "pass"} trailing={now === null ? undefined : `${Math.trunc(now / 1000)} now`} />
+    </ToolCard>
   );
 }

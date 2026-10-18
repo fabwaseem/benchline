@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChipButton, OptionRow, TextButton, TextInput } from "@/components/kit/controls";
+import { ActionButton, ChipButton, OptionRow, TextButton, TextInput } from "@/components/kit/controls";
 import { Scaling } from "lucide-react";
 import { toast } from "sonner";
 import { BatchList } from "@/components/kit/batch-list";
@@ -11,7 +11,8 @@ import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { encoderSupports, fileToBitmap, renderToBlob } from "@/lib/client-image";
 import { downloadBlob } from "@/lib/download-blob";
 import { encoderQuality, formatBytes, IMAGE_ACCEPT, outputFilename, resolveOutput, sniffFormat } from "@/lib/image-format";
@@ -179,22 +180,18 @@ export default function ImageResizeTool() {
   const formatLabel = choice;
 
   return (
-    <ToolShell
-      runsLocally
-      busy={busy}
-      layout="split+inspector"
-      flow="band"
-      tabs={<ToolTabs label="Mode" value="resize" onChange={() => {}} options={[{ value: "resize", label: "Resize" }]} />}
-      actions={<InkButton icon={<Scaling size={15} />} disabled={busy || jobs.length === 0} onClick={() => void resizeAll()}>{busy ? "Resizing" : "Resize"}</InkButton>}
-      status={
-        <>
-          <span className="dot" />
-          <span>{preview ? `${done}/${jobs.length} resized · ${preview.width}×${preview.height}` : "Waiting for images"}</span>
-          <span className="ml-auto hidden min-[700px]:inline">Files stay in this browser</span>
-        </>
-      }
-      input={
-        <Panel title="Size">
+    <ToolCard>
+      <ToolToolbar
+        actions={
+          <>
+            <TextButton onClick={clear}>Clear</TextButton>
+            <ActionButton variant="outline" disabled={done === 0} onClick={() => void saveZip()}>Download ZIP</ActionButton>
+            <ActionButton className="btn btn-ink" disabled={busy || jobs.length === 0} onClick={() => void resizeAll()}>{busy ? "Resizing" : "Resize"}</ActionButton>
+          </>
+        }
+      />
+      <ToolPanes ratio="40/60">
+        <Pane label="Size">
           <Notice tone="neutral" title="Nothing is uploaded." body="Leave one side empty to keep each image's ratio. Fill both sides to fit every image into the same frame." />
           <Segmented label="Resize by" value={mode} onChange={setMode} options={resizeModes.map((item) => ({ value: item, label: item === "pixels" ? "Pixels" : "Percent" }))} />
           <Dropzone accept={IMAGE_ACCEPT} multiple label="Drop images, or click to choose a batch" onFiles={addFiles} />
@@ -232,10 +229,8 @@ export default function ImageResizeTool() {
               <TextInput id="resize-pct" inputMode="numeric" value={percent} onChange={(event) => setPercent(event.target.value)} className="max-[699px]:h-11" />
             </FieldRow>
           )}
-        </Panel>
-      }
-      output={
-        <Panel title="Resized">
+        </Pane>
+        <Pane label="Resized">
           {jobs.length === 0 ? (
             <EmptyState art={<Scaling size={22} />} title="No images yet" hint="Drop a batch, set a width or a percent, and resize." />
           ) : (
@@ -262,19 +257,17 @@ export default function ImageResizeTool() {
               onSave={save}
             />
           )}
-        </Panel>
-      }
-      inspector={
-        <Panel title="Output">
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={preview ? `${done}/${jobs.length} resized · ${preview.width}×${preview.height}` : "Waiting for images"} tone="pass" trailing="Files stay in this browser">
+        <div className="flex w-full flex-col gap-2 min-[700px]:w-auto">
           <Segmented label="Format" value={choice} onChange={setChoice} options={FORMAT_CHOICES.map((item) => ({ value: item, label: LABELS[item] }))} />
           <div className="grid grid-cols-2 gap-2">
             <ResultStat variant="well" label="Output" value={preview ? `${preview.width}×${preview.height}` : "—"} hint={sample ? "From the first image" : "Add an image"} />
             <ResultStat variant="well" label="Fit" value={mode === "percent" ? "Percent" : FIT_LABELS[fit]} hint={formatLabel === "original" ? "Keep format" : LABELS[formatLabel]} />
           </div>
-          <InkButton icon={<Scaling size={15} />} disabled={done === 0} onClick={() => void saveZip()}>Download ZIP</InkButton>
-          <TextButton onClick={clear}>Clear the batch</TextButton>
-        </Panel>
-      }
-    />
+        </div>
+      </StatusStrip>
+    </ToolCard>
   );
 }
