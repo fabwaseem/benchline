@@ -28,7 +28,7 @@ export function benchLlms() {
 
 MCP endpoint: ${absoluteUrl("/mcp")}
 OpenAPI: ${absoluteUrl("/openapi.json")}
-Connect instructions: ${absoluteUrl("/ai")}
+Connect instructions: ${absoluteUrl("/mcp")}
 
 ${sections}
 
@@ -41,7 +41,8 @@ ${agents}
 - [Explore](${absoluteUrl("/explore")}): every tool, with search, category, and tag filters.
 - [Categories](${absoluteUrl("/categories")}): the category index, with hue, description, and the top tools.
 - [About](${absoluteUrl("/about")}): who built the bench and what stays in the browser.
-- [AI access](${absoluteUrl("/ai")}): Cursor, Claude, and ChatGPT setup.
+- [MCP](${absoluteUrl("/mcp")}): Claude Desktop, Cursor, and VS Code setup. Browser GET returns the docs; clients POST JSON-RPC.
+- [AI access](${absoluteUrl("/ai")}): the tool list, Cursor, Claude, and the HTTP API.
 `;
 }
 

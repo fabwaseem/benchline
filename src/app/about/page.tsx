@@ -152,7 +152,7 @@ export default function AboutPage() {
               },
               {
                 q: "Can an agent call a tool?",
-                a: "Yes. /mcp speaks the Model Context Protocol, and /api/v1/tools/<slug> is the same function over HTTP. Instructions live on /ai.",
+                a: "Yes. /mcp speaks the Model Context Protocol, and /api/v1/tools/<slug> is the same function over HTTP. Setup for Claude Desktop, Cursor, and VS Code is on /mcp.",
               },
             ]}
           />

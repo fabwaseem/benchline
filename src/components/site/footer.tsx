@@ -42,6 +42,7 @@ export function Footer() {
         <div>
           <b className="mb-3.5 block text-[13px] font-medium">Resources</b>
           <Link href="/ai" className="mt-2 block text-[13.5px] text-muted-foreground">AI access</Link>
+          <Link href="/mcp" className="mt-2 block text-[13.5px] text-muted-foreground">MCP</Link>
           <Link href="/llms.txt" className="mt-2 block text-[13.5px] text-muted-foreground">llms.txt</Link>
           <Link href="/llms-full.txt" className="mt-2 block text-[13.5px] text-muted-foreground">llms-full.txt</Link>
           <Link href="/openapi.json" className="mt-2 block text-[13.5px] text-muted-foreground">OpenAPI</Link>

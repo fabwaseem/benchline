@@ -9,6 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: absoluteUrl("/categories"), changeFrequency: "weekly", priority: 0.7 },
     { url: absoluteUrl("/about"), changeFrequency: "monthly", priority: 0.4 },
     { url: absoluteUrl("/ai"), changeFrequency: "monthly", priority: 0.6 },
+    { url: absoluteUrl("/mcp"), changeFrequency: "monthly", priority: 0.6 },
   ];
   for (const category of categories) {
     pages.push({

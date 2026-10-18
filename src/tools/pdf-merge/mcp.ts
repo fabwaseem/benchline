@@ -1,14 +1,11 @@
 import { z } from "zod";
-import { decodeBase64, encodeBase64 } from "@/lib/base64";
+import { encodeBase64 } from "@/lib/base64";
+import { pdfFileSchema, readMcpBytes } from "@/lib/mcp/bytes";
 import type { BenchTool } from "@/lib/mcp/types";
 import { mergePdfs } from "@/tools/pdf-merge/lib/merge";
 
 export const inputSchema = z.object({
-  files: z.array(z.object({
-    name: z.string().default("document.pdf"),
-    data: z.string().describe("PDF bytes as base64, or a data URI."),
-    pages: z.string().default("").describe("Pages to keep, such as 1-3,5. Blank keeps every page."),
-  })).min(2).max(25),
+  files: z.array(pdfFileSchema).min(2).max(25),
 });
 
 export const outputSchema = z.object({
@@ -19,11 +16,11 @@ export const outputSchema = z.object({
 
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
-  const result = await mergePdfs(parsed.files.map((file) => ({
-    name: file.name,
-    data: decodeBase64(file.data, file.name || "A PDF"),
-    pages: file.pages,
-  })));
+  const files = await Promise.all(parsed.files.map(async (file, index) => {
+    const read = await readMcpBytes(file, file.name || `PDF ${index + 1}`);
+    return { name: file.name || read.filename || "document.pdf", data: read.bytes, pages: file.pages };
+  }));
+  const result = await mergePdfs(files);
   return outputSchema.parse({
     data: encodeBase64(result.bytes),
     pageCount: result.pageCount,
@@ -35,8 +32,8 @@ export const tool: BenchTool = {
   slug: "pdf-merge",
   name: "merge_pdf",
   title: "Merge PDF files",
-  description: "Combine PDF files sent as base64. Each file can keep a page range such as 1-3,5. Returns one PDF as base64.",
-  openWorld: false,
+  description: "Combine PDF files. Each file is base64 or a public URL, and can keep a page range such as 1-3,5. Private addresses are refused. Returns one PDF as base64.",
+  openWorld: true,
   inputSchema,
   outputSchema,
   run,

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { mcpIndex } from "@/registry/mcp-index";
 
@@ -27,7 +28,8 @@ export default function AiPage() {
         </p>
         <h1 className="d2 mt-4">The same functions, for an agent.</h1>
         <p className="lede mt-5">
-          {mcpIndex.length} tools are registered on a stateless MCP endpoint and on a JSON API. No key. Sixty calls a minute per address.
+          {mcpIndex.length} tools are registered on a stateless MCP endpoint and on a JSON API. No key. Sixty calls a minute per address.{" "}
+          <Link href="/mcp" className="underline">Setup for Claude Desktop, Cursor, and VS Code</Link>.
         </p>
       </header>
 
