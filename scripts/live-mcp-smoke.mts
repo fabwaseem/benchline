@@ -2,7 +2,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { PDFDocument } from "pdf-lib";
 
-const endpoint = process.env.MCP_URL ?? "https://tools.fabwaseem.com/mcp";
+const endpoint = process.env.MCP_URL ?? "https://benchline.fabwaseem.com/mcp";
 const token = "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiJhZGEiLCJleHAiOjIwMDAwMDAwMDB9.e30";
 const png =
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
@@ -131,7 +131,7 @@ async function main() {
     hash_password: { password: "correct horse", algorithm: "bcrypt", cost: 4 },
     generate_keypair: { action: "generate", alg: "ES256" },
     build_csp: { policy: "default-src 'none'; object-src 'none'; base-uri 'none'" },
-    validate_sitemap: { url: "https://tools.fabwaseem.com/sitemap.xml", probe: false },
+    validate_sitemap: { url: "https://benchline.fabwaseem.com/sitemap.xml", probe: false },
     check_http_headers: { url: "https://example.com/" },
     check_ssl: { host: "example.com" },
     generate_totp: { secret: "JBSWY3DPEHPK3PXP", at: 1000000000000 },

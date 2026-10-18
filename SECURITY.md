@@ -11,7 +11,7 @@ Do not open a public issue for a vulnerability, and do not post an exploit again
 
 In scope:
 
-- The site at `https://tools.fabwaseem.com`, including `/mcp` and `/api/v1/tools/<slug>`.
+- The site at `https://benchline.fabwaseem.com`, including `/mcp` and `/api/v1/tools/<slug>`.
 - The SSRF guards on tools that fetch a URL. That is `src/lib/net/ssrf.ts` for browser checker routes, and the same checks inside `readMcpBytes` for MCP file URLs. A report that reaches a loopback, private, link-local, or metadata address is in scope.
 - Authentication bypass on the MCP origin check, and any path that stores or returns someone else's input. The app is stateless and stores no accounts.
 

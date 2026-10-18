@@ -11,7 +11,7 @@ describe("benchline access", () => {
   it("decodes a JWT through the MCP client", async () => {
     resetRateLimit();
     const client = new Client({ name: "benchline-test", version: "1.0.0" });
-    const transport = new StreamableHTTPClientTransport(new URL("https://tools.fabwaseem.com/mcp"), {
+    const transport = new StreamableHTTPClientTransport(new URL("https://benchline.fabwaseem.com/mcp"), {
       fetch: (url, init) => handleMcpRequest(new Request(url, init)),
     });
     await client.connect(transport);
@@ -27,7 +27,7 @@ describe("benchline access", () => {
   it("decodes a JWT through the REST API", async () => {
     resetRateLimit();
     const response = await POST(
-      new Request("https://tools.fabwaseem.com/api/v1/tools/jwt-decoder", {
+      new Request("https://benchline.fabwaseem.com/api/v1/tools/jwt-decoder", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ token }),

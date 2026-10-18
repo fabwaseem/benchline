@@ -58,7 +58,7 @@ const page = `<!doctype html><html lang="en"><head><title>Example page title</ti
 <meta property="og:image" content="https://1.1.1.1/og.png">
 </head><body><h1>Example</h1><p>A public example page used by the Benchline checker for agents.</p></body></html>`;
 
-const endpoint = "https://tools.fabwaseem.com/mcp";
+const endpoint = "https://benchline.fabwaseem.com/mcp";
 let pdf = "";
 let client: Client;
 

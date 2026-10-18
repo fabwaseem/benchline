@@ -19,7 +19,7 @@ const samplePrompt = "Summarise this changelog for a release tweet. Keep it unde
 const sampleHtml = `<html><head><title>Benchline — exact browser tools</title>
 <meta name="description" content="A quiet bench of precise browser tools.">
 <meta property="og:title" content="Benchline — exact browser tools">
-<meta property="og:image" content="https://tools.fabwaseem.com/opengraph-image">
+<meta property="og:image" content="https://benchline.fabwaseem.com/opengraph-image">
 </head><body><h1>Benchline</h1></body></html>`;
 
 export function Bento() {
@@ -33,7 +33,7 @@ export function Bento() {
   });
   const docker = buildDockerfile(dockerfileDefaults).split("\n").slice(0, 4);
   const llms = renderLlmsTxt("Benchline", "Exact tools for people who ship the web.", [
-    { url: "https://tools.fabwaseem.com/t/jwt-decoder", title: "JWT decoder", description: "Read and verify a token in the browser.", excerpt: "" },
+    { url: "https://benchline.fabwaseem.com/t/jwt-decoder", title: "JWT decoder", description: "Read and verify a token in the browser.", excerpt: "" },
   ]);
   const seo = scoreSeo({
     finalUrl: "https://example.com/docs",
@@ -53,7 +53,7 @@ export function Bento() {
     sitemapFound: true,
     robots: parseRobots("User-agent: *\nAllow: /\nSitemap: https://example.com/sitemap.xml\nUser-agent: GPTBot\nAllow: /\n"),
   });
-  const meta = inspectHtml(sampleHtml, "https://tools.fabwaseem.com/");
+  const meta = inspectHtml(sampleHtml, "https://benchline.fabwaseem.com/");
   const checks = seo.checks.slice(0, 3);
   return (
     <div className="page-x grid grid-cols-1 gap-3 min-[700px]:grid-cols-12 min-[700px]:gap-4">
