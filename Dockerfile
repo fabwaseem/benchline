@@ -22,6 +22,14 @@ RUN addgroup -S nextjs && adduser -S nextjs -G nextjs
 COPY --from=build /app/public ./public
 COPY --from=build --chown=nextjs:nextjs /app/.next/standalone ./
 COPY --from=build --chown=nextjs:nextjs /app/.next/static ./.next/static
+# Copy resolved wasm/native trees so MCP tools can require them in the standalone image
+RUN --mount=from=build,source=/app/node_modules,target=/mnt/nm \
+  mkdir -p node_modules \
+  && cp -aL /mnt/nm/pdfjs-dist node_modules/pdfjs-dist \
+  && cp -aL /mnt/nm/zxing-wasm node_modules/zxing-wasm \
+  && cp -aL /mnt/nm/tesseract.js node_modules/tesseract.js \
+  && cp -aL /mnt/nm/tesseract.js-core node_modules/tesseract.js-core \
+  && chown -R nextjs:nextjs node_modules/pdfjs-dist node_modules/zxing-wasm node_modules/tesseract.js node_modules/tesseract.js-core
 USER nextjs
 EXPOSE 3000
 CMD ["node", "server.js"]

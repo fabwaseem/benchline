@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
-import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { pdfjsFolderUrl } from "@/lib/pdf-assets";
 
 type PdfPage = {
@@ -20,7 +21,18 @@ export type NodePdf = {
 
 type PdfjsModule = {
   getDocument: (src: Record<string, unknown>) => { promise: Promise<NodePdf>; destroy: () => Promise<void> };
+  GlobalWorkerOptions: { workerSrc: string };
 };
+
+const require = createRequire(`${process.cwd()}/package.json`);
+let workerSrc = "";
+
+function pdfWorkerSrc() {
+  if (!workerSrc) {
+    workerSrc = pathToFileURL(require.resolve("pdfjs-dist/legacy/build/pdf.worker.mjs")).href;
+  }
+  return workerSrc;
+}
 
 let depth = 0;
 let originalFetch: typeof fetch | null = null;
@@ -58,12 +70,12 @@ async function withFileFetch<T>(run: () => Promise<T>) {
 
 async function openDocument(data: Uint8Array, extra: Record<string, unknown>) {
   const pdfjs = (await import("pdfjs-dist/legacy/build/pdf.mjs")) as unknown as PdfjsModule;
+  pdfjs.GlobalWorkerOptions.workerSrc = pdfWorkerSrc();
   return pdfjs.getDocument({
     data: data.slice(),
-    disableWorker: true,
-    isEvalSupported: false,
     standardFontDataUrl: pdfjsFolderUrl("standard_fonts"),
     cMapUrl: pdfjsFolderUrl("cmaps"),
+    wasmUrl: pdfjsFolderUrl("wasm"),
     cMapPacked: true,
     verbosity: 0,
     ...extra,

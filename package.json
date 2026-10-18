@@ -67,6 +67,7 @@
     "svgo": "^4.1.0",
     "tailwind-merge": "^3.7.0",
     "tesseract.js": "^7.0.0",
+    "tesseract.js-core": "^7.0.0",
     "three": "^0.186.1",
     "turndown": "^7.2.4",
     "turndown-plugin-gfm": "^1.0.2",
