@@ -237,7 +237,7 @@ export const ogTemplates: OgTemplate[] = [
     images: ["logo"],
     font: "sans",
     headline: "stat",
-    titleSpec: { base: 180, min: 72, width: 1000, maxLines: 1 },
+    titleSpec: { base: 148, min: 64, width: 760, maxLines: 1 },
     colors: colorsOf("#0e0e10", "#f6f4ef", "#3ddc6a", "#a1a1aa"),
     presets: [
       preset("Green", "#0e0e10", "#f6f4ef", "#3ddc6a", "#a1a1aa"),

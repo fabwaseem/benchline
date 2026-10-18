@@ -67,6 +67,8 @@ describe("og templates", () => {
     expect(openGraphSource(aurora)).toContain("BENCHLINE");
     expect(openGraphSource(aurora)).toContain("benchline.dev");
     expect(resolveState({ template: "stat" }).fields.author).toBe("Benchline");
+    expect(openGraphSource(resolveState({ template: "stat" }))).toContain("+18%");
+    expect(openGraphSource(resolveState({ template: "stat" }))).toContain("vs last quarter");
     expect(resolveState({ template: "profile" }).fields.role).toContain("Benchline");
   });
 

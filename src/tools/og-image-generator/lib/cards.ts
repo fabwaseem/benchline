@@ -410,6 +410,19 @@ export function renderProfile(card: Card) {
   );
 }
 
+function sparkline(card: Card, color: string) {
+  const heights = [22, 18, 30, 26, 38, 34, 48, 42, 58, 52, 68, 62, 78, 86];
+  return flex({ alignItems: "flex-end", gap: u(card, 6), height: u(card, 92) }, ...heights.map((height, index) =>
+    flex({
+      width: u(card, 12),
+      height: u(card, height),
+      borderRadius: u(card, 3),
+      background: color,
+      opacity: index > heights.length - 4 ? 1 : 0.55,
+    }),
+  ));
+}
+
 export function renderStat(card: Card) {
   return flex({
     width: card.width,
@@ -418,15 +431,37 @@ export function renderStat(card: Card) {
     color: card.colors.foreground,
     fontFamily: "Geist",
     flexDirection: "column",
-    justifyContent: "space-between",
-    padding: u(card, 64),
+    justifyContent: "center",
+    gap: u(card, 40),
+    padding: u(card, 56),
   },
-      headline(card, { base: 160, min: 72, width: 1000, maxLines: 1 }, card.fields.stat, { fontWeight: 700, letterSpacing: -4, color: card.colors.accent, lineHeight: 1 }),
-    flex({ width: "100%", justifyContent: "space-between", alignItems: "flex-end", gap: u(card, 32) },
-      text(card.fields.statLabel, { fontSize: u(card, 36), width: u(card, 620), lineHeight: 1.15, fontWeight: 500 }),
+    flex({ width: "100%", justifyContent: "space-between", alignItems: "flex-start", gap: u(card, 24) },
+      headline(card, { base: 148, min: 64, width: 760, maxLines: 1 }, card.fields.stat, { fontWeight: 700, letterSpacing: -4, color: card.colors.accent, lineHeight: 1 }),
       flex({ alignItems: "center", gap: u(card, 12), flexShrink: 0 },
         mark(card, { ...card.colors, foreground: card.colors.accent, background: card.colors.background }, initial(card.fields.author), card.images),
-        text(card.fields.author, { letterSpacing: 3, fontSize: u(card, 18), fontWeight: 600 }),
+        text(card.fields.author.toUpperCase(), { letterSpacing: 3, fontSize: u(card, 18), fontWeight: 600 }),
+      ),
+    ),
+    flex({ width: "100%", alignItems: "flex-end", justifyContent: "space-between", gap: u(card, 28) },
+      flex({ flexDirection: "column", gap: u(card, 16), width: u(card, 720) },
+        text(card.fields.statLabel, { fontSize: u(card, 30), width: u(card, 680), lineHeight: 1.15, fontWeight: 500 }),
+        sparkline(card, card.colors.accent),
+      ),
+      flex({
+        flexDirection: "column",
+        alignItems: "flex-end",
+        gap: u(card, 6),
+        borderWidth: 1,
+        borderStyle: "solid",
+        borderColor: card.colors.muted,
+        borderRadius: u(card, 16),
+        paddingTop: u(card, 14),
+        paddingBottom: u(card, 14),
+        paddingLeft: u(card, 18),
+        paddingRight: u(card, 18),
+      },
+        text("+18%", { fontSize: u(card, 36), fontWeight: 700, color: card.colors.accent, lineHeight: 1 }),
+        text("vs last quarter", { fontSize: u(card, 16), color: card.colors.muted, letterSpacing: 0.4 }),
       ),
     ),
   );
@@ -562,6 +597,9 @@ export function renderChangelog(card: Card) {
 }
 
 export function renderGlass(card: Card) {
+  const cardWidth = Math.min(u(card, 720), card.width - u(card, 160));
+  const gutter = Math.round((card.width - cardWidth) / 2);
+  const blob = Math.max(u(card, 140), gutter - u(card, 28));
   return flex({
     width: card.width,
     height: card.height,
@@ -570,20 +608,23 @@ export function renderGlass(card: Card) {
     alignItems: "center",
     justifyContent: "center",
     position: "relative",
+    overflow: "hidden",
   },
-    flex({ position: "absolute", left: u(card, 80), top: u(card, 40), width: u(card, 280), height: u(card, 280), borderRadius: 999, background: "#fb7185", opacity: 0.85 }),
-    flex({ position: "absolute", right: u(card, 40), bottom: u(card, 20), width: u(card, 360), height: u(card, 360), borderRadius: 999, background: "#38bdf8", opacity: 0.8 }),
+    flex({ position: "absolute", left: u(card, -28), top: u(card, -36), width: blob, height: Math.round(blob * 0.85), borderRadius: 999, background: "#fb7185", opacity: 0.92, zIndex: 0 }),
+    flex({ position: "absolute", right: u(card, -28), bottom: u(card, -40), width: blob, height: Math.round(blob * 0.85), borderRadius: 999, background: "#38bdf8", opacity: 0.92, zIndex: 0 }),
     flex({
-      width: u(card, 760),
+      width: cardWidth,
+      position: "relative",
+      zIndex: 2,
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
       gap: u(card, 18),
-      background: "rgba(255,255,255,0.2)",
+      background: "rgba(18, 10, 32, 0.72)",
       borderRadius: u(card, 36),
       borderWidth: 1,
       borderStyle: "solid",
-      borderColor: "rgba(255,255,255,0.45)",
+      borderColor: "rgba(255,255,255,0.55)",
       paddingTop: u(card, 48),
       paddingBottom: u(card, 48),
       paddingLeft: u(card, 36),

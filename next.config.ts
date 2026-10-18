@@ -1,23 +1,34 @@
 import type { NextConfig } from "next";
 
+// tesseract.js package.json dependencies, plus the node-fetch closure (whatwg-url → tr46, webidl-conversions).
+const tesseractRuntimeDeps = [
+  "bmp-js",
+  "idb-keyval",
+  "is-url",
+  "node-fetch",
+  "opencollective-postinstall",
+  "regenerator-runtime",
+  "tesseract.js-core",
+  "wasm-feature-detect",
+  "zlibjs",
+  "whatwg-url",
+  "tr46",
+  "webidl-conversions",
+];
+
+const tesseractAssetGlobs = tesseractRuntimeDeps.flatMap((dep) => [
+  `./node_modules/.pnpm/node_modules/${dep}/**/*`,
+  `./node_modules/.pnpm/${dep}@*/**/*`,
+  `./node_modules/.pnpm/tesseract.js@*/node_modules/${dep}/**/*`,
+]);
+
 const mcpNativeAssets = [
   "./node_modules/pdfjs-dist/**/*",
   "./node_modules/zxing-wasm/**/*",
   "./node_modules/tesseract.js/**/*",
   "./node_modules/tesseract.js-core/**/*",
   "./node_modules/.pnpm/tesseract.js@*/node_modules/**/*",
-  "./node_modules/.pnpm/node_modules/bmp-js/**/*",
-  "./node_modules/.pnpm/node_modules/zlibjs/**/*",
-  "./node_modules/.pnpm/node_modules/wasm-feature-detect/**/*",
-  "./node_modules/.pnpm/node_modules/idb-keyval/**/*",
-  "./node_modules/.pnpm/node_modules/is-url/**/*",
-  "./node_modules/.pnpm/node_modules/node-fetch/**/*",
-  "./node_modules/.pnpm/node_modules/regenerator-runtime/**/*",
-  "./node_modules/.pnpm/node_modules/whatwg-url/**/*",
-  "./node_modules/.pnpm/bmp-js@*/**/*",
-  "./node_modules/.pnpm/zlibjs@*/**/*",
-  "./node_modules/.pnpm/wasm-feature-detect@*/**/*",
-  "./node_modules/.pnpm/idb-keyval@*/**/*",
+  ...tesseractAssetGlobs,
   "./node_modules/@napi-rs/canvas/**/*",
   "./node_modules/@resvg/resvg-js/**/*",
   "./node_modules/.pnpm/@resvg+resvg-js@*/**/*",
@@ -36,6 +47,7 @@ const nextConfig: NextConfig = {
     "pdfjs-dist",
     "tesseract.js",
     "tesseract.js-core",
+    ...tesseractRuntimeDeps.filter((dep) => dep !== "tesseract.js-core"),
     "zxing-wasm",
     "sharp",
   ],
