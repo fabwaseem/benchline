@@ -318,5 +318,95 @@
     "status": "new",
     "icon": "Binary",
     "runsLocally": true
+  },
+  {
+    "slug": "image-convert",
+    "name": "Image format converter",
+    "tagline": "Convert HEIC, WebP, PNG, JPG, and AVIF in the browser. Nothing is uploaded.",
+    "description": "Free image format converter for HEIC to JPG, WebP to PNG, PNG to JPG, and AVIF. Drop a batch, pick a target, and download the files or a ZIP. Decoding and encoding run on this device, so the pictures never leave the browser.",
+    "category": "image",
+    "tags": [
+      "image",
+      "convert",
+      "heic",
+      "webp"
+    ],
+    "keywords": [
+      "heic to jpg",
+      "webp to png",
+      "png to jpg",
+      "avif converter",
+      "image format converter"
+    ],
+    "status": "new",
+    "icon": "Images",
+    "runsLocally": true
+  },
+  {
+    "slug": "image-compress",
+    "name": "Image compressor",
+    "tagline": "Shrink JPEG, PNG, WebP, and AVIF in the browser, with the real before and after size.",
+    "description": "Free image compressor. Set a quality level, optionally cap the long edge, and compress a batch of JPEG, PNG, WebP, or AVIF files. You see the size before and after, the savings, and you can download a ZIP. The work stays on this device.",
+    "category": "image",
+    "tags": [
+      "image",
+      "compress",
+      "webp",
+      "avif"
+    ],
+    "keywords": [
+      "image compressor",
+      "compress image",
+      "compress jpeg",
+      "webp compressor",
+      "avif compressor"
+    ],
+    "status": "new",
+    "icon": "ImageDown",
+    "runsLocally": true
+  },
+  {
+    "slug": "image-resize",
+    "name": "Image resizer",
+    "tagline": "Resize by pixels or percent, with the aspect ratio locked and a batch ZIP.",
+    "description": "Free image resizer. Set a width, a height, or a percent, lock the aspect ratio, and fit a batch with contain, cover, or stretch. Presets cover Instagram, Stories, Open Graph, and HD. Resizing runs in the browser, so the files stay on the device.",
+    "category": "image",
+    "tags": [
+      "image",
+      "resize"
+    ],
+    "keywords": [
+      "resize image",
+      "image resizer",
+      "resize jpg",
+      "resize png",
+      "image size in pixels"
+    ],
+    "status": "new",
+    "icon": "Scaling",
+    "runsLocally": true
+  },
+  {
+    "slug": "color-converter",
+    "name": "Color converter",
+    "tagline": "Turn any color into HEX, RGB, HSL, OKLCH, and CMYK, and check the contrast ratio.",
+    "description": "Free color converter and contrast checker. Paste HEX, RGB, HSL, OKLCH, CMYK, or a CSS color name and read every format back. The contrast ratio uses WCAG 2, with AA and AAA flags for normal and large text, plus the nearest Tailwind token.",
+    "category": "design",
+    "tags": [
+      "color",
+      "contrast",
+      "wcag",
+      "oklch"
+    ],
+    "keywords": [
+      "hex to rgb",
+      "contrast checker",
+      "oklch converter",
+      "cmyk converter",
+      "hsl to hex"
+    ],
+    "status": "new",
+    "icon": "Palette",
+    "runsLocally": true
   }
 ]

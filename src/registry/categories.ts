@@ -54,6 +54,20 @@ export const categories = [
     icon: "Box",
     hue: 0,
   },
+  {
+    slug: "image",
+    name: "Image",
+    description: "Convert, compress, and resize pictures in the browser. The file stays on the device.",
+    icon: "Image",
+    hue: 174,
+  },
+  {
+    slug: "design",
+    name: "Design",
+    description: "Color values, contrast, and the numbers a layout is built from.",
+    icon: "Palette",
+    hue: 312,
+  },
 ] as const satisfies readonly Category[];
 
 export const toolOrder = [
@@ -72,4 +86,8 @@ export const toolOrder = [
   "csv-json-convert",
   "diff-checker",
   "base64-codec",
+  "image-convert",
+  "image-compress",
+  "image-resize",
+  "color-converter",
 ] as const;

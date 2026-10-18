@@ -17,4 +17,8 @@ export const toolLoaders: Record<string, () => Promise<{ default: ComponentType 
   "csv-json-convert": () => import("@/tools/csv-json-convert/tool"),
   "diff-checker": () => import("@/tools/diff-checker/tool"),
   "base64-codec": () => import("@/tools/base64-codec/tool"),
+  "image-convert": () => import("@/tools/image-convert/tool"),
+  "image-compress": () => import("@/tools/image-compress/tool"),
+  "image-resize": () => import("@/tools/image-resize/tool"),
+  "color-converter": () => import("@/tools/color-converter/tool"),
 };

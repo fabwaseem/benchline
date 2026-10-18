@@ -20,6 +20,10 @@ const views: Record<string, ComponentType> = {
   "csv-json-convert": dynamic(() => import("@/tools/csv-json-convert/tool")),
   "diff-checker": dynamic(() => import("@/tools/diff-checker/tool")),
   "base64-codec": dynamic(() => import("@/tools/base64-codec/tool")),
+  "image-convert": dynamic(() => import("@/tools/image-convert/tool")),
+  "image-compress": dynamic(() => import("@/tools/image-compress/tool")),
+  "image-resize": dynamic(() => import("@/tools/image-resize/tool")),
+  "color-converter": dynamic(() => import("@/tools/color-converter/tool")),
 };
 
 export function ToolHost({ slug }: { slug: string }) {
