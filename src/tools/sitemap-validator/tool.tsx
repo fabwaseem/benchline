@@ -39,8 +39,8 @@ export default function SitemapTool() {
     if (tab === "xml") return analyzeSitemap(xml);
     if (tab === "generate") {
       const generated = generateSitemap(lines.split(/\n/));
-      if ("report" in generated) return { ...generated.report, xml: generated.xml };
-      return { error: generated.error };
+      if ("error" in generated) return generated;
+      return { ...generated.report, xml: generated.xml };
     }
     return null;
   }, [lines, tab, xml]);

@@ -54,7 +54,7 @@ export function analyzeSitemap(xml: string, now = new Date()): SitemapReport | {
   };
 }
 
-export function generateSitemap(lines: string[], now = new Date()) {
+export function generateSitemap(lines: string[], now = new Date()): { xml: string; report: SitemapReport } | { error: string } {
   const urls = lines.map((line) => line.trim()).filter(Boolean);
   if (urls.length === 0) return { error: "Enter at least one URL." };
   if (urls.length > 50_000) return { error: "A sitemap holds at most 50,000 URLs." };

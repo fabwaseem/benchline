@@ -223,7 +223,8 @@ describe("MCP endpoint", () => {
     const missing = mcpTools.map((tool) => tool.name).filter((name) => !(name in samples));
     expect(missing).toEqual([]);
 
-    for (const tool of mcpTools) {
+    for (const [index, tool] of mcpTools.entries()) {
+      if (index % 40 === 0) resetRateLimit();
       const args = samples[tool.name] ?? {};
       let result: Awaited<ReturnType<Client["callTool"]>>;
       try {
@@ -238,6 +239,7 @@ describe("MCP endpoint", () => {
   }, 120_000);
 
   it("fetches a public PDF URL and refuses a private one", async () => {
+    resetRateLimit();
     const ok = await client.callTool({ name: "split_pdf", arguments: { url: "https://1.1.1.1/a.pdf" } });
     expect(ok.isError, textOf(ok)).not.toBe(true);
     const blocked = await client.callTool({ name: "split_pdf", arguments: { url: "http://127.0.0.1/secret.pdf" } });
@@ -246,6 +248,7 @@ describe("MCP endpoint", () => {
   });
 
   it("rejects an unsupported protocol version and a foreign origin", async () => {
+    resetRateLimit();
     const headers = {
       "content-type": "application/json",
       accept: "application/json, text/event-stream",
