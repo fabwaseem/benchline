@@ -19,6 +19,13 @@ describe("validateEndpoint", () => {
     const result = validateEndpoint("not a url");
     expect("error" in result).toBe(true);
   });
+
+  it("rejects loopback and bare internal names", () => {
+    expect(validateEndpoint("http://127.0.0.1")).toMatchObject({ error: expect.stringMatching(/not public/) });
+    expect(validateEndpoint("http://coolify:8080")).toMatchObject({ error: expect.stringMatching(/not public/) });
+    expect(validateEndpoint("http://2130706433")).toMatchObject({ error: expect.stringMatching(/not public/) });
+    expect(validateEndpoint("http://host.docker.internal")).toMatchObject({ error: expect.stringMatching(/not public/) });
+  });
 });
 
 describe("parseVariables", () => {
@@ -73,6 +80,13 @@ describe("executeGraphql", () => {
     );
     expect(result.ok).toBe(false);
     expect(result.error).toContain("timed out");
+  });
+
+  it("rejects loopback and bare service names before fetching", async () => {
+    const fetchImpl = vi.fn();
+    await expect(executeGraphql({ endpoint: "http://127.0.0.1", query: "{ a }" }, fetchImpl)).rejects.toThrow(/not public/);
+    await expect(executeGraphql({ endpoint: "http://coolify:8080/graphql", query: "{ a }" }, fetchImpl)).rejects.toThrow(/not public/);
+    expect(fetchImpl).not.toHaveBeenCalled();
   });
 
   it("throws on an empty query", async () => {

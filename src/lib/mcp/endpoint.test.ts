@@ -4,6 +4,7 @@ import { PDFDocument } from "pdf-lib";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { encodeBase64 } from "@/lib/base64";
 import { handleMcpRequest } from "@/lib/mcp/handler";
+import { outboundTransport } from "@/lib/net/outbound";
 import { resetRateLimit } from "@/lib/net/rate-limit";
 import { mcpTools } from "@/registry/mcp-registry";
 
@@ -113,6 +114,10 @@ function installFetch() {
     }
     return new Response(page, { status: 200, headers: { "content-type": "text/html; charset=utf-8" } });
   });
+  vi.spyOn(outboundTransport, "dispatch").mockImplementation(async (url) => {
+    const response = await fetch(url);
+    return { status: response.status, headers: response.headers, body: new Uint8Array(await response.arrayBuffer()) };
+  });
 }
 
 function textOf(result: unknown) {
@@ -139,6 +144,7 @@ describe("MCP endpoint", () => {
 
   afterAll(async () => {
     await client.close();
+    vi.restoreAllMocks();
     vi.unstubAllGlobals();
     resetRateLimit();
   });
