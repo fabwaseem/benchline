@@ -25,7 +25,7 @@ import {
   type RatePoint,
 } from "@/tools/currency-converter/lib/currency";
 
-const TABLE_CODES = ["USD", "EUR", "GBP", "JPY", "CHF", "CAD", "AUD", "CNY", "INR", "PKR", "AED", "SAR"];
+const TABLE_CODES = ["USD", "EUR", "GBP", "JPY", "CHF", "CAD", "AUD", "CNY", "INR", "CZK", "HUF", "ILS"];
 const RANGES = [
   { label: "30D", days: 30 },
   { label: "90D", days: 90 },

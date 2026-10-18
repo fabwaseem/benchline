@@ -1,9 +1,7 @@
 import { z } from "zod";
 import { decodeBase64, encodeBase64 } from "@/lib/base64";
 import type { BenchTool } from "@/lib/mcp/types";
-import { unzipEntries, zipEntries } from "@/tools/zip-tools/lib/zip";
-
-const MAX_MCP_OUTPUT_BYTES = 10 * 1024 * 1024;
+import { SERVER_UNZIP_BYTES, unzipEntries, zipEntries } from "@/tools/zip-tools/lib/zip";
 
 export const inputSchema = z.object({
   mode: z.enum(["zip", "unzip"]).default("zip"),
@@ -58,11 +56,10 @@ async function run(input: unknown) {
     });
   }
   if (!parsed.archive) throw new Error("Provide an archive to unzip.");
-  const entries = unzipEntries(decodeBase64(parsed.archive.data, parsed.archive.name ?? "archive"));
+  const entries = unzipEntries(decodeBase64(parsed.archive.data, parsed.archive.name ?? "archive"), {
+    maxBytes: SERVER_UNZIP_BYTES,
+  });
   const total = entries.reduce((sum, entry) => sum + entry.data.byteLength, 0);
-  if (total > MAX_MCP_OUTPUT_BYTES) {
-    throw new Error("The extracted files exceed 10 MB; use the web tool instead.");
-  }
   return outputSchema.parse({
     mode: "unzip",
     files: entries.map((entry) => ({

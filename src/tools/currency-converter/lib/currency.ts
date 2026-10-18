@@ -10,13 +10,11 @@ export const CURRENCIES: Currency[] = [
   { code: "AUD", name: "Australian Dollar", symbol: "$" },
   { code: "CNY", name: "Chinese Yuan", symbol: "¥" },
   { code: "INR", name: "Indian Rupee", symbol: "₹" },
-  { code: "PKR", name: "Pakistani Rupee", symbol: "₨" },
-  { code: "AED", name: "UAE Dirham", symbol: "د.إ" },
-  { code: "SAR", name: "Saudi Riyal", symbol: "﷼" },
-  { code: "QAR", name: "Qatari Riyal", symbol: "﷼" },
-  { code: "KWD", name: "Kuwaiti Dinar", symbol: "د.ك" },
-  { code: "BHD", name: "Bahraini Dinar", symbol: ".د.ب" },
-  { code: "OMR", name: "Omani Rial", symbol: "﷼" },
+  { code: "CZK", name: "Czech Koruna", symbol: "Kč" },
+  { code: "HUF", name: "Hungarian Forint", symbol: "Ft" },
+  { code: "ILS", name: "Israeli New Shekel", symbol: "₪" },
+  { code: "ISK", name: "Icelandic Króna", symbol: "kr" },
+  { code: "RON", name: "Romanian Leu", symbol: "lei" },
   { code: "BRL", name: "Brazilian Real", symbol: "R$" },
   { code: "MXN", name: "Mexican Peso", symbol: "$" },
   { code: "SGD", name: "Singapore Dollar", symbol: "$" },
@@ -46,7 +44,7 @@ export function currencyLabel(code: string): string {
   return found ? `${found.code} — ${found.name}` : code.toUpperCase();
 }
 
-const FRANKFURTER = "https://api.frankfurter.app/v1";
+const FRANKFURTER = "https://api.frankfurter.dev/v1";
 
 export function latestUrl(base: string, symbols: string[]): string {
   const params = new URLSearchParams({ base: base.toUpperCase() });

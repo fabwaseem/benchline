@@ -16,9 +16,9 @@ export const meta = {
   related: ["unit-converter", "percentage-calculator", "loan-emi-calculator"],
   faqs: [
     { q: "Where do the rates come from?", a: "The Frankfurter API, which publishes the European Central Bank's reference rates. Rates update once per ECB business day, so the 'as of' date is shown under the result." },
-    { q: "Is my conversion sent anywhere?", a: "Only the rate lookup goes out: your browser fetches public rates from api.frankfurter.app. The amount you type never leaves this page." },
+    { q: "Is my conversion sent anywhere?", a: "Only the rate lookup goes out: your browser fetches public rates from api.frankfurter.dev. The amount you type never leaves this page." },
     { q: "Why is there no rate for today?", a: "The ECB publishes rates once per business day, usually in the afternoon European time. On weekends and holidays the latest available business day is shown." },
-    { q: "Can I convert crypto?", a: "No. This tool covers fiat currencies only — the 32 most traded ISO 4217 codes." },
+    { q: "Can I convert crypto?", a: "No. This tool covers fiat currencies only — the 30 currencies Frankfurter publishes." },
   ],
   seo: {
     title: "Currency Converter — Live Exchange Rates",

@@ -1,9 +1,20 @@
-import { strToU8, unzipSync, zipSync } from "fflate";
+import { strToU8, unzipSync, zipSync, type UnzipFileInfo } from "fflate";
 
 export type ZipEntry = { name: string; data: Uint8Array };
 
 export const MAX_ZIP_FILES = 200;
 export const MAX_ZIP_BYTES = 100 * 1024 * 1024;
+/** Uncompressed cap for the server unzip path. Checked on declared sizes before inflation. */
+export const SERVER_UNZIP_BYTES = 10 * 1024 * 1024;
+
+export class ArchiveTooLargeError extends Error {
+  constructor(message = "Archive too large.") {
+    super(message);
+    this.name = "ArchiveTooLargeError";
+  }
+}
+
+export type UnzipLimits = { maxBytes?: number };
 
 export function sanitizeEntryName(name: string): string | null {
   const cleaned = name.replace(/\\/g, "/").replace(/^\/+/, "").trim();
@@ -31,16 +42,28 @@ export function zipEntries(entries: ZipEntry[]): Uint8Array {
   return zipSync(record, { level: 6 });
 }
 
-export function unzipEntries(data: Uint8Array): ZipEntry[] {
+export function unzipEntries(data: Uint8Array, limits: UnzipLimits = {}): ZipEntry[] {
+  const maxBytes = limits.maxBytes ?? MAX_ZIP_BYTES;
+  let declaredBytes = 0;
+  let declaredCount = 0;
   let record: Record<string, Uint8Array>;
   try {
-    record = unzipSync(data);
-  } catch {
+    record = unzipSync(data, {
+      filter(file: UnzipFileInfo) {
+        declaredCount += 1;
+        declaredBytes += file.originalSize;
+        if (declaredCount > MAX_ZIP_FILES || declaredBytes > maxBytes) {
+          throw new ArchiveTooLargeError("Archive too large.");
+        }
+        return true;
+      },
+    });
+  } catch (error) {
+    if (error instanceof ArchiveTooLargeError) throw error;
     throw new Error("That file is not a valid ZIP archive.");
   }
   const entries = Object.entries(record);
   if (entries.length === 0) throw new Error("The archive is empty.");
-  if (entries.length > MAX_ZIP_FILES) throw new Error(`Too many files (max ${MAX_ZIP_FILES}).`);
   const out: ZipEntry[] = [];
   let total = 0;
   for (const [rawName, bytes] of entries) {
@@ -48,7 +71,7 @@ export function unzipEntries(data: Uint8Array): ZipEntry[] {
     const name = sanitizeEntryName(rawName);
     if (!name) continue;
     total += bytes.byteLength;
-    if (total > MAX_ZIP_BYTES) throw new Error("The unzipped files are too large (100 MB cap).");
+    if (total > maxBytes) throw new ArchiveTooLargeError("Archive too large.");
     out.push({ name, data: bytes });
   }
   if (out.length === 0) throw new Error("The archive has no files.");

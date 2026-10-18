@@ -16,19 +16,19 @@ import {
 describe("currency urls", () => {
   it("builds a latest url", () => {
     expect(latestUrl("usd", ["eur", "gbp"])).toBe(
-      "https://api.frankfurter.app/v1/latest?base=USD&symbols=EUR%2CGBP",
+      "https://api.frankfurter.dev/v1/latest?base=USD&symbols=EUR%2CGBP",
     );
   });
 
   it("builds a historical url", () => {
     expect(historicalUrl("2024-01-15", "USD", ["EUR"])).toBe(
-      "https://api.frankfurter.app/v1/2024-01-15?base=USD&symbols=EUR",
+      "https://api.frankfurter.dev/v1/2024-01-15?base=USD&symbols=EUR",
     );
   });
 
   it("builds a time series url", () => {
     expect(timeSeriesUrl("2024-01-01", "2024-02-01", "USD", "EUR")).toBe(
-      "https://api.frankfurter.app/v1/2024-01-01..2024-02-01?base=USD&symbols=EUR",
+      "https://api.frankfurter.dev/v1/2024-01-01..2024-02-01?base=USD&symbols=EUR",
     );
   });
 });
@@ -92,7 +92,8 @@ describe("math and formatting", () => {
 
   it("validates currency codes", () => {
     expect(isCurrencyCode("usd")).toBe(true);
-    expect(isCurrencyCode("PKR")).toBe(true);
+    expect(isCurrencyCode("CZK")).toBe(true);
+    expect(isCurrencyCode("PKR")).toBe(false);
     expect(isCurrencyCode("XXX")).toBe(false);
   });
 

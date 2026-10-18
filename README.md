@@ -90,6 +90,7 @@ JSON, tables, and the encodings that move data between systems.
 
 - [Base64 codec](https://benchline.fabwaseem.com/t/base64-codec) — Encode and decode Base64 for text or a file, including the URL-safe alphabet.
 - [Programmer calculator](https://benchline.fabwaseem.com/t/programmer-calculator) — Base conversions, bitwise ops, and a clickable bit grid.
+- [ZIP Tools](https://benchline.fabwaseem.com/t/zip-tools) — Create ZIP archives and extract them, entirely in your browser.
 
 **Markup.** Markdown and HTML, converted in either direction.
 
@@ -124,6 +125,7 @@ Markup, crawlers, and the files an AI search engine can cite.
 - [OG image generator](https://benchline.fabwaseem.com/t/og-image-generator) — Pick a template, watch the card update, then download the PNG or copy the Next.js file.
 - [Meta tags inspector](https://benchline.fabwaseem.com/t/meta-tags-inspector) — Read title, description, canonical, robots, Open Graph, Twitter, and JSON-LD types from one public URL.
 - [Social Image Resizer](https://benchline.fabwaseem.com/t/social-image-resizer) — Fit any photo to the exact dimensions for Instagram, YouTube, X, LinkedIn, and Facebook — cropped to the subject you pick.
+- [Meme Generator](https://benchline.fabwaseem.com/t/meme-generator) — Classic top/bottom caption memes from styles or your own images.
 
 ### Image & Media
 
@@ -140,6 +142,7 @@ Convert, compress, and resize pictures in the browser. The file stays on the dev
 - [Image cropper](https://benchline.fabwaseem.com/t/image-crop) — Crop with a free box or an aspect preset, including a circle.
 - [Image to text](https://benchline.fabwaseem.com/t/ocr-image-to-text) — Read the words in a picture. The OCR model downloads once and runs in this browser.
 - [Background remover](https://benchline.fabwaseem.com/t/background-remover) — Cut out a portrait in the browser, or clear a solid backdrop without a download.
+- [Photo Collage](https://benchline.fabwaseem.com/t/photo-collage) — Arrange photos into grid layouts and export high-res PNGs.
 
 **Audio.** Trim and shape sound in the browser. The file stays on the device.
 
@@ -159,6 +162,7 @@ Merge, split, compress, and build PDFs in the browser. The files stay on this de
 - [Protect PDF](https://benchline.fabwaseem.com/t/pdf-protect-unlock) — Add an AES password, or unlock a PDF when you already know the password.
 - [Resume Builder](https://benchline.fabwaseem.com/t/resume-builder) — Build a polished resume in the browser: profile, experience, education, and skills, exported as a clean PDF.
 - [PDF Signature](https://benchline.fabwaseem.com/t/pdf-signature) — Sign a PDF in the browser. Draw or type your signature, place it on any page, and download the signed file.
+- [PDF Form Filler](https://benchline.fabwaseem.com/t/pdf-form-filler) — Fill interactive PDF forms in the browser and export.
 
 ### Security & Crypto
 
@@ -218,6 +222,7 @@ Loans, percentages, units, and the timestamps a schedule is counted in.
 - [Loan EMI calculator](https://benchline.fabwaseem.com/t/loan-emi-calculator) — A monthly installment and the full amortization table, rounded to the cent.
 - [Percentage calculator](https://benchline.fabwaseem.com/t/percentage-calculator) — Percent of, percent change, reverse percent, and margin, with the formula shown.
 - [Invoice Generator](https://benchline.fabwaseem.com/t/invoice-generator) — Build invoices and quotes in the browser. Add line items, tax and discounts, then download a clean PDF.
+- [Currency Converter](https://benchline.fabwaseem.com/t/currency-converter) — Live exchange rates, historical trends, and multi-currency tables.
 
 **Units.** Convert length, mass, temperature, and data sizes.
 
@@ -373,6 +378,7 @@ The tools below can fetch a public URL through this site. The page posts the URL
 - [SSL checker](https://benchline.fabwaseem.com/t/ssl-checker) — Expiry, names, and the chain for a certificate on port 443.
 - [GraphQL Client](https://benchline.fabwaseem.com/t/graphql-client) — Query any GraphQL endpoint with variables, headers, and history.
 - [WebSocket Tester](https://benchline.fabwaseem.com/t/websocket-tester) — Connect to any ws/wss endpoint and inspect live frames.
+- [Currency Converter](https://benchline.fabwaseem.com/t/currency-converter) — Live exchange rates, historical trends, and multi-currency tables.
 
 <!-- privacy:end -->
 

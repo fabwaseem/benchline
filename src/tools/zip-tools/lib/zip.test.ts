@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { strFromU8 } from "fflate";
+import { strFromU8, zipSync } from "fflate";
 import {
+  ArchiveTooLargeError,
+  SERVER_UNZIP_BYTES,
   formatBytes,
   isZipName,
   sanitizeEntryName,
@@ -42,6 +44,13 @@ describe("zip round trip", () => {
 
   it("rejects invalid archives", () => {
     expect(() => unzipEntries(new Uint8Array([1, 2, 3]))).toThrow("not a valid ZIP");
+  });
+
+  it("rejects a small archive whose declared size is over the server cap", () => {
+    const archive = zipSync({ "zeros.bin": new Uint8Array(SERVER_UNZIP_BYTES + 1) }, { level: 9 });
+    expect(archive.byteLength).toBeLessThan(64 * 1024);
+    expect(() => unzipEntries(archive, { maxBytes: SERVER_UNZIP_BYTES })).toThrow(ArchiveTooLargeError);
+    expect(() => unzipEntries(archive, { maxBytes: SERVER_UNZIP_BYTES })).toThrow(/archive too large/i);
   });
 });
 
