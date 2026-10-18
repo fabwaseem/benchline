@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Fuse from "fuse.js";
+import { ChipButton } from "@/components/kit/controls";
 import { CategoryTile, TagChip, ToolCard } from "@/components/site/tool-card";
 import { Input } from "@/components/ui/input";
 import type { Category, SearchRecord } from "@/registry/schema";
@@ -104,31 +105,30 @@ export function Directory({
 
       <div className="flex gap-2 overflow-x-auto pb-1">
         {!lockedCategory && !lockedTag ? (
-          <button
-            type="button"
+          <ChipButton
+            pressed={!category && !tag}
             onClick={() => {
               setCategory("");
               setTag("");
             }}
-            className="shrink-0 rounded-full border border-border bg-card px-2.5 py-1 text-xs"
+            className="h-control-sm shrink-0 rounded-sm border border-border bg-card px-2.5 text-xs"
           >
             All
-          </button>
+          </ChipButton>
         ) : null}
         {tags.map((item) =>
           lockedTag ? (
             <TagChip key={item.slug} tag={item.slug} count={item.count} href={`/tags/${item.slug}`} active={item.slug === lockedTag} />
           ) : (
-            <button
+            <ChipButton
               key={item.slug}
-              type="button"
-              aria-pressed={tag === item.slug}
+              pressed={tag === item.slug}
               onClick={() => setTag(tag === item.slug ? "" : item.slug)}
-              className={`shrink-0 rounded-full border px-2.5 py-1 text-xs whitespace-nowrap ${tag === item.slug ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card"}`}
+              className={`h-control-sm shrink-0 rounded-sm border px-2.5 text-xs whitespace-nowrap ${tag === item.slug ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card"}`}
             >
               {item.slug}
               <span className="ml-1 tabular-nums opacity-70">{item.count}</span>
-            </button>
+            </ChipButton>
           ),
         )}
       </div>

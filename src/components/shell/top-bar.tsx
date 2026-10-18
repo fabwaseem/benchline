@@ -4,6 +4,8 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Search } from "lucide-react";
+import { Button } from "@/components/kit/primitives/button";
+import { IconButton } from "@/components/kit/primitives/icon-button";
 import { Kbd } from "@/components/kit/kbd";
 import { GithubMark } from "@/components/site/github-mark";
 import { Logo } from "@/components/site/logo";
@@ -32,9 +34,10 @@ export function TopBar({ toolCount }: { toolCount: number }) {
       <div className="grid h-14 grid-cols-[auto_1fr_auto] items-center gap-3 px-3 sm:px-4">
         <Logo />
         <div className="flex justify-center px-2">
-          <button
+          <Button
             type="button"
-            className="hidden h-9 w-full max-w-[440px] items-center gap-2 rounded-lg border border-border bg-surface px-3 text-[13px] text-muted-foreground transition-colors duration-150 hover:border-border-strong focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none md:flex"
+            variant="outline"
+            className="hidden h-control-lg w-full max-w-[440px] justify-start gap-2 px-3 font-normal text-muted-foreground md:inline-flex"
             onClick={() => openCommandK()}
           >
             <Search size={14} strokeWidth={1.75} aria-hidden />
@@ -43,7 +46,7 @@ export function TopBar({ toolCount }: { toolCount: number }) {
               <Kbd>⌘</Kbd>
               <Kbd>K</Kbd>
             </span>
-          </button>
+          </Button>
         </div>
         <div className="flex items-center gap-1">
           <nav className="hidden items-center lg:flex" aria-label="Primary">
@@ -72,14 +75,9 @@ export function TopBar({ toolCount }: { toolCount: number }) {
             <GithubMark size={16} />
           </a>
           <ThemeToggle />
-          <button
-            type="button"
-            className="grid size-9 place-items-center rounded-lg text-muted-foreground md:hidden"
-            aria-label="Search"
-            onClick={() => openCommandK()}
-          >
+          <IconButton label="Search" size="lg" variant="ghost" className="md:hidden" onClick={() => openCommandK()}>
             <Search size={16} strokeWidth={1.75} />
-          </button>
+          </IconButton>
           <Sheet>
             <SheetTrigger className="grid size-9 place-items-center rounded-lg text-muted-foreground lg:hidden" aria-label="Menu">
               <Menu size={16} strokeWidth={1.75} />

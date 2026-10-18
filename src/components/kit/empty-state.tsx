@@ -15,7 +15,7 @@ export function EmptyState({
     return (
       <div className="flex flex-1 flex-col items-center justify-center px-6 py-10 text-center">
         {art ? (
-          <div className="mb-[18px] grid size-16 place-items-center rounded-2xl bg-gradient-to-b from-surface to-well text-faint shadow-[var(--in-hi),inset_0_0_0_1px_var(--border),var(--shadow-1)]">
+          <div className="mb-4 grid size-16 place-items-center rounded-xl bg-gradient-to-b from-surface to-well text-faint shadow-[var(--in-hi),inset_0_0_0_1px_var(--border),var(--shadow-1)]">
             {art}
           </div>
         ) : null}

@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { ArrowRight, Eye, Search, Zap } from "lucide-react";
+import { Button } from "@/components/kit/primitives/button";
+import { Kbd } from "@/components/kit/kbd";
 import { Cover } from "@/components/site/cover";
 import { GithubMark } from "@/components/site/github-mark";
 import { openCommandK } from "@/components/site/open-command";
@@ -107,14 +109,14 @@ export function HeroStage({ toolCount, still }: { toolCount: number; still: Reac
         <p className="lede mt-7 max-w-[44ch]">
           Precise, free browser tools for developers and marketers who ship the web. No signup, no ads, and every checker tells you exactly what it fetches.
         </p>
-        <button type="button" className="plate mt-9 flex h-14 w-full max-w-[560px] items-center gap-3 rounded-[14px] px-4 text-[15.5px] text-faint shadow-[var(--in-hi),0_0_0_1px_var(--border-strong),var(--shadow-2)]" onClick={() => openCommandK()}>
+        <Button type="button" variant="outline" className="mt-9 h-control-lg w-full max-w-[560px] justify-start gap-3 px-4 text-[15.5px] font-normal text-faint" onClick={() => openCommandK()}>
           <Search size={18} strokeWidth={1.75} />
           <span className="truncate">Search {toolCount} tools, or paste a JWT…</span>
           <span className="ml-auto flex gap-0.5">
-            <span className="keycap">⌘</span>
-            <span className="keycap">K</span>
+            <Kbd>⌘</Kbd>
+            <Kbd>K</Kbd>
           </span>
-        </button>
+        </Button>
         <div className="mt-3.5 flex flex-wrap gap-2.5">
           <a className="btn btn-brand" href="#bench">
             Open the bench <ArrowRight size={15} strokeWidth={1.75} />

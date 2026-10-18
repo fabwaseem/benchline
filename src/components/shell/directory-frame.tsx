@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { CategorySidebar } from "@/components/shell/category-sidebar";
+import { Button } from "@/components/kit/primitives/button";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import type { DirectoryCategory } from "@/lib/catalog";
 
@@ -38,13 +39,9 @@ export function MobileCategories({
   const [open, setOpen] = useState(false);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <button
-        type="button"
-        className="inline-flex h-8 items-center rounded-lg border border-border bg-surface px-2.5 text-[13px] lg:hidden"
-        onClick={() => setOpen(true)}
-      >
+      <Button type="button" variant="outline" size="md" className="lg:hidden" onClick={() => setOpen(true)}>
         Categories
-      </button>
+      </Button>
       <SheetContent side="left" className="w-72 bg-background p-0">
         <SheetTitle className="sr-only">Categories</SheetTitle>
         <CategorySidebar categories={categories} total={total} active={active} onNavigate={() => setOpen(false)} />

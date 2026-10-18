@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Search } from "lucide-react";
+import { Button } from "@/components/kit/primitives/button";
+import { IconButton } from "@/components/kit/primitives/icon-button";
+import { Kbd } from "@/components/kit/kbd";
 import { GithubMark } from "@/components/site/github-mark";
 import { Logo } from "@/components/site/logo";
 import { openCommandK } from "@/components/site/open-command";
@@ -41,22 +44,22 @@ export function Header() {
           );
         })}
       </nav>
-      <button type="button" className="ml-auto hidden h-[34px] w-[300px] items-center gap-2 rounded-[9px] bg-sunken px-3 text-[13px] text-faint shadow-[var(--in-bd)] min-[700px]:flex" onClick={() => openCommandK()}>
+      <Button type="button" variant="secondary" className="ml-auto hidden h-control-md w-[300px] justify-start gap-2 px-3 font-normal text-faint min-[700px]:inline-flex" onClick={() => openCommandK()}>
         <Search size={14} strokeWidth={1.75} aria-hidden />
         <span>Search tools</span>
         <span className="ml-auto flex gap-0.5">
-          <span className="keycap">⌘</span>
-          <span className="keycap">K</span>
+          <Kbd>⌘</Kbd>
+          <Kbd>K</Kbd>
         </span>
-      </button>
+      </Button>
       <ThemeToggle />
       <a className="btn hidden h-[34px] min-[700px]:inline-flex" href={GITHUB_URL}>
         <GithubMark size={15} />
         GitHub
       </a>
-      <button type="button" className="btn size-9 px-0 min-[700px]:hidden" aria-label="Search" onClick={() => openCommandK()}>
+      <IconButton label="Search" size="lg" variant="outline" className="min-[700px]:hidden" onClick={() => openCommandK()}>
         <Search size={16} strokeWidth={1.75} />
-      </button>
+      </IconButton>
       <Sheet>
         <SheetTrigger className="btn size-9 px-0 min-[700px]:hidden" aria-label="Menu">
           <Menu size={16} strokeWidth={1.75} />

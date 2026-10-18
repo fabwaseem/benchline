@@ -3,6 +3,8 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { Search } from "lucide-react";
+import { ChipButton, Select } from "@/components/kit/controls";
+import { Input } from "@/components/kit/primitives/input";
 import { Cover } from "@/components/site/cover";
 import { exploreTools, type ExploreSort, type ExploreTool } from "@/lib/explore";
 
@@ -42,16 +44,14 @@ export function ExploreBrowser({
         <h1 className="d2 mt-4">Every tool.</h1>
         <p className="lede mt-4 max-w-[46ch]">Search the bench, then narrow by category, tag, or the order you want them in.</p>
       </header>
-      <label className="field h-12 max-w-[640px]">
-        <Search size={16} strokeWidth={1.75} />
-        <input
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search tools"
-          aria-label="Search tools"
-          className="w-full bg-transparent text-[15px] text-foreground outline-none"
-        />
-      </label>
+      <Input
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        placeholder="Search tools"
+        aria-label="Search tools"
+        prefix={<Search size={16} strokeWidth={1.75} />}
+        className="h-control-lg max-w-[640px] text-[15px]"
+      />
       <div className="mt-5 flex flex-wrap gap-2" role="group" aria-label="Category">
         <FilterChip on={category === "all"} onClick={() => setCategory("all")}>All</FilterChip>
         {categories.map((item) => (
@@ -69,18 +69,18 @@ export function ExploreBrowser({
         ))}
       </div>
       <div className="mt-5 flex items-center gap-3">
-        <label className="text-[13px] text-muted-foreground">
+        <label className="inline-flex items-center gap-2 text-[13px] text-muted-foreground">
           Sort
-          <select
+          <Select
             value={sort}
             onChange={(event) => setSort(event.target.value as ExploreSort)}
-            className="field ml-2 h-[34px] w-auto bg-transparent pr-3 text-foreground"
             aria-label="Sort"
+            className="w-auto"
           >
             {sorts.map((item) => (
               <option key={item.value} value={item.value}>{item.label}</option>
             ))}
-          </select>
+          </Select>
         </label>
         <span className="font-mono text-[12px] text-faint">{rows.length} {rows.length === 1 ? "tool" : "tools"}</span>
       </div>
@@ -106,8 +106,8 @@ export function ExploreBrowser({
 
 function FilterChip({ on, onClick, children }: { on: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
-    <button type="button" className="chip" data-on={on ? "true" : undefined} aria-pressed={on} onClick={onClick}>
+    <ChipButton pressed={on} onClick={onClick} className="h-control-sm rounded-sm px-2.5 text-[13px]">
       {children}
-    </button>
+    </ChipButton>
   );
 }

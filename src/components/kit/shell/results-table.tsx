@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Button } from "@/components/kit/primitives/button";
 import { cn } from "@/lib/utils";
 
 export type ResultLevel = "pass" | "warn" | "fail" | "info";
@@ -39,25 +40,23 @@ export function ResultsTable({ rows, empty = "Nothing to show yet." }: { rows: R
 
   return (
     <div className="flex min-h-0 flex-col">
-      <div role="tablist" aria-label="Filter results" className="flex h-10 shrink-0 items-center gap-1 overflow-hidden border-b border-border px-2">
+      <div role="tablist" aria-label="Filter results" className="flex h-12 shrink-0 items-center gap-1 overflow-hidden border-b border-border px-2">
         {filters.map((item) => {
           const selected = filter === item;
           const label = item === "all" ? "All" : word[item];
           return (
-            <button
+            <Button
               key={item}
               type="button"
+              variant={selected ? "secondary" : "ghost"}
+              size="sm"
               role="tab"
               aria-selected={selected}
-              className={cn(
-                "inline-flex h-7 shrink-0 items-center gap-1.5 rounded-[4px] px-2 text-[12.5px] font-medium whitespace-nowrap",
-                selected ? "bg-sunken text-foreground" : "text-muted-foreground hover:text-foreground",
-              )}
               onClick={() => setFilter(item)}
             >
               {label}
               <span className="font-mono text-[11px] text-faint tabular-nums">{counts[item]}</span>
-            </button>
+            </Button>
           );
         })}
       </div>

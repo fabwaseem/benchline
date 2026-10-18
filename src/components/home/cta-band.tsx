@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/kit/primitives/button";
 import { openCommandK } from "@/components/site/open-command";
 import { GITHUB_URL } from "@/lib/site";
 
@@ -27,12 +28,12 @@ export function CtaBand() {
           </div>
         </div>
         <div className="flex justify-center gap-3.5">
-          <button type="button" className="kc" onClick={() => openCommandK()} aria-label="Command">
+          <Button type="button" variant="outline" className="kc !size-[118px] !rounded-xl text-[46px] font-medium" onClick={() => openCommandK()} aria-label="Command">
             ⌘
-          </button>
-          <button type="button" className="kc text-[40px]" onClick={() => openCommandK()} aria-label="K">
+          </Button>
+          <Button type="button" variant="outline" className="kc !size-[118px] !rounded-xl text-[40px] font-medium" onClick={() => openCommandK()} aria-label="K">
             K
-          </button>
+          </Button>
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
+import { Button } from "@/components/kit/primitives/button";
 import { Cover } from "@/components/site/cover";
 import type { Category, SearchRecord } from "@/registry/schema";
 
@@ -24,13 +25,13 @@ export function Explorer({
           const on = item.slug === category.slug;
           const count = tools.filter((tool) => tool.category === item.slug).length;
           return (
-            <button
+            <Button
               key={item.slug}
               type="button"
+              variant={on ? "secondary" : "outline"}
               onClick={() => setActive(item.slug)}
-              className="flex shrink-0 items-center gap-3 rounded-full px-3 py-1.5 text-[13.5px] font-medium text-muted-foreground shadow-[inset_0_0_0_1px_var(--border)] min-[900px]:w-full min-[900px]:rounded-none min-[900px]:border-b min-[900px]:border-border min-[900px]:px-1 min-[900px]:py-3.5 min-[900px]:text-[15px] min-[900px]:shadow-none"
-              style={on ? undefined : undefined}
-              data-on={on}
+              aria-pressed={on}
+              className="h-control-lg shrink-0 justify-start gap-3 rounded-sm px-3 font-medium text-muted-foreground min-[900px]:h-auto min-[900px]:w-full min-[900px]:rounded-none min-[900px]:border-x-0 min-[900px]:border-t-0 min-[900px]:px-1 min-[900px]:py-3.5 min-[900px]:text-[15px]"
             >
               <span className={on ? "hidden font-mono text-brand min-[900px]:inline" : "hidden font-mono text-faint min-[900px]:inline"} style={{ width: 22 }}>
                 {String(index + 1).padStart(2, "0")}
@@ -38,7 +39,7 @@ export function Explorer({
               <span className={on ? "min-[900px]:flex-1 min-[900px]:text-foreground" : "min-[900px]:flex-1"}>{item.name}</span>
               <span className="hidden font-mono text-faint min-[900px]:inline">{count}</span>
               {on ? <ChevronRight size={14} strokeWidth={1.75} className="hidden min-[900px]:inline" /> : null}
-            </button>
+            </Button>
           );
         })}
       </div>

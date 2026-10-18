@@ -3,6 +3,7 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useSyncExternalStore } from "react";
+import { IconButton } from "@/components/kit/primitives/icon-button";
 
 function subscribe() {
   return () => {};
@@ -13,10 +14,10 @@ export function ThemeToggle() {
   const mounted = useSyncExternalStore(subscribe, () => true, () => false);
   const dark = mounted && resolvedTheme === "dark";
   return (
-    <button
-      type="button"
-      className="btn-ghost btn size-9 px-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-      aria-label={dark ? "Switch to light" : "Switch to dark"}
+    <IconButton
+      size="lg"
+      variant="ghost"
+      label={dark ? "Switch to light" : "Switch to dark"}
       onClick={() => {
         const next = dark ? "light" : "dark";
         const apply = () => setTheme(next);
@@ -28,6 +29,6 @@ export function ThemeToggle() {
       }}
     >
       {dark ? <Sun size={16} strokeWidth={1.75} /> : <Moon size={16} strokeWidth={1.75} />}
-    </button>
+    </IconButton>
   );
 }

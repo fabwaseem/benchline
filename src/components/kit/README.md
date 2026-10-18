@@ -1,5 +1,11 @@
 # Tool workspace
 
+Use these components only. Do not render a raw `button`, `input`, `select`, `textarea`, color input, or file input, and do not import `@base-ui/react` outside this folder. The headless package is `@base-ui/react` (MIT). Variants use `cva` and Benchline CSS variables. Control heights are 28 / 32 / 40. Radii are 4px on controls and 6px on cards.
+
+Interactive primitives live in `primitives/` (Button, IconButton, Toggle, Segmented control, Input, Textarea, NumberInput, Field, Select, Combobox, DropdownMenu, ContextMenu, Checkbox, RadioGroup, Switch, Slider, ColorPicker, Popover, Tooltip, Dialog, AlertDialog, Sheet, Drawer, Toast, Accordion, Collapsible, ScrollArea, Separator, Badge, Kbd, Skeleton, Spinner, Progress, Card, Table). Uploaders live in `upload/` and share `useFileDrop`: Dropzone, FileUpload, MultiFileList, ImageUpload, PdfUpload, CompactFilePill, LogoDrop.
+
+`/kit` renders every variant and state in light and dark. It is dev-only, noindex, and left out of the sitemap.
+
 Tool pages use these pieces. A tool renders a card. The page around it (`src/app/t/[slug]/page.tsx`) renders the header, the agent block, related tools, and the how-it-works section.
 
 | Component | Role |
@@ -24,7 +30,7 @@ Tool pages use these pieces. A tool renders a card. The page around it (`src/app
     options={types}
     value={type}
     onChange={setType}
-    actions={<button className="btn btn-ink h-8">Copy script</button>}
+    actions={<Button variant="solid" size="sm">Copy script</Button>}
   />
   <ToolPanes ratio="50/50">
     <Pane label="Fields">{fields}</Pane>

@@ -3,6 +3,10 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, LayoutGrid, List, Search } from "lucide-react";
+import { Select } from "@/components/kit/controls";
+import { Input } from "@/components/kit/primitives/input";
+import { Toggle } from "@/components/kit/primitives/toggle";
+import { Segmented } from "@/components/kit/segmented";
 import { Cover } from "@/components/site/cover";
 import type { SearchRecord } from "@/registry/schema";
 
@@ -37,34 +41,30 @@ export function CategoryBrowser({
     <>
       <div className="sticky top-[60px] z-[5] border-b border-border bg-background">
       <div className="page-x flex flex-col gap-3 py-3 min-[700px]:flex-row min-[700px]:flex-wrap min-[700px]:items-center">
-        <div className="seg max-w-full overflow-x-auto" role="radiogroup" aria-label="Filter">
-          {(
-            [
-              ["all", `All ${tools.length}`],
-              ["new", "New"],
-            ] as const
-          ).map(([value, label]) => (
-            <button key={value} type="button" role="radio" aria-checked={filter === value} className={filter === value ? "on" : ""} onClick={() => setFilter(value)}>
-              {label}
-            </button>
-          ))}
+        <Segmented
+          label="Filter"
+          value={filter}
+          onChange={setFilter}
+          options={[
+            { value: "all", label: `All ${tools.length}` },
+            { value: "new", label: "New" },
+          ]}
+        />
+        <div className="hidden w-[260px] min-[700px]:block">
+          <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Filter tools" aria-label="Filter tools" prefix={<Search size={14} strokeWidth={1.75} />} />
         </div>
-        <label className="field hidden w-[260px] min-[700px]:flex">
-          <Search size={14} strokeWidth={1.75} />
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Filter tools" className="w-full bg-transparent text-foreground outline-none" />
-        </label>
         <div className="flex items-center gap-3 min-[700px]:ml-auto">
-        <select value={sort} onChange={(event) => setSort(event.target.value as Sort)} className="field h-[34px] w-auto bg-transparent pr-3 text-foreground" aria-label="Sort">
+        <Select value={sort} onChange={(event) => setSort(event.target.value as Sort)} aria-label="Sort" className="w-auto">
           <option value="name">Name</option>
           <option value="updated">Updated</option>
-        </select>
-        <div className="seg">
-          <button type="button" aria-pressed={!grid} className={!grid ? "on" : ""} onClick={() => setGrid(false)} aria-label="List">
+        </Select>
+        <div className="inline-flex h-control-md overflow-hidden rounded-sm border border-border" role="group" aria-label="Layout">
+          <Toggle pressed={!grid} onPressedChange={() => setGrid(false)} aria-label="List" className="grid h-control-md w-control-md place-items-center rounded-none">
             <List size={14} strokeWidth={1.75} />
-          </button>
-          <button type="button" aria-pressed={grid} className={grid ? "on" : ""} onClick={() => setGrid(true)} aria-label="Grid">
+          </Toggle>
+          <Toggle pressed={grid} onPressedChange={() => setGrid(true)} aria-label="Grid" className="grid h-control-md w-control-md place-items-center rounded-none border-l border-border">
             <LayoutGrid size={14} strokeWidth={1.75} />
-          </button>
+          </Toggle>
         </div>
         </div>
       </div>

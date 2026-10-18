@@ -9,6 +9,7 @@ import { explainCron } from "@/tools/cron-expression-builder/lib/cron";
 import { buildDockerfile, dockerfileDefaults } from "@/tools/nextjs-dockerfile-generator/lib/dockerfile";
 import { buildSchema, exampleValues } from "@/tools/schema-generator/lib/schema";
 import { CodeViewer } from "@/components/kit/code-viewer";
+import { Input } from "@/components/kit/primitives/input";
 import { metaTagsFor, resolveState } from "@/tools/og-image-generator/lib/og";
 
 export function Flagship({ category, href, name }: { category: string; href: string; name: string }) {
@@ -50,7 +51,7 @@ function LlmsMini() {
   );
   return (
     <div className="grid gap-3">
-      <input value={site} onChange={(event) => setSite(event.target.value)} className="field text-foreground" aria-label="Site name" />
+      <Input value={site} onChange={(event) => setSite(event.target.value)} aria-label="Site name" />
       <CodeViewer code={text} label="llms.txt" language="markdown" filename="llms.txt" maxHeight={192} dense />
     </div>
   );
@@ -62,7 +63,7 @@ function JwtMini() {
   const decoded = decodeJwt(token);
   return (
     <div className="grid gap-3">
-      <input value={token} onChange={(event) => setToken(event.target.value)} className="field font-mono text-foreground" aria-label="Token" />
+      <Input value={token} onChange={(event) => setToken(event.target.value)} className="font-mono" aria-label="Token" />
       <CodeViewer code={isDecoded(decoded) ? JSON.stringify(decoded.payload, null, 2) : decoded.error} label="Payload" language="json" maxHeight={160} dense />
     </div>
   );
@@ -73,7 +74,7 @@ function CronMini() {
   const result = explainCron(expression, "standard", "UTC", new Date("2026-10-19T08:00:00Z"));
   return (
     <div className="grid gap-3">
-      <input value={expression} onChange={(event) => setExpression(event.target.value)} className="field font-mono text-foreground" aria-label="Cron expression" />
+      <Input value={expression} onChange={(event) => setExpression(event.target.value)} className="font-mono" aria-label="Cron expression" />
       <p className="text-sm">{result.valid ? result.english : result.error}</p>
     </div>
   );
@@ -93,7 +94,7 @@ function OgMini() {
   const [title, setTitle] = useState("Designing tools people return to");
   return (
     <div className="grid gap-3">
-      <input value={title} onChange={(event) => setTitle(event.target.value)} className="field text-foreground" aria-label="Card title" />
+      <Input value={title} onChange={(event) => setTitle(event.target.value)} aria-label="Card title" />
       <CodeViewer code={metaTagsFor(resolveState({ template: "editorial", title }))} label="Meta tags" language="html" maxHeight={160} dense />
     </div>
   );

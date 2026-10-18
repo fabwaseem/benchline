@@ -5,7 +5,7 @@ import { converter, formatHex, parse } from "culori";
 import { Copy, Dices, Download, ImageIcon, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import { CodeViewer } from "@/components/kit/code-viewer";
-import { ChipButton, TextArea, TextInput } from "@/components/kit/controls";
+import { ChipButton, ColorInput, TextArea, TextInput } from "@/components/kit/controls";
 import { Dropzone } from "@/components/kit/dropzone";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
@@ -268,7 +268,7 @@ function ColorField({ label, value, onChange }: { label: string; value: string; 
     <label className="flex flex-col gap-1 rounded-lg border border-border p-2">
       <span className="text-[12px] text-muted-foreground">{label}</span>
       <span className="flex items-center gap-2">
-        <input aria-label={`${label} color`} type="color" value={hex} onChange={(event) => onChange(event.target.value)} className="size-8 cursor-pointer rounded border border-border bg-transparent p-0.5" />
+        <ColorInput aria-label={`${label} color`} value={hex} onChange={(event) => onChange(event.target.value)} className="size-8" />
         <span className="size-8 rounded-md border border-border" style={{ background: value }} />
       </span>
       <span className="font-mono text-[11px] text-foreground">{hex}</span>

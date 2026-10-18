@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import { Share2 } from "lucide-react";
+import { Button } from "@/components/kit/primitives/button";
 
 export function ToolActions({ title }: { slug: string; title: string }) {
   const [copied, setCopied] = useState(false);
   return (
-    <button
+    <Button
       type="button"
-      className="btn"
+      variant="outline"
       onClick={() => {
         const url = window.location.href;
         const share = navigator.share?.({ title, url });
@@ -24,6 +25,6 @@ export function ToolActions({ title }: { slug: string; title: string }) {
     >
       <Share2 size={15} strokeWidth={1.75} />
       {copied ? "Copied" : "Share"}
-    </button>
+    </Button>
   );
 }
