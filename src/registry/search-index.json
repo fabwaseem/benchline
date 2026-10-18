@@ -178,7 +178,7 @@
     "name": "Cron expression builder",
     "tagline": "Build or paste a cron schedule, read it in plain English, and see the next run times.",
     "description": "Free cron expression generator and explainer. Build a schedule visually or paste one to translate it into plain English, validate it, and preview the next 10 run times in any timezone. Supports standard 5-field cron, seconds, Quartz, and macros.",
-    "category": "developer",
+    "category": "cron",
     "tags": [
       "cron",
       "scheduling"
@@ -220,7 +220,7 @@
     "name": "JSON formatter",
     "tagline": "Pretty-print, minify, and validate JSON, with the exact line and column when it fails.",
     "description": "Free JSON formatter and JSON validator that runs in the browser. Choose an indent of 2, 4, or a tab, sort object keys, minify, and read a tree of the value. Invalid JSON reports the line, the column, and the line of source.",
-    "category": "developer",
+    "category": "json",
     "tags": [
       "json",
       "format",
@@ -241,7 +241,7 @@
     "name": "JSON YAML converter",
     "tagline": "Convert JSON, YAML, TOML, and XML in the browser, and keep the line number when a document fails.",
     "description": "Free converter for JSON to YAML, YAML to JSON, TOML, and XML to JSON. The source format can be detected automatically. Errors include a line and column. Conversion stays in the browser.",
-    "category": "developer",
+    "category": "json",
     "tags": [
       "json",
       "yaml",
@@ -264,7 +264,7 @@
     "name": "CSV JSON converter",
     "tagline": "Convert CSV to JSON and JSON back to CSV, with a delimiter and a header row you choose.",
     "description": "Free CSV to JSON and JSON to CSV converter. Pick a comma, tab, semicolon, or pipe, or let the first row decide. Keep or drop the header, infer booleans and numbers, and flatten nested JSON into dotted columns. It runs in the browser.",
-    "category": "developer",
+    "category": "tables",
     "tags": [
       "csv",
       "json",
@@ -284,7 +284,7 @@
     "name": "Diff checker",
     "tagline": "Compare two texts side by side or inline, and download a unified patch.",
     "description": "Free diff checker for text and JSON. Compare by line, word, or character, ignore whitespace, or diff JSON so key order does not matter. The result is a side-by-side view, an inline view, and a unified patch. It runs in the browser.",
-    "category": "developer",
+    "category": "text",
     "tags": [
       "diff",
       "compare"
@@ -304,7 +304,7 @@
     "name": "Base64 codec",
     "tagline": "Encode and decode Base64 for text or a file, including the URL-safe alphabet.",
     "description": "Free Base64 encode and Base64 decode tool for text and files. Turn on URL-safe output, wrap a file as a data URI, or decode a data URI back to text or a download. The file never leaves the browser.",
-    "category": "developer",
+    "category": "encoding",
     "tags": [
       "base64",
       "encode"
@@ -414,7 +414,7 @@
     "name": "Unix timestamp converter",
     "tagline": "Turn epoch seconds or milliseconds into a date, and a date in any time zone back into epoch time.",
     "description": "Free epoch converter for unix timestamps. Switch between seconds, milliseconds, microseconds, and nanoseconds, read ISO-8601 and RFC 2822 dates, and convert both ways across IANA time zones. Runs in the browser.",
-    "category": "developer",
+    "category": "time",
     "tags": [
       "time",
       "epoch",
@@ -435,7 +435,7 @@
     "name": "Date difference calculator",
     "tagline": "Count the days, weeks, and business days between two dates.",
     "description": "Free date calculator for the exact days between two dates. See the calendar span, elapsed time, weeks, and business days with weekends and your own holiday list excluded. Runs in the browser.",
-    "category": "developer",
+    "category": "time",
     "tags": [
       "date",
       "calendar"
@@ -454,7 +454,7 @@
     "name": "Hash generator",
     "tagline": "MD5, SHA-1, SHA-256, and SHA-512 checksums for text or a file, with HMAC.",
     "description": "Free SHA-256 and MD5 hash generator. Checksum text or a file with MD5, SHA-1, SHA-256, and SHA-512, copy hex or base64, compare an expected digest, and compute HMAC. The bytes stay in the browser.",
-    "category": "developer",
+    "category": "crypto",
     "tags": [
       "hash",
       "sha256",
@@ -476,7 +476,7 @@
     "name": "UUID generator",
     "tagline": "Generate UUID v4 or v7 in bulk, and read the time stored in a v7 id.",
     "description": "Free UUID and GUID generator for version 4 and version 7. Create one id or a bulk list from cryptographic randomness, then inspect a UUID to see its version, variant, and v7 timestamp.",
-    "category": "developer",
+    "category": "crypto",
     "tags": [
       "uuid",
       "guid"
@@ -496,7 +496,7 @@
     "name": "URL encoder and parser",
     "tagline": "Encode or decode a URL, then break the query string into parameters.",
     "description": "Free URL encoder and decoder. Percent-encode a component or a whole URL, decode it again, and parse a URL into its host, path, and query parameters. Edit the query and copy the rebuilt URL. Runs in the browser.",
-    "category": "developer",
+    "category": "urls",
     "tags": [
       "url",
       "encode"
@@ -516,7 +516,7 @@
     "name": "Password generator",
     "tagline": "Cryptographic passwords and passphrases, with an entropy strength meter.",
     "description": "Free strong password generator. Build a password with crypto.getRandomValues, choose the length and character sets, skip ambiguous characters, or make a passphrase. The strength meter shows the entropy in bits.",
-    "category": "developer",
+    "category": "crypto",
     "tags": [
       "password",
       "random"
@@ -535,7 +535,7 @@
     "name": "Chmod calculator",
     "tagline": "Turn a permission grid into octal and symbolic chmod, and back.",
     "description": "Free chmod calculator. Check read, write, and execute for owner, group, and others, including setuid, setgid, and the sticky bit. See the octal mode, the symbolic mode, and the chmod command.",
-    "category": "developer",
+    "category": "crypto",
     "tags": [
       "chmod",
       "linux"

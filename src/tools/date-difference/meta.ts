@@ -6,7 +6,7 @@ export const meta = {
   tagline: "Count the days, weeks, and business days between two dates.",
   description:
     "Free date calculator for the exact days between two dates. See the calendar span, elapsed time, weeks, and business days with weekends and your own holiday list excluded. Runs in the browser.",
-  category: "developer",
+  category: "time",
   tags: ["date", "calendar"],
   keywords: ["days between dates", "date calculator", "business days calculator"],
   status: "new",

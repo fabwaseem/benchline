@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { absoluteUrl } from "@/lib/site";
-import { allTags, categories, tools } from "@/registry";
+import { indexableCategorySlugs } from "@/lib/taxonomy";
+import { allTags, tools } from "@/registry";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages: MetadataRoute.Sitemap = [
@@ -11,9 +12,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: absoluteUrl("/ai"), changeFrequency: "monthly", priority: 0.6 },
     { url: absoluteUrl("/mcp"), changeFrequency: "monthly", priority: 0.6 },
   ];
-  for (const category of categories) {
+  for (const category of indexableCategorySlugs()) {
     pages.push({
-      url: absoluteUrl(`/${category.slug}`),
+      url: absoluteUrl(`/${category}`),
       changeFrequency: "weekly",
       priority: 0.7,
     });

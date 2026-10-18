@@ -27,14 +27,14 @@ export function CategorySidebar({
           label={category.name}
           count={category.count}
           icon={<ToolIcon name={category.icon} size={16} />}
-          active={active === category.slug}
+          active={category.match.includes(active)}
           onNavigate={onNavigate}
         />
       ))}
       <Link
         href="/mcp/guide"
         onClick={onNavigate}
-        className="mt-4 rounded-xl border border-border p-3 text-[13px] leading-snug transition-colors duration-150 hover:border-border-strong focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+        className="lift mt-4 rounded-xl border border-border p-3 text-[13px] leading-snug focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
       >
         <span className="block text-foreground">Use every tool from your AI agent</span>
         <span className="mt-1 block text-muted-foreground">Connect MCP</span>
@@ -64,7 +64,7 @@ function SidebarLink({
       aria-current={active ? "page" : undefined}
       onClick={onNavigate}
       className={cn(
-        "flex h-9 items-center gap-2.5 rounded-lg px-2.5 text-[13.5px] text-muted-foreground transition-colors duration-150 hover:bg-sunken hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+        "flex h-8 items-center gap-2.5 rounded-lg px-2 text-[13px] text-muted-foreground transition-colors duration-150 hover:bg-sunken hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
         active && "bg-[color-mix(in_oklch,var(--accent-brand)_12%,transparent)] text-foreground shadow-[inset_2px_0_0_var(--accent-brand)]",
       )}
     >

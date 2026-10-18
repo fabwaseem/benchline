@@ -8,6 +8,8 @@ export type DirectoryTool = {
   description: string;
   category: string;
   categoryName: string;
+  parent: string;
+  parentName: string;
   hue: number;
   tags: readonly string[];
   keywords: readonly string[];
@@ -41,16 +43,16 @@ export type DirectorySearch = {
 };
 
 export const sidebarCategoryOrder = [
-  "pdf",
-  "image",
-  "design",
   "developer",
-  "auth",
-  "seo",
-  "ai-search",
-  "ai-dev",
-  "social",
-  "nextjs",
+  "data",
+  "seo-ai",
+  "media",
+  "documents",
+  "security",
+  "design",
+  "text",
+  "math",
+  "network",
 ] as const;
 
 export function orderCategories<T extends { slug: string }>(categories: readonly T[]): T[] {
@@ -63,13 +65,13 @@ export function orderCategories<T extends { slug: string }>(categories: readonly
 export function filterDirectory<T extends DirectoryTool>(tools: readonly T[], filters: DirectoryFilters): T[] {
   const needle = filters.query.trim().toLowerCase();
   const rows = tools.filter((tool) => {
-    if (filters.category !== "all" && tool.category !== filters.category) return false;
+    if (filters.category !== "all" && tool.category !== filters.category && tool.parent !== filters.category) return false;
     if (filters.tag !== "all" && !tool.tags.includes(filters.tag)) return false;
     if (filters.browser && !tool.runsLocally) return false;
     if (filters.mcp && !tool.mcpName) return false;
     if (filters.fresh && tool.status !== "new") return false;
     if (!needle) return true;
-    const haystack = [tool.name, tool.tagline, tool.description, tool.slug, tool.categoryName, tool.tags.join(" "), tool.keywords.join(" ")]
+    const haystack = [tool.name, tool.tagline, tool.description, tool.slug, tool.categoryName, tool.parentName, tool.tags.join(" "), tool.keywords.join(" ")]
       .join(" ")
       .toLowerCase();
     return haystack.includes(needle);

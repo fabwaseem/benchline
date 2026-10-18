@@ -35,7 +35,7 @@ export function Notice({
   className?: string;
 }) {
   return (
-    <div role={role} className={cn("notice flex gap-2.5 rounded-[11px] px-3.5 py-[11px] text-[12.5px] leading-normal", tones[tone], className)}>
+    <div role={role} className={cn("notice flex gap-2.5 rounded-xl px-3.5 py-[11px] text-[12.5px] leading-normal", tones[tone], className)}>
       {icon ? <span className={cn("mt-0.5 shrink-0", iconTones[tone])}>{icon}</span> : null}
       <div>
         <b className="font-semibold text-foreground">{title}</b>

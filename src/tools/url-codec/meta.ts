@@ -6,7 +6,7 @@ export const meta = {
   tagline: "Encode or decode a URL, then break the query string into parameters.",
   description:
     "Free URL encoder and decoder. Percent-encode a component or a whole URL, decode it again, and parse a URL into its host, path, and query parameters. Edit the query and copy the rebuilt URL. Runs in the browser.",
-  category: "developer",
+  category: "urls",
   tags: ["url", "encode"],
   keywords: ["url decode", "url encode", "query string parser", "url encoder"],
   status: "new",

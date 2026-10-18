@@ -6,7 +6,7 @@ export const meta = {
   tagline: "Convert CSV to JSON and JSON back to CSV, with a delimiter and a header row you choose.",
   description:
     "Free CSV to JSON and JSON to CSV converter. Pick a comma, tab, semicolon, or pipe, or let the first row decide. Keep or drop the header, infer booleans and numbers, and flatten nested JSON into dotted columns. It runs in the browser.",
-  category: "developer",
+  category: "tables",
   tags: ["csv", "json", "convert"],
   keywords: ["csv to json", "json to csv", "csv converter"],
   status: "new",

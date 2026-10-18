@@ -9,6 +9,7 @@ export function ToolHeader({
   tagline,
   categorySlug,
   categoryName,
+  parent,
   hue,
   icon,
   runsLocally,
@@ -19,6 +20,7 @@ export function ToolHeader({
   tagline: string;
   categorySlug: string;
   categoryName: string;
+  parent: { href: string; label: string } | null;
   hue: number;
   icon: string;
   runsLocally: boolean;
@@ -33,11 +35,12 @@ export function ToolHeader({
           <Breadcrumbs
             items={[
               { href: "/", label: "Tools" },
+              ...(parent ? [parent] : []),
               { href: `/${categorySlug}`, label: categoryName },
               { href: `/t/${slug}`, label: name },
             ]}
           />
-          <h1 className="mt-2 text-[32px] font-semibold tracking-[-0.045em]">{name}</h1>
+          <h1 className="mt-2 text-[28px] font-semibold tracking-[-0.03em]">{name}</h1>
           <p className="mt-1.5 max-w-[62ch] text-[15px] leading-6 text-muted-foreground">{tagline}</p>
           <div className="mt-3 flex flex-wrap gap-1.5">
             <span className="chip">{runsLocally ? "Runs in browser" : "Fetches a public URL"}</span>

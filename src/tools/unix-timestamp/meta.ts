@@ -6,7 +6,7 @@ export const meta = {
   tagline: "Turn epoch seconds or milliseconds into a date, and a date in any time zone back into epoch time.",
   description:
     "Free epoch converter for unix timestamps. Switch between seconds, milliseconds, microseconds, and nanoseconds, read ISO-8601 and RFC 2822 dates, and convert both ways across IANA time zones. Runs in the browser.",
-  category: "developer",
+  category: "time",
   tags: ["time", "epoch", "timezone"],
   keywords: ["epoch converter", "unix timestamp", "epoch to date", "unix time converter"],
   status: "new",

@@ -14,10 +14,28 @@ import {
 import { Cover } from "@/components/site/cover";
 import { classifyPaste, stagePaste, type PasteKind } from "@/lib/paste";
 import type { SearchRecord } from "@/registry/schema";
-import { categories } from "@/registry/categories";
+import { categories, parents } from "@/registry/categories";
 
-const hueFor = new Map<string, number>(categories.map((category) => [category.slug, category.hue]));
+const childParent = new Map<string, string>(categories.map((category) => [category.slug, category.parent]));
+const parentHueFor = new Map<string, number>(parents.map((parent) => [parent.slug, parent.hue]));
 const nameFor = new Map<string, string>(categories.map((category) => [category.slug, category.name]));
+
+function paletteCategories(used: Set<string>) {
+  return parents.flatMap((parent) => {
+    const kids = categories.filter((category) => category.parent === parent.slug && used.has(category.slug));
+    if (kids.length === 0) return [];
+    const flat = kids.length === 1;
+    return [
+      {
+        slug: flat ? kids[0].slug : parent.slug,
+        name: parent.name,
+        description: parent.description,
+        icon: parent.icon,
+        hue: parent.hue,
+      },
+    ];
+  });
+}
 
 export function CommandPalette({ tools, startOpen = false }: { tools: SearchRecord[]; startOpen?: boolean }) {
   return <CommandK tools={tools} startOpen={startOpen} />;
@@ -66,6 +84,7 @@ export function CommandK({ tools, startOpen = false }: { tools: SearchRecord[]; 
     else go("/t/schema-generator");
   }
 
+  const groups = useMemo(() => paletteCategories(new Set(tools.map((tool) => tool.category))), [tools]);
   const tags = useMemo(() => {
     const counts = new Map<string, number>();
     for (const tool of tools) {
@@ -105,14 +124,14 @@ export function CommandK({ tools, startOpen = false }: { tools: SearchRecord[]; 
                 value={`${tool.name} ${tool.tagline} ${tool.tags.join(" ")} ${tool.keywords.join(" ")}`}
                 onSelect={() => go(`/t/${tool.slug}`)}
               >
-                <Cover hue={hueFor.get(tool.category) ?? 200} icon={tool.icon} size={24} />
+                <Cover hue={parentHueFor.get(childParent.get(tool.category) ?? "") ?? 200} icon={tool.icon} size={24} />
                 <span className="min-w-0 flex-1 truncate font-medium">{tool.name}</span>
                 <span className="hidden font-mono text-[11.5px] text-faint sm:inline">{nameFor.get(tool.category)}</span>
               </CommandItem>
             ))}
           </CommandGroup>
           <CommandGroup heading="Categories" className="**:[[cmdk-group-heading]]:font-mono **:[[cmdk-group-heading]]:text-[11px] **:[[cmdk-group-heading]]:tracking-[0.08em] **:[[cmdk-group-heading]]:uppercase">
-            {categories.map((category) => (
+            {groups.map((category) => (
               <CommandItem key={category.slug} value={`category ${category.name} ${category.description}`} onSelect={() => go(`/${category.slug}`)}>
                 <Cover hue={category.hue} icon={category.icon} size={24} />
                 <span className="font-medium">{category.name}</span>

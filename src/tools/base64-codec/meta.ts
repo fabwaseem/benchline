@@ -6,7 +6,7 @@ export const meta = {
   tagline: "Encode and decode Base64 for text or a file, including the URL-safe alphabet.",
   description:
     "Free Base64 encode and Base64 decode tool for text and files. Turn on URL-safe output, wrap a file as a data URI, or decode a data URI back to text or a download. The file never leaves the browser.",
-  category: "developer",
+  category: "encoding",
   tags: ["base64", "encode"],
   keywords: ["base64 decode", "base64 encode", "base64 to file", "url safe base64"],
   status: "new",

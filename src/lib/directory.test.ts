@@ -16,6 +16,8 @@ const tools: DirectoryTool[] = [
     description: "Join PDF files",
     category: "pdf",
     categoryName: "PDF",
+    parent: "documents",
+    parentName: "PDF & Documents",
     hue: 12,
     tags: ["pdf"],
     keywords: ["merge"],
@@ -32,9 +34,11 @@ const tools: DirectoryTool[] = [
     name: "JSON formatter",
     tagline: "Format JSON",
     description: "Pretty print JSON",
-    category: "developer",
-    categoryName: "Developer",
-    hue: 200,
+    category: "json",
+    categoryName: "JSON",
+    parent: "data",
+    parentName: "Data & Formats",
+    hue: 210,
     tags: ["json"],
     keywords: ["format"],
     status: "new",
@@ -52,7 +56,9 @@ const tools: DirectoryTool[] = [
     description: "Fetch a public page",
     category: "ai-search",
     categoryName: "AI search",
-    hue: 185,
+    parent: "seo-ai",
+    parentName: "SEO & AI Search",
+    hue: 255,
     tags: ["seo"],
     keywords: ["crawler"],
     status: "stable",
@@ -71,6 +77,7 @@ describe("filterDirectory", () => {
   it("filters by query, category, tag, browser, mcp, and new", () => {
     expect(filterDirectory(tools, { ...base, query: "json" }).map((tool) => tool.slug)).toEqual(["json-formatter"]);
     expect(filterDirectory(tools, { ...base, category: "pdf", tag: "pdf" }).map((tool) => tool.slug)).toEqual(["pdf-merge"]);
+    expect(filterDirectory(tools, { ...base, category: "data" }).map((tool) => tool.slug)).toEqual(["json-formatter"]);
     expect(filterDirectory(tools, { ...base, browser: true }).map((tool) => tool.slug)).toEqual(["json-formatter", "pdf-merge"]);
     expect(filterDirectory(tools, { ...base, mcp: true }).map((tool) => tool.slug)).toEqual(["json-formatter", "pdf-merge"]);
     expect(filterDirectory(tools, { ...base, fresh: true }).map((tool) => tool.slug)).toEqual(["json-formatter"]);
@@ -106,9 +113,9 @@ describe("directory search params", () => {
 
 describe("orderCategories", () => {
   it("puts the curated categories first and keeps unknown ones after", () => {
-    expect(orderCategories([{ slug: "nextjs" }, { slug: "pdf" }, { slug: "extra" }]).map((item) => item.slug)).toEqual([
-      "pdf",
-      "nextjs",
+    expect(orderCategories([{ slug: "network" }, { slug: "developer" }, { slug: "extra" }]).map((item) => item.slug)).toEqual([
+      "developer",
+      "network",
       "extra",
     ]);
   });

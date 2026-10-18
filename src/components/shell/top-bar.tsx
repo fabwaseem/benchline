@@ -11,19 +11,21 @@ import { openCommandK } from "@/components/site/open-command";
 import { ThemeToggle } from "@/components/site/theme-toggle";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { GITHUB_URL } from "@/lib/site";
-import { categories } from "@/registry/categories";
+import { categories, parents } from "@/registry/categories";
+
+const categoryPaths = new Set([...categories, ...parents].map((item) => `/${item.slug}`));
 import { cn } from "@/lib/utils";
 
 const links = [
   { href: "/", label: "Tools", match: (path: string) => path === "/" || path.startsWith("/t/") || path.startsWith("/tags/") || path === "/search" },
-  { href: "/categories", label: "Categories", match: (path: string) => path === "/categories" || categories.some((item) => path === `/${item.slug}`) },
+  { href: "/categories", label: "Categories", match: (path: string) => path === "/categories" || categoryPaths.has(path) },
   { href: "/mcp/guide", label: "MCP", match: (path: string) => path.startsWith("/mcp") || path === "/ai" },
 ];
 
 export function TopBar({ toolCount }: { toolCount: number }) {
   const path = usePathname();
   return (
-    <header className="site-header sticky top-0 z-40 border-b border-border bg-background">
+    <header className="site-header sticky top-0 z-40 border-b border-border">
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-surface focus:px-2 focus:py-1">
         Skip to content
       </a>

@@ -11,7 +11,9 @@ import { JsonLd, toolGraph } from "@/lib/jsonld";
 import { absoluteUrl } from "@/lib/site";
 import { COVER_SIZE, toolCover } from "@/lib/assets";
 import { mcpFor } from "@/registry/mcp-index";
-import { categories, getCategory, getTool, relatedTools, tools } from "@/registry";
+import { mcpToolBySlug } from "@/registry/mcp-registry";
+import { categories, getTool, relatedTools, tools } from "@/registry";
+import { parentHue, resolveListing } from "@/lib/taxonomy";
 
 export function generateStaticParams() {
   return tools.map((tool) => ({ slug: tool.slug }));
@@ -47,10 +49,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 function WorkspaceSkeleton() {
   return (
     <div className="animate-pulse" aria-hidden>
-      <div className="h-12 border-b border-border bg-sunken" />
+      <div className="flex h-12 items-center gap-2 border-b border-border bg-sunken px-3">
+        <div className="h-6 w-16 rounded-sm bg-surface" />
+        <div className="h-6 w-16 rounded-sm bg-surface" />
+      </div>
       <div className="grid min-h-72 md:grid-cols-2">
-        <div className="border-b border-border bg-surface md:border-r md:border-b-0" />
-        <div className="bg-well" />
+        <div className="space-y-2 border-b border-border bg-surface p-4 md:border-r md:border-b-0">
+          <div className="h-3 w-1/3 rounded-sm bg-sunken" />
+          <div className="h-3 w-2/3 rounded-sm bg-sunken" />
+          <div className="h-3 w-1/2 rounded-sm bg-sunken" />
+        </div>
+        <div className="bg-well p-4">
+          <div className="h-3 w-1/4 rounded-sm bg-sunken" />
+        </div>
       </div>
     </div>
   );
@@ -60,21 +71,32 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const tool = getTool(slug);
   if (!tool) notFound();
-  const category = getCategory(tool.category);
-  const categoryName = category?.name ?? tool.category;
-  const hue = category?.hue ?? 200;
+  const listing = resolveListing(tool.category);
+  const categoryName = listing?.kind === "page" ? listing.name : tool.category;
+  const parent =
+    listing?.kind === "page" && listing.breadcrumbs.length > 2
+      ? { href: listing.breadcrumbs[1]?.href ?? "/", label: listing.breadcrumbs[1]?.label ?? "" }
+      : null;
+  const hue = listing?.kind === "page" ? listing.hue : parentHue(tool.category);
+  const categorySlug = listing?.kind === "page" ? listing.slug : tool.category;
   const related = relatedTools(slug);
   const mcp = mcpFor(tool.slug);
-  const hues = Object.fromEntries(categories.map((item) => [item.slug, item.hue]));
+  const mcpTool = mcpToolBySlug(tool.slug);
+  const hues = Object.fromEntries(categories.map((item) => [item.slug, parentHue(item.slug)]));
+  const crumbs =
+    listing?.kind === "page"
+      ? listing.breadcrumbs.slice(1).map((item) => ({ name: item.label, href: item.href }))
+      : undefined;
   return (
     <>
-      <JsonLd data={toolGraph(tool, categoryName)} />
+      <JsonLd data={toolGraph(tool, categoryName, crumbs)} />
       <div className="mx-auto w-full max-w-[1200px] px-4 py-6 lg:px-8">
         <ToolHeader
           name={tool.name}
           tagline={tool.tagline}
-          categorySlug={tool.category}
+          categorySlug={categorySlug}
           categoryName={categoryName}
+          parent={parent}
           hue={hue}
           icon={tool.icon}
           runsLocally={tool.runsLocally}
@@ -93,7 +115,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
               <h2 className="text-[15px] font-medium">How to use it</h2>
               <ol className="mt-3 grid gap-3 sm:grid-cols-3">
                 {tool.howTo.map((step, index) => (
-                  <li key={step.name} className="rounded-xl border border-border bg-surface p-4">
+                  <li key={step.name} className="rounded-xl border border-border bg-surface p-4 shadow-[0_0_0_1px_transparent] transition-shadow duration-150">
                     <span className="font-mono text-[11px] text-faint">{String(index + 1).padStart(2, "0")}</span>
                     <p className="mt-2 text-[14px] font-medium">{step.name}</p>
                     <p className="mt-1 text-[13px] leading-5 text-muted-foreground">{step.text}</p>
@@ -108,7 +130,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           </div>
           <aside id="next" className="flex flex-col gap-4 lg:sticky lg:top-20">
             <RelatedTools tools={related} hues={hues} />
-            {mcp ? <McpSnippet name={mcp.name} /> : null}
+            {mcp && mcpTool ? <McpSnippet name={mcp.name} inputSchema={mcpTool.inputSchema} /> : null}
           </aside>
         </div>
       </div>

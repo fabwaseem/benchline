@@ -8,7 +8,7 @@ export function ToolCard({ tool }: { tool: DirectoryTool }) {
   return (
     <Link
       href={`/t/${tool.slug}`}
-      className="flex h-full flex-col gap-4 rounded-xl border border-border bg-surface p-4 transition-[border-color,background-color] duration-150 hover:border-border-strong focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+      className="lift flex h-full flex-col gap-3.5 rounded-xl border border-border bg-surface p-4 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
     >
       <span className="flex items-start gap-3">
         <Cover hue={tool.hue} icon={tool.icon} size={40} />
