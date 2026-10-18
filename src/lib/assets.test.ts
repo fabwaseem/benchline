@@ -7,6 +7,13 @@ import { toolCover, toolLogo } from "@/lib/assets";
 // Artwork intentionally deferred by the maintainer (2026-10-18): these tools
 // ship code-only for now. Remove a slug from this set when its cover/logo land.
 const PENDING_ARTWORK = new Set([
+  // batch 1
+  "totp-generator",
+  "jsonpath-tester",
+  "programmer-calculator",
+  "aes-crypto",
+  "har-analyzer",
+  // batch 2
   "json-to-types",
   "code-minifier",
   "curl-converter",
