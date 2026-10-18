@@ -44,7 +44,7 @@ The directory is the home page. The JSON formatter is one tool page (`/t/json-fo
 
 <!-- tools:start -->
 
-76 tools, in `toolOrder`. Run `pnpm gen:readme-tools` after adding one.
+Every tool, in `toolOrder`. Run `pnpm gen:readme-tools` after adding one.
 
 ### Developer
 
@@ -358,9 +358,9 @@ The full input list is [docs/MCP.md](docs/MCP.md).
 
 <!-- privacy:start -->
 
-65 tools run entirely in the browser. Text, files, and results stay on the device.
+Tools that run entirely in the browser keep text, files, and results on the device.
 
-11 tools can fetch a public URL through this site. The page posts the URL or hostname you submit, the route fetches that address and does not write it anywhere, and private addresses are refused. Those routes allow 8 requests from one address every 10 minutes.
+The tools below can fetch a public URL through this site. The page posts the URL or hostname you submit, the route fetches that address and does not write it anywhere, and private addresses are refused. Those routes allow 8 requests from one address every 10 minutes.
 
 - [llms.txt generator](https://benchline.fabwaseem.com/t/llms-txt-generator) — Read a public sitemap and write an llms.txt index, plus an optional llms-full.txt.
 - [AI SEO checker](https://benchline.fabwaseem.com/t/ai-seo-checker) — Score crawler access, llms.txt, structured data, and the on-page signals AI search uses.
@@ -388,7 +388,7 @@ Next.js 16 (App Router, React Server Components, `output: "standalone"`), React 
 src/app/                  directory, category, tag, tool, explore, search, about, AI, MCP guide
 src/app/mcp/route.ts      POST /mcp
 src/app/api/v1/tools/     POST /api/v1/tools/<slug>
-src/app/api/tools/        browser routes for the nine tools that fetch
+src/app/api/tools/        browser routes for tools that fetch
 src/tools/<slug>/         meta.ts, tool.tsx, lib/, mcp.ts
 src/registry/             generated index, loaders, MCP registry, search index
 src/lib/                  shared helpers, MCP handler, SSRF guard, rate limit

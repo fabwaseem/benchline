@@ -20,7 +20,7 @@ function toolLink(slug: string, name: string) {
 
 function toolsSection() {
   const lines = [
-    `${tools.length} tools, in \`toolOrder\`. Run \`pnpm gen:readme-tools\` after adding one.`,
+    "Every tool, in `toolOrder`. Run `pnpm gen:readme-tools` after adding one.",
     "",
   ];
   for (const parent of parents) {
@@ -47,12 +47,11 @@ function toolsSection() {
 }
 
 function privacySection() {
-  const local = tools.filter((tool) => tool.runsLocally);
   const remote = tools.filter((tool) => !tool.runsLocally);
   const lines = [
-    `${local.length} tools run entirely in the browser. Text, files, and results stay on the device.`,
+    "Tools that run entirely in the browser keep text, files, and results on the device.",
     "",
-    `${remote.length} tools can fetch a public URL through this site. The page posts the URL or hostname you submit, the route fetches that address and does not write it anywhere, and private addresses are refused. Those routes allow 8 requests from one address every 10 minutes.`,
+    "The tools below can fetch a public URL through this site. The page posts the URL or hostname you submit, the route fetches that address and does not write it anywhere, and private addresses are refused. Those routes allow 8 requests from one address every 10 minutes.",
     "",
   ];
   for (const tool of remote) {

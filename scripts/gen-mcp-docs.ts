@@ -105,7 +105,7 @@ const parts = [
   "",
   "The handler validates with the input schema, runs the tool, and validates the output. A thrown error comes back as `isError: true` and a text message. It is not a successful result.",
   "",
-  `${mcpTools.length} tools.`,
+  "Every registered tool is listed below.",
   "",
 ];
 
