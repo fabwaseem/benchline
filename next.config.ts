@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
-  serverExternalPackages: ["@napi-rs/canvas"],
+  serverExternalPackages: ["@napi-rs/canvas", "tesseract.js", "tesseract.js-core", "zxing-wasm", "sharp"],
   outputFileTracingIncludes: {
     "/pdfjs/[...path]": [
       "./node_modules/pdfjs-dist/standard_fonts/**/*",
@@ -26,6 +26,9 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
   },
   turbopack: {
+    resolveAlias: {
+      "onnxruntime-node": { browser: "./src/lib/onnx-stub.ts" },
+    },
     rules: {
       "*.css": {
         loaders: ["@tailwindcss/turbopack"],

@@ -258,4 +258,11 @@ export const toolOrder = [
   "pdf-protect-unlock",
   "markdown-html",
   "html-to-markdown-url",
+  "qr-code-reader",
+  "svg-optimizer",
+  "exif-viewer-remover",
+  "image-crop",
+  "favicon-generator",
+  "ocr-image-to-text",
+  "background-remover",
 ] as const;

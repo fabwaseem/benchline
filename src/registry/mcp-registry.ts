@@ -36,9 +36,16 @@ import { tool as pdfToImage } from "@/tools/pdf-to-image/mcp";
 import { tool as pdfProtectUnlock } from "@/tools/pdf-protect-unlock/mcp";
 import { tool as markdownHtml } from "@/tools/markdown-html/mcp";
 import { tool as htmlToMarkdownUrl } from "@/tools/html-to-markdown-url/mcp";
+import { tool as qrCodeReader } from "@/tools/qr-code-reader/mcp";
+import { tool as svgOptimizer } from "@/tools/svg-optimizer/mcp";
+import { tool as exifViewerRemover } from "@/tools/exif-viewer-remover/mcp";
+import { tool as imageCrop } from "@/tools/image-crop/mcp";
+import { tool as faviconGenerator } from "@/tools/favicon-generator/mcp";
+import { tool as ocrImageToText } from "@/tools/ocr-image-to-text/mcp";
+import { tool as backgroundRemover } from "@/tools/background-remover/mcp";
 import type { BenchTool } from "@/lib/mcp/types";
 
-export const mcpTools: BenchTool[] = [llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator, pdfToText, pdfRotateOrganize, pdfToImage, pdfProtectUnlock, markdownHtml, htmlToMarkdownUrl];
+export const mcpTools: BenchTool[] = [llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator, pdfToText, pdfRotateOrganize, pdfToImage, pdfProtectUnlock, markdownHtml, htmlToMarkdownUrl, qrCodeReader, svgOptimizer, exifViewerRemover, imageCrop, faviconGenerator, ocrImageToText, backgroundRemover];
 
 export function mcpToolBySlug(slug: string) {
   return mcpTools.find((tool) => tool.slug === slug);

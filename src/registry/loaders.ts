@@ -39,4 +39,11 @@ export const toolLoaders: Record<string, () => Promise<{ default: ComponentType 
   "pdf-protect-unlock": () => import("@/tools/pdf-protect-unlock/tool"),
   "markdown-html": () => import("@/tools/markdown-html/tool"),
   "html-to-markdown-url": () => import("@/tools/html-to-markdown-url/tool"),
+  "qr-code-reader": () => import("@/tools/qr-code-reader/tool"),
+  "svg-optimizer": () => import("@/tools/svg-optimizer/tool"),
+  "exif-viewer-remover": () => import("@/tools/exif-viewer-remover/tool"),
+  "image-crop": () => import("@/tools/image-crop/tool"),
+  "favicon-generator": () => import("@/tools/favicon-generator/tool"),
+  "ocr-image-to-text": () => import("@/tools/ocr-image-to-text/tool"),
+  "background-remover": () => import("@/tools/background-remover/tool"),
 };

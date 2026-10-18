@@ -758,5 +758,140 @@
     "status": "new",
     "icon": "Globe",
     "runsLocally": false
+  },
+  {
+    "slug": "qr-code-reader",
+    "name": "QR and barcode reader",
+    "tagline": "Read QR codes and barcodes from a photo, a paste, or the camera.",
+    "description": "Free QR and barcode reader. Drop an image, paste one, or scan with the camera. Several codes in one picture are listed with their format. Decoding runs in this browser, so the photo stays on the device.",
+    "category": "image",
+    "tags": [
+      "qr",
+      "barcode"
+    ],
+    "keywords": [
+      "qr code scanner online",
+      "scan qr code from image",
+      "barcode reader"
+    ],
+    "status": "new",
+    "icon": "ScanBarcode",
+    "runsLocally": true
+  },
+  {
+    "slug": "svg-optimizer",
+    "name": "SVG optimizer",
+    "tagline": "Minify an SVG, compare the size, and keep the viewBox unless you turn that off.",
+    "description": "Free SVG optimizer. SVGO runs in this browser: comments, metadata, and extra precision come out, and you can turn each pass off. The viewBox stays unless you remove it. The file is not uploaded.",
+    "category": "image",
+    "tags": [
+      "svg",
+      "optimize"
+    ],
+    "keywords": [
+      "svg optimizer",
+      "svgo online",
+      "minify svg"
+    ],
+    "status": "new",
+    "icon": "FileCode",
+    "runsLocally": true
+  },
+  {
+    "slug": "exif-viewer-remover",
+    "name": "EXIF viewer and remover",
+    "tagline": "Read photo metadata, including GPS, and strip all of it or only the location.",
+    "description": "Free EXIF viewer and metadata remover. See the camera, the time, and the GPS coordinates, then download a copy with every tag removed or with only the GPS block taken out of a JPEG. Reading and stripping run in this browser.",
+    "category": "image",
+    "tags": [
+      "exif",
+      "privacy",
+      "metadata"
+    ],
+    "keywords": [
+      "exif viewer",
+      "remove metadata from photo",
+      "remove gps from photo"
+    ],
+    "status": "new",
+    "icon": "Aperture",
+    "runsLocally": true
+  },
+  {
+    "slug": "image-crop",
+    "name": "Image cropper",
+    "tagline": "Crop with a free box or an aspect preset, including a circle.",
+    "description": "Free image cropper. Drag the frame, lock an aspect such as 1:1, 4:5, 16:9, or Open Graph, and export JPG, PNG, or WebP. A circle crop keeps a round mask. Cropping runs in this browser.",
+    "category": "image",
+    "tags": [
+      "image",
+      "crop"
+    ],
+    "keywords": [
+      "crop image",
+      "crop photo online",
+      "circle crop"
+    ],
+    "status": "new",
+    "icon": "Crop",
+    "runsLocally": true
+  },
+  {
+    "slug": "favicon-generator",
+    "name": "Favicon generator",
+    "tagline": "Make the ICO, the PNG sizes, the manifest, and the HTML snippet from a picture or letters.",
+    "description": "Free favicon generator. Start from an image or up to three letters, then download a ZIP with favicon.ico, the PNG sizes, a web manifest, an HTML snippet, and a Next.js metadata snippet. The pack is built in this browser.",
+    "category": "design",
+    "tags": [
+      "favicon",
+      "ico",
+      "pwa"
+    ],
+    "keywords": [
+      "favicon generator",
+      "favicon ico",
+      "apple touch icon"
+    ],
+    "status": "new",
+    "icon": "AppWindow",
+    "runsLocally": true
+  },
+  {
+    "slug": "ocr-image-to-text",
+    "name": "Image to text",
+    "tagline": "Read the words in a picture. The OCR model downloads once and runs in this browser.",
+    "description": "Free image to text. Tesseract reads the picture in this browser after a one-time download of the language data. Pick a language, then copy or download the text. A progress line shows the download and the recognition.",
+    "category": "image",
+    "tags": [
+      "ocr",
+      "text"
+    ],
+    "keywords": [
+      "image to text",
+      "ocr online",
+      "extract text from image"
+    ],
+    "status": "new",
+    "icon": "ScanText",
+    "runsLocally": true
+  },
+  {
+    "slug": "background-remover",
+    "name": "Background remover",
+    "tagline": "Cut out a portrait in the browser, or clear a solid backdrop without a download.",
+    "description": "Free background remover. A portrait uses MODNet, an Apache-2.0 matting model that downloads once and runs in this browser, with a progress line while it loads. A solid backdrop can be cleared instantly by sampling the corners. RMBG-1.4 is not used because its license is non-commercial. The picture is not uploaded.",
+    "category": "image",
+    "tags": [
+      "image",
+      "background"
+    ],
+    "keywords": [
+      "remove background",
+      "background remover",
+      "remove bg"
+    ],
+    "status": "new",
+    "icon": "Eraser",
+    "runsLocally": true
   }
 ]

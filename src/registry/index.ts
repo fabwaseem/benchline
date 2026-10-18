@@ -36,11 +36,18 @@ import { meta as pdfToImage } from "@/tools/pdf-to-image/meta";
 import { meta as pdfProtectUnlock } from "@/tools/pdf-protect-unlock/meta";
 import { meta as markdownHtml } from "@/tools/markdown-html/meta";
 import { meta as htmlToMarkdownUrl } from "@/tools/html-to-markdown-url/meta";
+import { meta as qrCodeReader } from "@/tools/qr-code-reader/meta";
+import { meta as svgOptimizer } from "@/tools/svg-optimizer/meta";
+import { meta as exifViewerRemover } from "@/tools/exif-viewer-remover/meta";
+import { meta as imageCrop } from "@/tools/image-crop/meta";
+import { meta as faviconGenerator } from "@/tools/favicon-generator/meta";
+import { meta as ocrImageToText } from "@/tools/ocr-image-to-text/meta";
+import { meta as backgroundRemover } from "@/tools/background-remover/meta";
 import { categories, parents, toolOrder } from "@/registry/categories";
 import type { SearchRecord } from "@/registry/schema";
 import { assertRegistry } from "@/registry/validate";
 
-const tools = assertRegistry([llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator, pdfToText, pdfRotateOrganize, pdfToImage, pdfProtectUnlock, markdownHtml, htmlToMarkdownUrl], [...categories], toolOrder, [...parents]);
+const tools = assertRegistry([llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator, pdfToText, pdfRotateOrganize, pdfToImage, pdfProtectUnlock, markdownHtml, htmlToMarkdownUrl, qrCodeReader, svgOptimizer, exifViewerRemover, imageCrop, faviconGenerator, ocrImageToText, backgroundRemover], [...categories], toolOrder, [...parents]);
 
 export { categories, parents, tools };
 
