@@ -66,6 +66,25 @@
     "runsLocally": true
   },
   {
+    "slug": "og-template-list",
+    "name": "OG template list",
+    "tagline": "Browse Open Graph template ids, fields, and color presets.",
+    "description": "List every Open Graph card template, with its id, category, fields, and color presets. Copy an id into the OG image generator or pass it to list_og_templates.",
+    "category": "social",
+    "tags": [
+      "open-graph",
+      "social-preview"
+    ],
+    "keywords": [
+      "Open Graph templates",
+      "og template list",
+      "list_og_templates"
+    ],
+    "status": "new",
+    "icon": "Images",
+    "runsLocally": true
+  },
+  {
     "slug": "jwt-decoder",
     "name": "JWT decoder",
     "tagline": "Paste a JSON Web Token, read the claims, and verify the signature in the browser.",

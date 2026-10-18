@@ -123,6 +123,7 @@ Markup, crawlers, and the files an AI search engine can cite.
 **Social previews.** Open Graph cards, meta tags, and the picture a shared link unfurls into.
 
 - [OG image generator](https://benchline.fabwaseem.com/t/og-image-generator) — Pick a template, watch the card update, then download the PNG or copy the Next.js file.
+- [OG template list](https://benchline.fabwaseem.com/t/og-template-list) — Browse Open Graph template ids, fields, and color presets.
 - [Meta tags inspector](https://benchline.fabwaseem.com/t/meta-tags-inspector) — Read title, description, canonical, robots, Open Graph, Twitter, and JSON-LD types from one public URL.
 - [Social Image Resizer](https://benchline.fabwaseem.com/t/social-image-resizer) — Fit any photo to the exact dimensions for Instagram, YouTube, X, LinkedIn, and Facebook — cropped to the subject you pick.
 - [Meme Generator](https://benchline.fabwaseem.com/t/meme-generator) — Classic top/bottom caption memes from styles or your own images.

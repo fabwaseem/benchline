@@ -13,7 +13,7 @@ export const meta = {
   createdAt: "2026-03-01",
   updatedAt: "2026-10-18",
   icon: "Image",
-  related: ["meta-tags-inspector", "llms-txt-generator", "ai-seo-checker", "schema-generator"],
+  related: ["og-template-list", "meta-tags-inspector", "llms-txt-generator", "ai-seo-checker"],
   faqs: [
     { q: "What size does this generator export?", a: "The default is 1200 by 630, the large-card size Facebook, LinkedIn, Slack, Discord, and WhatsApp expect. You can also export 1600 by 900 for X, or a 1080 square." },
     { q: "Is the OG image generator free?", a: "Yes. It runs in the browser. There is no account and no watermark on the PNG." },

@@ -8,6 +8,7 @@ const views: Record<string, ComponentType> = {
   "llms-txt-generator": dynamic(() => import("@/tools/llms-txt-generator/tool")),
   "ai-seo-checker": dynamic(() => import("@/tools/ai-seo-checker/tool")),
   "og-image-generator": dynamic(() => import("@/tools/og-image-generator/tool")),
+  "og-template-list": dynamic(() => import("@/tools/og-template-list/tool")),
   "jwt-decoder": dynamic(() => import("@/tools/jwt-decoder/tool")),
   "robots-txt-checker": dynamic(() => import("@/tools/robots-txt-checker/tool")),
   "meta-tags-inspector": dynamic(() => import("@/tools/meta-tags-inspector/tool")),

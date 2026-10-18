@@ -5,6 +5,7 @@ export const toolLoaders: Record<string, () => Promise<{ default: ComponentType 
   "llms-txt-generator": () => import("@/tools/llms-txt-generator/tool"),
   "ai-seo-checker": () => import("@/tools/ai-seo-checker/tool"),
   "og-image-generator": () => import("@/tools/og-image-generator/tool"),
+  "og-template-list": () => import("@/tools/og-template-list/tool"),
   "jwt-decoder": () => import("@/tools/jwt-decoder/tool"),
   "robots-txt-checker": () => import("@/tools/robots-txt-checker/tool"),
   "meta-tags-inspector": () => import("@/tools/meta-tags-inspector/tool"),

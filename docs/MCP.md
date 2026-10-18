@@ -106,8 +106,8 @@ Render one of the Open Graph templates as a PNG and a Next.js opengraph-image.ts
 
 List Open Graph card templates with ids, names, categories, defaults, color presets, and field schemas.
 
-- Page: https://benchline.fabwaseem.com/t/og-image-generator
-- HTTP: `POST https://benchline.fabwaseem.com/api/v1/tools/og-image-generator`
+- Page: https://benchline.fabwaseem.com/t/og-template-list
+- HTTP: `POST https://benchline.fabwaseem.com/api/v1/tools/og-template-list`
 - Fetches the network: no
 
 ### Input
