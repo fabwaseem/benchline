@@ -99,13 +99,13 @@ const parts = [
   "",
   "Sixty calls a minute per address on `/mcp` and on `/api/v1/tools/<slug>`. A 429 includes `retry-after`. The limit reads the first `x-forwarded-for` hop, then `x-real-ip`.",
   "",
-  "A request with an `Origin` header must match the request host, `localhost`, `127.0.0.1`, or the site origin. A request with no `Origin` is allowed.",
+  "A request with an `Origin` header must match the request host, `localhost`, `127.0.0.1`, the site origin, `https://benchline.fabwaseem.com`, or `https://tools.fabwaseem.com`. A request with no `Origin` is allowed.",
   "",
   "File fields take either `url` or `data`, not both. `data` is base64 or a data URI, decoded to at most 10 MB. `url` must be public `http` or `https` on port 80 or 443, with no userinfo. Local, private, link-local, and CGNAT addresses are refused, including after DNS lookup and after up to four redirects. The fetch times out after 15 seconds.",
   "",
   "The handler validates with the input schema, runs the tool, and validates the output. A thrown error comes back as `isError: true` and a text message. It is not a successful result.",
   "",
-  `${mcpTools.length} tools.`,
+  "Every registered tool is listed below.",
   "",
 ];
 

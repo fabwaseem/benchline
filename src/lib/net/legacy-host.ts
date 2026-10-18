@@ -1,4 +1,5 @@
 export const LEGACY_HOST = "tools.fabwaseem.com";
+export const CANONICAL_HOST = "benchline.fabwaseem.com";
 export const CANONICAL_ORIGIN = "https://benchline.fabwaseem.com";
 
 export function hostnameFromHost(host: string | null | undefined): string {
@@ -13,7 +14,11 @@ export function hostnameFromHost(host: string | null | undefined): string {
   return value;
 }
 
+export function isMcpPath(pathname: string): boolean {
+  return pathname === "/mcp" || pathname.startsWith("/mcp/");
+}
+
 export function legacyHostRedirect(host: string | null | undefined, pathname: string, search: string): URL | null {
-  if (hostnameFromHost(host) !== LEGACY_HOST) return null;
+  if (hostnameFromHost(host) !== LEGACY_HOST || isMcpPath(pathname)) return null;
   return new URL(pathname + search, CANONICAL_ORIGIN);
 }

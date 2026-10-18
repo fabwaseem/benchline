@@ -40,7 +40,7 @@ The handler builds an `McpServer` named `benchline` and registers every entry in
 Limits and checks:
 
 - 60 requests a minute per address (`mcp:<ip>`).
-- `Origin`, when present, must match the request host, localhost, or `SITE_URL`.
+- `Origin`, when present, must match the request host, localhost, `SITE_URL`, `https://benchline.fabwaseem.com`, or `https://tools.fabwaseem.com`.
 - Tool errors are caught and returned as `isError: true`.
 
 `SITE_URL` is `NEXT_PUBLIC_SITE_URL` or `https://benchline.fabwaseem.com`.
@@ -51,7 +51,7 @@ The guide for people is `src/app/mcp/guide/page.tsx` at `/mcp/guide`. The tool l
 
 `POST /api/v1/tools/<slug>` runs the same `tool.run` as MCP. It has its own 60-a-minute bucket (`api:<ip>`). Unknown slugs are 404. Bad JSON or a thrown error is 400. `GET /openapi.json` is that surface as OpenAPI 3.1, built from the zod input schemas.
 
-Nine tools cannot do their job in the browser. Their pages post to a route under `src/app/api/tools/`:
+These tools cannot do their job in the browser. Their pages post to a route under `src/app/api/tools/`:
 
 | Page | Route |
 | --- | --- |

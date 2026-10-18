@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { legacyHostRedirect } from "@/lib/net/legacy-host";
+import { hostnameFromHost, isMcpPath, LEGACY_HOST, legacyHostRedirect } from "@/lib/net/legacy-host";
 
 export function proxy(request: NextRequest) {
   const url = request.nextUrl;
-  const target = legacyHostRedirect(request.headers.get("host"), url.pathname, url.search);
+  const host = request.headers.get("host");
+  if (hostnameFromHost(host) === LEGACY_HOST && isMcpPath(url.pathname)) return NextResponse.next();
+  const target = legacyHostRedirect(host, url.pathname, url.search);
   if (target) return NextResponse.redirect(target, 308);
   if (url.pathname !== "/mcp" || request.method !== "GET") return NextResponse.next();
   const accept = request.headers.get("accept") ?? "";

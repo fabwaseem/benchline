@@ -1,25 +1,10 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { ZodError } from "zod";
+import { originAllowed } from "@/lib/mcp/origin";
 import { clientIp } from "@/lib/net/fetch-public";
 import { rateLimit } from "@/lib/net/rate-limit";
-import { SITE_URL } from "@/lib/site";
 import { mcpTools } from "@/registry/mcp-registry";
-
-function originAllowed(request: Request) {
-  const origin = request.headers.get("origin");
-  if (!origin) return true;
-  let url: URL;
-  try {
-    url = new URL(origin);
-  } catch {
-    return false;
-  }
-  const host = request.headers.get("host");
-  if (host && url.host === host) return true;
-  if (url.hostname === "localhost" || url.hostname === "127.0.0.1") return true;
-  return origin === SITE_URL;
-}
 
 function messageOf(error: unknown) {
   if (error instanceof ZodError) {
@@ -61,7 +46,7 @@ function createServer() {
 }
 
 export async function handleMcpRequest(request: Request): Promise<Response> {
-  if (!originAllowed(request)) {
+  if (!originAllowed(request.headers.get("host"), request.headers.get("origin"))) {
     return Response.json(
       { jsonrpc: "2.0", error: { code: -32000, message: "Origin is not allowed." }, id: null },
       { status: 403, headers: { "cache-control": "no-store" } },
