@@ -2,15 +2,13 @@
 
 import { useMemo, useState } from "react";
 import { Percent } from "lucide-react";
+import { TextInput } from "@/components/kit/controls";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
-import { Panel, ToolShell } from "@/components/kit/tool-shell";
-import { Input } from "@/components/ui/input";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
 import { calculatePercent, percentLabels, percentModes, type PercentMode } from "@/tools/percentage-calculator/lib/percent";
-
-const selectClass = "h-11 w-full rounded-lg border border-input bg-transparent px-2 text-sm min-[700px]:h-8";
 
 export default function PercentageTool() {
   const [mode, setMode] = useState<PercentMode>("of");
@@ -21,49 +19,43 @@ export default function PercentageTool() {
   const failed = "error" in result;
 
   return (
-    <ToolShell
-      runsLocally
-      layout="split"
-      status={
-        <>
-          <span className={failed ? "dot dot-warn" : "dot"} />
-          <span>{failed ? result.error : labels.label}</span>
-        </>
-      }
-      input={
-        <Panel title="Values">
-          <FieldRow label="Form" htmlFor="percent-mode">
-            <select id="percent-mode" value={mode} onChange={(event) => setMode(event.target.value as PercentMode)} className={selectClass}>
-              {percentModes.map((item) => <option key={item} value={item}>{percentLabels[item].label}</option>)}
-            </select>
-          </FieldRow>
+    <ToolCard>
+      <ToolToolbar
+        label="Form"
+        options={percentModes.map((item) => ({ value: item, label: percentLabels[item].label }))}
+        value={mode}
+        onChange={setMode}
+      />
+      <ToolPanes>
+        <Pane label="Values">
           <FieldRow label={labels.a} htmlFor="percent-a">
-            <Input id="percent-a" inputMode="decimal" value={a} onChange={(event) => setA(event.target.value)} />
+            <TextInput id="percent-a" inputMode="decimal" value={a} onChange={(event) => setA(event.target.value)} />
           </FieldRow>
           <FieldRow label={labels.b} htmlFor="percent-b">
-            <Input id="percent-b" inputMode="decimal" value={b} onChange={(event) => setB(event.target.value)} />
+            <TextInput id="percent-b" inputMode="decimal" value={b} onChange={(event) => setB(event.target.value)} />
           </FieldRow>
-        </Panel>
-      }
-      output={
-        <div aria-live="polite">
-          {failed ? (
-            <Panel>
-              <Notice tone="bad" role="alert" title={result.error} />
-              <EmptyState art={<Percent size={22} />} title="No result" hint="Both fields need numbers, and a divisor cannot be zero." />
-            </Panel>
-          ) : (
-            <Panel title="Result">
-              <ResultStat variant="well" label={labels.label} value={result.unit === "percent" ? `${result.result}%` : result.result} hint={result.formula} />
-              {result.parts.length > 0 ? (
-                <div className="grid grid-cols-2 gap-2">
-                  {result.parts.map((part) => <ResultStat key={part.label} label={part.label} value={part.value} />)}
-                </div>
-              ) : null}
-            </Panel>
-          )}
-        </div>
-      }
-    />
+        </Pane>
+        <Pane label="Result">
+          <div aria-live="polite" className="flex flex-col gap-3">
+            {failed ? (
+              <>
+                <Notice tone="bad" role="alert" title={result.error} />
+                <EmptyState art={<Percent size={22} />} title="No result" hint="Both fields need numbers, and a divisor cannot be zero." />
+              </>
+            ) : (
+              <>
+                <ResultStat variant="well" label={labels.label} value={result.unit === "percent" ? `${result.result}%` : result.result} hint={result.formula} />
+                {result.parts.length > 0 ? (
+                  <div className="grid grid-cols-2 gap-2">
+                    {result.parts.map((part) => <ResultStat key={part.label} label={part.label} value={part.value} />)}
+                  </div>
+                ) : null}
+              </>
+            )}
+          </div>
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={failed ? result.error : result.formula} tone={failed ? "fail" : "pass"} />
+    </ToolCard>
   );
 }

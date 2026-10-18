@@ -2,13 +2,11 @@
 
 import { useMemo, useState } from "react";
 import { Regex } from "lucide-react";
+import { OptionRow, TextArea, TextInput } from "@/components/kit/controls";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
-import { Panel, ToolShell } from "@/components/kit/tool-shell";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
+import { Pane, StatusStrip, ToolCard, ToolPanes, Truncate } from "@/components/kit/shell";
 import { examplePattern, exampleText, flagList, highlightSpans, testRegex, type Flag } from "@/tools/regex-tester/lib/regex";
 
 export default function RegexTesterTool() {
@@ -33,78 +31,75 @@ export default function RegexTesterTool() {
     });
   }
 
+  const note = result.valid
+    ? `${result.matches.length} match${result.matches.length === 1 ? "" : "es"}${result.truncated ? " · list capped" : ""}`
+    : result.error;
+
   return (
-    <ToolShell
-      runsLocally
-      layout="split"
-      status={
-        <>
-          <span className={!result.valid ? "dot dot-warn" : "dot"} />
-          <span>{result.valid ? `${result.matches.length} matches${result.truncated ? ", list capped" : ""}` : result.error}</span>
-        </>
-      }
-      input={
-        <Panel title="Pattern">
+    <ToolCard>
+      <ToolPanes>
+        <Pane label="Pattern">
           <FieldRow label="Expression" htmlFor="regex-pattern" error={result.valid ? undefined : result.error}>
-            <Input id="regex-pattern" value={pattern} onChange={(event) => setPattern(event.target.value)} spellCheck={false} className="font-mono" aria-invalid={!result.valid} />
+            <TextInput id="regex-pattern" value={pattern} onChange={(event) => setPattern(event.target.value)} spellCheck={false} className="font-mono" aria-invalid={!result.valid} />
           </FieldRow>
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col">
             {flagList.map((flag) => (
-              <label key={flag} className="flex min-h-11 items-center justify-between gap-3 text-sm">
-                {flag}
-                <Switch checked={flags.includes(flag)} onCheckedChange={(on) => toggle(flag, on)} />
-              </label>
+              <OptionRow key={flag} label={flag} checked={flags.includes(flag)} onChange={(on) => toggle(flag, on)} />
             ))}
           </div>
           <FieldRow label="Sample" htmlFor="regex-text">
-            <Textarea id="regex-text" value={text} onChange={(event) => setText(event.target.value)} spellCheck={false} className="min-h-40 font-mono text-[13px]" />
+            <TextArea id="regex-text" value={text} onChange={(event) => setText(event.target.value)} spellCheck={false} className="min-h-40 font-mono text-[13px]" />
           </FieldRow>
           <FieldRow label="Replacement" htmlFor="regex-replace" help="Optional. $1 and $<name> follow JavaScript.">
-            <Input id="regex-replace" value={replacement} onChange={(event) => setReplacement(event.target.value)} spellCheck={false} className="font-mono" />
+            <TextInput id="regex-replace" value={replacement} onChange={(event) => setReplacement(event.target.value)} spellCheck={false} className="font-mono" />
           </FieldRow>
-        </Panel>
-      }
-      output={
-        <div aria-live="polite">
-          {!result.valid ? (
-            <Panel>
-              <Notice tone="bad" role="alert" title={result.error} />
-              <EmptyState art={<Regex size={22} />} title="No matches" hint="Fix the pattern. Leave the slashes out." />
-            </Panel>
-          ) : (
-            <Panel title="Matches">
-              <p className="font-mono text-[13px] leading-6 break-all whitespace-pre-wrap">
-                {highlightSpans(text, result.matches).map((span, index) => (
-                  <span key={`${index}-${span.text.slice(0, 8)}`} className={span.match ? "rounded-sm bg-[color-mix(in_srgb,var(--success)_28%,transparent)]" : undefined}>{span.text}</span>
-                ))}
-              </p>
-              {result.matches.length === 0 ? <p className="text-sm text-muted-foreground">No match in this sample.</p> : (
-                <ul className="text-sm">
-                  {result.matches.map((match, index) => (
-                    <li key={`${match.index}-${index}`} className="border-t border-border py-2">
-                      <div className="font-mono text-[12.5px]">{match.value || "empty"} <span className="text-muted-foreground">at {match.index}</span></div>
-                      {match.groups.length > 0 ? (
-                        <div className="mt-1 text-[12px] text-muted-foreground">{match.groups.map((group) => `${group.name}: ${group.value || "empty"}`).join(" · ")}</div>
-                      ) : null}
-                    </li>
+        </Pane>
+        <Pane label="Matches">
+          <div aria-live="polite" className="flex flex-col gap-3">
+            {!result.valid ? (
+              <>
+                <Notice tone="bad" role="alert" title={result.error} />
+                <EmptyState art={<Regex size={22} />} title="No matches" hint="Fix the pattern. Leave the slashes out." />
+              </>
+            ) : (
+              <>
+                <p className="font-mono text-[13px] leading-6 break-words whitespace-pre-wrap">
+                  {highlightSpans(text, result.matches).map((span, index) => (
+                    <span key={`${index}-${span.text.slice(0, 8)}`} className={span.match ? "rounded-sm bg-[color-mix(in_srgb,var(--success)_28%,transparent)]" : undefined}>{span.text}</span>
                   ))}
-                </ul>
-              )}
-              {result.replacement !== null ? (
-                <>
-                  <p className="text-xs font-medium tracking-tight text-muted-foreground">Replacement</p>
-                  <p className="font-mono text-[13px] whitespace-pre-wrap">{result.replacement}</p>
-                </>
-              ) : null}
-              {result.replaceError ? <Notice tone="bad" role="alert" title={result.replaceError} /> : null}
-              <p className="text-xs font-medium tracking-tight text-muted-foreground">Explanation</p>
-              <ol className="list-decimal pl-4 text-[13px] text-muted-foreground">
-                {result.explanation.map((line, index) => <li key={`${index}-${line}`} className="whitespace-pre-wrap">{line}</li>)}
-              </ol>
-            </Panel>
-          )}
-        </div>
-      }
-    />
+                </p>
+                {result.matches.length === 0 ? <p className="text-sm text-muted-foreground">No match in this sample.</p> : (
+                  <ul className="text-sm">
+                    {result.matches.map((match, index) => (
+                      <li key={`${match.index}-${index}`} className="border-t border-border py-2">
+                        <div className="flex min-w-0 items-baseline gap-2 font-mono text-[12.5px]">
+                          <Truncate value={match.value || "empty"} className="font-mono" />
+                          <span className="shrink-0 text-muted-foreground whitespace-nowrap">at {match.index}</span>
+                        </div>
+                        {match.groups.length > 0 ? (
+                          <Truncate value={match.groups.map((group) => `${group.name}: ${group.value || "empty"}`).join(" · ")} className="mt-1 text-[12px] text-muted-foreground" />
+                        ) : null}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {result.replacement !== null ? (
+                  <>
+                    <p className="text-xs font-medium tracking-tight text-muted-foreground">Replacement</p>
+                    <p className="font-mono text-[13px] break-words whitespace-pre-wrap">{result.replacement}</p>
+                  </>
+                ) : null}
+                {result.replaceError ? <Notice tone="bad" role="alert" title={result.replaceError} /> : null}
+                <p className="text-xs font-medium tracking-tight text-muted-foreground">Explanation</p>
+                <ol className="list-decimal pl-4 text-[13px] text-muted-foreground">
+                  {result.explanation.map((line, index) => <li key={`${index}-${line}`} className="break-words whitespace-pre-wrap">{line}</li>)}
+                </ol>
+              </>
+            )}
+          </div>
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={note} tone={result.valid ? "pass" : "fail"} />
+    </ToolCard>
   );
 }
