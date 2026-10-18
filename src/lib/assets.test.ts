@@ -13,12 +13,6 @@ const PENDING_ARTWORK = new Set([
   "programmer-calculator",
   "aes-crypto",
   "har-analyzer",
-  // batch 2
-  "json-to-types",
-  "code-minifier",
-  "curl-converter",
-  "graphql-client",
-  "websocket-tester",
 ]);
 
 describe("tool artwork", () => {
