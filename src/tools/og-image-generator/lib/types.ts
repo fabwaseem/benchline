@@ -40,6 +40,7 @@ export type OgFields = {
   beforeValue: string;
   afterValue: string;
   caption: string;
+  brand: string;
 };
 
 export type FieldKey = keyof OgFields;
@@ -113,6 +114,7 @@ export const blankFields: OgFields = {
   beforeValue: "",
   afterValue: "",
   caption: "",
+  brand: "Benchline",
 };
 
 export const blankImages: OgImages = {

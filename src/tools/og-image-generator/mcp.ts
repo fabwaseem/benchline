@@ -16,7 +16,7 @@ const colorSchema = z.object({
 const fieldKeys = [
   "title", "subtitle", "author", "role", "eyebrow", "badge", "date", "time", "price", "cta", "url",
   "stat", "statLabel", "quote", "episode", "readTime", "meta", "command", "steps", "versions",
-  "beforeValue", "afterValue", "caption",
+  "beforeValue", "afterValue", "caption", "brand",
 ] as const;
 
 const imageKeys = ["logo", "avatar", "hero", "before", "after"] as const;
@@ -47,6 +47,7 @@ export const inputSchema = z.object({
   beforeValue: z.string().optional(),
   afterValue: z.string().optional(),
   caption: z.string().optional(),
+  brand: z.string().optional().describe("Brand name shown on templates that have a brand row."),
   colors: colorSchema.partial().optional(),
   logo: z.string().optional().describe("Logo image as base64, a data URI, or a public URL. Private addresses are refused. 10 MB cap."),
   avatar: z.string().optional().describe("Portrait image as base64, a data URI, or a public URL."),

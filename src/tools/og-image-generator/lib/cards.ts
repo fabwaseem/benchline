@@ -20,6 +20,11 @@ function headline(card: Card, spec: { base: number; min: number; width: number; 
   });
 }
 
+function initial(value: string) {
+  const letter = value.trim().charAt(0).toUpperCase();
+  return letter || "B";
+}
+
 function mark(card: Card, colors: OgColors, letter: string, images: OgImages) {
   const size = u(card, 64);
   if (images.logo) return photo(images.logo, { width: size, height: size, borderRadius: u(card, 12) });
@@ -71,8 +76,8 @@ export function renderEditorial(card: Card) {
       flex({ width: "100%", justifyContent: "space-between", alignItems: "flex-end" },
         text(`${card.fields.author}  ·  ${card.fields.readTime}`, { fontFamily: "Geist", fontSize: u(card, 24), opacity: 0.82 }),
         flex({ alignItems: "center", gap: u(card, 12) },
-          mark(card, card.colors, "A", card.images),
-          text("AURORA", { fontFamily: "Geist", fontSize: u(card, 18), letterSpacing: 3, fontWeight: 600 }),
+          mark(card, card.colors, initial(card.fields.brand), card.images),
+          text(card.fields.brand.toUpperCase(), { fontFamily: "Geist", fontSize: u(card, 18), letterSpacing: 3, fontWeight: 600 }),
         ),
       ),
     ),
@@ -80,6 +85,7 @@ export function renderEditorial(card: Card) {
 }
 
 export function renderAurora(card: Card) {
+  const waveHeight = Math.round(card.height * 0.3);
   return flex({
     width: card.width,
     height: card.height,
@@ -88,14 +94,25 @@ export function renderAurora(card: Card) {
     color: card.colors.foreground,
     fontFamily: "Geist",
     flexDirection: "column",
-    justifyContent: "space-between",
-    padding: u(card, 64),
+    justifyContent: "flex-start",
+    paddingTop: u(card, 56),
+    paddingLeft: u(card, 64),
+    paddingRight: u(card, 64),
+    paddingBottom: waveHeight + u(card, 24),
     position: "relative",
     overflow: "hidden",
   },
-    photo(waves, { position: "absolute", left: 0, top: u(card, 180), width: card.width, height: u(card, 420), opacity: 0.95 }),
-    text("AURORA", { fontSize: u(card, 18), letterSpacing: 4, fontWeight: 600, color: card.colors.muted }),
-    flex({ flexDirection: "column", gap: u(card, 28) },
+    photo(waves, {
+      position: "absolute",
+      left: 0,
+      top: card.height - waveHeight,
+      width: card.width,
+      height: waveHeight,
+      opacity: 0.38,
+      objectFit: "fill",
+    }),
+    text(card.fields.brand.toUpperCase(), { fontSize: u(card, 18), letterSpacing: 4, fontWeight: 600, color: card.colors.muted }),
+    flex({ flexDirection: "column", gap: u(card, 28), marginTop: u(card, 36) },
       headline(card, { base: 78, min: 40, width: 980, maxLines: 3 }, card.fields.title, { fontWeight: 650, letterSpacing: -2 }),
       flex({
         alignSelf: "flex-start",
@@ -226,51 +243,92 @@ export function renderSplit(card: Card) {
 }
 
 export function renderBrutalist(card: Card) {
-  const inset = u(card, 22);
+  const inset = u(card, 18);
+  const ink = card.colors.foreground;
+  const paper = card.colors.background;
+  const bar = u(card, 16);
   return flex({
     width: card.width,
     height: card.height,
-    background: card.colors.background,
+    background: paper,
     padding: inset,
+    fontFamily: "Geist",
   },
     flex({
       width: "100%",
       height: "100%",
-      borderWidth: u(card, 12),
+      borderWidth: u(card, 10),
       borderStyle: "solid",
-      borderColor: card.colors.foreground,
-      alignItems: "center",
-      justifyContent: "center",
-      padding: u(card, 36),
+      borderColor: ink,
+      flexDirection: "column",
+      justifyContent: "space-between",
+      padding: u(card, 28),
     },
-      headline(card, { base: 120, min: 48, width: 1000, maxLines: 2 }, card.fields.title.toUpperCase(), {
+      flex({ justifyContent: "space-between", alignItems: "center" },
+        flex({
+          background: ink,
+          color: paper,
+          paddingLeft: u(card, 14),
+          paddingRight: u(card, 14),
+          paddingTop: u(card, 8),
+          paddingBottom: u(card, 8),
+        }, text(card.fields.eyebrow.toUpperCase(), { fontWeight: 700, fontSize: u(card, 18), letterSpacing: 2 })),
+        flex({ gap: u(card, 8) },
+          flex({ width: u(card, 26), height: u(card, 26), background: ink }),
+          flex({ width: u(card, 26), height: u(card, 26), background: ink }),
+        ),
+      ),
+      flex({ width: "100%", height: bar, background: ink }),
+      headline(card, { base: 92, min: 42, width: 980, maxLines: 2 }, card.fields.title.toUpperCase(), {
         fontFamily: "Geist",
         fontWeight: 700,
-        letterSpacing: -3,
-        color: card.colors.foreground,
-        textAlign: "center",
+        letterSpacing: -2,
+        color: ink,
       }),
+      flex({ width: "46%", height: bar, background: ink }),
+      text(card.fields.subtitle, { fontSize: u(card, 28), fontWeight: 600, color: ink }),
+      flex({ gap: u(card, 10), alignItems: "center" },
+        flex({ width: u(card, 140), height: bar, background: ink }),
+        flex({ width: u(card, 48), height: bar, background: ink }),
+        flex({ width: bar, height: bar, background: ink }),
+      ),
+      flex({
+        width: "100%",
+        background: ink,
+        color: paper,
+        justifyContent: "space-between",
+        alignItems: "center",
+        paddingLeft: u(card, 16),
+        paddingRight: u(card, 16),
+        paddingTop: u(card, 12),
+        paddingBottom: u(card, 12),
+      },
+        text(card.fields.brand.toUpperCase(), { fontWeight: 700, fontSize: u(card, 20), letterSpacing: 3 }),
+        flex({ width: u(card, 16), height: u(card, 16), background: paper }),
+      ),
     ),
   );
 }
 
 export function renderLaunch(card: Card) {
   const steps = linesOf(card.fields.steps, 4);
+  const wide = card.width / card.height > 1.15;
   return flex({
     width: card.width,
     height: card.height,
     background: card.colors.background,
     color: card.colors.foreground,
     fontFamily: "Geist",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: wide ? "row" : "column",
+    alignItems: wide ? "center" : "flex-start",
+    justifyContent: wide ? "space-between" : "center",
     padding: u(card, 64),
+    gap: u(card, 32),
     position: "relative",
     overflow: "hidden",
   },
     flex({ position: "absolute", right: u(card, -40), top: u(card, -60), width: u(card, 280), height: u(card, 280), borderRadius: 999, background: card.colors.accent, opacity: 0.18 }),
-    flex({ flexDirection: "column", gap: u(card, 18), width: u(card, 620) },
+    flex({ flexDirection: "column", gap: u(card, 18), width: wide ? u(card, 620) : "100%" },
       flex({
         alignSelf: "flex-start",
         background: card.colors.foreground,
@@ -292,7 +350,7 @@ export function renderLaunch(card: Card) {
       color: "#1c1530",
       borderRadius: u(card, 22),
       padding: u(card, 22),
-      width: u(card, 340),
+      width: wide ? u(card, 340) : u(card, 520),
       gap: u(card, 12),
       borderWidth: 1,
       borderStyle: "solid",
@@ -312,7 +370,11 @@ export function renderLaunch(card: Card) {
 
 export function renderProfile(card: Card) {
   const chips = linesOf(card.fields.meta, 4);
-  const avatar = u(card, 220);
+  const pad = u(card, 56);
+  const gap = u(card, 40);
+  const tall = card.height > card.width * 0.95;
+  const avatar = tall ? Math.round(card.width * 0.36) : u(card, 220);
+  const textWidth = Math.max(u(card, 280), card.width - pad * 2 - avatar - gap);
   return flex({
     width: card.width,
     height: card.height,
@@ -321,14 +383,14 @@ export function renderProfile(card: Card) {
     fontFamily: "Geist",
     flexDirection: "row",
     alignItems: "center",
-    padding: u(card, 56),
-    gap: u(card, 48),
+    padding: pad,
+    gap,
   },
     card.images.avatar
       ? photo(card.images.avatar, { width: avatar, height: avatar, borderRadius: avatar })
       : photo(portrait, { width: avatar, height: avatar, borderRadius: avatar }),
-    flex({ flexDirection: "column", gap: u(card, 14), width: u(card, 760) },
-      headline(card, { base: 72, min: 40, width: 740, maxLines: 2 }, card.fields.title, { fontWeight: 650, letterSpacing: -1.5 }),
+    flex({ flexDirection: "column", gap: u(card, 14), width: textWidth },
+      headline(card, { base: 72, min: 40, width: Math.round(textWidth / (card.width / 1200)), maxLines: 2 }, card.fields.title, { fontWeight: 650, letterSpacing: -1.5 }),
       text(card.fields.role, { fontSize: u(card, 28), color: card.colors.muted }),
       flex({ gap: u(card, 10), flexWrap: "wrap", marginTop: u(card, 12) }, ...chips.map((chip) =>
         flex({
@@ -359,11 +421,11 @@ export function renderStat(card: Card) {
     justifyContent: "space-between",
     padding: u(card, 64),
   },
-      headline(card, { base: 180, min: 72, width: 1000, maxLines: 1 }, card.fields.stat, { fontWeight: 700, letterSpacing: -6, color: card.colors.accent, lineHeight: 0.9 }),
+      headline(card, { base: 160, min: 72, width: 1000, maxLines: 1 }, card.fields.stat, { fontWeight: 700, letterSpacing: -4, color: card.colors.accent, lineHeight: 1 }),
     flex({ width: "100%", justifyContent: "space-between", alignItems: "flex-end", gap: u(card, 32) },
       text(card.fields.statLabel, { fontSize: u(card, 36), width: u(card, 620), lineHeight: 1.15, fontWeight: 500 }),
       flex({ alignItems: "center", gap: u(card, 12), flexShrink: 0 },
-        mark(card, { ...card.colors, foreground: card.colors.accent, background: "#0e0e10" }, "L", card.images),
+        mark(card, { ...card.colors, foreground: card.colors.accent, background: card.colors.background }, initial(card.fields.author), card.images),
         text(card.fields.author, { letterSpacing: 3, fontSize: u(card, 18), fontWeight: 600 }),
       ),
     ),
@@ -414,7 +476,7 @@ export function renderEvent(card: Card) {
   },
     flex({ flexDirection: "column", width: u(card, 250) },
       text(month, { fontSize: u(card, 36), letterSpacing: 4, fontWeight: 700, color: card.colors.accent }),
-      text(day, { fontSize: u(card, 120), fontWeight: 700, letterSpacing: -4, lineHeight: 0.9, color: card.colors.accent }),
+      text(day, { fontSize: Math.min(u(card, 120), Math.round(card.height * 0.34)), fontWeight: 700, letterSpacing: -3, lineHeight: 1, color: card.colors.accent }),
     ),
     flex({ width: 1, height: u(card, 360), background: "rgba(255,255,255,0.16)" }),
     flex({ flexDirection: "column", gap: u(card, 18), width: u(card, 760) },
@@ -527,7 +589,7 @@ export function renderGlass(card: Card) {
       paddingLeft: u(card, 36),
       paddingRight: u(card, 36),
     },
-      mark(card, { background: "rgba(255,255,255,0.85)", foreground: card.colors.foreground, accent: card.colors.accent, muted: card.colors.muted }, "B", card.images),
+      mark(card, { background: "#1c1530", foreground: "#ffffff", accent: card.colors.accent, muted: card.colors.muted }, initial(card.fields.brand), card.images),
       headline(card, { base: 64, min: 34, width: 640, maxLines: 2 }, card.fields.title, { color: "#ffffff", fontFamily: "Geist", fontWeight: 600, letterSpacing: -1.2, textAlign: "center" }),
     ),
   );
@@ -582,8 +644,8 @@ export function renderProduct(card: Card) {
       }, card.fields.cta),
     ),
     card.images.hero
-      ? photo(card.images.hero, { width: u(card, 460), height: u(card, 420) })
-      : photo(shoe, { width: u(card, 480), height: u(card, 320) }),
+      ? photo(card.images.hero, { width: wide ? u(card, 460) : Math.round(card.width * 0.7), height: wide ? u(card, 420) : Math.round(card.height * 0.34) })
+      : photo(shoe, { width: wide ? u(card, 480) : Math.round(card.width * 0.7), height: wide ? u(card, 320) : Math.round(card.height * 0.3) }),
   );
 }
 
@@ -621,6 +683,7 @@ export function renderTutorial(card: Card) {
 
 export function renderBeforeAfter(card: Card) {
   const wide = card.width / card.height > 1.05;
+  const imageHeight = wide ? u(card, 250) : Math.round(card.height * 0.24);
   return flex({
     width: card.width,
     height: card.height,
@@ -631,17 +694,17 @@ export function renderBeforeAfter(card: Card) {
     gap: u(card, 16),
   },
     flex({ flex: 1, flexDirection: wide ? "row" : "column", gap: u(card, 16) },
-      comparePane(card, "Before", card.fields.beforeValue, card.images.before || mountains, "#f6d5d0"),
+      comparePane(card, "Before", card.fields.beforeValue, card.images.before || mountains, "#f6d5d0", imageHeight),
       flex({ alignItems: "center", justifyContent: "center" },
         flex({ width: u(card, 64), height: u(card, 64), borderRadius: 99, background: "#ffffff", alignItems: "center", justifyContent: "center", fontWeight: 700, color: card.colors.foreground, fontSize: u(card, 18) }, "VS"),
       ),
-      comparePane(card, "After", card.fields.afterValue, card.images.after || mountainsWarm, "#d9efd8"),
+      comparePane(card, "After", card.fields.afterValue, card.images.after || mountainsWarm, "#d9efd8", imageHeight),
     ),
     text(card.fields.caption, { textAlign: "center", fontSize: u(card, 22), color: card.colors.muted, fontWeight: 500 }),
   );
 }
 
-function comparePane(card: Card, label: string, value: string, src: string, tint: string) {
+function comparePane(card: Card, label: string, value: string, src: string, tint: string, imageHeight: number) {
   return flex({
     flex: 1,
     background: tint,
@@ -651,7 +714,7 @@ function comparePane(card: Card, label: string, value: string, src: string, tint
     gap: u(card, 12),
   },
     text(label, { fontSize: u(card, 18), color: card.colors.muted, fontWeight: 600 }),
-    photo(src, { width: "100%", height: u(card, 250), borderRadius: u(card, 16) }),
+    photo(src, { width: "100%", height: imageHeight, borderRadius: u(card, 16) }),
     text(value, { fontSize: u(card, 36), fontWeight: 700, color: card.colors.foreground }),
   );
 }

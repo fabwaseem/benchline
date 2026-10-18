@@ -26,7 +26,14 @@ describe("og templates", () => {
       const source = openGraphSource(state);
       expect(source).toContain("next/og");
       expect(source.toLowerCase()).toContain(state.fields[template.headline].toLowerCase().slice(0, 12));
+      expect(source).not.toContain("AURORA");
+      expect(template.defaults.brand).toBe("Benchline");
     }
+    const brutalist = resolveState({ template: "brutalist" });
+    expect(brutalist.fields.eyebrow).toBe("Issue 04");
+    expect(brutalist.fields.subtitle.length).toBeGreaterThan(0);
+    expect(openGraphSource(brutalist)).toContain("ISSUE 04");
+    expect(openGraphSource(brutalist)).toContain("BENCHLINE");
   });
 
   it("escapes meta tags and sizes the card", () => {
@@ -49,6 +56,18 @@ describe("og templates", () => {
     const clipped = layoutTitle("word ".repeat(80), { base: 72, min: 36, width: 420, maxLines: 2 }, 1200);
     expect(clipped.clipped).toBe(true);
     expect(titleFit(ogExample).notice).toMatch(/^Title fits in \d+ lines?\.$/);
+  });
+
+  it("keeps each template on its own Benchline defaults", () => {
+    const editorial = resolveState({ template: "editorial" });
+    const aurora = resolveState({ template: "aurora" });
+    expect(editorial.fields.brand).toBe("Benchline");
+    expect(editorial.fields.author).toBe("Waseem Anjum");
+    expect(openGraphSource(editorial)).toContain("BENCHLINE");
+    expect(openGraphSource(aurora)).toContain("BENCHLINE");
+    expect(openGraphSource(aurora)).toContain("benchline.dev");
+    expect(resolveState({ template: "stat" }).fields.author).toBe("Benchline");
+    expect(resolveState({ template: "profile" }).fields.role).toContain("Benchline");
   });
 
   it("rasterizes a serif card and a terminal card to PNG", async () => {

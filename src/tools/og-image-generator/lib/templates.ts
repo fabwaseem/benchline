@@ -44,6 +44,7 @@ const FIELD_META: Record<FieldKey, { label: string; kind: "text" | "textarea" }>
   beforeValue: { label: "Before value", kind: "text" },
   afterValue: { label: "After value", kind: "text" },
   caption: { label: "Caption", kind: "text" },
+  brand: { label: "Brand", kind: "text" },
 };
 
 export const IMAGE_LABELS: Record<ImageKey, string> = {
@@ -88,7 +89,7 @@ export const ogTemplates: OgTemplate[] = [
     id: "editorial",
     name: "Editorial",
     category: "Blog",
-    fields: ["title", "author", "readTime"],
+    fields: ["title", "author", "readTime", "brand"],
     images: ["logo"],
     font: "serif",
     headline: "title",
@@ -99,14 +100,14 @@ export const ogTemplates: OgTemplate[] = [
       preset("Ink", "#16130f", "#f6f4ef", "#e8590c", "#a39c91"),
       preset("Sage", "#e7efe6", "#1c2a22", "#1f6b45", "#4e6558"),
     ],
-    defaults: { title: "Designing tools people return to", author: "Ada Lovelace", readTime: "8 min read" },
+    defaults: { title: "Designing tools people return to", author: "Waseem Anjum", readTime: "8 min read", brand: "Benchline" },
     render: renderEditorial,
   }),
   define({
     id: "aurora",
     name: "Aurora",
     category: "Product",
-    fields: ["title", "url"],
+    fields: ["brand", "title", "url"],
     images: ["logo"],
     font: "sans",
     headline: "title",
@@ -117,7 +118,7 @@ export const ogTemplates: OgTemplate[] = [
       preset("Dusk", "#14081f", "#fff7ed", "#f97316", "#fdba74"),
       preset("Sea", "#04141c", "#ecfeff", "#22d3ee", "#67e8f9"),
     ],
-    defaults: { title: "Ship faster with Benchline", url: "benchline.dev" },
+    defaults: { brand: "Benchline", title: "Ship faster with Benchline", url: "benchline.dev" },
     render: renderAurora,
   }),
   define({
@@ -179,17 +180,17 @@ export const ogTemplates: OgTemplate[] = [
     id: "brutalist",
     name: "Brutalist",
     category: "Social",
-    fields: ["title"],
+    fields: ["eyebrow", "title", "subtitle", "brand"],
     font: "sans",
     headline: "title",
-    titleSpec: { base: 120, min: 48, width: 1000, maxLines: 2 },
+    titleSpec: { base: 92, min: 42, width: 980, maxLines: 2 },
     colors: colorsOf("#f25c05", "#111111", "#111111", "#111111"),
     presets: [
       preset("Orange", "#f25c05", "#111111", "#111111", "#111111"),
       preset("Yellow", "#ffe14a", "#111111", "#111111", "#111111"),
       preset("Black", "#111111", "#f6f4ef", "#f6f4ef", "#f6f4ef"),
     ],
-    defaults: { title: "Stop guessing" },
+    defaults: { eyebrow: "Issue 04", title: "Stop guessing", subtitle: "Ship the work. Skip the debate.", brand: "Benchline" },
     render: renderBrutalist,
   }),
   define({
@@ -225,7 +226,7 @@ export const ogTemplates: OgTemplate[] = [
       preset("Night", "#16130f", "#f6f4ef", "#e8590c", "#a39c91"),
       preset("Blue", "#f8fafc", "#0f172a", "#2563eb", "#64748b"),
     ],
-    defaults: { title: "Sara Khan", role: "Staff Engineer at Linear", meta: "6+ years at Linear\nRemote · GMT +5\nTypeScript · React · Rails" },
+    defaults: { title: "Sara Khan", role: "Staff Engineer at Benchline", meta: "6+ years at Benchline\nRemote · GMT +5\nTypeScript · React · Rails" },
     render: renderProfile,
   }),
   define({
@@ -243,7 +244,7 @@ export const ogTemplates: OgTemplate[] = [
       preset("Orange", "#0e0e10", "#fff7ed", "#ff7a1a", "#a8a29e"),
       preset("Paper", "#f6f1e7", "#16130f", "#e8590c", "#6b645c"),
     ],
-    defaults: { stat: "3.2x", statLabel: "faster page loads after the migration", author: "LINEAR" },
+    defaults: { stat: "3.2x", statLabel: "faster page loads after the migration", author: "Benchline" },
     render: renderStat,
   }),
   define({
