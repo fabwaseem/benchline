@@ -7,14 +7,25 @@ export function Dropzone({
   accept,
   label,
   onFile,
+  onFiles,
+  multiple = false,
   invalid = false,
 }: {
   accept: string;
   label: string;
-  onFile: (file: File) => void;
+  onFile?: (file: File) => void;
+  onFiles?: (files: File[]) => void;
+  multiple?: boolean;
   invalid?: boolean;
 }) {
   const [over, setOver] = useState(false);
+  function take(list: FileList | readonly File[] | null) {
+    const files = list ? [...list] : [];
+    if (files.length === 0) return;
+    onFiles?.(files);
+    const first = files[0];
+    if (first) onFile?.(first);
+  }
   return (
     <label
       aria-invalid={invalid || undefined}
@@ -31,17 +42,17 @@ export function Dropzone({
       onDrop={(event) => {
         event.preventDefault();
         setOver(false);
-        const file = event.dataTransfer.files[0];
-        if (file) onFile(file);
+        take(event.dataTransfer.files);
       }}
     >
       <input
         type="file"
         accept={accept}
+        multiple={multiple}
         className="sr-only"
         onChange={(event) => {
-          const file = event.target.files?.[0];
-          if (file) onFile(file);
+          take(event.target.files);
+          event.target.value = "";
         }}
       />
       {label}

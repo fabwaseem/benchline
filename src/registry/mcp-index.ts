@@ -23,6 +23,10 @@ export const mcpIndex: McpIndexEntry[] = [
   {"slug":"csv-json-convert","name":"convert_csv_json","title":"Convert CSV and JSON","description":"Convert CSV to JSON or JSON to CSV. Supports comma, tab, semicolon, and pipe delimiters, an optional header, type inference, and dotted flattening.","openWorld":false},
   {"slug":"diff-checker","name":"diff_text","title":"Diff two texts","description":"Compare two texts by line, word, or character, or compare JSON so object key order does not matter. Returns an inline diff, side-by-side rows for line and JSON modes, and a unified patch.","openWorld":false},
   {"slug":"base64-codec","name":"base64_codec","title":"Encode or decode Base64","description":"Encode UTF-8 text as Base64, or decode Base64 and data URIs. URL-safe output uses - and _ and omits padding. Decode reports the sniffed media type and whether the bytes are UTF-8 text.","openWorld":false},
+  {"slug":"image-convert","name":"plan_image_conversion","title":"Plan an image conversion","description":"Return the output filename, extension, and MIME type for converting an image to JPEG, PNG, WebP, or AVIF. Pixel encoding runs in the browser tool so the file stays on the device.","openWorld":false},
+  {"slug":"image-compress","name":"plan_image_compression","title":"Plan image compression","description":"Return the output format, clamped quality, capped pixel size, and savings for an image. Encoding runs in the browser tool so the file stays on the device.","openWorld":false},
+  {"slug":"image-resize","name":"plan_image_resize","title":"Plan an image resize","description":"Return the output pixel size and crop for a resize by pixels or percent, with aspect lock and contain, cover, or stretch. Drawing runs in the browser tool so the file stays on the device.","openWorld":false},
+  {"slug":"color-converter","name":"convert_color","title":"Convert a color and check contrast","description":"Convert HEX, RGB, HSL, OKLCH, or CMYK into every format, name the nearest Tailwind token, and report the WCAG 2 contrast ratio against a background.","openWorld":false},
 ];
 
 export function mcpFor(slug: string) {

@@ -14,9 +14,13 @@ import { tool as jsonYamlConvert } from "@/tools/json-yaml-convert/mcp";
 import { tool as csvJsonConvert } from "@/tools/csv-json-convert/mcp";
 import { tool as diffChecker } from "@/tools/diff-checker/mcp";
 import { tool as base64Codec } from "@/tools/base64-codec/mcp";
+import { tool as imageConvert } from "@/tools/image-convert/mcp";
+import { tool as imageCompress } from "@/tools/image-compress/mcp";
+import { tool as imageResize } from "@/tools/image-resize/mcp";
+import { tool as colorConverter } from "@/tools/color-converter/mcp";
 import type { BenchTool } from "@/lib/mcp/types";
 
-export const mcpTools: BenchTool[] = [llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec];
+export const mcpTools: BenchTool[] = [llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter];
 
 export function mcpToolBySlug(slug: string) {
   return mcpTools.find((tool) => tool.slug === slug);

@@ -14,11 +14,15 @@ import { meta as jsonYamlConvert } from "@/tools/json-yaml-convert/meta";
 import { meta as csvJsonConvert } from "@/tools/csv-json-convert/meta";
 import { meta as diffChecker } from "@/tools/diff-checker/meta";
 import { meta as base64Codec } from "@/tools/base64-codec/meta";
+import { meta as imageConvert } from "@/tools/image-convert/meta";
+import { meta as imageCompress } from "@/tools/image-compress/meta";
+import { meta as imageResize } from "@/tools/image-resize/meta";
+import { meta as colorConverter } from "@/tools/color-converter/meta";
 import { categories, toolOrder } from "@/registry/categories";
 import type { SearchRecord } from "@/registry/schema";
 import { assertRegistry } from "@/registry/validate";
 
-const tools = assertRegistry([llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec], [...categories], toolOrder);
+const tools = assertRegistry([llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter], [...categories], toolOrder);
 
 export { categories, tools };
 
