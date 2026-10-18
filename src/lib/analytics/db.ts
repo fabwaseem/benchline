@@ -6,7 +6,7 @@ import { emptyReport, mergeCountries, summarizeRuns, type CountRow, type Duratio
 import { safeError, utcDay } from "@/lib/analytics/clean";
 import type { AnalyticsEvent, AnalyticsStore, StatsFilter } from "@/lib/analytics/types";
 
-type Sql = ReturnType<typeof postgres>;
+export type Sql = ReturnType<typeof postgres>;
 
 function num(value: unknown): number {
   if (typeof value === "number" && Number.isFinite(value)) return value;

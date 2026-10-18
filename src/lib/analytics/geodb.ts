@@ -5,13 +5,11 @@ import { gunzipSync } from "node:zlib";
 import { Reader, type CountryResponse } from "mmdb-lib";
 import { countryFromRecord } from "@/lib/analytics/country";
 import { safeError } from "@/lib/analytics/clean";
+import { analyticsRuntime } from "@/lib/analytics/global";
 
 const MAX_GZIP_BYTES = 30_000_000;
 const MAX_DB_BYTES = 80_000_000;
 const FILE_NAME = "dbip-country-lite.mmdb";
-
-let reader: Reader<CountryResponse> | null = null;
-let loading: Promise<void> | null = null;
 
 export function geodbUrls(now = new Date()): string[] {
   return [0, 1, 2].map((offset) => {
@@ -22,7 +20,11 @@ export function geodbUrls(now = new Date()): string[] {
 }
 
 export function lookupCountry(ip: string): string | null {
-  if (!reader || !ip) return null;
+  const reader = analyticsRuntime().reader;
+  if (!reader || !ip) {
+    if (ip) void ensureGeoDb();
+    return null;
+  }
   try {
     return countryFromRecord(reader.get(ip));
   } catch {
@@ -88,15 +90,16 @@ export async function downloadGeoDatabase(dest: string, now = new Date()): Promi
 }
 
 export async function ensureGeoDb(): Promise<void> {
-  if (reader) return;
-  if (loading) return loading;
-  loading = (async () => {
+  const slot = analyticsRuntime();
+  if (slot.reader) return;
+  if (slot.geoLoading) return slot.geoLoading;
+  slot.geoLoading = (async () => {
     for (const file of geoDbPaths()) {
       if (!(await fileExists(file))) continue;
       const bytes = await readFile(file);
       const opened = openReader(bytes);
       if (opened) {
-        reader = opened;
+        analyticsRuntime().reader = opened;
         return;
       }
     }
@@ -105,19 +108,21 @@ export async function ensureGeoDb(): Promise<void> {
     const ok = await downloadGeoDatabase(dest);
     if (!ok) return;
     const opened = openReader(await readFile(dest));
-    if (opened) reader = opened;
+    if (opened) analyticsRuntime().reader = opened;
   })().catch((error: unknown) => {
     console.warn("[analytics] country database unavailable", safeError(error));
+    analyticsRuntime().geoLoading = null;
   });
-  await loading;
+  await slot.geoLoading;
 }
 
 /** Test hook. Production code does not replace the reader. */
 export function setGeoReaderForTests(next: Reader<CountryResponse> | null) {
-  reader = next;
-  loading = next ? Promise.resolve() : null;
+  const slot = analyticsRuntime();
+  slot.reader = next;
+  slot.geoLoading = next ? Promise.resolve() : null;
 }
 
 export function geoReaderOpen(): boolean {
-  return reader !== null;
+  return analyticsRuntime().reader !== null;
 }
