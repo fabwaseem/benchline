@@ -9,6 +9,6 @@ export function Tag({ children, className }: { children: ReactNode; className?: 
   );
 }
 
-export function Badge({ children, className }: { children: ReactNode; className?: string }) {
-  return <Tag className={className}>{children}</Tag>;
+export function Badge({ children, className, variant }: { children: ReactNode; className?: string; variant?: "mono" | "default" }) {
+  return <Tag className={cn(variant === "mono" && "font-mono", className)}>{children}</Tag>;
 }

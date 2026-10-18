@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { ActionButton, TextArea, OptionRow } from "@/components/kit/controls";
 import { Binary, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { CodeOutput } from "@/components/kit/code-output";
@@ -10,8 +11,6 @@ import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
 import { decodeBase64, encodeBytes, encodeText, exampleText, type DecodeResult } from "@/tools/base64-codec/lib/codec";
 
 type Source = "text" | "file";
@@ -91,7 +90,7 @@ export default function Base64Tool() {
             </FieldRow>
           ) : (
             <FieldRow label={action === "encode" ? "Text" : "Base64 or data URI"} htmlFor="b64-input" error={decoded && !decoded.ok ? decoded.error : undefined}>
-              <Textarea
+              <TextArea
                 id="b64-input"
                 value={action === "encode" ? text : payload}
                 onChange={(event) => (action === "encode" ? setText(event.target.value) : setPayload(event.target.value))}
@@ -124,7 +123,7 @@ export default function Base64Tool() {
             <Panel title="Decoded">
               <Notice tone="ok" title={decoded.mime} body={decoded.text === null ? "The bytes are not UTF-8. Download the file to keep them." : `${decoded.text.length.toLocaleString("en-US")} characters of text.`} />
               {decoded.text !== null ? <CodeOutput code={decoded.text} filename={decoded.filename} label="Text" /> : null}
-              <button type="button" className="btn btn-ink h-[30px] self-start" onClick={() => downloadBytes(decoded.filename, decoded.bytes, decoded.mime)}>Download {decoded.filename}</button>
+              <ActionButton className="btn btn-ink h-[30px] self-start" onClick={() => downloadBytes(decoded.filename, decoded.bytes, decoded.mime)}>Download {decoded.filename}</ActionButton>
             </Panel>
           ) : null}
           {action === "encode" && output ? (
@@ -136,8 +135,8 @@ export default function Base64Tool() {
       }
       inspector={
         <Panel title="Options">
-          <Toggle label="URL-safe" checked={urlSafe} onChange={setUrlSafe} />
-          <Toggle label="Data URI" checked={dataUri} onChange={setDataUri} />
+          <OptionRow label="URL-safe" checked={urlSafe} onChange={setUrlSafe} />
+          <OptionRow label="Data URI" checked={dataUri} onChange={setDataUri} />
           <p className="text-[12px] text-faint">URL-safe output uses - and _ and drops the padding. A data URI keeps the standard alphabet so a browser can read it.</p>
         </Panel>
       }
@@ -176,11 +175,3 @@ function downloadBytes(filename: string, bytes: Uint8Array, mime: string) {
   toast.success("Downloaded");
 }
 
-function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (value: boolean) => void }) {
-  return (
-    <label className="flex min-h-11 items-center justify-between gap-3 text-sm">
-      {label}
-      <Switch checked={checked} onCheckedChange={onChange} />
-    </label>
-  );
-}

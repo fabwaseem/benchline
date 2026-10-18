@@ -52,3 +52,7 @@ export function FieldRow({
     </div>
   );
 }
+
+export function Field(props: Parameters<typeof FieldRow>[0]) {
+  return <FieldRow {...props} />;
+}

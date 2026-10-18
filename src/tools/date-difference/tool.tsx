@@ -1,15 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { OptionRow, TextInput, TextArea } from "@/components/kit/controls";
 import { CalendarRange } from "lucide-react";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
 import { Panel, ToolShell } from "@/components/kit/tool-shell";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
 import { difference } from "@/tools/date-difference/lib/diff";
 
 export default function DateDifferenceTool() {
@@ -41,24 +39,21 @@ export default function DateDifferenceTool() {
         <Panel title="Dates">
           <div className="grid gap-3 min-[700px]:grid-cols-2">
             <FieldRow label="Start" htmlFor="diff-start">
-              <Input id="diff-start" type="date" value={startDate} onChange={(event) => setStartDate(event.target.value)} />
+              <TextInput id="diff-start" type="date" value={startDate} onChange={(event) => setStartDate(event.target.value)} />
             </FieldRow>
             <FieldRow label="End" htmlFor="diff-end">
-              <Input id="diff-end" type="date" value={endDate} onChange={(event) => setEndDate(event.target.value)} />
+              <TextInput id="diff-end" type="date" value={endDate} onChange={(event) => setEndDate(event.target.value)} />
             </FieldRow>
             <FieldRow label="Start time" htmlFor="diff-start-time">
-              <Input id="diff-start-time" type="time" value={startTime} onChange={(event) => setStartTime(event.target.value)} />
+              <TextInput id="diff-start-time" type="time" value={startTime} onChange={(event) => setStartTime(event.target.value)} />
             </FieldRow>
             <FieldRow label="End time" htmlFor="diff-end-time">
-              <Input id="diff-end-time" type="time" value={endTime} onChange={(event) => setEndTime(event.target.value)} />
+              <TextInput id="diff-end-time" type="time" value={endTime} onChange={(event) => setEndTime(event.target.value)} />
             </FieldRow>
           </div>
-          <label className="flex min-h-11 items-center justify-between gap-3 text-sm">
-            Count the end date
-            <Switch checked={includeEnd} onCheckedChange={setIncludeEnd} />
-          </label>
+          <OptionRow label="Count the end date" checked={includeEnd} onChange={setIncludeEnd} />
           <FieldRow label="Holidays" htmlFor="diff-holidays" help="One YYYY-MM-DD per line. Weekends are already excluded from business days.">
-            <Textarea id="diff-holidays" value={holidays} onChange={(event) => setHolidays(event.target.value)} placeholder="2026-12-25" className="min-h-24 font-mono" />
+            <TextArea id="diff-holidays" value={holidays} onChange={(event) => setHolidays(event.target.value)} placeholder="2026-12-25" className="min-h-24 font-mono" />
           </FieldRow>
         </Panel>
       }

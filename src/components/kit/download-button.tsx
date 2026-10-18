@@ -1,7 +1,7 @@
 "use client";
 
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { ActionButton } from "@/components/kit/controls";
 
 export function downloadText(filename: string, content: string, mime = "text/plain") {
   const blob = new Blob([content], { type: `${mime};charset=utf-8` });
@@ -40,14 +40,13 @@ export function DownloadButton({
   disabled?: boolean;
 }) {
   return (
-    <Button
-      type="button"
+    <ActionButton
       variant="outline"
       size="sm"
       disabled={disabled || !content}
       onClick={() => downloadText(filename, content, mime)}
     >
       {label}
-    </Button>
+    </ActionButton>
   );
 }

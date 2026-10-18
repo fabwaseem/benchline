@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { ChipButton, OptionRow, TextArea } from "@/components/kit/controls";
 import { Copy, Diff } from "lucide-react";
 import { toast } from "sonner";
 import { CodeOutput } from "@/components/kit/code-output";
@@ -10,8 +11,6 @@ import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
 import { compareText, diffModes, exampleLeft, exampleRight, sidePieces, type DiffMode, type DiffPiece, type DiffRow } from "@/tools/diff-checker/lib/diff";
 
 type View = "side" | "inline";
@@ -57,7 +56,7 @@ export default function DiffCheckerTool() {
       tabs={<ToolTabs label="View" value={view} onChange={setView} options={[{ value: "side", label: "Side by side" }, { value: "inline", label: "Inline" }]} />}
       actions={
         <>
-          <button type="button" className="chip h-8 max-[699px]:h-11" onClick={swap}>Swap</button>
+          <ChipButton className="h-8 max-[699px]:h-11" onClick={swap}>Swap</ChipButton>
           <InkButton icon={<Copy size={15} />} disabled={!result.patch} onClick={() => void navigator.clipboard.writeText(result.patch).then(() => toast.success("Patch copied"))}>Copy patch</InkButton>
         </>
       }
@@ -72,12 +71,12 @@ export default function DiffCheckerTool() {
         <div className="flex min-w-0 flex-col">
           <Panel title="Original">
             <FieldRow label="Original" htmlFor="diff-left">
-              <Textarea id="diff-left" value={left} onChange={(event) => setLeft(event.target.value)} spellCheck={false} className="min-h-40 font-mono text-[13px]" />
+              <TextArea id="diff-left" value={left} onChange={(event) => setLeft(event.target.value)} spellCheck={false} className="min-h-40 font-mono text-[13px]" />
             </FieldRow>
           </Panel>
           <Panel title="Changed" className="border-t border-border">
             <FieldRow label="Changed" htmlFor="diff-right">
-              <Textarea id="diff-right" value={right} onChange={(event) => setRight(event.target.value)} spellCheck={false} className="min-h-40 font-mono text-[13px]" />
+              <TextArea id="diff-right" value={right} onChange={(event) => setRight(event.target.value)} spellCheck={false} className="min-h-40 font-mono text-[13px]" />
             </FieldRow>
           </Panel>
         </div>
@@ -100,10 +99,7 @@ export default function DiffCheckerTool() {
       inspector={
         <Panel title="Comparison">
           <Segmented label="Mode" value={mode} onChange={setMode} options={diffModes.map((item) => ({ value: item, label: item }))} />
-          <label className="flex min-h-11 items-center justify-between gap-3 text-sm">
-            Ignore whitespace
-            <Switch checked={ignoreWhitespace} onCheckedChange={setIgnoreWhitespace} />
-          </label>
+            <OptionRow label="Ignore whitespace" checked={ignoreWhitespace} onChange={setIgnoreWhitespace} />
           <div className="grid grid-cols-2 gap-2">
             <ResultStat variant="well" label={`Added ${result.unit}`} value={String(result.added)} />
             <ResultStat variant="well" label={`Removed ${result.unit}`} value={String(result.removed)} />

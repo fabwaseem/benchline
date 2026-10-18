@@ -3,14 +3,12 @@
 import { useMemo, useState } from "react";
 import { Braces, Copy } from "lucide-react";
 import { toast } from "sonner";
-import { CodeOutput } from "@/components/kit/code-output";
+import { CodeField, CodeOutput } from "@/components/kit/code-output";
+import { ActionButton, OptionRow, Select } from "@/components/kit/controls";
+import { FileButton } from "@/components/kit/dropzone";
 import { EmptyState } from "@/components/kit/empty-state";
-import { FieldRow } from "@/components/kit/field-row";
-import { Notice } from "@/components/kit/notice";
-import { Segmented } from "@/components/kit/segmented";
+import { ErrorCallout } from "@/components/kit/notice";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
 import { exampleJson, formatJson, type Indent, type JsonTreeNode } from "@/tools/json-formatter/lib/format";
 
 export default function JsonFormatterTool() {
@@ -21,6 +19,8 @@ export default function JsonFormatterTool() {
   const [tab, setTab] = useState<"format" | "tree">("format");
   const result = useMemo(() => formatJson(input, { indent, sortKeys, minify }), [indent, input, minify, sortKeys]);
   const issue = result.errors[0];
+  const lines = result.output ? result.output.split("\n").length : 0;
+  const bytes = new TextEncoder().encode(result.output).length;
 
   useWorkbenchKeys({
     onCopy: () => {
@@ -36,7 +36,7 @@ export default function JsonFormatterTool() {
   });
 
   const status = result.valid
-    ? `Valid JSON · ${result.output.length.toLocaleString("en-US")} characters`
+    ? `Valid JSON · ${lines.toLocaleString("en-US")} lines · ${bytes.toLocaleString("en-US")} bytes`
     : `Invalid · line ${issue?.line ?? 1}, column ${issue?.column ?? 1}`;
 
   return (
@@ -44,9 +44,32 @@ export default function JsonFormatterTool() {
       runsLocally
       layout="split+inspector"
       flow="band"
-      columns="min-[1280px]:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_300px]"
+      columns="min-[1280px]:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_280px]"
       tabs={<ToolTabs label="View" value={tab} onChange={setTab} options={[{ value: "format", label: "Format" }, { value: "tree", label: "Tree" }]} />}
-      actions={<InkButton icon={<Copy size={15} />} disabled={!result.output} onClick={() => void navigator.clipboard.writeText(result.output).then(() => toast.success("JSON copied"))}>Copy JSON</InkButton>}
+      actions={
+        <>
+          <ActionButton variant={minify ? "outline" : "default"} onClick={() => setMinify(false)}>Format</ActionButton>
+          <ActionButton variant={minify ? "default" : "outline"} onClick={() => setMinify(true)}>Minify</ActionButton>
+          <Select aria-label="Indent" value={indent} disabled={minify} onChange={(event) => setIndent(event.target.value as Indent)} className="w-[7.5rem]">
+            <option value="2">2 spaces</option>
+            <option value="4">4 spaces</option>
+            <option value="tab">Tab</option>
+          </Select>
+          <FileButton
+            accept="application/json,.json,text/plain"
+            label="Upload"
+            onFile={(file) => {
+              void file.text().then((text) => {
+                setInput(text);
+                setMinify(false);
+              });
+            }}
+          />
+          <ActionButton variant="outline" onClick={() => { setInput(exampleJson); setMinify(false); }}>Sample</ActionButton>
+          <ActionButton variant="ghost" onClick={() => setInput("")}>Clear</ActionButton>
+          <InkButton icon={<Copy size={15} />} disabled={!result.output} onClick={() => void navigator.clipboard.writeText(result.output).then(() => toast.success("JSON copied"))}>Copy JSON</InkButton>
+        </>
+      }
       status={
         <>
           <span className={result.valid ? "dot" : "dot dot-warn"} />
@@ -56,9 +79,7 @@ export default function JsonFormatterTool() {
       }
       input={
         <Panel title="JSON">
-          <FieldRow label="Document" htmlFor="json-input" error={issue ? `${issue.message} at line ${issue.line}, column ${issue.column}` : undefined}>
-            <Textarea id="json-input" value={input} onChange={(event) => setInput(event.target.value)} spellCheck={false} aria-invalid={!result.valid} className="min-h-72 font-mono text-[13px]" />
-          </FieldRow>
+          <CodeField id="json-input" label="JSON document" value={input} invalid={!result.valid} onChange={(event) => setInput(event.target.value)} />
         </Panel>
       }
       output={
@@ -75,8 +96,8 @@ export default function JsonFormatterTool() {
           ) : null}
           {!result.valid ? (
             <Panel title="Error">
-              <Notice tone="bad" role="alert" title={issue ? `Line ${issue.line}, column ${issue.column}` : "Invalid JSON"} body={issue?.message} />
-              {issue?.excerpt ? <pre className="overflow-auto rounded-lg border border-border bg-background p-3 font-mono text-[12.5px] whitespace-pre-wrap">{issue.excerpt}</pre> : null}
+              <ErrorCallout title={issue ? `Line ${issue.line}, column ${issue.column}` : "Invalid JSON"} body={issue?.message} />
+              {issue?.excerpt ? <pre className="overflow-auto rounded-lg border border-border bg-well p-3 font-mono text-[12.5px] whitespace-pre-wrap">{issue.excerpt}</pre> : null}
               {result.errors.length > 1 ? (
                 <ul className="text-sm text-muted-foreground">
                   {result.errors.slice(1).map((error) => (
@@ -91,11 +112,7 @@ export default function JsonFormatterTool() {
       }
       inspector={
         <Panel title="Options">
-          <Segmented label="Style" value={minify ? "minify" : "pretty"} onChange={(value) => setMinify(value === "minify")} options={[{ value: "pretty", label: "Pretty" }, { value: "minify", label: "Minify" }]} />
-          {minify ? <p className="text-[12px] text-faint">Minify drops insignificant whitespace. Indent is not used.</p> : (
-            <Segmented label="Indent" value={indent} onChange={setIndent} options={[{ value: "2", label: "2 spaces" }, { value: "4", label: "4 spaces" }, { value: "tab", label: "Tab" }]} />
-          )}
-          <Toggle label="Sort keys" checked={sortKeys} onChange={setSortKeys} />
+          <OptionRow label="Sort keys" checked={sortKeys} onChange={setSortKeys} hint={minify ? "Keys are sorted before whitespace is dropped." : "Sort object keys at every level."} />
         </Panel>
       }
     />
@@ -124,14 +141,5 @@ function Tree({ node, depth }: { node: JsonTreeNode; depth: number }) {
         ))}
       </div>
     </details>
-  );
-}
-
-function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (value: boolean) => void }) {
-  return (
-    <label className="flex min-h-11 items-center justify-between gap-3 text-sm">
-      {label}
-      <Switch checked={checked} onCheckedChange={onChange} />
-    </label>
   );
 }

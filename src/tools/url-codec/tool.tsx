@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { ChipButton, OptionRow, TextInput, TextArea } from "@/components/kit/controls";
 import { Link } from "lucide-react";
 import { CopyButton } from "@/components/kit/copy-button";
 import { EmptyState } from "@/components/kit/empty-state";
@@ -8,9 +9,6 @@ import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
 import { Panel, ToolShell, ToolTabs } from "@/components/kit/tool-shell";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
 import { decodeUrl, encodeUrl, parseUrl, replaceQuery, serializeQuery, utmKeys, withUtm, type EncodeMode, type QueryParam } from "@/tools/url-codec/lib/url";
 
 export default function UrlCodecTool() {
@@ -47,20 +45,17 @@ export default function UrlCodecTool() {
         <Panel title={tab === "parse" ? "URL" : "Text"}>
           {tab === "parse" ? (
             <FieldRow label="URL or query string" htmlFor="url-input" error={"error" in parsed ? parsed.error : undefined}>
-              <Textarea id="url-input" value={url} onChange={(event) => { setUrl(event.target.value); setParams(null); }} className="min-h-28 font-mono" aria-invalid={"error" in parsed} />
+              <TextArea id="url-input" value={url} onChange={(event) => { setUrl(event.target.value); setParams(null); }} className="min-h-28 font-mono" aria-invalid={"error" in parsed} />
             </FieldRow>
           ) : (
             <>
               <FieldRow label={tab === "encode" ? "Plain text" : "Encoded text"} htmlFor="url-text">
-                <Textarea id="url-text" value={text} onChange={(event) => setText(event.target.value)} className="min-h-28 font-mono" />
+                <TextArea id="url-text" value={text} onChange={(event) => setText(event.target.value)} className="min-h-28 font-mono" />
               </FieldRow>
               {tab === "encode" ? (
                 <Segmented label="Encoding" value={mode} onChange={setMode} options={[{ value: "component", label: "Component" }, { value: "full", label: "Full URL" }]} />
               ) : (
-                <label className="flex min-h-11 items-center justify-between gap-3 text-sm">
-                  Treat + as space
-                  <Switch checked={plusAsSpace} onCheckedChange={setPlusAsSpace} />
-                </label>
+                <OptionRow label="Treat + as space" checked={plusAsSpace} onChange={setPlusAsSpace} />
               )}
             </>
           )}
@@ -102,17 +97,17 @@ export default function UrlCodecTool() {
                   <div className="flex flex-col gap-2">
                     {activeParams.map((param, index) => (
                       <div key={`${param.key}-${index}`} className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] gap-2">
-                        <Input aria-label={`Parameter ${index + 1} name`} value={param.key} onChange={(event) => editParam(index, { key: event.target.value })} className="font-mono" />
-                        <Input aria-label={`Parameter ${index + 1} value`} value={param.value} onChange={(event) => editParam(index, { value: event.target.value })} className="font-mono" />
-                        <button type="button" className="chip" onClick={() => setParams(activeParams.filter((_, item) => item !== index))}>Remove</button>
+                        <TextInput aria-label={`Parameter ${index + 1} name`} value={param.key} onChange={(event) => editParam(index, { key: event.target.value })} className="font-mono" />
+                        <TextInput aria-label={`Parameter ${index + 1} value`} value={param.value} onChange={(event) => editParam(index, { value: event.target.value })} className="font-mono" />
+                        <ChipButton onClick={() => setParams(activeParams.filter((_, item) => item !== index))}>Remove</ChipButton>
                       </div>
                     ))}
-                    <button type="button" className="chip" onClick={() => setParams([...activeParams, { key: "", value: "" }])}>Add parameter</button>
+                    <ChipButton onClick={() => setParams([...activeParams, { key: "", value: "" }])}>Add parameter</ChipButton>
                   </div>
                   <div className="grid gap-2 min-[700px]:grid-cols-2">
                     {utmKeys.map((key) => (
                       <FieldRow key={key} label={key} htmlFor={`utm-${key}`}>
-                        <Input
+                        <TextInput
                           id={`utm-${key}`}
                           value={activeParams.find((param) => param.key === key)?.value ?? ""}
                           onChange={(event) => {

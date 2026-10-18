@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { ActionButton, ChipButton, OptionRow, TextInput } from "@/components/kit/controls";
 import { Braces, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { CheckRows } from "@/components/kit/check-row";
@@ -10,9 +11,6 @@ import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
 import { buildSchema, exampleValues, graphOf, nextSnippet, schemaTypes, scriptTag, validateSchema, type SchemaType, type SchemaValues } from "@/tools/schema-generator/lib/schema";
 
 export default function SchemaTool() {
@@ -76,19 +74,16 @@ export default function SchemaTool() {
         <Panel title="Fields">
           <div className="flex flex-wrap gap-1.5" role="radiogroup" aria-label="Schema type">
             {schemaTypes.map((item) => (
-              <button key={item} type="button" role="radio" aria-checked={item === type} data-on={item === type ? "true" : "false"} className="chip h-8 max-[699px]:h-11" onClick={() => pick(item)}>
+              <ChipButton key={item} role="radio" pressed={item === type} className="h-8 max-[699px]:h-11" onClick={() => pick(item)}>
                 {item}
-              </button>
+              </ChipButton>
             ))}
           </div>
-          <label className="flex items-center justify-between gap-3 text-sm">
-            Combine into @graph ({graph.length} saved)
-            <Switch checked={combine} onCheckedChange={setCombine} />
-          </label>
+          <OptionRow label={<>Combine into @graph ({graph.length} saved)</>} checked={combine} onChange={setCombine} />
           <Fields type={type} values={values} checks={checks} onChange={setValues} />
           <div className="flex flex-wrap gap-2">
-            <Button type="button" variant="outline" className="max-[699px]:h-11" onClick={() => setValues(exampleValues(type))}>Load example</Button>
-            <Button type="button" variant="outline" className="max-[699px]:h-11" onClick={addToGraph}>Add to graph</Button>
+            <ActionButton type="button" variant="outline" className="max-[699px]:h-11" onClick={() => setValues(exampleValues(type))}>Load example</ActionButton>
+            <ActionButton type="button" variant="outline" className="max-[699px]:h-11" onClick={addToGraph}>Add to graph</ActionButton>
           </div>
         </Panel>
       }
@@ -131,7 +126,7 @@ function Fields({ type, values, checks, onChange }: { type: SchemaType; values: 
             : undefined;
         return (
           <FieldRow key={key} label={key} htmlFor={`schema-${key}`} help={help} error={invalid ? check?.detail : undefined}>
-            <Input id={`schema-${key}`} value={typeof values[key] === "string" ? values[key] : ""} aria-invalid={invalid || undefined} onChange={(event) => onChange({ ...values, [key]: event.target.value })} className="max-[699px]:h-11" />
+            <TextInput id={`schema-${key}`} value={typeof values[key] === "string" ? values[key] : ""} aria-invalid={invalid || undefined} onChange={(event) => onChange({ ...values, [key]: event.target.value })} className="max-[699px]:h-11" />
           </FieldRow>
         );
       })}
@@ -149,19 +144,19 @@ function Repeater({ label, addLabel, items, fields, onChange }: { label: string;
       {items.map((item, index) => (
         <div key={`${label}-${index}`} className="grid gap-2 rounded-lg border border-border p-2">
           {fields.map((field) => (
-            <Input key={field} aria-label={`${label} ${field} ${index + 1}`} value={item[field as "q"] ?? ""} className="max-[699px]:h-11" onChange={(event) => {
+            <TextInput key={field} aria-label={`${label} ${field} ${index + 1}`} value={item[field as "q"] ?? ""} className="max-[699px]:h-11" onChange={(event) => {
               const next = items.map((row, rowIndex) => rowIndex === index ? { ...row, [field]: event.target.value } : row);
               onChange(next);
             }} />
           ))}
           <div className="flex gap-2">
-            <Button type="button" variant="ghost" size="sm" disabled={index === 0} onClick={() => onChange(move(items, index, -1))}>Up</Button>
-            <Button type="button" variant="ghost" size="sm" disabled={index === items.length - 1} onClick={() => onChange(move(items, index, 1))}>Down</Button>
-            <Button type="button" variant="ghost" size="sm" onClick={() => onChange(items.filter((_, rowIndex) => rowIndex !== index))}>Remove</Button>
+            <ActionButton type="button" variant="ghost" size="sm" disabled={index === 0} onClick={() => onChange(move(items, index, -1))}>Up</ActionButton>
+            <ActionButton type="button" variant="ghost" size="sm" disabled={index === items.length - 1} onClick={() => onChange(move(items, index, 1))}>Down</ActionButton>
+            <ActionButton type="button" variant="ghost" size="sm" onClick={() => onChange(items.filter((_, rowIndex) => rowIndex !== index))}>Remove</ActionButton>
           </div>
         </div>
       ))}
-      <Button type="button" variant="outline" size="sm" className="max-[699px]:h-11" onClick={() => onChange([...items, {}])}>{addLabel}</Button>
+      <ActionButton type="button" variant="outline" size="sm" className="max-[699px]:h-11" onClick={() => onChange([...items, {}])}>{addLabel}</ActionButton>
     </div>
   );
 }

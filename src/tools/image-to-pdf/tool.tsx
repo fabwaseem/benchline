@@ -1,7 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { ChevronDown, ChevronUp, Download, FileImage, X } from "lucide-react";
+import { ActionButton } from "@/components/kit/controls";
+import { Download, FileImage } from "lucide-react";
+import { FileList } from "@/components/kit/file-list";
 import { downloadBytes } from "@/components/kit/download-button";
 import { Dropzone } from "@/components/kit/dropzone";
 import { EmptyState } from "@/components/kit/empty-state";
@@ -10,7 +12,6 @@ import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Button } from "@/components/ui/button";
 import { formatBytes } from "@/lib/image-format";
 import { imagesToPdf, type Orientation, type PageSizeName } from "@/tools/image-to-pdf/lib/images";
 
@@ -108,35 +109,33 @@ export default function ImageToPdfTool() {
         <Panel title="Images">
           <Dropzone accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" multiple onFiles={(files) => void addFiles(files)} label="Drop JPG, PNG, or WebP. They stay in this browser." invalid={Boolean(error)} />
           {items.length === 0 ? <EmptyState title="No images yet" hint="The list order becomes the page order." /> : (
-            <ul className="flex flex-col gap-2" aria-label="Images">
-              {items.map((item, index) => (
-                <li
-                  key={item.id}
-                  draggable
-                  onDragStart={() => { drag.current = index; }}
-                  onDragOver={(event) => event.preventDefault()}
-                  onDrop={(event) => {
-                    event.preventDefault();
-                    const from = drag.current;
-                    drag.current = null;
-                    if (from == null) return;
-                    setItems((current) => moveItem(current, from, index));
-                    setResult(null);
-                  }}
-                  className="flex items-center gap-2 rounded-lg border border-border bg-background p-2"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
+            <FileList
+              label="Images"
+              items={items.map((item, index) => ({
+                id: item.id,
+                name: item.name,
+                meta: `${item.kind.toUpperCase()} · ${formatBytes(item.bytes.byteLength)}`,
+                leading: (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img src={item.preview} alt="" className="size-10 rounded-md object-cover" />
-                  <div className="min-w-0 flex-1">
-                    <div className="truncate text-sm font-medium">{item.name}</div>
-                    <div className="font-mono text-[12px] text-muted-foreground">{item.kind.toUpperCase()} · {formatBytes(item.bytes.byteLength)}</div>
-                  </div>
-                  <Button type="button" variant="ghost" size="icon-sm" aria-label={`Move ${item.name} up`} disabled={index === 0} onClick={() => { setItems((current) => moveItem(current, index, index - 1)); setResult(null); }}><ChevronUp /></Button>
-                  <Button type="button" variant="ghost" size="icon-sm" aria-label={`Move ${item.name} down`} disabled={index === items.length - 1} onClick={() => { setItems((current) => moveItem(current, index, index + 1)); setResult(null); }}><ChevronDown /></Button>
-                  <Button type="button" variant="ghost" size="icon-sm" aria-label={`Remove ${item.name}`} onClick={() => remove(item.id)}><X /></Button>
-                </li>
-              ))}
-            </ul>
+                ),
+                upDisabled: index === 0,
+                downDisabled: index === items.length - 1,
+                onUp: () => { setItems((current) => moveItem(current, index, index - 1)); setResult(null); },
+                onDown: () => { setItems((current) => moveItem(current, index, index + 1)); setResult(null); },
+                onRemove: () => remove(item.id),
+                onDragStart: () => { drag.current = index; },
+                onDragOver: (event) => event.preventDefault(),
+                onDrop: (event) => {
+                  event.preventDefault();
+                  const from = drag.current;
+                  drag.current = null;
+                  if (from == null) return;
+                  setItems((current) => moveItem(current, from, index));
+                  setResult(null);
+                },
+              }))}
+            />
           )}
         </Panel>
       }
@@ -149,7 +148,7 @@ export default function ImageToPdfTool() {
                 <ResultStat label="Pages" value={String(items.length)} />
                 <ResultStat label="Size" value={formatBytes(result.byteLength)} />
               </div>
-              <Button type="button" onClick={download}><Download />Download PDF</Button>
+              <ActionButton type="button" onClick={download}><Download />Download PDF</ActionButton>
             </div>
           ) : <EmptyState title="No PDF yet" hint="WebP is converted in this browser, then embedded with the JPG and PNG files." />}
         </Panel>

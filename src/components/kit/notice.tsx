@@ -15,6 +15,10 @@ const iconTones = {
   bad: "text-status-bad",
 };
 
+export function ErrorCallout({ title, body, className }: { title: string; body?: string; className?: string }) {
+  return <Notice tone="bad" role="alert" title={title} body={body} className={className} />;
+}
+
 export function Notice({
   tone = "neutral",
   icon,

@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { ActionButton } from "@/components/kit/controls";
 
 export function CopyButton({
   value,
@@ -28,8 +28,7 @@ export function CopyButton({
 }) {
   const [copied, setCopied] = useState(false);
   return (
-    <Button
-      type="button"
+    <ActionButton
       variant={variant}
       size={iconOnly ? "icon" : size}
       className={className}
@@ -45,6 +44,6 @@ export function CopyButton({
     >
       {icon}
       {iconOnly ? null : copied ? "Copied" : label}
-    </Button>
+    </ActionButton>
   );
 }

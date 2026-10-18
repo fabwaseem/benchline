@@ -141,9 +141,9 @@ export function ToolShell({
   if (layout) {
     return (
       <section className="flex min-w-0 flex-col bg-surface">
-        <div className="flex h-12 items-center gap-3 border-b border-border px-3 min-[700px]:px-4">
+        <div className="flex min-h-12 flex-wrap items-center gap-2 border-b border-border px-3 py-2 min-[700px]:px-4">
           {tabs}
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex flex-wrap items-center gap-2">
             {actions}
           </div>
         </div>

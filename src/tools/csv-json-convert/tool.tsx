@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { TextArea, OptionRow } from "@/components/kit/controls";
 import { Copy, Table2 } from "lucide-react";
 import { toast } from "sonner";
 import { CodeOutput } from "@/components/kit/code-output";
@@ -10,8 +11,6 @@ import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
 import { csvToJson, delimiterName, exampleCsv, exampleJsonRows, jsonToCsv, type DelimiterChoice } from "@/tools/csv-json-convert/lib/convert";
 
 type Direction = "csv-json" | "json-csv";
@@ -68,7 +67,7 @@ export default function CsvJsonTool() {
       input={
         <Panel title={toJson ? "CSV" : "JSON"}>
           <FieldRow label={toJson ? "Table" : "Rows"} htmlFor="csv-input" error={result.ok ? undefined : result.error}>
-            <Textarea
+            <TextArea
               id="csv-input"
               value={input}
               onChange={(event) => (toJson ? setCsv(event.target.value) : setJson(event.target.value))}
@@ -108,8 +107,8 @@ export default function CsvJsonTool() {
               { value: "|", label: "Pipe" },
             ]}
           />
-          <Toggle label="Header row" checked={header} onChange={setHeader} />
-          {toJson ? <Toggle label="Infer types" checked={inferTypes} onChange={setInferTypes} /> : <Toggle label="Flatten nested values" checked={flatten} onChange={setFlatten} />}
+          <OptionRow label="Header row" checked={header} onChange={setHeader} />
+          {toJson ? <OptionRow label="Infer types" checked={inferTypes} onChange={setInferTypes} /> : <OptionRow label="Flatten nested values" checked={flatten} onChange={setFlatten} />}
           <div className="grid grid-cols-2 gap-2">
             <ResultStat variant="well" label="Rows" value={String(result.rows)} />
             <ResultStat variant="well" label="Columns" value={String(result.columns)} />
@@ -120,11 +119,3 @@ export default function CsvJsonTool() {
   );
 }
 
-function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (value: boolean) => void }) {
-  return (
-    <label className="flex min-h-11 items-center justify-between gap-3 text-sm">
-      {label}
-      <Switch checked={checked} onCheckedChange={onChange} />
-    </label>
-  );
-}

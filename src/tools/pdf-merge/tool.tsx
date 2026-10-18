@@ -1,7 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { ChevronDown, ChevronUp, Download, Files, X } from "lucide-react";
+import { ActionButton, TextInput } from "@/components/kit/controls";
+import { Download, Files } from "lucide-react";
+import { FileList } from "@/components/kit/file-list";
 import { downloadBytes } from "@/components/kit/download-button";
 import { Dropzone } from "@/components/kit/dropzone";
 import { EmptyState } from "@/components/kit/empty-state";
@@ -9,8 +11,6 @@ import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { formatBytes } from "@/lib/image-format";
 import { inspectPdf, mergePdfs, type MergeResult } from "@/tools/pdf-merge/lib/merge";
 
@@ -89,42 +89,38 @@ export default function PdfMergeTool() {
         <Panel title="PDFs">
           <Dropzone accept="application/pdf,.pdf" multiple onFiles={(files) => void addFiles(files)} label="Drop PDFs. They stay in this browser." invalid={Boolean(error)} />
           {items.length === 0 ? <EmptyState title="No PDFs yet" hint="Add at least two. The list order is the page order." /> : (
-            <ul className="flex flex-col gap-2" aria-label="PDFs to merge">
-              {items.map((item, index) => (
-                <li
-                  key={item.id}
-                  draggable
-                  onDragStart={() => { drag.current = index; }}
-                  onDragOver={(event) => event.preventDefault()}
-                  onDrop={(event) => {
-                    event.preventDefault();
-                    const from = drag.current;
-                    drag.current = null;
-                    if (from == null) return;
-                    setItems((current) => moveItem(current, from, index));
-                    setResult(null);
-                  }}
-                  className="rounded-lg border border-border bg-background p-2"
-                >
-                  <div className="flex items-center gap-2">
-                    <div className="min-w-0 flex-1">
-                      <div className="truncate text-sm font-medium">{item.name}</div>
-                      <div className="font-mono text-[12px] text-muted-foreground">{item.pageCount} {item.pageCount === 1 ? "page" : "pages"} · {formatBytes(item.bytes.byteLength)}</div>
-                    </div>
-                    <Button type="button" variant="ghost" size="icon-sm" aria-label={`Move ${item.name} up`} disabled={index === 0} onClick={() => { setItems((current) => moveItem(current, index, index - 1)); setResult(null); }}><ChevronUp /></Button>
-                    <Button type="button" variant="ghost" size="icon-sm" aria-label={`Move ${item.name} down`} disabled={index === items.length - 1} onClick={() => { setItems((current) => moveItem(current, index, index + 1)); setResult(null); }}><ChevronDown /></Button>
-                    <Button type="button" variant="ghost" size="icon-sm" aria-label={`Remove ${item.name}`} onClick={() => { setItems((current) => current.filter((row) => row.id !== item.id)); setResult(null); }}><X /></Button>
-                  </div>
-                  <FieldRow label="Pages" htmlFor={`pages-${item.id}`} help="Blank keeps every page. Example: 1-3,5" className="mt-2">
-                    <Input id={`pages-${item.id}`} value={item.pages} placeholder="all pages" onChange={(event) => {
+            <FileList
+              label="PDFs to merge"
+              items={items.map((item, index) => ({
+                id: item.id,
+                name: item.name,
+                meta: `${item.pageCount} ${item.pageCount === 1 ? "page" : "pages"} · ${formatBytes(item.bytes.byteLength)}`,
+                upDisabled: index === 0,
+                downDisabled: index === items.length - 1,
+                onUp: () => { setItems((current) => moveItem(current, index, index - 1)); setResult(null); },
+                onDown: () => { setItems((current) => moveItem(current, index, index + 1)); setResult(null); },
+                onRemove: () => { setItems((current) => current.filter((row) => row.id !== item.id)); setResult(null); },
+                onDragStart: () => { drag.current = index; },
+                onDragOver: (event) => event.preventDefault(),
+                onDrop: (event) => {
+                  event.preventDefault();
+                  const from = drag.current;
+                  drag.current = null;
+                  if (from == null) return;
+                  setItems((current) => moveItem(current, from, index));
+                  setResult(null);
+                },
+                extra: (
+                  <FieldRow label="Pages" htmlFor={`pages-${item.id}`} help="Blank keeps every page. Example: 1-3,5">
+                    <TextInput id={`pages-${item.id}`} value={item.pages} placeholder="all pages" onChange={(event) => {
                       const pages = event.target.value;
                       setItems((current) => current.map((row) => row.id === item.id ? { ...row, pages } : row));
                       setResult(null);
                     }} />
                   </FieldRow>
-                </li>
-              ))}
-            </ul>
+                ),
+              }))}
+            />
           )}
         </Panel>
       }
@@ -137,7 +133,7 @@ export default function PdfMergeTool() {
                 <ResultStat label="Pages" value={String(result.pageCount)} />
                 <ResultStat label="Size" value={formatBytes(result.bytes.byteLength)} />
               </div>
-              <Button type="button" onClick={download}><Download />Download PDF</Button>
+              <ActionButton type="button" onClick={download}><Download />Download PDF</ActionButton>
             </div>
           ) : <EmptyState title="Nothing merged yet" hint="Add two PDFs, then merge. The file is built in this browser." />}
         </Panel>

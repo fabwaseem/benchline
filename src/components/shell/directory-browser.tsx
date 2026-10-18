@@ -152,7 +152,19 @@ export function DirectoryBrowser({
       </div>
 
       <div className="mt-6">
-        {mode === "home" ? <h2 className="mb-3 text-[15px] font-medium tracking-[-0.02em]">{heading}</h2> : (
+        {mode === "home" && heading === "Popular" && results.length > 0 ? (
+          <section className="mb-8">
+            <h2 className="mb-3 text-[15px] font-medium tracking-[-0.02em]">Popular</h2>
+            <div className="flex gap-3 overflow-x-auto pb-1">
+              {results.slice(0, 8).map((tool) => (
+                <div key={tool.slug} className="w-[260px] shrink-0">
+                  <ToolCard tool={tool} />
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : null}
+        {mode === "home" ? <h2 className="mb-3 text-[15px] font-medium tracking-[-0.02em]">{heading === "Popular" ? "All tools" : heading}</h2> : (
           <p className="mb-3 text-[13px] text-muted-foreground" aria-live="polite">
             {results.length} {results.length === 1 ? "tool" : "tools"}
           </p>

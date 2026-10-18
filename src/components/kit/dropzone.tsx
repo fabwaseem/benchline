@@ -3,6 +3,43 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
+export function FileButton({
+  accept,
+  label,
+  onFile,
+  onFiles,
+  multiple = false,
+  className,
+}: {
+  accept: string;
+  label: string;
+  onFile?: (file: File) => void;
+  onFiles?: (files: File[]) => void;
+  multiple?: boolean;
+  className?: string;
+}) {
+  return (
+    <label className={cn("btn cursor-pointer", className)}>
+      {label}
+      <input
+        type="file"
+        accept={accept}
+        multiple={multiple}
+        className="sr-only"
+        onChange={(event) => {
+          const files = event.target.files ? [...event.target.files] : [];
+          if (files.length > 0) {
+            onFiles?.(files);
+            const first = files[0];
+            if (first) onFile?.(first);
+          }
+          event.target.value = "";
+        }}
+      />
+    </label>
+  );
+}
+
 export function FileDropzone(props: {
   accept: string;
   label: string;

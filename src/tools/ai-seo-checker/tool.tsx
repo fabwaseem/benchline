@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { ActionButton, TextInput } from "@/components/kit/controls";
 import { Copy, Search } from "lucide-react";
 import { toast } from "sonner";
 import { CheckRows } from "@/components/kit/check-row";
@@ -12,8 +13,6 @@ import { ResultStat } from "@/components/kit/result-stat";
 import { ScoreRing } from "@/components/kit/score-ring";
 import { SkeletonRows } from "@/components/kit/skeleton-rows";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { postTool } from "@/lib/post-tool";
 import { seoVerdict } from "@/tools/ai-seo-checker/lib/score";
 
@@ -89,7 +88,7 @@ export default function AiSeoTool() {
       flow="band"
       columns="min-[1280px]:grid-cols-[340px_minmax(0,1fr)_320px]"
       tabs={<ToolTabs label="Mode" value="check" onChange={() => {}} options={[{ value: "check", label: "Check" }]} />}
-      actions={busy ? <Button type="button" variant="outline" className="h-[30px]" onClick={cancel}>Cancel</Button> : <InkButton onClick={() => void navigator.clipboard.writeText(reportText).then(() => toast.success("Report copied"))} disabled={!reportText} icon={<Copy size={15} />}>Copy report</InkButton>}
+      actions={busy ? <ActionButton type="button" variant="outline" className="h-[30px]" onClick={cancel}>Cancel</ActionButton> : <InkButton onClick={() => void navigator.clipboard.writeText(reportText).then(() => toast.success("Report copied"))} disabled={!reportText} icon={<Copy size={15} />}>Copy report</InkButton>}
       status={
         <>
           <span className={error ? "dot dot-warn" : "dot"} style={report && !error ? { background: "var(--success)" } : undefined} />
@@ -101,9 +100,9 @@ export default function AiSeoTool() {
         <Panel title="Page">
           <p className="text-[12.5px] text-muted-foreground">Pass, warn, or fail for crawler access, llms.txt, structured data, and the on-page signals.</p>
           <FieldRow label="Page URL" htmlFor="seo-url" help="A bare domain is fine. The check reads the page, robots.txt, llms.txt, and the sitemap." error={blocked ? "Private addresses are refused." : undefined}>
-            <Input ref={urlRef} id="seo-url" value={url} aria-invalid={blocked || undefined} autoFocus onChange={(event) => setUrl(event.target.value)} className="max-[699px]:h-11" />
+            <TextInput ref={urlRef} id="seo-url" value={url} aria-invalid={blocked || undefined} autoFocus onChange={(event) => setUrl(event.target.value)} className="max-[699px]:h-11" />
           </FieldRow>
-          <Button type="button" className="btn btn-ink h-11" aria-busy={busy} disabled={!url.trim() || busy} onClick={() => void run()}>Check</Button>
+          <ActionButton type="button" className="btn btn-ink h-11" aria-busy={busy} disabled={!url.trim() || busy} onClick={() => void run()}>Check</ActionButton>
           <div className="flex flex-wrap gap-1.5">
             {CRAWLERS.map((name) => (
               <span key={name} className="chip">{name}</span>
@@ -137,7 +136,7 @@ export default function AiSeoTool() {
                 <ResultStat variant="well" label="Final URL" value={hostOf(report.finalUrl)} />
               </div>
               <CopyButton value={reportText} label="Copy report" toastMessage="Report copied" />
-              <Button type="button" variant="outline" onClick={() => void run()}>Re-run</Button>
+              <ActionButton type="button" variant="outline" onClick={() => void run()}>Re-run</ActionButton>
             </>
           ) : (
             <p className="text-sm text-muted-foreground">{busy ? "Scoring…" : "Not scored yet."}</p>

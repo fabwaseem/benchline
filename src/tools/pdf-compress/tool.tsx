@@ -1,16 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { ActionButton } from "@/components/kit/controls";
 import { Download, Shrink } from "lucide-react";
 import { downloadBytes } from "@/components/kit/download-button";
 import { Dropzone } from "@/components/kit/dropzone";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
-import { ResultStat } from "@/components/kit/result-stat";
+import { ResultStat, SizeStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Button } from "@/components/ui/button";
 import { formatBytes } from "@/lib/image-format";
 import { TARGET_BYTES, compressPdf, type CompressPreset, type CompressResult } from "@/tools/pdf-compress/lib/compress";
 
@@ -93,12 +93,9 @@ export default function PdfCompressTool() {
           {error ? <Notice tone="bad" role="alert" title="Could not compress" body={error} /> : null}
           {result ? (
             <div className="flex flex-col gap-3">
-              <div className="grid grid-cols-2 gap-2">
-                <ResultStat label="Before" value={formatBytes(result.before)} />
-                <ResultStat label="After" value={formatBytes(result.after)} hint={result.saved ? `${result.percent}% smaller` : "No size change"} />
-              </div>
+              <SizeStat before={formatBytes(result.before)} after={formatBytes(result.after)} hint={result.saved ? `${result.percent}% smaller` : "No size change"} />
               <Notice tone={result.metTarget ? "ok" : "warn"} title={result.metTarget ? "Ready" : "Above the target"} body={result.note} />
-              <Button type="button" onClick={download}><Download />Download PDF</Button>
+              <ActionButton type="button" onClick={download}><Download />Download PDF</ActionButton>
             </div>
           ) : <EmptyState title="Nothing compressed yet" hint="Pick a preset, then compress. If a pass would grow the file, the original is kept." />}
         </Panel>
