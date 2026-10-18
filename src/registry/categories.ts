@@ -328,6 +328,7 @@ export const toolOrder = [
   "llms-txt-generator",
   "ai-seo-checker",
   "og-image-generator",
+  "og-template-list",
   "jwt-decoder",
   "robots-txt-checker",
   "meta-tags-inspector",

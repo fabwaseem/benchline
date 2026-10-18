@@ -3,8 +3,8 @@ import { readMcpBytes } from "@/lib/mcp/bytes";
 import type { BenchTool } from "@/lib/mcp/types";
 import { metaTagsFor, openGraphSource, renderOg, resolveState } from "@/tools/og-image-generator/lib/og";
 import { renderOgPng } from "@/tools/og-image-generator/lib/png";
-import { ogTemplates, TEMPLATE_IDS, templateSchemaRows } from "@/tools/og-image-generator/lib/templates";
-import { OG_CATEGORIES, type ImageKey, type OgImages } from "@/tools/og-image-generator/lib/types";
+import { TEMPLATE_IDS } from "@/tools/og-image-generator/lib/templates";
+import type { ImageKey, OgImages } from "@/tools/og-image-generator/lib/types";
 
 const colorSchema = z.object({
   background: z.string(),
@@ -67,28 +67,6 @@ export const outputSchema = z.object({
   metaTags: z.string(),
 });
 
-export const listInputSchema = z.object({
-  category: z.enum(OG_CATEGORIES).optional(),
-});
-
-export const listOutputSchema = z.object({
-  templates: z.array(z.object({
-    id: z.string(),
-    name: z.string(),
-    category: z.string(),
-    fields: z.array(z.object({
-      key: z.string(),
-      label: z.string(),
-      kind: z.enum(["text", "textarea"]),
-    })),
-    images: z.array(z.string()),
-    defaults: z.record(z.string(), z.string()),
-    colors: colorSchema,
-    presets: z.array(z.object({ name: z.string(), colors: colorSchema })),
-    schema: z.record(z.string(), z.unknown()),
-  })),
-});
-
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   const images = {} as OgImages;
@@ -118,30 +96,6 @@ async function run(input: unknown) {
   });
 }
 
-async function listRun(input: unknown) {
-  const parsed = listInputSchema.parse(input ?? {});
-  const templates = ogTemplates.filter((template) => !parsed.category || template.category === parsed.category);
-  return listOutputSchema.parse({
-    templates: templates.map((template) => ({
-      id: template.id,
-      name: template.name,
-      category: template.category,
-      fields: templateSchemaRows(template),
-      images: template.images,
-      defaults: Object.fromEntries(template.fields.map((key) => [key, template.defaults[key]])),
-      colors: template.colors,
-      presets: template.presets,
-      schema: fieldJsonSchema(template.fields),
-    })),
-  });
-}
-
-function fieldJsonSchema(fields: string[]) {
-  const shape: Record<string, z.ZodType> = {};
-  for (const key of fields) shape[key] = z.string();
-  return z.toJSONSchema(z.object(shape)) as Record<string, unknown>;
-}
-
 async function readImage(value: string | undefined, label: ImageKey) {
   const trimmed = value?.trim() ?? "";
   if (!trimmed) return "";
@@ -162,16 +116,3 @@ export const tool: BenchTool = {
   outputSchema,
   run,
 };
-
-export const listTool: BenchTool = {
-  slug: "og-image-generator",
-  name: "list_og_templates",
-  title: "List Open Graph templates",
-  description: "List Open Graph card templates with ids, names, categories, defaults, color presets, and field schemas.",
-  openWorld: false,
-  inputSchema: listInputSchema,
-  outputSchema: listOutputSchema,
-  run: listRun,
-};
-
-export const tools = [tool, listTool];
