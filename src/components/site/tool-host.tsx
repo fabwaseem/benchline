@@ -66,11 +66,11 @@ const views: Record<string, ComponentType> = {
   "sitemap-validator": dynamic(() => import("@/tools/sitemap-validator/tool")),
   "http-headers-checker": dynamic(() => import("@/tools/http-headers-checker/tool")),
   "ssl-checker": dynamic(() => import("@/tools/ssl-checker/tool")),
-  "totp-generator": dynamic(() => import("@/tools/totp-generator/tool")),
-  "jsonpath-tester": dynamic(() => import("@/tools/jsonpath-tester/tool")),
-  "programmer-calculator": dynamic(() => import("@/tools/programmer-calculator/tool")),
-  "aes-crypto": dynamic(() => import("@/tools/aes-crypto/tool")),
-  "har-analyzer": dynamic(() => import("@/tools/har-analyzer/tool")),
+  "json-to-types": dynamic(() => import("@/tools/json-to-types/tool")),
+  "code-minifier": dynamic(() => import("@/tools/code-minifier/tool")),
+  "curl-converter": dynamic(() => import("@/tools/curl-converter/tool")),
+  "graphql-client": dynamic(() => import("@/tools/graphql-client/tool")),
+  "websocket-tester": dynamic(() => import("@/tools/websocket-tester/tool")),
 };
 
 export function ToolHost({ slug }: { slug: string }) {

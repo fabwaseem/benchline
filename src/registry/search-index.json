@@ -1227,116 +1227,111 @@
     "runsLocally": false
   },
   {
-    "slug": "totp-generator",
-    "name": "TOTP authenticator",
-    "tagline": "Live 2FA codes for your accounts, with otpauth:// import and QR export.",
-    "description": "Free TOTP and HOTP authenticator. Add accounts with a base32 secret, watch live codes tick down with a countdown, copy with one click, and import or export otpauth:// provisioning URIs. Everything runs in the browser; secrets never leave the page.",
-    "category": "auth",
-    "tags": [
-      "totp",
-      "2fa",
-      "authenticator",
-      "otp"
-    ],
-    "keywords": [
-      "totp generator",
-      "2fa authenticator",
-      "hotp code",
-      "otpauth uri",
-      "authenticator app"
-    ],
-    "status": "new",
-    "icon": "Clock",
-    "runsLocally": true
-  },
-  {
-    "slug": "jsonpath-tester",
-    "name": "JSONPath tester",
-    "tagline": "Query JSON with JSONPath Plus and inspect every match.",
-    "description": "Free JSONPath tester. Paste a JSON document, write a JSONPath Plus query, and see each match with its path and a count. Syntax mistakes are reported with the position, and filters, slices, unions, and recursive descent all work.",
+    "slug": "json-to-types",
+    "name": "JSON to Types",
+    "tagline": "Paste JSON, get TypeScript, Zod, Pydantic, dataclass, and Go types.",
+    "description": "Free JSON to type converter. Paste a JSON document and generate TypeScript interfaces, Zod schemas, Python Pydantic models or dataclasses, and Go structs. Optional fields are detected across array items, nulls become nullable, and nested objects get their own named types.",
     "category": "json",
     "tags": [
-      "jsonpath",
       "json",
-      "query"
+      "types",
+      "typescript"
     ],
     "keywords": [
-      "jsonpath tester",
-      "jsonpath online",
-      "json query",
-      "jsonpath plus",
-      "test jsonpath expression"
+      "json to typescript",
+      "json to zod",
+      "json to pydantic",
+      "json to go struct",
+      "json type generator"
     ],
     "status": "new",
-    "icon": "FileJson",
+    "icon": "Braces",
     "runsLocally": true
   },
   {
-    "slug": "programmer-calculator",
-    "name": "Programmer calculator",
-    "tagline": "Base conversions, bitwise ops, and a clickable bit grid.",
-    "description": "Free programmer calculator. Convert between binary, octal, decimal, and hexadecimal with live sync, evaluate expressions with C-like precedence, run bitwise AND, OR, XOR, NOT and shifts, toggle individual bits, and read signed and unsigned 8/16/32/64-bit interpretations plus the ASCII character.",
-    "category": "encoding",
+    "slug": "code-minifier",
+    "name": "Code Minifier",
+    "tagline": "Minify JavaScript, CSS, and HTML with byte-level savings.",
+    "description": "Free code minifier. Shrink JavaScript with Terser and CSS with csso, plus a structural HTML pass that strips comments, collapses whitespace, and cleans redundant attributes. Toggle mangling, compression, and aggressive HTML options, then compare before/after byte counts and the savings percentage.",
+    "category": "code",
     "tags": [
-      "calculator",
-      "binary",
-      "hex",
-      "bitwise"
+      "minify",
+      "javascript",
+      "css"
     ],
     "keywords": [
-      "programmer calculator",
-      "hex to decimal",
-      "binary calculator",
-      "bitwise calculator",
-      "base converter"
+      "javascript minifier",
+      "css minifier",
+      "html minifier",
+      "minify js online",
+      "code compressor"
     ],
     "status": "new",
-    "icon": "Calculator",
+    "icon": "Shrink",
     "runsLocally": true
   },
   {
-    "slug": "aes-crypto",
-    "name": "AES encryption",
-    "tagline": "AES-GCM encrypt and decrypt in the browser, nothing uploaded.",
-    "description": "Free AES encryption playground. Encrypt text with AES-256-GCM: the key is derived from your passphrase with PBKDF2-SHA256, and a fresh random salt and IV are generated every time. Decrypt a bundle back to plaintext. Everything runs locally with WebCrypto.",
-    "category": "crypto",
-    "tags": [
-      "aes",
-      "encryption",
-      "crypto"
-    ],
-    "keywords": [
-      "aes encryption",
-      "aes gcm online",
-      "encrypt text",
-      "aes decrypt",
-      "pbkdf2"
-    ],
-    "status": "new",
-    "icon": "Lock",
-    "runsLocally": true
-  },
-  {
-    "slug": "har-analyzer",
-    "name": "HAR analyzer",
-    "tagline": "Drop a HAR capture, see where the time went.",
-    "description": "Free HAR file analyzer. Drop a .har capture or paste its JSON to get a request table with method, URL, status, size, and time, plus summary stats: totals, status-code distribution, the slowest requests, the largest payloads, top hosts, and a per-request timing breakdown of blocked, DNS, connect, send, wait, and receive.",
+    "slug": "curl-converter",
+    "name": "cURL Converter",
+    "tagline": "Turn any curl command into fetch, Python, Go, PHP, or Rust.",
+    "description": "Free curl converter. Paste a curl command and get equivalent code for JavaScript fetch, Python requests, Go net/http, PHP cURL, and Rust reqwest. Headers, bodies, basic auth, and common flags are translated automatically.",
     "category": "http",
     "tags": [
-      "har",
-      "network",
-      "performance",
-      "waterfall"
+      "curl",
+      "http",
+      "api"
     ],
     "keywords": [
-      "har analyzer",
-      "har viewer",
-      "analyze har file",
-      "waterfall chart",
-      "http archive"
+      "curl to python",
+      "curl to javascript",
+      "curl converter",
+      "curl to fetch",
+      "curl to go"
+    ],
+    "status": "new",
+    "icon": "ArrowLeftRight",
+    "runsLocally": true
+  },
+  {
+    "slug": "graphql-client",
+    "name": "GraphQL Client",
+    "tagline": "Query any GraphQL endpoint with variables, headers, and history.",
+    "description": "Free GraphQL playground. Send queries to any GraphQL endpoint with JSON variables and custom headers, inspect pretty-printed responses and errors, and replay recent requests from history. Timing is reported per request.",
+    "category": "http",
+    "tags": [
+      "graphql",
+      "api",
+      "http"
+    ],
+    "keywords": [
+      "graphql client online",
+      "graphql playground",
+      "test graphql api",
+      "graphql query tester"
+    ],
+    "status": "new",
+    "icon": "Waypoints",
+    "runsLocally": false
+  },
+  {
+    "slug": "websocket-tester",
+    "name": "WebSocket Tester",
+    "tagline": "Connect to any ws/wss endpoint and inspect live frames.",
+    "description": "Free WebSocket testing tool. Connect to ws:// or wss:// endpoints, send text messages, and watch a live timestamped log of incoming, outgoing, and system frames. Close codes are decoded, and an optional heartbeat keeps idle connections alive.",
+    "category": "http",
+    "tags": [
+      "websocket",
+      "network",
+      "realtime"
+    ],
+    "keywords": [
+      "websocket tester online",
+      "test websocket",
+      "wss client",
+      "websocket debugger"
     ],
     "status": "new",
     "icon": "Network",
-    "runsLocally": true
+    "runsLocally": false
   }
 ]

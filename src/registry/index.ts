@@ -60,16 +60,16 @@ import { meta as cspGenerator } from "@/tools/csp-generator/meta";
 import { meta as sitemapValidator } from "@/tools/sitemap-validator/meta";
 import { meta as httpHeadersChecker } from "@/tools/http-headers-checker/meta";
 import { meta as sslChecker } from "@/tools/ssl-checker/meta";
-import { meta as totpGenerator } from "@/tools/totp-generator/meta";
-import { meta as jsonpathTester } from "@/tools/jsonpath-tester/meta";
-import { meta as programmerCalculator } from "@/tools/programmer-calculator/meta";
-import { meta as aesCrypto } from "@/tools/aes-crypto/meta";
-import { meta as harAnalyzer } from "@/tools/har-analyzer/meta";
+import { meta as jsonToTypes } from "@/tools/json-to-types/meta";
+import { meta as codeMinifier } from "@/tools/code-minifier/meta";
+import { meta as curlConverter } from "@/tools/curl-converter/meta";
+import { meta as graphqlClient } from "@/tools/graphql-client/meta";
+import { meta as websocketTester } from "@/tools/websocket-tester/meta";
 import { categories, parents, toolOrder } from "@/registry/categories";
 import type { SearchRecord } from "@/registry/schema";
 import { assertRegistry } from "@/registry/validate";
 
-const tools = assertRegistry([llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator, pdfToText, pdfRotateOrganize, pdfToImage, pdfProtectUnlock, markdownHtml, htmlToMarkdownUrl, qrCodeReader, svgOptimizer, exifViewerRemover, imageCrop, faviconGenerator, ocrImageToText, backgroundRemover, wordCounter, caseConverter, loremIpsum, regexTester, sqlFormatter, jsonSchemaValidate, loanEmiCalculator, percentageCalculator, unitConverter, dnsLookup, ipCidrCalculator, htpasswdBcrypt, rsaKeypair, cspGenerator, sitemapValidator, httpHeadersChecker, sslChecker, totpGenerator, jsonpathTester, programmerCalculator, aesCrypto, harAnalyzer], [...categories], toolOrder, [...parents]);
+const tools = assertRegistry([llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator, pdfToText, pdfRotateOrganize, pdfToImage, pdfProtectUnlock, markdownHtml, htmlToMarkdownUrl, qrCodeReader, svgOptimizer, exifViewerRemover, imageCrop, faviconGenerator, ocrImageToText, backgroundRemover, wordCounter, caseConverter, loremIpsum, regexTester, sqlFormatter, jsonSchemaValidate, loanEmiCalculator, percentageCalculator, unitConverter, dnsLookup, ipCidrCalculator, htpasswdBcrypt, rsaKeypair, cspGenerator, sitemapValidator, httpHeadersChecker, sslChecker, jsonToTypes, codeMinifier, curlConverter, graphqlClient, websocketTester], [...categories], toolOrder, [...parents]);
 
 export { categories, parents, tools };
 
