@@ -43,9 +43,18 @@ import { tool as imageCrop } from "@/tools/image-crop/mcp";
 import { tool as faviconGenerator } from "@/tools/favicon-generator/mcp";
 import { tool as ocrImageToText } from "@/tools/ocr-image-to-text/mcp";
 import { tool as backgroundRemover } from "@/tools/background-remover/mcp";
+import { tool as wordCounter } from "@/tools/word-counter/mcp";
+import { tool as caseConverter } from "@/tools/case-converter/mcp";
+import { tool as loremIpsum } from "@/tools/lorem-ipsum/mcp";
+import { tool as regexTester } from "@/tools/regex-tester/mcp";
+import { tool as sqlFormatter } from "@/tools/sql-formatter/mcp";
+import { tool as jsonSchemaValidate } from "@/tools/json-schema-validate/mcp";
+import { tool as loanEmiCalculator } from "@/tools/loan-emi-calculator/mcp";
+import { tool as percentageCalculator } from "@/tools/percentage-calculator/mcp";
+import { tool as unitConverter } from "@/tools/unit-converter/mcp";
 import type { BenchTool } from "@/lib/mcp/types";
 
-export const mcpTools: BenchTool[] = [llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator, pdfToText, pdfRotateOrganize, pdfToImage, pdfProtectUnlock, markdownHtml, htmlToMarkdownUrl, qrCodeReader, svgOptimizer, exifViewerRemover, imageCrop, faviconGenerator, ocrImageToText, backgroundRemover];
+export const mcpTools: BenchTool[] = [llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator, pdfToText, pdfRotateOrganize, pdfToImage, pdfProtectUnlock, markdownHtml, htmlToMarkdownUrl, qrCodeReader, svgOptimizer, exifViewerRemover, imageCrop, faviconGenerator, ocrImageToText, backgroundRemover, wordCounter, caseConverter, loremIpsum, regexTester, sqlFormatter, jsonSchemaValidate, loanEmiCalculator, percentageCalculator, unitConverter];
 
 export function mcpToolBySlug(slug: string) {
   return mcpTools.find((tool) => tool.slug === slug);

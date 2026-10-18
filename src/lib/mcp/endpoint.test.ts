@@ -144,6 +144,15 @@ describe("MCP endpoint", () => {
       generate_favicon: { text: "B", background: "#111111", color: "#ffffff" },
       read_image_text: { file: image, language: "eng" },
       remove_background: { file: image, tolerance: 24, feather: false },
+      count_text: { text: "Hello world" },
+      convert_case: { text: "hello world" },
+      generate_fake_data: { mode: "lorem", kind: "words", count: 3, seed: 1 },
+      test_regex: { pattern: "a+", text: "baaac" },
+      format_sql: { sql: "select a from t" },
+      validate_json_schema: { json: "{\"a\":1}" },
+      calculate_emi: { principal: "100000", annualRate: "10", months: 12 },
+      calculate_percentage: { mode: "of", a: "10", b: "200" },
+      convert_units: { category: "length", from: "m", to: "cm", value: "1", precision: 2 },
     };
 
     const missing = mcpTools.map((tool) => tool.name).filter((name) => !(name in samples));
