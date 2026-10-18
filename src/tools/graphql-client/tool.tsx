@@ -104,7 +104,7 @@ export default function GraphqlClientTool() {
       />
       <ToolPanes>
         <Pane label="Request" scroll bodyClassName="flex min-h-[340px] flex-col gap-3 p-3">
-          <FieldRow label="Endpoint" htmlFor="gql-endpoint" help="Local, private, and internal addresses are blocked.">
+          <FieldRow label="Endpoint" htmlFor="gql-endpoint" help="Local, private, and internal addresses are blocked. Only ports 80 and 443 are allowed.">
             <TextInput
               id="gql-endpoint"
               value={endpoint}

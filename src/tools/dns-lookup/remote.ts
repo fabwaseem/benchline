@@ -1,6 +1,6 @@
 import { FETCH_LIMITS } from "@/lib/net/fetch-public";
 import { outboundFetch } from "@/lib/net/outbound";
-import { parsePublicHttpUrl, PublicUrlError } from "@/lib/net/ssrf";
+import { parsePublicHttpUrl, PublicUrlError, WEB_PORTS } from "@/lib/net/ssrf";
 import {
   dmarcName,
   parseDmarc,
@@ -44,7 +44,7 @@ async function queryType(name: string, type: RecordType, resolver: ResolverId): 
   endpoint.searchParams.set("type", type);
   const response = await outboundFetch(endpoint.toString(), {
     method: "GET",
-    ports: "web",
+    allowedPorts: WEB_PORTS,
     followRedirects: false,
     redirectMessage: "The resolver redirected. That is refused.",
     timeoutMs: FETCH_LIMITS.timeoutMs,

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { outboundFetch } from "@/lib/net/outbound";
+import { WEB_PORTS } from "@/lib/net/ssrf";
 import { executeGraphql } from "@/tools/graphql-client/lib/graphql";
 import type { BenchTool } from "@/lib/mcp/types";
 
@@ -32,7 +33,7 @@ async function pinnedGraphqlFetch(url: string, init: RequestInit | undefined, ti
     maxBytes: GRAPHQL_MAX_BYTES,
     maxRedirects: 0,
     followRedirects: false,
-    ports: "any",
+    allowedPorts: WEB_PORTS,
     schemes: ["http", "https"],
     tooLargeMessage: "Response is larger than 2 MB.",
   });
@@ -56,7 +57,7 @@ export const tool: BenchTool = {
   name: "execute_graphql",
   title: "Execute a GraphQL query",
   description:
-    "Send a GraphQL query with optional variables and headers to a public http or https endpoint and return the response data or errors. Local, private, and internal addresses are refused.",
+    "Send a GraphQL query with optional variables and headers to a public http or https endpoint on port 80 or 443 and return the response data or errors. Local, private, and internal addresses are refused.",
   openWorld: true,
   inputSchema,
   outputSchema,

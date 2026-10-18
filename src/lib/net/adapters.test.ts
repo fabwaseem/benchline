@@ -30,6 +30,14 @@ describe("server adapters reject private targets", () => {
     }
   });
 
+  it("execute_graphql rejects a public address on port 8000", async () => {
+    await expect(graphql.run({ endpoint: "http://1.2.3.4:8000", query: "{ a }" })).rejects.toThrow(/80 and 443/);
+    const response = await postTool("graphql-client", { endpoint: "http://1.2.3.4:8000", query: "{ a }" });
+    expect(response.status).toBe(400);
+    const body = (await response.json()) as { error?: string };
+    expect(body.error).toMatch(/80 and 443/);
+  });
+
   it("execute_graphql HTTP adapter rejects loopback and bare service names", async () => {
     for (const endpoint of blocked) {
       const response = await postTool("graphql-client", { endpoint, query: "{ a }" });
