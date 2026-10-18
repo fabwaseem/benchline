@@ -14,7 +14,7 @@ File fields take either `url` or `data`, not both. `data` is base64 or a data UR
 
 The handler validates with the input schema, runs the tool, and validates the output. A thrown error comes back as `isError: true` and a text message. It is not a successful result.
 
-72 tools.
+77 tools.
 
 ## `generate_llms_txt`
 
@@ -1365,3 +1365,147 @@ Validate and parse a ws:// or wss:// URL into its components, and optionally dec
 
 - `url` (string, required, min length 1, max length 2000)
 - `explainCloseCode` (integer, optional, minimum 1000, maximum 4999)
+
+## `generate_resume`
+
+**Generate a resume PDF**
+
+Build a resume PDF from profile, experience, education, and skills. A name plus at least one experience, education, or skills entry is required. Choose the clean, modern, or compact template. Returns the A4 PDF as base64.
+
+- Page: https://tools.fabwaseem.com/t/resume-builder
+- HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/resume-builder`
+- Fetches the network: no
+
+### Input
+
+- `resume` (object, required)
+  - `profile` (object, required)
+    - `name` (string, required, min length 1)
+    - `title` (string, optional, default `""`)
+    - `email` (string, optional, default `""`)
+    - `phone` (string, optional, default `""`)
+    - `location` (string, optional, default `""`)
+    - `website` (string, optional, default `""`)
+    - `summary` (string, optional, default `""`)
+  - `experience` (array of object, optional, default `[]`)
+    - `title` (string, optional, default `""`)
+    - `company` (string, optional, default `""`)
+    - `location` (string, optional, default `""`)
+    - `start` (string, optional, default `""`)
+    - `end` (string, optional, default `""`)
+    - `current` (boolean, optional, default `false`)
+    - `bullets` (array of string, optional, default `[]`)
+  - `education` (array of object, optional, default `[]`)
+    - `degree` (string, optional, default `""`)
+    - `school` (string, optional, default `""`)
+    - `location` (string, optional, default `""`)
+    - `year` (string, optional, default `""`)
+  - `skills` (array of string, optional, default `[]`)
+- `template` (`clean` \| `modern` \| `compact`, optional, default `clean`)
+
+## `generate_invoice`
+
+**Generate an invoice or quote PDF**
+
+Build an invoice or quote PDF from company and client details, line items with quantities and rates, a tax rate, and an optional percent or flat discount. All money is computed in integer cents, so there are no float rounding errors. Returns the PDF as base64 plus the total.
+
+- Page: https://tools.fabwaseem.com/t/invoice-generator
+- HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/invoice-generator`
+- Fetches the network: no
+
+### Input
+
+- `invoice` (object, required)
+  - `kind` (`invoice` \| `quote`, required)
+  - `number` (string, required, min length 1)
+  - `issueDate` (string, required)
+  - `dueDate` (string, required)
+  - `currency` (string, required)
+  - `from` (object, required)
+    - `name` (string, required, min length 1)
+    - `address` (string, optional, default `""`)
+    - `email` (string, optional, default `""`)
+  - `to` (object, required)
+    - `name` (string, required, min length 1)
+    - `address` (string, optional, default `""`)
+    - `email` (string, optional, default `""`)
+  - `items` (array of object, required, min items 1)
+    - `description` (string, required, min length 1)
+    - `quantity` (number, required, exclusive minimum 0)
+    - `rate` (number, required, minimum 0)
+  - `taxRate` (number, required, minimum 0, maximum 100)
+  - `discount` (object, required)
+    - `type` (`percent` \| `flat`, required)
+    - `value` (number, required, minimum 0)
+  - `notes` (string, optional, default `""`)
+
+## `sign_pdf`
+
+**Sign a PDF with a PNG signature**
+
+Stamp a PNG signature image onto one or more PDF pages at given positions (fractions of the page, x and y measured from the top-left, width as a fraction of page width). The signature keeps its aspect ratio. Returns the signed PDF as base64.
+
+- Page: https://tools.fabwaseem.com/t/pdf-signature
+- HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/pdf-signature`
+- Fetches the network: yes
+
+### Input
+
+- `file` (object, required) — The PDF to sign.
+  - `url` (string, optional) — Public http or https URL. Private and local addresses are refused.
+  - `data` (string, optional) — Base64 bytes or a data URI. Decoded size is capped at 10 MB.
+  - `mimeType` (string, optional) — MIME type when you know it.
+  - `filename` (string, optional) — File name, including the extension when you have one.
+  - `name` (string, optional, default `document.pdf`)
+  - `pages` (string, optional, default `""`) — Pages to keep, such as 1-3,5. Blank keeps every page.
+- `signature` (object, required) — The signature as a PNG image, base64 or a public URL.
+  - `url` (string, optional) — Public http or https URL. Private and local addresses are refused.
+  - `data` (string, optional) — Base64 bytes or a data URI. Decoded size is capped at 10 MB.
+  - `mimeType` (string, optional) — MIME type when you know it.
+  - `filename` (string, optional) — File name, including the extension when you have one.
+- `placements` (array of object, required, min items 1, max items 20)
+  - `page` (integer, required, minimum 1, maximum 9007199254740991) — 1-based page number.
+  - `x` (number, required, minimum 0, maximum 1) — Horizontal position from the left, as a fraction of page width.
+  - `y` (number, required, minimum 0, maximum 1) — Vertical position from the top, as a fraction of page height.
+  - `width` (number, required, minimum 0.05, maximum 1) — Signature width, as a fraction of page width.
+
+## `resize_social_image`
+
+**Resize an image to social media dimensions**
+
+Crop and resize an image to an exact social media preset: instagram-post (1080x1080), instagram-portrait (1080x1350), instagram-story (1080x1920), youtube-thumbnail (1280x720), x-post (1200x675), x-header (1500x500), linkedin-post (1200x627), or facebook-post (1200x630). The cover crop keeps the center subject. Send base64 or a public URL. Private addresses are refused and the decoded file is capped at 10 MB. Returns the image as base64 PNG.
+
+- Page: https://tools.fabwaseem.com/t/social-image-resizer
+- HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/social-image-resizer`
+- Fetches the network: yes
+
+### Input
+
+- `file` (object, required) — The image. Provide url or data.
+  - `url` (string, optional) — Public http or https URL. Private and local addresses are refused.
+  - `data` (string, optional) — Base64 bytes or a data URI. Decoded size is capped at 10 MB.
+  - `mimeType` (string, optional) — MIME type when you know it.
+  - `filename` (string, optional) — File name, including the extension when you have one.
+- `preset` (`instagram-post` \| `instagram-portrait` \| `instagram-story` \| `youtube-thumbnail` \| `x-post` \| `x-header` \| `linkedin-post` \| `facebook-post`, required) — Social platform preset with exact pixel dimensions.
+
+## `trim_audio`
+
+**Trim a WAV audio file**
+
+Trim a WAV audio file to a time range with optional fade in and out, returning a 16-bit PCM WAV as base64. Only WAV is accepted; the web UI handles MP3/OGG/M4A.
+
+- Page: https://tools.fabwaseem.com/t/audio-trimmer
+- HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/audio-trimmer`
+- Fetches the network: yes
+
+### Input
+
+- `file` (object, required)
+  - `url` (string, optional) — Public http or https URL. Private and local addresses are refused.
+  - `data` (string, optional) — Base64 bytes or a data URI. Decoded size is capped at 10 MB.
+  - `mimeType` (string, optional) — MIME type when you know it.
+  - `filename` (string, optional) — File name, including the extension when you have one.
+- `startSec` (number, required, minimum 0) — Trim start in seconds.
+- `endSec` (number, required, exclusive minimum 0) — Trim end in seconds, after startSec.
+- `fadeInSec` (number, optional, default `0`, minimum 0) — Linear fade-in length in seconds.
+- `fadeOutSec` (number, optional, default `0`, minimum 0) — Linear fade-out length in seconds.

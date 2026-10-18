@@ -17,7 +17,7 @@ describe("taxonomy", () => {
       "Math & Finance",
       "Network",
     ]);
-    expect(nav.find((entry) => entry.name === "Image & Media")).toMatchObject({ slug: "image", flat: true, children: [] });
+    expect(nav.find((entry) => entry.name === "Image & Media")).toMatchObject({ slug: "media", flat: false });
     expect(nav.find((entry) => entry.name === "PDF & Documents")).toMatchObject({ slug: "pdf", flat: true });
     expect(nav.find((entry) => entry.name === "Design")).toMatchObject({ slug: "design", flat: true });
     expect(nav.find((entry) => entry.name === "Text")).toMatchObject({ slug: "text", flat: false });
@@ -26,6 +26,7 @@ describe("taxonomy", () => {
     expect(nav.find((entry) => entry.name === "Network")?.children.map((child) => child.slug)).toEqual(["urls", "dns", "ip", "http", "tls"]);
     const data = nav.find((entry) => entry.slug === "data");
     expect(data?.children.map((child) => child.slug)).toEqual(["json", "tables", "encoding", "markup", "sql"]);
+    expect(nav.find((entry) => entry.slug === "media")?.children.map((child) => child.slug)).toEqual(["image", "audio"]);
     expect(nav.find((entry) => entry.slug === "text")?.children.map((child) => child.slug)).toEqual(["diff", "writing"]);
     expect(nav.find((entry) => entry.slug === "math")?.children.map((child) => child.slug)).toEqual(["time", "finance", "units"]);
     expect(nav.reduce((sum, entry) => sum + entry.count, 0)).toBe(tools.length);
@@ -45,8 +46,10 @@ describe("taxonomy", () => {
     expect(parent.filter).toBe("seo-ai");
     expect(parent.chips?.length).toBe(4);
 
-    expect(resolveListing("media")).toEqual({ kind: "redirect", href: "/image" });
     expect(resolveListing("documents")).toEqual({ kind: "redirect", href: "/pdf" });
+    const media = resolveListing("media");
+    expect(media?.kind).toBe("page");
+    if (media?.kind === "page") expect(media.chips?.map((chip) => chip.slug)).toEqual(["image", "audio"]);
     const math = resolveListing("math");
     expect(math?.kind).toBe("page");
     if (math?.kind === "page") expect(math.chips?.map((chip) => chip.slug)).toEqual(["time", "finance", "units"]);
@@ -62,9 +65,9 @@ describe("taxonomy", () => {
     const image = resolveListing("image");
     expect(image?.kind).toBe("page");
     if (image?.kind !== "page") return;
-    expect(image.name).toBe("Image & Media");
-    expect(image.chips).toBeNull();
-    expect(image.breadcrumbs.map((item) => item.label)).toEqual(["Tools", "Image & Media"]);
+    expect(image.name).toBe("Image");
+    expect(image.chips?.map((chip) => chip.slug)).toEqual(["image", "audio"]);
+    expect(image.breadcrumbs.map((item) => item.label)).toEqual(["Tools", "Image & Media", "Image"]);
 
     const design = resolveListing("design");
     expect(design?.kind).toBe("page");
@@ -82,7 +85,7 @@ describe("taxonomy", () => {
     const indexable = indexableCategorySlugs();
     expect(indexable).toContain("data");
     expect(indexable).toContain("image");
-    expect(indexable).not.toContain("media");
+    expect(indexable).toContain("media");
     for (const tool of tools) {
       const listing = resolveListing(tool.category);
       expect(listing?.kind).toBe("page");

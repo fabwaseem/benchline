@@ -73,4 +73,9 @@ export const toolLoaders: Record<string, () => Promise<{ default: ComponentType 
   "curl-converter": () => import("@/tools/curl-converter/tool"),
   "graphql-client": () => import("@/tools/graphql-client/tool"),
   "websocket-tester": () => import("@/tools/websocket-tester/tool"),
+  "resume-builder": () => import("@/tools/resume-builder/tool"),
+  "invoice-generator": () => import("@/tools/invoice-generator/tool"),
+  "pdf-signature": () => import("@/tools/pdf-signature/tool"),
+  "social-image-resizer": () => import("@/tools/social-image-resizer/tool"),
+  "audio-trimmer": () => import("@/tools/audio-trimmer/tool"),
 };

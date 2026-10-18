@@ -42,6 +42,8 @@ function sampleString(key: string | undefined, checks: Check[]) {
   if (key === "json" || key === "yaml" || key === "csv") return key === "csv" ? "name,role\nAda,admin" : "{}";
   if (key === "token" || key === "jwt") return "eyJhbGciOiJub25lIn0.eyJzdWIiOiJhZGEifQ.";
   if (key === "expression" || key === "cron") return "0 * * * *";
+  if (key === "currency") return "USD";
+  if (key !== undefined && /date$/i.test(key)) return "2026-10-18";
   if (key === "html" || key === "source") return "<p>Hello</p>";
   if (key === "svg") return `<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"></svg>`;
   const min = checks.find((check) => check.check === "min_length")?.minimum ?? 1;
