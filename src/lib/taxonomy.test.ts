@@ -20,11 +20,13 @@ describe("taxonomy", () => {
     expect(nav.find((entry) => entry.name === "Image & Media")).toMatchObject({ slug: "image", flat: true, children: [] });
     expect(nav.find((entry) => entry.name === "PDF & Documents")).toMatchObject({ slug: "pdf", flat: true });
     expect(nav.find((entry) => entry.name === "Design")).toMatchObject({ slug: "design", flat: true });
-    expect(nav.find((entry) => entry.name === "Text")).toMatchObject({ slug: "text", flat: true });
-    expect(nav.find((entry) => entry.name === "Math & Finance")).toMatchObject({ slug: "time", flat: true });
+    expect(nav.find((entry) => entry.name === "Text")).toMatchObject({ slug: "text", flat: false });
+    expect(nav.find((entry) => entry.name === "Math & Finance")).toMatchObject({ slug: "math", flat: false });
     expect(nav.find((entry) => entry.name === "Network")).toMatchObject({ slug: "urls", flat: true });
     const data = nav.find((entry) => entry.slug === "data");
-    expect(data?.children.map((child) => child.slug)).toEqual(["json", "tables", "encoding", "markup"]);
+    expect(data?.children.map((child) => child.slug)).toEqual(["json", "tables", "encoding", "markup", "sql"]);
+    expect(nav.find((entry) => entry.slug === "text")?.children.map((child) => child.slug)).toEqual(["diff", "writing"]);
+    expect(nav.find((entry) => entry.slug === "math")?.children.map((child) => child.slug)).toEqual(["time", "finance", "units"]);
     expect(nav.reduce((sum, entry) => sum + entry.count, 0)).toBe(tools.length);
   });
 
@@ -44,7 +46,12 @@ describe("taxonomy", () => {
 
     expect(resolveListing("media")).toEqual({ kind: "redirect", href: "/image" });
     expect(resolveListing("documents")).toEqual({ kind: "redirect", href: "/pdf" });
-    expect(resolveListing("math")).toEqual({ kind: "redirect", href: "/time" });
+    const math = resolveListing("math");
+    expect(math?.kind).toBe("page");
+    if (math?.kind === "page") expect(math.chips?.map((chip) => chip.slug)).toEqual(["time", "finance", "units"]);
+    const text = resolveListing("text");
+    expect(text?.kind).toBe("page");
+    if (text?.kind === "page") expect(text.chips?.map((chip) => chip.slug)).toEqual(["diff", "writing"]);
     expect(resolveListing("network")).toEqual({ kind: "redirect", href: "/urls" });
 
     const image = resolveListing("image");

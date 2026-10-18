@@ -284,7 +284,7 @@
     "name": "Diff checker",
     "tagline": "Compare two texts side by side or inline, and download a unified patch.",
     "description": "Free diff checker for text and JSON. Compare by line, word, or character, ignore whitespace, or diff JSON so key order does not matter. The result is a side-by-side view, an inline view, and a unified patch. It runs in the browser.",
-    "category": "text",
+    "category": "diff",
     "tags": [
       "diff",
       "compare"
@@ -892,6 +892,180 @@
     ],
     "status": "new",
     "icon": "Eraser",
+    "runsLocally": true
+  },
+  {
+    "slug": "word-counter",
+    "name": "Word counter",
+    "tagline": "Words, graphemes, reading time, and the limits a title or post has to fit.",
+    "description": "Free word counter and character counter. Counts words with Intl.Segmenter, code points, graphemes, sentences, and paragraphs, then checks SEO title, meta description, X, SMS, Bluesky, and Instagram limits.",
+    "category": "writing",
+    "tags": [
+      "text",
+      "count"
+    ],
+    "keywords": [
+      "word counter",
+      "character count",
+      "reading time",
+      "meta description length"
+    ],
+    "status": "new",
+    "icon": "WholeWord",
+    "runsLocally": true
+  },
+  {
+    "slug": "case-converter",
+    "name": "Case converter",
+    "tagline": "camelCase, snake_case, and title case, including AP and Chicago rules.",
+    "description": "Free text case converter. See lower, upper, sentence, capital, AP title case, Chicago title case, camelCase, PascalCase, snake_case, CONSTANT_CASE, kebab-case, and the rest at once.",
+    "category": "writing",
+    "tags": [
+      "text",
+      "case"
+    ],
+    "keywords": [
+      "case converter",
+      "camel case converter",
+      "title case"
+    ],
+    "status": "new",
+    "icon": "CaseSensitive",
+    "runsLocally": true
+  },
+  {
+    "slug": "lorem-ipsum",
+    "name": "Lorem ipsum",
+    "tagline": "Placeholder copy, or fake rows as JSON, CSV, and SQL, from a seed.",
+    "description": "Free lorem ipsum and fake data generator. Write words, sentences, or paragraphs, or build a small table of names, emails, and other fields and download JSON, CSV, or SQL. The same seed repeats the same rows.",
+    "category": "fixtures",
+    "tags": [
+      "mock",
+      "data",
+      "faker"
+    ],
+    "keywords": [
+      "lorem ipsum generator",
+      "fake data generator",
+      "mock json"
+    ],
+    "status": "new",
+    "icon": "Dices",
+    "runsLocally": true
+  },
+  {
+    "slug": "regex-tester",
+    "name": "Regex tester",
+    "tagline": "Test a JavaScript pattern, read the groups, and preview a replacement.",
+    "description": "Free JavaScript regex tester. Set flags, see every match and capture group, read a short explanation of the pattern, and preview a replacement. The match list is exact, which is what an agent needs when a model guesses.",
+    "category": "regex",
+    "tags": [
+      "regex"
+    ],
+    "keywords": [
+      "regex tester",
+      "javascript regex",
+      "regex replace"
+    ],
+    "status": "new",
+    "icon": "Regex",
+    "runsLocally": true
+  },
+  {
+    "slug": "sql-formatter",
+    "name": "SQL formatter",
+    "tagline": "Format SQL for PostgreSQL, MySQL, BigQuery, Snowflake, and other dialects.",
+    "description": "Free SQL formatter. Pick a dialect, choose upper, lower, or preserved keywords, and indent with 2 or 4 spaces. Formatting runs in the browser.",
+    "category": "sql",
+    "tags": [
+      "sql",
+      "format"
+    ],
+    "keywords": [
+      "sql formatter",
+      "format sql",
+      "postgresql formatter"
+    ],
+    "status": "new",
+    "icon": "Database",
+    "runsLocally": true
+  },
+  {
+    "slug": "json-schema-validate",
+    "name": "JSON Schema",
+    "tagline": "Infer a schema from JSON, validate against one, and export TypeScript and Zod.",
+    "description": "Free JSON Schema generator and validator. Infer a schema from a sample, check a document against a schema you paste, and export TypeScript types and a Zod object. Errors include the path that failed.",
+    "category": "json",
+    "tags": [
+      "json",
+      "schema",
+      "zod"
+    ],
+    "keywords": [
+      "json schema validator",
+      "json to typescript",
+      "json to zod"
+    ],
+    "status": "new",
+    "icon": "FileJson",
+    "runsLocally": true
+  },
+  {
+    "slug": "loan-emi-calculator",
+    "name": "Loan EMI calculator",
+    "tagline": "A monthly installment and the full amortization table, rounded to the cent.",
+    "description": "Free loan, EMI, and mortgage calculator. Enter principal, annual rate, and term. See the installment, total interest, and every payment. Extra monthly payments shorten the schedule. Amounts use decimal rounding, not binary floats.",
+    "category": "finance",
+    "tags": [
+      "loan",
+      "emi",
+      "mortgage"
+    ],
+    "keywords": [
+      "emi calculator",
+      "loan calculator",
+      "mortgage calculator",
+      "amortization schedule"
+    ],
+    "status": "new",
+    "icon": "Landmark",
+    "runsLocally": true
+  },
+  {
+    "slug": "percentage-calculator",
+    "name": "Percentage calculator",
+    "tagline": "Percent of, percent change, reverse percent, and margin, with the formula shown.",
+    "description": "Free percentage calculator. Find X% of Y, what percent X is of Y, the change from one number to another, the original value, an increase or decrease, and margin versus markup. Arithmetic uses decimal rounding.",
+    "category": "finance",
+    "tags": [
+      "math",
+      "percent"
+    ],
+    "keywords": [
+      "percentage calculator",
+      "percent change",
+      "margin calculator"
+    ],
+    "status": "new",
+    "icon": "Percent",
+    "runsLocally": true
+  },
+  {
+    "slug": "unit-converter",
+    "name": "Unit converter",
+    "tagline": "Length, mass, temperature, and data sizes, with decimal and binary units kept apart.",
+    "description": "Free unit converter for length, mass, volume, temperature, area, speed, and time, plus decimal data units (kB, MB) and binary data units (KiB, MiB). Set the number of decimal places.",
+    "category": "units",
+    "tags": [
+      "units"
+    ],
+    "keywords": [
+      "unit converter",
+      "mb to gb",
+      "celsius to fahrenheit"
+    ],
+    "status": "new",
+    "icon": "Ruler",
     "runsLocally": true
   }
 ]

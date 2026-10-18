@@ -49,6 +49,15 @@ const views: Record<string, ComponentType> = {
   "favicon-generator": dynamic(() => import("@/tools/favicon-generator/tool")),
   "ocr-image-to-text": dynamic(() => import("@/tools/ocr-image-to-text/tool")),
   "background-remover": dynamic(() => import("@/tools/background-remover/tool")),
+  "word-counter": dynamic(() => import("@/tools/word-counter/tool")),
+  "case-converter": dynamic(() => import("@/tools/case-converter/tool")),
+  "lorem-ipsum": dynamic(() => import("@/tools/lorem-ipsum/tool")),
+  "regex-tester": dynamic(() => import("@/tools/regex-tester/tool")),
+  "sql-formatter": dynamic(() => import("@/tools/sql-formatter/tool")),
+  "json-schema-validate": dynamic(() => import("@/tools/json-schema-validate/tool")),
+  "loan-emi-calculator": dynamic(() => import("@/tools/loan-emi-calculator/tool")),
+  "percentage-calculator": dynamic(() => import("@/tools/percentage-calculator/tool")),
+  "unit-converter": dynamic(() => import("@/tools/unit-converter/tool")),
 };
 
 export function ToolHost({ slug }: { slug: string }) {

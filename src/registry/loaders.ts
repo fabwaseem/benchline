@@ -46,4 +46,13 @@ export const toolLoaders: Record<string, () => Promise<{ default: ComponentType 
   "favicon-generator": () => import("@/tools/favicon-generator/tool"),
   "ocr-image-to-text": () => import("@/tools/ocr-image-to-text/tool"),
   "background-remover": () => import("@/tools/background-remover/tool"),
+  "word-counter": () => import("@/tools/word-counter/tool"),
+  "case-converter": () => import("@/tools/case-converter/tool"),
+  "lorem-ipsum": () => import("@/tools/lorem-ipsum/tool"),
+  "regex-tester": () => import("@/tools/regex-tester/tool"),
+  "sql-formatter": () => import("@/tools/sql-formatter/tool"),
+  "json-schema-validate": () => import("@/tools/json-schema-validate/tool"),
+  "loan-emi-calculator": () => import("@/tools/loan-emi-calculator/tool"),
+  "percentage-calculator": () => import("@/tools/percentage-calculator/tool"),
+  "unit-converter": () => import("@/tools/unit-converter/tool"),
 };
