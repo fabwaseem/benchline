@@ -18,9 +18,16 @@ import { tool as imageConvert } from "@/tools/image-convert/mcp";
 import { tool as imageCompress } from "@/tools/image-compress/mcp";
 import { tool as imageResize } from "@/tools/image-resize/mcp";
 import { tool as colorConverter } from "@/tools/color-converter/mcp";
+import { tool as unixTimestamp } from "@/tools/unix-timestamp/mcp";
+import { tool as dateDifference } from "@/tools/date-difference/mcp";
+import { tool as hashGenerator } from "@/tools/hash-generator/mcp";
+import { tool as uuidGenerator } from "@/tools/uuid-generator/mcp";
+import { tool as urlCodec } from "@/tools/url-codec/mcp";
+import { tool as passwordGenerator } from "@/tools/password-generator/mcp";
+import { tool as chmodCalculator } from "@/tools/chmod-calculator/mcp";
 import type { BenchTool } from "@/lib/mcp/types";
 
-export const mcpTools: BenchTool[] = [llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter];
+export const mcpTools: BenchTool[] = [llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator];
 
 export function mcpToolBySlug(slug: string) {
   return mcpTools.find((tool) => tool.slug === slug);

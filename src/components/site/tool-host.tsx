@@ -24,6 +24,13 @@ const views: Record<string, ComponentType> = {
   "image-compress": dynamic(() => import("@/tools/image-compress/tool")),
   "image-resize": dynamic(() => import("@/tools/image-resize/tool")),
   "color-converter": dynamic(() => import("@/tools/color-converter/tool")),
+  "unix-timestamp": dynamic(() => import("@/tools/unix-timestamp/tool")),
+  "date-difference": dynamic(() => import("@/tools/date-difference/tool")),
+  "hash-generator": dynamic(() => import("@/tools/hash-generator/tool")),
+  "uuid-generator": dynamic(() => import("@/tools/uuid-generator/tool")),
+  "url-codec": dynamic(() => import("@/tools/url-codec/tool")),
+  "password-generator": dynamic(() => import("@/tools/password-generator/tool")),
+  "chmod-calculator": dynamic(() => import("@/tools/chmod-calculator/tool")),
 };
 
 export function ToolHost({ slug }: { slug: string }) {

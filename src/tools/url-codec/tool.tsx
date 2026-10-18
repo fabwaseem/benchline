@@ -1,0 +1,149 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import { Link } from "lucide-react";
+import { CopyButton } from "@/components/kit/copy-button";
+import { EmptyState } from "@/components/kit/empty-state";
+import { FieldRow } from "@/components/kit/field-row";
+import { Notice } from "@/components/kit/notice";
+import { Segmented } from "@/components/kit/segmented";
+import { Panel, ToolShell, ToolTabs } from "@/components/kit/tool-shell";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { decodeUrl, encodeUrl, parseUrl, replaceQuery, serializeQuery, utmKeys, withUtm, type EncodeMode, type QueryParam } from "@/tools/url-codec/lib/url";
+
+export default function UrlCodecTool() {
+  const [tab, setTab] = useState<"encode" | "decode" | "parse">("encode");
+  const [text, setText] = useState("a b/c?");
+  const [mode, setMode] = useState<EncodeMode>("component");
+  const [plusAsSpace, setPlusAsSpace] = useState(true);
+  const [url, setUrl] = useState("https://example.com/docs?q=hello+world");
+  const [params, setParams] = useState<QueryParam[] | null>(null);
+
+  const encoded = encodeUrl(text, mode);
+  const decoded = decodeUrl(text, plusAsSpace);
+  const parsed = useMemo(() => parseUrl(url), [url]);
+  const activeParams = params ?? ("error" in parsed ? [] : parsed.params);
+  const rebuilt = replaceQuery(url, activeParams);
+
+  function editParam(index: number, patch: Partial<QueryParam>) {
+    const next = activeParams.map((param, item) => (item === index ? { ...param, ...patch } : param));
+    setParams(next);
+  }
+
+  return (
+    <ToolShell
+      runsLocally
+      layout="split"
+      tabs={<ToolTabs label="Mode" value={tab} onChange={setTab} options={[{ value: "encode", label: "Encode" }, { value: "decode", label: "Decode" }, { value: "parse", label: "Parse" }]} />}
+      status={
+        <>
+          <span className="dot" />
+          <span>{tab === "parse" ? `${activeParams.length} parameters` : mode === "component" ? "Component encoding" : "Full encoding"}</span>
+        </>
+      }
+      input={
+        <Panel title={tab === "parse" ? "URL" : "Text"}>
+          {tab === "parse" ? (
+            <FieldRow label="URL or query string" htmlFor="url-input" error={"error" in parsed ? parsed.error : undefined}>
+              <Textarea id="url-input" value={url} onChange={(event) => { setUrl(event.target.value); setParams(null); }} className="min-h-28 font-mono" aria-invalid={"error" in parsed} />
+            </FieldRow>
+          ) : (
+            <>
+              <FieldRow label={tab === "encode" ? "Plain text" : "Encoded text"} htmlFor="url-text">
+                <Textarea id="url-text" value={text} onChange={(event) => setText(event.target.value)} className="min-h-28 font-mono" />
+              </FieldRow>
+              {tab === "encode" ? (
+                <Segmented label="Encoding" value={mode} onChange={setMode} options={[{ value: "component", label: "Component" }, { value: "full", label: "Full URL" }]} />
+              ) : (
+                <label className="flex min-h-11 items-center justify-between gap-3 text-sm">
+                  Treat + as space
+                  <Switch checked={plusAsSpace} onCheckedChange={setPlusAsSpace} />
+                </label>
+              )}
+            </>
+          )}
+        </Panel>
+      }
+      output={
+        <div aria-live="polite">
+          {tab === "encode" ? (
+            <Panel title="Encoded">
+              <div className="flex items-start justify-between gap-3">
+                <p className="font-mono text-[13px] break-all">{encoded || " "}</p>
+                <CopyButton value={encoded} />
+              </div>
+            </Panel>
+          ) : null}
+          {tab === "decode" ? (
+            <Panel title="Decoded">
+              {"error" in decoded ? <Notice tone="bad" role="alert" title={decoded.error} /> : (
+                <div className="flex items-start justify-between gap-3">
+                  <p className="font-mono text-[13px] break-all">{decoded.value || " "}</p>
+                  <CopyButton value={decoded.value} />
+                </div>
+              )}
+            </Panel>
+          ) : null}
+          {tab === "parse" ? (
+            <Panel title="Parts">
+              {"error" in parsed ? (
+                <EmptyState art={<Link size={22} />} title="No URL" hint="Paste a full URL or a query string such as a=1&b=2." />
+              ) : (
+                <>
+                  <dl className="grid grid-cols-[6.5rem_minmax(0,1fr)] gap-x-3 gap-y-1 text-[13px]">
+                    <Part name="Protocol" value={parsed.protocol} />
+                    <Part name="Host" value={parsed.hostname} />
+                    <Part name="Port" value={parsed.port} />
+                    <Part name="Path" value={parsed.pathname} />
+                    <Part name="Hash" value={parsed.hash} />
+                  </dl>
+                  <div className="flex flex-col gap-2">
+                    {activeParams.map((param, index) => (
+                      <div key={`${param.key}-${index}`} className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] gap-2">
+                        <Input aria-label={`Parameter ${index + 1} name`} value={param.key} onChange={(event) => editParam(index, { key: event.target.value })} className="font-mono" />
+                        <Input aria-label={`Parameter ${index + 1} value`} value={param.value} onChange={(event) => editParam(index, { value: event.target.value })} className="font-mono" />
+                        <button type="button" className="chip" onClick={() => setParams(activeParams.filter((_, item) => item !== index))}>Remove</button>
+                      </div>
+                    ))}
+                    <button type="button" className="chip" onClick={() => setParams([...activeParams, { key: "", value: "" }])}>Add parameter</button>
+                  </div>
+                  <div className="grid gap-2 min-[700px]:grid-cols-2">
+                    {utmKeys.map((key) => (
+                      <FieldRow key={key} label={key} htmlFor={`utm-${key}`}>
+                        <Input
+                          id={`utm-${key}`}
+                          value={activeParams.find((param) => param.key === key)?.value ?? ""}
+                          onChange={(event) => {
+                            const current = Object.fromEntries(utmKeys.map((item) => [item, activeParams.find((param) => param.key === item)?.value ?? ""]));
+                            setParams(withUtm(activeParams, { ...current, [key]: event.target.value }));
+                          }}
+                        />
+                      </FieldRow>
+                    ))}
+                  </div>
+                  {typeof rebuilt === "string" ? (
+                    <div className="flex items-start justify-between gap-3">
+                      <p className="font-mono text-[13px] break-all">{rebuilt || serializeQuery(activeParams)}</p>
+                      <CopyButton value={rebuilt} />
+                    </div>
+                  ) : <Notice tone="bad" title={rebuilt.error} />}
+                </>
+              )}
+            </Panel>
+          ) : null}
+        </div>
+      }
+    />
+  );
+}
+
+function Part({ name, value }: { name: string; value: string }) {
+  return (
+    <>
+      <dt className="text-muted-foreground">{name}</dt>
+      <dd className="font-mono break-all">{value || "—"}</dd>
+    </>
+  );
+}
