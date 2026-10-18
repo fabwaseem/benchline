@@ -1,16 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Download, FileImage } from "lucide-react";
-import { FieldRow } from "@/components/kit/field-row";
-import { Segmented } from "@/components/kit/segmented";
-import { Slider, TextInput } from "@/components/kit/controls";
+import { FileImage } from "lucide-react";
+import { ActionButton, Slider, TextInput } from "@/components/kit/controls";
 import { downloadBytes } from "@/components/kit/download-button";
 import { Dropzone } from "@/components/kit/dropzone";
 import { EmptyState } from "@/components/kit/empty-state";
+import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
-import { ResultStat } from "@/components/kit/result-stat";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { renderPdfInBrowser } from "@/tools/pdf-to-image/lib/browser";
 import { imageFormats, type ImageFormat, type RenderedImage } from "@/tools/pdf-to-image/lib/plan";
 
@@ -68,23 +67,21 @@ export default function PdfToImageTool() {
   useWorkbenchKeys({ onEnter: () => { if (images.length) download(); else void render(); } });
 
   return (
-    <ToolShell
-      runsLocally
-      busy={busy}
-      layout="split"
-      tabs={<ToolTabs label="Format" value={format} onChange={setFormat} options={imageFormats.map((item) => ({ value: item, label: item.toUpperCase() }))} />}
-      actions={<InkButton icon={<Download size={15} />} disabled={busy || !file} onClick={() => { if (images.length) download(); else void render(); }}>{images.length ? "Download" : "Render"}</InkButton>}
-      status={
-        <>
-          <span className={error ? "dot dot-warn" : "dot"} />
-          <span>{error || (busy ? "Drawing pages in this browser" : file ? "Ready to render" : "The PDF stays in this browser")}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘↵ render</span>
-        </>
-      }
-      input={
-        <Panel title="PDF">
+    <ToolCard>
+      <ToolToolbar
+        label="Format"
+        options={imageFormats.map((item) => ({ value: item, label: item.toUpperCase() }))}
+        value={format}
+        onChange={(next) => { setFormat(next); setImages([]); setZip(null); setPreviews([]); }}
+        actions={
+          <ActionButton className="btn btn-ink" disabled={busy || !file} onClick={() => { if (images.length) download(); else void render(); }}>
+            {busy ? "Drawing" : images.length ? "Download" : "Render"}
+          </ActionButton>
+        }
+      />
+      <ToolPanes ratio="40/60">
+        <Pane label="PDF">
           <Dropzone accept="application/pdf,.pdf" onFiles={(files) => void add(files)} label={file ? name : "Drop a PDF. It stays in this browser."} invalid={Boolean(error)} />
-          <Segmented label="Image format" value={format} onChange={setFormat} options={imageFormats.map((item) => ({ value: item, label: item.toUpperCase() }))} />
           <FieldRow label="Pages" htmlFor="pdf-image-range" help="Blank renders every page, up to 24. Example: 1-3,5">
             <TextInput id="pdf-image-range" value={range} placeholder="all pages" onChange={(event) => { setRange(event.target.value); setImages([]); }} />
           </FieldRow>
@@ -96,29 +93,31 @@ export default function PdfToImageTool() {
               <Slider id="pdf-image-quality" min={1} max={100} value={[quality]} onValueChange={(value) => { setQuality(value[0] ?? 82); setImages([]); }} />
             </FieldRow>
           ) : null}
-        </Panel>
-      }
-      output={
-        <Panel title="Images">
+        </Pane>
+        <Pane label="Images">
           {error ? <Notice tone="bad" role="alert" title="Could not render" body={error} /> : null}
           {images.length ? (
-            <div className="flex flex-col gap-3">
-              <div className="grid grid-cols-2 gap-2">
-                <ResultStat label="Images" value={String(images.length)} />
-                <ResultStat label="Download" value={zip ? "ZIP" : images[0]?.name ?? "Image"} />
-              </div>
-              <div className="grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-2">
-                {previews.map((src, index) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img key={images[index]?.name ?? src} src={src} alt={images[index]?.name ?? "Rendered page"} className="w-full rounded-md border border-border bg-well" />
-                ))}
-              </div>
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-2">
+              {previews.map((src, index) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img key={images[index]?.name ?? src} src={src} alt={images[index]?.name ?? "Rendered page"} className="w-full rounded-md border border-border bg-well" />
+              ))}
             </div>
           ) : (
             <EmptyState art={<FileImage size={22} />} title="No images yet" hint="Add a PDF, then render. One page downloads as an image. Several pages download as a ZIP." />
           )}
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip
+        note={error || (busy ? "Drawing pages in this browser" : file ? "Ready to render" : "The PDF stays in this browser")}
+        tone={error ? "fail" : "pass"}
+        trailing="⌘↵ render"
+        items={[
+          { level: "info", label: "Format", detail: format.toUpperCase() },
+          { level: "info", label: "Images", detail: images.length ? String(images.length) : "—" },
+          { level: images.length > 1 ? "pass" : "info", label: "Download", detail: zip ? "ZIP" : images[0]?.name ?? "—" },
+        ]}
+      />
+    </ToolCard>
   );
 }

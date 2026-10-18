@@ -1,13 +1,14 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Download, RotateCw, Trash2 } from "lucide-react";
+import { RotateCw, Trash2 } from "lucide-react";
 import { ActionButton, IconButton } from "@/components/kit/controls";
 import { downloadBytes } from "@/components/kit/download-button";
 import { Dropzone } from "@/components/kit/dropzone";
 import { EmptyState } from "@/components/kit/empty-state";
 import { Notice } from "@/components/kit/notice";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { openBrowserPdf } from "@/lib/pdf-browser";
 import { inspectPdf, nextTurn, organizePdf, type QuarterTurn } from "@/tools/pdf-rotate-organize/lib/organize";
 
@@ -109,21 +110,12 @@ export default function PdfRotateTool() {
   useWorkbenchKeys({ onEnter: () => void save() });
 
   return (
-    <ToolShell
-      runsLocally
-      busy={busy}
-      layout="split"
-      tabs={<ToolTabs label="Mode" value="pages" onChange={() => undefined} options={[{ value: "pages", label: "Pages" }]} />}
-      actions={<InkButton icon={<Download size={15} />} disabled={busy || cards.length === 0} onClick={() => void save()}>Download</InkButton>}
-      status={
-        <>
-          <span className={error ? "dot dot-warn" : "dot"} />
-          <span>{error || (busy ? "Working in this browser" : `${cards.length} ${cards.length === 1 ? "page" : "pages"} in the new file`)}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘↵ download</span>
-        </>
-      }
-      input={
-        <Panel title="PDF">
+    <ToolCard>
+      <ToolToolbar
+        actions={<ActionButton className="btn btn-ink" disabled={busy || cards.length === 0} onClick={() => void save()}>{busy ? "Working" : "Download"}</ActionButton>}
+      />
+      <ToolPanes ratio="35/65">
+        <Pane label="PDF">
           <Dropzone accept="application/pdf,.pdf" onFiles={(files) => void add(files)} label="Drop a PDF. It stays in this browser." invalid={Boolean(error)} />
           <div className="flex flex-wrap gap-2">
             <ActionButton type="button" variant="outline" disabled={cards.length === 0} onClick={() => setCards((current) => current.map((card) => ({ ...card, rotate: nextTurn(card.rotate) })))}>
@@ -134,10 +126,8 @@ export default function PdfRotateTool() {
             </ActionButton>
           </div>
           <Notice tone="neutral" title="Nothing is uploaded." body="Drag a card to move it. Turn or delete a single page from the card." />
-        </Panel>
-      }
-      output={
-        <Panel title="Page order">
+        </Pane>
+        <Pane label="Page order">
           {error ? <Notice tone="bad" role="alert" title="Could not organize" body={error} /> : null}
           {cards.length === 0 ? (
             <EmptyState art={<RotateCw size={22} />} title="No pages yet" hint="Drop a PDF. Each page becomes a card you can turn or drop." />
@@ -181,8 +171,14 @@ export default function PdfRotateTool() {
               ))}
             </ul>
           )}
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip
+        note={error || (busy ? "Working in this browser" : `${cards.length} ${cards.length === 1 ? "page" : "pages"} in the new file`)}
+        tone={error ? "fail" : "pass"}
+        trailing="⌘↵ download"
+        items={[{ level: "info", label: "Order", detail: cards.length ? cards.map((card) => card.source).join(", ") : "Waiting for a PDF" }]}
+      />
+    </ToolCard>
   );
 }
