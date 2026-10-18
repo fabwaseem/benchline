@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import { Eraser } from "lucide-react";
-import { ColorInput, OptionRow, Slider, TextInput } from "@/components/kit/controls";
+import { ActionButton, ColorInput, OptionRow, Slider, TextInput } from "@/components/kit/controls";
 import { downloadBytes } from "@/components/kit/download-button";
 import { Dropzone } from "@/components/kit/dropzone";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { ProgressMeter } from "@/components/kit/progress-meter";
-import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { fileToBitmap } from "@/lib/client-image";
 import { IMAGE_ACCEPT } from "@/lib/image-format";
 import { parseHexColor, removeSolidBackground } from "@/tools/background-remover/lib/matte";
@@ -108,28 +108,27 @@ export default function BackgroundTool() {
   useWorkbenchKeys({ onEnter: () => void remove() });
 
   return (
-    <ToolShell
-      runsLocally
-      busy={busy}
-      layout="split"
-      tabs={<ToolTabs label="Mode" value={mode} onChange={setMode} options={[{ value: "portrait", label: "Portrait" }, { value: "solid", label: "Solid color" }]} />}
-      actions={<InkButton icon={<Eraser size={15} />} disabled={!file || busy} onClick={() => void remove()}>{busy ? "Working" : "Remove"}</InkButton>}
-      status={
-        <>
-          <span className={error ? "dot dot-warn" : "dot"} />
-          <span>{error || progress.label}</span>
-          <span className="ml-auto hidden min-[700px]:inline">Stays in this browser</span>
-        </>
-      }
-      input={
-        <Panel title="Image">
+    <ToolCard>
+      <ToolToolbar
+        label="Mode"
+        options={[{ value: "portrait", label: "Portrait" }, { value: "solid", label: "Solid color" }]}
+        value={mode}
+        onChange={setMode}
+        actions={
+          <>
+            <ActionButton className="btn btn-ink" disabled={!file || busy} onClick={() => void remove()}>{busy ? "Working" : "Remove"}</ActionButton>
+            {png ? <ActionButton variant="outline" onClick={save}>Download PNG</ActionButton> : null}
+          </>
+        }
+      />
+      <ToolPanes ratio="40/60">
+        <Pane label="Image">
           <Notice
             tone="neutral"
             title="Nothing is uploaded."
             body="Portrait uses MODNet (Apache-2.0) and shows download progress. It is trained on people. Solid color clears a plain backdrop from the edges without a download."
           />
           <Dropzone accept={IMAGE_ACCEPT} label={file ? file.name : "Drop an image, or click to choose one"} onFile={setFile} />
-          <Segmented label="Removal" value={mode} onChange={setMode} options={[{ value: "portrait", label: "Portrait" }, { value: "solid", label: "Solid color" }]} />
           {mode === "portrait" ? (
             <p className="text-[12px] text-faint">The long side is limited to 1024 pixels before the model runs. The first run downloads about 7 MB.</p>
           ) : (
@@ -139,7 +138,7 @@ export default function BackgroundTool() {
               </FieldRow>
               <OptionRow label="Set the backdrop color" checked={useColor} onChange={setUseColor} />
               {useColor ? (
-                <div className="flex items-end gap-3">
+                <div className="flex flex-wrap items-end gap-3">
                   <ColorInput aria-label="Backdrop color" value={picked} onChange={(event) => { setPicked(event.target.value); setColor(event.target.value); }} />
                   <TextInput value={color || picked} onChange={(event) => setColor(event.target.value)} aria-label="Backdrop hex" />
                 </div>
@@ -147,10 +146,8 @@ export default function BackgroundTool() {
             </>
           )}
           {busy || progress.percent > 0 ? <ProgressMeter label={progress.label} value={progress.percent} /> : null}
-        </Panel>
-      }
-      output={
-        <Panel title="Cutout">
+        </Pane>
+        <Pane label="Cutout">
           {error ? <Notice tone="bad" role="alert" title="Not removed" body={error} /> : null}
           {preview ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -158,9 +155,14 @@ export default function BackgroundTool() {
           ) : (
             <EmptyState art={<Eraser size={22} />} title="No cutout yet" hint="Drop a portrait or a product on a plain backdrop." />
           )}
-          {png ? <InkButton icon={<Eraser size={15} />} onClick={save}>Download PNG</InkButton> : null}
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip
+        note={error || progress.label}
+        tone={error ? "fail" : png ? "pass" : "info"}
+        trailing="Stays in this browser"
+        items={[{ level: mode === "portrait" ? "info" : "pass", label: mode === "portrait" ? "MODNet" : "Solid color", detail: mode === "portrait" ? "Portrait model" : "Border flood fill" }]}
+      />
+    </ToolCard>
   );
 }

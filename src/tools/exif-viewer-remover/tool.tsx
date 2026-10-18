@@ -10,8 +10,7 @@ import { EmptyState } from "@/components/kit/empty-state";
 import { FileList } from "@/components/kit/file-list";
 import { CodeOutput } from "@/components/kit/code-output";
 import { Notice } from "@/components/kit/notice";
-import { ResultStat } from "@/components/kit/result-stat";
-import { InkButton, Panel, ToolShell, ToolTabs } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes } from "@/components/kit/shell";
 import { fileToBitmap } from "@/lib/client-image";
 import { formatBytes, IMAGE_ACCEPT } from "@/lib/image-format";
 import type { ExifReport } from "@/tools/exif-viewer-remover/lib/read";
@@ -104,21 +103,9 @@ export default function ExifTool() {
   const tagText = report?.tags.map((tag) => `${tag.name}: ${tag.value}`).join("\n") ?? "";
 
   return (
-    <ToolShell
-      runsLocally
-      busy={busy}
-      layout="split"
-      tabs={<ToolTabs label="Metadata" value="exif" onChange={() => {}} options={[{ value: "exif", label: "EXIF" }]} />}
-      actions={<InkButton icon={<Aperture size={15} />} disabled={!current || busy} onClick={() => void strip("all")}>{busy ? "Stripping" : "Strip all"}</InkButton>}
-      status={
-        <>
-          <span className="dot" />
-          <span>{report?.gps ? report.gps.label : current ? "No GPS" : "Waiting for photos"}</span>
-          <span className="ml-auto hidden min-[700px]:inline">Stays in this browser</span>
-        </>
-      }
-      input={
-        <Panel title="Photos">
+    <ToolCard>
+      <ToolPanes ratio="40/60">
+        <Pane label="Photos">
           <Notice tone="neutral" title="Nothing is uploaded." body="GPS-only keeps the other JPEG tags. Strip all redraws the pixels, so every tag goes." />
           <Dropzone accept={IMAGE_ACCEPT} multiple label="Drop photos, or click to choose a batch" onFiles={(files) => void addFiles(files)} />
           <FileList
@@ -141,20 +128,14 @@ export default function ExifTool() {
           ) : null}
           <div className="flex flex-wrap gap-2">
             <ActionButton type="button" variant="outline" disabled={!current || busy} onClick={() => void strip("gps")}>Strip GPS</ActionButton>
-            <ActionButton type="button" disabled={!current || busy} onClick={() => void strip("all")}>Strip all</ActionButton>
+            <ActionButton type="button" className="btn btn-ink" disabled={!current || busy} onClick={() => void strip("all")}>{busy ? "Stripping" : "Strip all"}</ActionButton>
           </div>
-        </Panel>
-      }
-      output={
-        <Panel title="Tags">
+        </Pane>
+        <Pane label="Tags">
           {!current ? (
             <EmptyState art={<Aperture size={22} />} title="No photo yet" hint="Drop a picture to see the camera, the time, and the GPS point." />
           ) : (
             <>
-              <div className="grid grid-cols-2 gap-2">
-                <ResultStat variant="well" label="Camera" value={report?.camera || "—"} />
-                <ResultStat variant="well" label="When" value={report?.when || "—"} />
-              </div>
               {report?.gps ? (
                 <Notice tone="warn" title={report.gps.label} body="This photo carries a location." />
               ) : (
@@ -171,8 +152,17 @@ export default function ExifTool() {
               ) : null}
             </>
           )}
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip
+        note={report?.gps ? report.gps.label : current ? "No GPS" : "Waiting for photos"}
+        tone={report?.gps ? "warn" : current ? "pass" : "info"}
+        trailing="Stays in this browser"
+        items={current ? [
+          { level: "info" as const, label: "Camera", detail: report?.camera || "—" },
+          { level: "info" as const, label: "When", detail: report?.when || "—" },
+        ] : undefined}
+      />
+    </ToolCard>
   );
 }

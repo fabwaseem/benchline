@@ -4,14 +4,15 @@ import { useState } from "react";
 import Cropper, { type Area } from "react-easy-crop";
 import { Crop } from "lucide-react";
 import { toast } from "sonner";
-import { ChipButton, OptionRow, Slider } from "@/components/kit/controls";
+import { ActionButton, ChipButton, OptionRow, Slider } from "@/components/kit/controls";
 import { downloadBytes } from "@/components/kit/download-button";
 import { Dropzone } from "@/components/kit/dropzone";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { fileToBitmap } from "@/lib/client-image";
 import { IMAGE_ACCEPT } from "@/lib/image-format";
 import { aspectPresets, aspectRatio, type AspectPreset, type CropFormat } from "@/tools/image-crop/lib/crop";
@@ -85,21 +86,12 @@ export default function ImageCropTool() {
   useWorkbenchKeys({ onEnter: () => void save() });
 
   return (
-    <ToolShell
-      runsLocally
-      busy={busy}
-      layout="split"
-      tabs={<ToolTabs label="Crop" value="crop" onChange={() => {}} options={[{ value: "crop", label: "Crop" }]} />}
-      actions={<InkButton icon={<Crop size={15} />} disabled={!pixels || busy} onClick={() => void save()}>{busy ? "Cropping" : "Download crop"}</InkButton>}
-      status={
-        <>
-          <span className="dot" />
-          <span>{pixels ? `${Math.round(pixels.width)}×${Math.round(pixels.height)}` : "Waiting for an image"}</span>
-          <span className="ml-auto hidden min-[700px]:inline">Stays in this browser</span>
-        </>
-      }
-      input={
-        <Panel title="Frame">
+    <ToolCard>
+      <ToolToolbar
+        actions={<ActionButton className="btn btn-ink" disabled={!pixels || busy} onClick={() => void save()}>{busy ? "Cropping" : "Download crop"}</ActionButton>}
+      />
+      <ToolPanes ratio="35/65">
+        <Pane label="Frame">
           <Notice tone="neutral" title="Nothing is uploaded." body="Drag the picture inside the frame. A circle keeps a round mask, and JPG fills the corners with white." />
           <Dropzone accept={IMAGE_ACCEPT} label={url ? "Replace the image" : "Drop an image, or click to choose one"} onFile={load} />
           <div className="flex flex-wrap gap-1.5">
@@ -112,12 +104,10 @@ export default function ImageCropTool() {
             <Slider id="crop-zoom" min={1} max={3} step={0.01} value={[zoom]} onValueChange={([value]) => setZoom(value ?? 1)} />
           </FieldRow>
           <Segmented label="Format" value={format} onChange={setFormat} options={formats.map((item) => ({ value: item, label: labels[item] }))} />
-        </Panel>
-      }
-      output={
-        <Panel title="Crop">
+        </Pane>
+        <Pane label="Crop" scroll={false} bodyClassName="relative min-h-80 p-3">
           {url ? (
-            <div className="relative h-80 overflow-hidden rounded-lg bg-sunken">
+            <div className="relative h-full min-h-80 overflow-hidden rounded-lg bg-sunken">
               <Cropper
                 image={url}
                 crop={crop}
@@ -133,8 +123,14 @@ export default function ImageCropTool() {
           ) : (
             <EmptyState art={<Crop size={22} />} title="No image yet" hint="Drop a picture, then drag the frame." />
           )}
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip
+        note={pixels ? `${Math.round(pixels.width)}×${Math.round(pixels.height)} · ${labels[format]}` : "Waiting for an image"}
+        tone={pixels ? "pass" : "info"}
+        trailing="Stays in this browser"
+        items={circle ? [{ level: "info", label: "Circle", detail: format === "jpeg" ? "JPG corners turn white" : "Transparent corners" }] : undefined}
+      />
+    </ToolCard>
   );
 }

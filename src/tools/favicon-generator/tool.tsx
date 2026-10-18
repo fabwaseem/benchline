@@ -3,14 +3,15 @@
 import { useState } from "react";
 import { AppWindow } from "lucide-react";
 import { toast } from "sonner";
-import { ColorInput, TextInput } from "@/components/kit/controls";
+import { ActionButton, ColorInput, TextInput } from "@/components/kit/controls";
 import { CodeOutput } from "@/components/kit/code-output";
 import { downloadBytes } from "@/components/kit/download-button";
 import { Dropzone } from "@/components/kit/dropzone";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { fileToBitmap } from "@/lib/client-image";
 import { IMAGE_ACCEPT } from "@/lib/image-format";
 import { zipBlob } from "@/lib/zip-files";
@@ -114,21 +115,16 @@ export default function FaviconTool() {
   useWorkbenchKeys({ onEnter: () => void build() });
 
   return (
-    <ToolShell
-      runsLocally
-      busy={busy}
-      layout="split"
-      tabs={<ToolTabs label="Source" value={source} onChange={setSource} options={[{ value: "letters", label: "Letters" }, { value: "image", label: "Image" }]} />}
-      actions={<InkButton icon={<AppWindow size={15} />} disabled={busy || (source === "image" && !file)} onClick={() => void build()}>{busy ? "Building" : "Download ZIP"}</InkButton>}
-      status={
-        <>
-          <span className="dot" />
-          <span>{source === "image" ? file?.name ?? "Waiting for an image" : safeName(text || "A")}</span>
-          <span className="ml-auto hidden min-[700px]:inline">Built in this browser</span>
-        </>
-      }
-      input={
-        <Panel title="Mark">
+    <ToolCard>
+      <ToolToolbar
+        label="Source"
+        options={[{ value: "letters", label: "Letters" }, { value: "image", label: "Image" }]}
+        value={source}
+        onChange={setSource}
+        actions={<ActionButton className="btn btn-ink" disabled={busy || (source === "image" && !file)} onClick={() => void build()}>{busy ? "Building" : "Download ZIP"}</ActionButton>}
+      />
+      <ToolPanes ratio="40/60">
+        <Pane label="Mark">
           <Notice tone="neutral" title="Nothing is uploaded." body="The ZIP includes favicon.ico, the PNG sizes, a manifest, and the tags to paste into a page." />
           {source === "image" ? (
             <Dropzone accept={IMAGE_ACCEPT} label={file ? file.name : "Drop an image, or click to choose one"} onFile={setFile} />
@@ -146,10 +142,8 @@ export default function FaviconTool() {
           <FieldRow label="App name" htmlFor="app-name" help="Written into the web manifest.">
             <TextInput id="app-name" value={name} onChange={(event) => setName(event.target.value)} />
           </FieldRow>
-        </Panel>
-      }
-      output={
-        <Panel title="Pack">
+        </Pane>
+        <Pane label="Pack">
           {preview ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={preview} alt="32 pixel favicon preview" className="size-16 rounded-lg border border-border bg-background" />
@@ -159,8 +153,14 @@ export default function FaviconTool() {
           <CodeOutput code={htmlSnippet()} filename="snippet.html" label="HTML" />
           <CodeOutput code={nextMetadataSnippet()} filename="next-metadata.ts" label="Next.js" />
           <CodeOutput code={manifestJson(name)} filename="site.webmanifest" label="Manifest" />
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip
+        note={source === "image" ? file?.name ?? "Waiting for an image" : safeName(text || "A")}
+        tone={source === "image" && !file ? "info" : "pass"}
+        trailing="Built in this browser"
+        items={[{ level: "info", label: "ICO", detail: "16 · 32 · 48" }, { level: "info", label: "PNG", detail: "180 · 192 · 512" }]}
+      />
+    </ToolCard>
   );
 }

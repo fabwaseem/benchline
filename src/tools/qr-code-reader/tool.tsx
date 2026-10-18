@@ -8,8 +8,8 @@ import { CopyButton } from "@/components/kit/copy-button";
 import { Dropzone } from "@/components/kit/dropzone";
 import { EmptyState } from "@/components/kit/empty-state";
 import { Notice } from "@/components/kit/notice";
-import { ResultStat } from "@/components/kit/result-stat";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { IMAGE_ACCEPT } from "@/lib/image-format";
 import { fileToBitmap } from "@/lib/client-image";
 import type { BarcodeHit } from "@/tools/qr-code-reader/lib/codes";
@@ -142,21 +142,9 @@ export default function QrReaderTool() {
   });
 
   return (
-    <ToolShell
-      runsLocally
-      busy={busy}
-      layout="split"
-      tabs={<ToolTabs label="Source" value="image" onChange={() => {}} options={[{ value: "image", label: "Image" }]} />}
-      actions={<InkButton icon={<Camera size={15} />} onClick={() => void toggleCamera()}>{camera ? "Stop camera" : "Camera"}</InkButton>}
-      status={
-        <>
-          <span className={error ? "dot dot-warn" : "dot"} />
-          <span>{error || `${codes.length} code${codes.length === 1 ? "" : "s"} · ${source}`}</span>
-          <span className="ml-auto hidden min-[700px]:inline">Paste an image · stays in this browser</span>
-        </>
-      }
-      input={
-        <Panel title="Picture">
+    <ToolCard>
+      <ToolPanes ratio="40/60">
+        <Pane label="Picture">
           <Notice tone="neutral" title="Nothing is uploaded." body="Drop a photo, paste one, or use the camera. Decoding stays on this device." />
           <Dropzone accept={IMAGE_ACCEPT} label="Drop an image, or click to choose one" onFile={(file) => void readFile(file)} />
           {camera ? (
@@ -165,10 +153,8 @@ export default function QrReaderTool() {
           <ActionButton type="button" variant="outline" onClick={() => void toggleCamera()}>
             <Camera />{camera ? "Stop camera" : "Use camera"}
           </ActionButton>
-        </Panel>
-      }
-      output={
-        <Panel title="Codes">
+        </Pane>
+        <Pane label="Codes">
           {codes.length === 0 ? (
             <EmptyState art={<ScanBarcode size={22} />} title="No code yet" hint="A QR code or barcode in the picture shows up here with its format." />
           ) : (
@@ -184,12 +170,14 @@ export default function QrReaderTool() {
               ))}
             </ul>
           )}
-          <div className="grid grid-cols-2 gap-2">
-            <ResultStat variant="well" label="Codes" value={String(codes.length)} />
-            <ResultStat variant="well" label="Source" value={source === "Waiting for an image" ? "—" : source} />
-          </div>
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip
+        note={error || (busy ? "Reading the picture" : codes.length === 0 ? "Waiting for an image" : `${codes.length} code${codes.length === 1 ? "" : "s"}`)}
+        tone={error ? "warn" : codes.length ? "pass" : "info"}
+        trailing="Paste an image · stays in this browser"
+        items={codes.length ? [{ level: "pass", label: source, detail: `${codes.length} found` }] : undefined}
+      />
+    </ToolCard>
   );
 }

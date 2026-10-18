@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ScanText } from "lucide-react";
 import { toast } from "sonner";
-import { Select } from "@/components/kit/controls";
+import { ActionButton, Select } from "@/components/kit/controls";
 import { CodeOutput } from "@/components/kit/code-output";
 import { downloadText } from "@/components/kit/download-button";
 import { Dropzone } from "@/components/kit/dropzone";
@@ -11,8 +11,8 @@ import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { ProgressMeter } from "@/components/kit/progress-meter";
-import { ResultStat } from "@/components/kit/result-stat";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { IMAGE_ACCEPT } from "@/lib/image-format";
 import { ocrLanguages, type OcrLanguage } from "@/tools/ocr-image-to-text/lib/text";
 
@@ -70,21 +70,12 @@ export default function OcrTool() {
   });
 
   return (
-    <ToolShell
-      runsLocally
-      busy={busy}
-      layout="split"
-      tabs={<ToolTabs label="OCR" value="read" onChange={() => {}} options={[{ value: "read", label: "Read" }]} />}
-      actions={<InkButton icon={<ScanText size={15} />} disabled={!file || busy} onClick={() => void read()}>{busy ? "Reading" : "Read text"}</InkButton>}
-      status={
-        <>
-          <span className={error ? "dot dot-warn" : "dot"} />
-          <span>{error || (confidence === null ? "Waiting for an image" : `${confidence}% confidence`)}</span>
-          <span className="ml-auto hidden min-[700px]:inline">Runs in this browser</span>
-        </>
-      }
-      input={
-        <Panel title="Image">
+    <ToolCard>
+      <ToolToolbar
+        actions={<ActionButton className="btn btn-ink" disabled={!file || busy} onClick={() => void read()}>{busy ? "Reading" : "Read text"}</ActionButton>}
+      />
+      <ToolPanes ratio="40/60">
+        <Pane label="Image">
           <Notice tone="neutral" title="Nothing is uploaded." body="The first run downloads the language data. A progress line shows that download, then the recognition." />
           <Dropzone accept={IMAGE_ACCEPT} label={file ? file.name : "Drop an image, or click to choose one"} onFile={setFile} />
           <FieldRow label="Language" htmlFor="ocr-lang">
@@ -93,21 +84,24 @@ export default function OcrTool() {
             </Select>
           </FieldRow>
           {busy || progress.percent > 0 ? <ProgressMeter label={progress.label} value={progress.percent} /> : null}
-        </Panel>
-      }
-      output={
-        <Panel title="Text">
+        </Pane>
+        <Pane label="Text" scroll={false} bodyClassName="flex min-h-[320px] flex-col gap-3 p-3">
           {text ? (
             <>
-              <ResultStat variant="well" label="Confidence" value={`${confidence ?? 0}%`} hint={language} />
-              <CodeOutput code={text} filename="text.txt" label="Text" />
-              <InkButton icon={<ScanText size={15} />} onClick={() => downloadText("text.txt", text)}>Download text</InkButton>
+              <CodeOutput code={text} filename="text.txt" label="Text" fill chrome={false} className="min-h-0 flex-1" />
+              <ActionButton variant="outline" onClick={() => downloadText("text.txt", text)}>Download text</ActionButton>
             </>
           ) : (
             <EmptyState art={<ScanText size={22} />} title={error ? "No text" : "No text yet"} hint={error || "Drop a screenshot or a scan, then read it."} />
           )}
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip
+        note={error || (confidence === null ? "Waiting for an image" : `${confidence}% confidence`)}
+        tone={error ? "warn" : confidence === null ? "info" : "pass"}
+        trailing="Runs in this browser"
+        items={confidence === null ? undefined : [{ level: confidence >= 70 ? "pass" : "warn", label: language, detail: `${confidence}%` }]}
+      />
+    </ToolCard>
   );
 }
