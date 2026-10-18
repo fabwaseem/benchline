@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { KeyRound, ShieldCheck } from "lucide-react";
-import { ActionButton, Select, TextArea } from "@/components/kit/controls";
+import { ActionButton, Select } from "@/components/kit/controls";
+import { CodeEditor } from "@/components/kit/code-viewer";
 import { CodeOutput } from "@/components/kit/code-output";
 import { CopyButton } from "@/components/kit/copy-button";
 import { EmptyState } from "@/components/kit/empty-state";
@@ -88,12 +89,12 @@ export default function KeypairTool() {
           ) : null}
           {tab === "pem" ? (
             <FieldRow label="PEM" htmlFor="pem" error={error || undefined}>
-              <TextArea id="pem" value={pem} className="min-h-40 font-mono" onChange={(event) => setPem(event.target.value)} />
+              <CodeEditor id="pem" label="PEM" language="plaintext" value={pem} onChange={(event) => setPem(event.target.value)} />
             </FieldRow>
           ) : null}
           {tab === "jwk" ? (
             <FieldRow label="JWK" htmlFor="jwk" error={error || undefined}>
-              <TextArea id="jwk" value={jwk} className="min-h-40 font-mono" onChange={(event) => setJwk(event.target.value)} />
+              <CodeEditor id="jwk" label="JWK" language="json" value={jwk} onChange={(event) => setJwk(event.target.value)} />
             </FieldRow>
           ) : null}
           <ActionButton type="button" className="btn btn-ink" disabled={busy || (tab === "pem" && !pem.trim()) || (tab === "jwk" && !jwk.trim())} onClick={() => void run()}>

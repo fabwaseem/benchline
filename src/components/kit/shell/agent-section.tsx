@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CopyButton } from "@/components/kit/copy-button";
+import { CodeViewer } from "@/components/kit/code-viewer";
 import { cn } from "@/lib/utils";
 
 const clients = ["Cursor", "Claude Desktop", "VS Code", "cURL"] as const;
@@ -62,17 +62,6 @@ export function AgentSection({ name, endpoint, call }: { name: string; endpoint:
 }
 
 function Snippet({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="min-w-0 overflow-hidden rounded-xl border border-border bg-surface">
-      <div className="flex items-center gap-2 border-b border-border px-3 py-2">
-        <span className="truncate font-mono text-[11px] tracking-[0.06em] text-faint uppercase whitespace-nowrap" title={label}>
-          {label}
-        </span>
-        <div className="ml-auto">
-          <CopyButton value={value} label="Copy" />
-        </div>
-      </div>
-      <pre className="max-h-80 overflow-x-hidden overflow-y-auto p-3 font-mono text-[12px] leading-5 break-words whitespace-pre-wrap text-foreground">{value}</pre>
-    </div>
-  );
+  const language = label === "curl" ? "bash" : "json";
+  return <CodeViewer code={value} label={label} language={language} maxHeight={320} wrapDefault />;
 }

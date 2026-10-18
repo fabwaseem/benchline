@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CodeViewer } from "@/components/kit/code-viewer";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -65,8 +66,8 @@ export default function McpGuidePage() {
           <p className="mt-2 text-[14.5px] leading-relaxed text-muted-foreground">
             Add the URL to claude_desktop_config.json. A build that only starts a local command can use mcp-remote with the same URL.
           </p>
-          <pre className="mt-4 overflow-x-auto rounded-[10px] bg-sunken p-3 font-mono text-[12px] leading-relaxed">{claudeDesktop}</pre>
-          <pre className="mt-3 overflow-x-auto rounded-[10px] bg-sunken p-3 font-mono text-[12px] leading-relaxed">{claudeRemote}</pre>
+          <CodeViewer className="mt-4" code={claudeDesktop} label="claude_desktop_config.json" language="json" filename="claude_desktop_config.json" maxHeight={240} />
+          <CodeViewer className="mt-3" code={claudeRemote} label="mcp-remote" language="json" maxHeight={180} />
         </article>
         <article className="card p-6">
           <p className="font-mono text-[11px] text-faint">02</p>
@@ -74,7 +75,7 @@ export default function McpGuidePage() {
           <p className="mt-2 text-[14.5px] leading-relaxed text-muted-foreground">
             Add a remote MCP server in settings, or put this in ~/.cursor/mcp.json. The server answers JSON and does not keep a session.
           </p>
-          <pre className="mt-4 overflow-x-auto rounded-[10px] bg-sunken p-3 font-mono text-[12px] leading-relaxed">{cursor}</pre>
+          <CodeViewer className="mt-4" code={cursor} label="mcp.json" language="json" filename="mcp.json" maxHeight={220} />
         </article>
         <article className="card p-6">
           <p className="font-mono text-[11px] text-faint">03</p>
@@ -82,7 +83,7 @@ export default function McpGuidePage() {
           <p className="mt-2 text-[14.5px] leading-relaxed text-muted-foreground">
             Save this as .vscode/mcp.json in a workspace, or add it from the MCP: Add Server command.
           </p>
-          <pre className="mt-4 overflow-x-auto rounded-[10px] bg-sunken p-3 font-mono text-[12px] leading-relaxed">{vscode}</pre>
+          <CodeViewer className="mt-4" code={vscode} label="mcp.json" language="json" filename="mcp.json" maxHeight={220} />
         </article>
       </section>
 

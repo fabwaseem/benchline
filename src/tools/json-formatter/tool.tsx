@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Braces } from "lucide-react";
 import { toast } from "sonner";
 import { CodeField, CodeOutput } from "@/components/kit/code-output";
+import { CodeViewer } from "@/components/kit/code-viewer";
 import { ActionButton, OptionRow, Select } from "@/components/kit/controls";
 import { FileButton } from "@/components/kit/dropzone";
 import { EmptyState } from "@/components/kit/empty-state";
@@ -90,7 +91,7 @@ export default function JsonFormatterTool() {
             {!result.valid ? (
               <>
                 <ErrorCallout title={issue ? `Line ${issue.line}, column ${issue.column}` : "Invalid JSON"} body={issue?.message} />
-                {issue?.excerpt ? <pre className="overflow-x-hidden overflow-y-auto rounded-xl border border-border bg-well p-3 font-mono text-[12.5px] break-words whitespace-pre-wrap">{issue.excerpt}</pre> : null}
+                {issue?.excerpt ? <CodeViewer code={issue.excerpt} label="Excerpt" language="json" highlightLines={[issue.line]} maxHeight={160} wrapDefault /> : null}
                 {result.errors.length > 1 ? (
                   <ul className="text-sm text-muted-foreground">
                     {result.errors.slice(1).map((error) => (

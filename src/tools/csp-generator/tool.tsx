@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ChipButton, OptionRow, TextArea, TextInput, Toggle } from "@/components/kit/controls";
+import { ChipButton, OptionRow, TextInput, Toggle } from "@/components/kit/controls";
+import { CodeEditor } from "@/components/kit/code-viewer";
 import { CodeOutput } from "@/components/kit/code-output";
 import { CopyButton } from "@/components/kit/copy-button";
 import { FieldRow } from "@/components/kit/field-row";
@@ -41,10 +42,11 @@ export default function CspTool() {
             <ChipButton onClick={() => apply(nextPreset)}>Next.js</ChipButton>
           </div>
           <FieldRow label="Paste a policy" htmlFor="csp-paste" help="Replaces the fields when you leave the box.">
-            <TextArea
+            <CodeEditor
               id="csp-paste"
+              label="Policy"
+              language="plaintext"
               value={pasted}
-              className="min-h-16 font-mono"
               onChange={(event) => setPasted(event.target.value)}
               onBlur={() => {
                 if (!pasted.trim()) return;

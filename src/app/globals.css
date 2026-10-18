@@ -664,6 +664,14 @@
   }
 }
 
+.shiki-token {
+  color: var(--shiki-light);
+}
+
+.dark .shiki-token {
+  color: var(--shiki-dark);
+}
+
 @media (prefers-reduced-transparency: reduce) {
   .glass,
   .hfloat,

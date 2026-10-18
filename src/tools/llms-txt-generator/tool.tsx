@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { ActionButton, TextInput, TextArea } from "@/components/kit/controls";
 import { FileText } from "lucide-react";
 import { toast } from "sonner";
+import { CodeEditor } from "@/components/kit/code-viewer";
 import { CopyButton } from "@/components/kit/copy-button";
 import { downloadText } from "@/components/kit/download-button";
 import { EmptyState } from "@/components/kit/empty-state";
@@ -131,7 +132,7 @@ export default function LlmsTool() {
           <div className="flex min-h-[280px] flex-col gap-3" aria-live="polite">
             {busy ? <SkeletonRows /> : text ? (
               <>
-                <TextArea aria-label="Editable preview" value={text} onChange={(event) => (file === "llms" ? setLlms(event.target.value) : setFull(event.target.value))} className="min-h-64 font-mono text-xs" />
+                <CodeEditor label={file === "llms" ? "llms.txt" : "llms-full.txt"} language="markdown" filename={file === "llms" ? "llms.txt" : "llms-full.txt"} value={text} onChange={(event) => (file === "llms" ? setLlms(event.target.value) : setFull(event.target.value))} maxHeight={420} />
                 <div className="flex flex-wrap gap-2">
                   <CopyButton value={text} label="Copy" toastMessage="File copied" />
                   <ActionButton type="button" variant="outline" onClick={() => downloadText(file === "llms" ? "llms.txt" : "llms-full.txt", text)}>Download</ActionButton>

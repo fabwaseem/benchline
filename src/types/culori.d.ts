@@ -13,6 +13,7 @@ declare module "culori" {
 
   export function parse(input: string): CuloriColor | undefined;
   export function formatHex(color: CuloriColor | string | undefined): string | undefined;
+  export function formatCss(color: CuloriColor | string | undefined): string | undefined;
   export function formatRgb(color: CuloriColor | string | undefined): string | undefined;
   export function formatHsl(color: CuloriColor | string | undefined): string | undefined;
   export function converter(mode: string): (color: CuloriColor | string | undefined) => CuloriColor | undefined;

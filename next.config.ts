@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
   output: "standalone",
   serverExternalPackages: [
     "@napi-rs/canvas",
+    "@resvg/resvg-js",
     "pdfjs-dist",
     "tesseract.js",
     "tesseract.js-core",

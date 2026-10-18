@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ActionButton, TextArea, OptionRow } from "@/components/kit/controls";
+import { ActionButton, OptionRow } from "@/components/kit/controls";
+import { CodeEditor } from "@/components/kit/code-viewer";
 import { Table2 } from "lucide-react";
 import { toast } from "sonner";
 import { CodeOutput } from "@/components/kit/code-output";
@@ -62,13 +63,14 @@ export default function CsvJsonTool() {
       <ToolPanes>
         <Pane label={toJson ? "CSV" : "JSON"}>
           <FieldRow label={toJson ? "Table" : "Rows"} htmlFor="csv-input" error={result.ok ? undefined : result.error}>
-            <TextArea
+            <CodeEditor
               id="csv-input"
+              label={toJson ? "Table" : "Rows"}
+              language={toJson ? "csv" : "json"}
+              filename={toJson ? "table.csv" : "rows.json"}
               value={input}
               onChange={(event) => (toJson ? setCsv(event.target.value) : setJson(event.target.value))}
-              spellCheck={false}
               aria-invalid={!result.ok}
-              className="min-h-72 font-mono text-[13px]"
             />
           </FieldRow>
           <Segmented

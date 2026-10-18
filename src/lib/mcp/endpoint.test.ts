@@ -160,6 +160,7 @@ describe("MCP endpoint", () => {
       },
       score_ai_seo: { url: "https://1.1.1.1/" },
       build_open_graph: { title: "Ship notes" },
+      list_og_templates: {},
       decode_jwt: { token },
       check_robots_txt: { url: "https://1.1.1.1/" },
       inspect_meta_tags: { url: "https://1.1.1.1/" },
