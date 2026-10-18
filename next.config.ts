@@ -50,6 +50,8 @@ const nextConfig: NextConfig = {
     ...tesseractRuntimeDeps.filter((dep) => dep !== "tesseract.js-core"),
     "zxing-wasm",
     "sharp",
+    "postgres",
+    "mmdb-lib",
   ],
   outputFileTracingIncludes: {
     "/pdfjs/[...path]": [

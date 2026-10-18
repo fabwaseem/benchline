@@ -8,6 +8,7 @@ import { DirectorySearch as SearchField, FilterChip, SortSelect, TagMenu, ViewTo
 import { ToolCard, ToolRow } from "@/components/shell/tool-card";
 import { EmptyState } from "@/components/kit/empty-state";
 import { Button } from "@/components/kit/primitives/button";
+import { scheduleSearchTrack } from "@/lib/analytics/browser";
 import type { DirectoryCategory } from "@/lib/catalog";
 import {
   filterDirectory,
@@ -122,6 +123,7 @@ export function DirectoryBrowser({
           onChange={(query) => {
             setDraft(query);
             setEpoch((value) => value + 1);
+            scheduleSearchTrack(query);
             if (queryTimer.current) window.clearTimeout(queryTimer.current);
             queryTimer.current = window.setTimeout(() => write({ query }), 80);
           }}

@@ -12,7 +12,7 @@
   <a href="https://glama.ai/mcp/servers/fabwaseem/benchline"><img src="https://glama.ai/mcp/servers/fabwaseem/benchline/badges/score.svg" alt="fabwaseem/benchline MCP server" /></a>
 </p>
 
-Benchline is a free directory of browser tools for the small, exact jobs around shipping software: JSON, PDFs, images, tokens, headers, and the files a crawler can cite. Each tool is a pure function with a page on the site and the same function on a stateless MCP server. Nothing is stored. A tool runs in the browser unless its job is to read a public URL.
+Benchline is a free directory of browser tools for the small, exact jobs around shipping software: JSON, PDFs, images, tokens, headers, and the files a crawler can cite. Each tool is a pure function with a page on the site and the same function on a stateless MCP server. Tool inputs stay on the device unless a tool's job is to read a public URL. When Postgres is configured, the site can store anonymous usage counts; see Privacy.
 
 **Live:** [https://benchline.fabwaseem.com](https://benchline.fabwaseem.com)
 
@@ -383,6 +383,28 @@ The tools below can fetch a public URL through this site. The page posts the URL
 
 <!-- privacy:end -->
 
+### Usage counts
+
+When `DATABASE_URL` is set, the server records anonymous counts: tool runs (MCP, `POST /api/v1/tools/<slug>`, and the browser), page views, tool opens, directory search text, and copy or download clicks. A run stores the time, tool slug, source, outcome, an error class such as `validation` or `timeout`, duration, and byte sizes. It does not store the tool input, the tool output, file bytes, submitted URLs, or the raw IP address.
+
+The client address for these counts comes from `X-Real-Ip`, then the first `X-Forwarded-For` hop. Traefik sets both from the TCP connection. The stored address is `sha256(ANALYTICS_SALT + UTC date + ip)`. Country is an ISO code from a server-side lookup of that address in the [DB-IP IP to Country Lite](https://db-ip.com/) database (CC BY 4.0). If that file is missing, country is left empty. A CDN country header (`cf-ipcountry` and the same idea from other edges) is used only when the lookup has no answer. The user agent is stored as a family (`chrome`, `curl`, …), and the referrer as a hostname. Browser visitors get a random first-party id in `localStorage` and the `bl_vid` / `bl_sid` cookies.
+
+`POST /api/track` accepts the browser beacon. It checks `Origin` the same way MCP does, ignores known bots and prefetch, caps the body at 4 KB, and allows 30 requests a minute per address. Unknown tool slugs are rejected. Search text that looks like a URL or a token is dropped. Counts are queued in memory and flushed every few seconds; a full buffer or a database error drops the batch and logs a warning. The tool response is not delayed on the database.
+
+`GET /api/v1/stats` returns totals by tool, source, outcome, and day, plus MCP clients, countries, error rates, and p50/p95 duration. Send `Authorization: Bearer <STATS_TOKEN>`. A missing or wrong token is a 404. Filters are `from`, `to`, `slug`, and `source` (at most 366 days; the default window is 30).
+
+Raw rows older than `ANALYTICS_RETENTION_DAYS` (default 90) are folded into `analytics_daily` and deleted. That job runs at startup and then once a day, and `pnpm db:retain` runs it by hand. `pnpm db:migrate` applies the same SQL the server applies on boot. Startup takes an advisory lock, creates `schema_migrations` if needed, and applies any version that is not already recorded. If `DATABASE_URL` is unset, or the database does not answer within a few seconds, tracking stays off and the site still serves tools.
+
+Without the rollup job, the same prune is:
+
+```sql
+DELETE FROM tool_runs WHERE ts < now() - interval '90 days';
+DELETE FROM page_views WHERE ts < now() - interval '90 days';
+DELETE FROM tool_opens WHERE ts < now() - interval '90 days';
+DELETE FROM search_queries WHERE ts < now() - interval '90 days';
+DELETE FROM ui_actions WHERE ts < now() - interval '90 days';
+```
+
 An MCP call is different from the page. The server runs the function. A file sent as base64, or a public URL the server fetches, is read in memory for that call and is not written to disk. Tools whose MCP entry says they fetch the network are marked `openWorld` in the registry. Image and PDF pages still do the work in the browser; their MCP handlers accept a file because an agent has no local disk on this server.
 
 ## Tech stack
@@ -395,7 +417,10 @@ Next.js 16 (App Router, React Server Components, `output: "standalone"`), React 
 src/app/                  directory, category, tag, tool, explore, search, about, AI, MCP guide
 src/app/mcp/route.ts      POST /mcp
 src/app/api/v1/tools/     POST /api/v1/tools/<slug>
+src/app/api/v1/stats/     GET /api/v1/stats
+src/app/api/track/        POST /api/track
 src/app/api/tools/        browser routes for tools that fetch
+src/lib/analytics/        usage counts, queue, migrations, country lookup
 src/tools/<slug>/         meta.ts, tool.tsx, lib/, mcp.ts
 src/registry/             generated index, loaders, MCP registry, search index
 src/lib/                  shared helpers, MCP handler, SSRF guard, rate limit
@@ -404,6 +429,9 @@ src/components/ui/        themed primitives
 src/components/shell/     directory
 public/tools/<slug>/      cover.png and logo.png
 scripts/gen-registry.ts
+scripts/db-migrate.ts
+scripts/db-retain.ts
+scripts/download-geodb.ts
 scripts/gen-readme-tools.ts
 scripts/gen-mcp-docs.ts
 scripts/live-mcp-smoke.mts
@@ -443,7 +471,7 @@ pnpm gen:mcp-docs
 
 ### Docker
 
-The image is a three-stage build in `Dockerfile`: install, `pnpm build`, then a Node 22 Alpine runner that starts `node server.js` on port 3000.
+The image is a three-stage build in `Dockerfile`: install, `pnpm geo:download` and `pnpm build`, then a Node 22 Alpine runner that starts `node server.js` on port 3000. The country database download is allowed to fail; the image still builds and country stays empty until a file is present. The runner copies `data/` next to the server.
 
 ```bash
 docker build -t benchline .
@@ -458,8 +486,14 @@ The runner copies `pdfjs-dist`, `zxing-wasm`, `tesseract.js`, `tesseract.js-core
 | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Canonical URLs, Open Graph, and the MCP origin check | `https://benchline.fabwaseem.com` |
 | `MCP_URL` | `scripts/live-mcp-smoke.mts` only | `https://benchline.fabwaseem.com/mcp` |
+| `DATABASE_URL` | Postgres 17 connection for anonymous usage counts | unset (tracking off) |
+| `ANALYTICS_SALT` | Daily IP hash | unset (hash omitted) |
+| `STATS_TOKEN` | Bearer token for `GET /api/v1/stats` | unset (the route is 404) |
+| `ANALYTICS_RETENTION_DAYS` | Raw-event window before rollup | `90` |
+| `GEOIP_DB_PATH` | DB-IP country lite mmdb | `data/dbip-country-lite.mmdb` |
+| `GEOIP_DOWNLOAD` | `0` skips the startup download | download when the file is missing |
 
-Copy `.env.example` if you want a local origin. The app runs with neither variable set.
+Copy `.env.example` if you want a local origin. The app runs with none of these set.
 
 ### Live MCP smoke test
 
@@ -484,3 +518,5 @@ New tools and changes are tracked as [GitHub issues](https://github.com/fabwasee
 ## Acknowledgements
 
 Benchline sits on [Next.js](https://nextjs.org), [React](https://react.dev), [Tailwind CSS](https://tailwindcss.com), [shadcn/ui](https://ui.shadcn.com) and [Base UI](https://base-ui.com), [zod](https://zod.dev), [Vitest](https://vitest.dev), the [Model Context Protocol TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk), [Lucide](https://lucide.dev), and [Geist](https://vercel.com/font) (loaded through `next/font`). Tool implementations use the packages listed in `package.json`, including pdf-lib and sharp. New dependencies stay on permissive licenses. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+IP geolocation by [DB-IP](https://db-ip.com/), the free IP to Country Lite database, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The image downloads `dbip-country-lite-YYYY-MM.mmdb.gz` at build time. A missing file leaves country empty.

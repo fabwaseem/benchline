@@ -41,3 +41,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# DB-IP country database, downloaded at image build or first startup
+/data/*.mmdb
+/data/*.mmdb.gz
