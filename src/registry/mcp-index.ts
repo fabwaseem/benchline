@@ -27,6 +27,13 @@ export const mcpIndex: McpIndexEntry[] = [
   {"slug":"image-compress","name":"plan_image_compression","title":"Plan image compression","description":"Return the output format, clamped quality, capped pixel size, and savings for an image. Encoding runs in the browser tool so the file stays on the device.","openWorld":false},
   {"slug":"image-resize","name":"plan_image_resize","title":"Plan an image resize","description":"Return the output pixel size and crop for a resize by pixels or percent, with aspect lock and contain, cover, or stretch. Drawing runs in the browser tool so the file stays on the device.","openWorld":false},
   {"slug":"color-converter","name":"convert_color","title":"Convert a color and check contrast","description":"Convert HEX, RGB, HSL, OKLCH, or CMYK into every format, name the nearest Tailwind token, and report the WCAG 2 contrast ratio against a background.","openWorld":false},
+  {"slug":"unix-timestamp","name":"convert_unix_timestamp","title":"Convert a unix timestamp","description":"Convert epoch seconds, milliseconds, microseconds, or nanoseconds to ISO-8601 and RFC 2822 in an IANA time zone, or convert a calendar time back to epoch.","openWorld":false},
+  {"slug":"date-difference","name":"date_difference","title":"Difference between two dates","description":"Count calendar days, elapsed time, and business days between two dates. Business days skip weekends and any YYYY-MM-DD holidays you list.","openWorld":false},
+  {"slug":"hash-generator","name":"hash_data","title":"Hash text or bytes","description":"Compute MD5, SHA-1, SHA-256, and SHA-512 for UTF-8 text or base64 bytes. Pass hmacKey for HMAC and expected to see which digest matches.","openWorld":false},
+  {"slug":"uuid-generator","name":"generate_uuid","title":"Generate or inspect a UUID","description":"Generate UUID version 4 or version 7 from cryptographic randomness, up to 10,000 at once, or inspect the version, variant, and v7 timestamp.","openWorld":false},
+  {"slug":"url-codec","name":"url_codec","title":"Encode, decode, or parse a URL","description":"Percent-encode or decode text, or parse a URL into its host, path, hash, and query parameters.","openWorld":false},
+  {"slug":"password-generator","name":"generate_password","title":"Generate a password or passphrase","description":"Generate cryptographic passwords or EFF-wordlist passphrases and report the entropy in bits. Randomness comes from the platform CSPRNG.","openWorld":false},
+  {"slug":"chmod-calculator","name":"explain_chmod","title":"Explain a chmod mode","description":"Convert an octal or symbolic file mode into octal, symbolic notation, and a chmod command, including setuid, setgid, and the sticky bit.","openWorld":false},
 ];
 
 export function mcpFor(slug: string) {

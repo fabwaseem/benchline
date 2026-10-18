@@ -43,7 +43,7 @@ export const categories = [
   {
     slug: "developer",
     name: "Developer",
-    description: "Schedules, formats, and the small expressions a deploy depends on.",
+    description: "Timestamps, hashes, passwords, formats, and the small expressions a deploy depends on.",
     icon: "Terminal",
     hue: 200,
   },
@@ -90,4 +90,11 @@ export const toolOrder = [
   "image-compress",
   "image-resize",
   "color-converter",
+  "unix-timestamp",
+  "date-difference",
+  "hash-generator",
+  "uuid-generator",
+  "url-codec",
+  "password-generator",
+  "chmod-calculator",
 ] as const;

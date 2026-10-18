@@ -53,8 +53,8 @@ const guides: Record<string, { title: string; body: string }> = {
     body: "Tokenisers disagree. The counter uses o200k or cl100k where that matches the model, and says when a price is an estimate. The prompt does not leave the tab.",
   },
   developer: {
-    title: "A schedule you can read back",
-    body: "Cron is five fields until it is not. The builder explains the expression, lists the next runs in the zone you pick, and shows the snippet a host actually expects.",
+    title: "Values a program can check",
+    body: "Convert a timestamp, count the days between two dates, hash a file, format JSON, or read a chmod mode. Cron still explains the next run. Each of these stays in the browser and shows the exact value.",
   },
   nextjs: {
     title: "A container that matches the app",

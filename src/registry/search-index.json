@@ -408,5 +408,145 @@
     "status": "new",
     "icon": "Palette",
     "runsLocally": true
+  },
+  {
+    "slug": "unix-timestamp",
+    "name": "Unix timestamp converter",
+    "tagline": "Turn epoch seconds or milliseconds into a date, and a date in any time zone back into epoch time.",
+    "description": "Free epoch converter for unix timestamps. Switch between seconds, milliseconds, microseconds, and nanoseconds, read ISO-8601 and RFC 2822 dates, and convert both ways across IANA time zones. Runs in the browser.",
+    "category": "developer",
+    "tags": [
+      "time",
+      "epoch",
+      "timezone"
+    ],
+    "keywords": [
+      "epoch converter",
+      "unix timestamp",
+      "epoch to date",
+      "unix time converter"
+    ],
+    "status": "new",
+    "icon": "Clock",
+    "runsLocally": true
+  },
+  {
+    "slug": "date-difference",
+    "name": "Date difference calculator",
+    "tagline": "Count the days, weeks, and business days between two dates.",
+    "description": "Free date calculator for the exact days between two dates. See the calendar span, elapsed time, weeks, and business days with weekends and your own holiday list excluded. Runs in the browser.",
+    "category": "developer",
+    "tags": [
+      "date",
+      "calendar"
+    ],
+    "keywords": [
+      "days between dates",
+      "date calculator",
+      "business days calculator"
+    ],
+    "status": "new",
+    "icon": "CalendarRange",
+    "runsLocally": true
+  },
+  {
+    "slug": "hash-generator",
+    "name": "Hash generator",
+    "tagline": "MD5, SHA-1, SHA-256, and SHA-512 checksums for text or a file, with HMAC.",
+    "description": "Free SHA-256 and MD5 hash generator. Checksum text or a file with MD5, SHA-1, SHA-256, and SHA-512, copy hex or base64, compare an expected digest, and compute HMAC. The bytes stay in the browser.",
+    "category": "developer",
+    "tags": [
+      "hash",
+      "sha256",
+      "md5",
+      "checksum"
+    ],
+    "keywords": [
+      "sha256 generator",
+      "md5 hash",
+      "file checksum",
+      "hmac generator"
+    ],
+    "status": "new",
+    "icon": "Hash",
+    "runsLocally": true
+  },
+  {
+    "slug": "uuid-generator",
+    "name": "UUID generator",
+    "tagline": "Generate UUID v4 or v7 in bulk, and read the time stored in a v7 id.",
+    "description": "Free UUID and GUID generator for version 4 and version 7. Create one id or a bulk list from cryptographic randomness, then inspect a UUID to see its version, variant, and v7 timestamp.",
+    "category": "developer",
+    "tags": [
+      "uuid",
+      "guid"
+    ],
+    "keywords": [
+      "uuid generator",
+      "guid generator",
+      "uuid v4",
+      "uuid v7"
+    ],
+    "status": "new",
+    "icon": "Fingerprint",
+    "runsLocally": true
+  },
+  {
+    "slug": "url-codec",
+    "name": "URL encoder and parser",
+    "tagline": "Encode or decode a URL, then break the query string into parameters.",
+    "description": "Free URL encoder and decoder. Percent-encode a component or a whole URL, decode it again, and parse a URL into its host, path, and query parameters. Edit the query and copy the rebuilt URL. Runs in the browser.",
+    "category": "developer",
+    "tags": [
+      "url",
+      "encode"
+    ],
+    "keywords": [
+      "url decode",
+      "url encode",
+      "query string parser",
+      "url encoder"
+    ],
+    "status": "new",
+    "icon": "Link",
+    "runsLocally": true
+  },
+  {
+    "slug": "password-generator",
+    "name": "Password generator",
+    "tagline": "Cryptographic passwords and passphrases, with an entropy strength meter.",
+    "description": "Free strong password generator. Build a password with crypto.getRandomValues, choose the length and character sets, skip ambiguous characters, or make a passphrase. The strength meter shows the entropy in bits.",
+    "category": "developer",
+    "tags": [
+      "password",
+      "random"
+    ],
+    "keywords": [
+      "password generator",
+      "strong password generator",
+      "passphrase generator"
+    ],
+    "status": "new",
+    "icon": "KeyRound",
+    "runsLocally": true
+  },
+  {
+    "slug": "chmod-calculator",
+    "name": "Chmod calculator",
+    "tagline": "Turn a permission grid into octal and symbolic chmod, and back.",
+    "description": "Free chmod calculator. Check read, write, and execute for owner, group, and others, including setuid, setgid, and the sticky bit. See the octal mode, the symbolic mode, and the chmod command.",
+    "category": "developer",
+    "tags": [
+      "chmod",
+      "linux"
+    ],
+    "keywords": [
+      "chmod calculator",
+      "file permission calculator",
+      "octal permissions"
+    ],
+    "status": "new",
+    "icon": "Binary",
+    "runsLocally": true
   }
 ]

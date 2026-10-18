@@ -21,4 +21,11 @@ export const toolLoaders: Record<string, () => Promise<{ default: ComponentType 
   "image-compress": () => import("@/tools/image-compress/tool"),
   "image-resize": () => import("@/tools/image-resize/tool"),
   "color-converter": () => import("@/tools/color-converter/tool"),
+  "unix-timestamp": () => import("@/tools/unix-timestamp/tool"),
+  "date-difference": () => import("@/tools/date-difference/tool"),
+  "hash-generator": () => import("@/tools/hash-generator/tool"),
+  "uuid-generator": () => import("@/tools/uuid-generator/tool"),
+  "url-codec": () => import("@/tools/url-codec/tool"),
+  "password-generator": () => import("@/tools/password-generator/tool"),
+  "chmod-calculator": () => import("@/tools/chmod-calculator/tool"),
 };

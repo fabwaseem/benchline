@@ -18,11 +18,18 @@ import { meta as imageConvert } from "@/tools/image-convert/meta";
 import { meta as imageCompress } from "@/tools/image-compress/meta";
 import { meta as imageResize } from "@/tools/image-resize/meta";
 import { meta as colorConverter } from "@/tools/color-converter/meta";
+import { meta as unixTimestamp } from "@/tools/unix-timestamp/meta";
+import { meta as dateDifference } from "@/tools/date-difference/meta";
+import { meta as hashGenerator } from "@/tools/hash-generator/meta";
+import { meta as uuidGenerator } from "@/tools/uuid-generator/meta";
+import { meta as urlCodec } from "@/tools/url-codec/meta";
+import { meta as passwordGenerator } from "@/tools/password-generator/meta";
+import { meta as chmodCalculator } from "@/tools/chmod-calculator/meta";
 import { categories, toolOrder } from "@/registry/categories";
 import type { SearchRecord } from "@/registry/schema";
 import { assertRegistry } from "@/registry/validate";
 
-const tools = assertRegistry([llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter], [...categories], toolOrder);
+const tools = assertRegistry([llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator], [...categories], toolOrder);
 
 export { categories, tools };
 
