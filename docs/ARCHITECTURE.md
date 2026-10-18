@@ -40,7 +40,7 @@ The handler builds an `McpServer` named `benchline` and registers every entry in
 Limits and checks:
 
 - 60 requests a minute per address (`mcp:<ip>`).
-- `Origin`, when present, must match the request host, localhost, or `SITE_URL`.
+- `Origin`, when present, must match the request host, localhost, `SITE_URL`, `https://benchline.fabwaseem.com`, or `https://tools.fabwaseem.com`.
 - Tool errors are caught and returned as `isError: true`.
 
 `SITE_URL` is `NEXT_PUBLIC_SITE_URL` or `https://benchline.fabwaseem.com`.
