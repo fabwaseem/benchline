@@ -15,6 +15,11 @@ const views: Record<string, ComponentType> = {
   "ai-token-counter": dynamic(() => import("@/tools/ai-token-counter/tool")),
   "cron-expression-builder": dynamic(() => import("@/tools/cron-expression-builder/tool")),
   "nextjs-dockerfile-generator": dynamic(() => import("@/tools/nextjs-dockerfile-generator/tool")),
+  "json-formatter": dynamic(() => import("@/tools/json-formatter/tool")),
+  "json-yaml-convert": dynamic(() => import("@/tools/json-yaml-convert/tool")),
+  "csv-json-convert": dynamic(() => import("@/tools/csv-json-convert/tool")),
+  "diff-checker": dynamic(() => import("@/tools/diff-checker/tool")),
+  "base64-codec": dynamic(() => import("@/tools/base64-codec/tool")),
 };
 
 export function ToolHost({ slug }: { slug: string }) {

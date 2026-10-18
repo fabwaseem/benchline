@@ -12,4 +12,9 @@ export const toolLoaders: Record<string, () => Promise<{ default: ComponentType 
   "ai-token-counter": () => import("@/tools/ai-token-counter/tool"),
   "cron-expression-builder": () => import("@/tools/cron-expression-builder/tool"),
   "nextjs-dockerfile-generator": () => import("@/tools/nextjs-dockerfile-generator/tool"),
+  "json-formatter": () => import("@/tools/json-formatter/tool"),
+  "json-yaml-convert": () => import("@/tools/json-yaml-convert/tool"),
+  "csv-json-convert": () => import("@/tools/csv-json-convert/tool"),
+  "diff-checker": () => import("@/tools/diff-checker/tool"),
+  "base64-codec": () => import("@/tools/base64-codec/tool"),
 };

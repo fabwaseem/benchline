@@ -18,6 +18,11 @@ export const mcpIndex: McpIndexEntry[] = [
   {"slug":"ai-token-counter","name":"count_tokens","title":"Count tokens","description":"Count tokens with the o200k or cl100k encoder and price the count against the published model table. Claude and Gemini rows are estimates, not those vendors' tokenizers.","openWorld":false},
   {"slug":"cron-expression-builder","name":"explain_cron","title":"Explain a cron expression","description":"Turn a cron expression into English, the next UTC run times, and snippets for crontab, GitHub Actions, Vercel, Kubernetes, and node-cron.","openWorld":false},
   {"slug":"nextjs-dockerfile-generator","name":"build_nextjs_dockerfile","title":"Build a Next.js Dockerfile","description":"Generate a production Dockerfile, dockerignore, compose file, and next.config snippet for a Next.js app. Defaults match a pnpm standalone image.","openWorld":false},
+  {"slug":"json-formatter","name":"format_json","title":"Format and validate JSON","description":"Pretty-print or minify JSON. Returns the formatted text when it is valid, or the line and column of each syntax error.","openWorld":false},
+  {"slug":"json-yaml-convert","name":"convert_data_format","title":"Convert JSON, YAML, TOML, or XML","description":"Convert between JSON, YAML, TOML, and XML. Auto-detects the source. Errors include a line and column. TOML refuses null and a non-table root.","openWorld":false},
+  {"slug":"csv-json-convert","name":"convert_csv_json","title":"Convert CSV and JSON","description":"Convert CSV to JSON or JSON to CSV. Supports comma, tab, semicolon, and pipe delimiters, an optional header, type inference, and dotted flattening.","openWorld":false},
+  {"slug":"diff-checker","name":"diff_text","title":"Diff two texts","description":"Compare two texts by line, word, or character, or compare JSON so object key order does not matter. Returns an inline diff, side-by-side rows for line and JSON modes, and a unified patch.","openWorld":false},
+  {"slug":"base64-codec","name":"base64_codec","title":"Encode or decode Base64","description":"Encode UTF-8 text as Base64, or decode Base64 and data URIs. URL-safe output uses - and _ and omits padding. Decode reports the sniffed media type and whether the bytes are UTF-8 text.","openWorld":false},
 ];
 
 export function mcpFor(slug: string) {
