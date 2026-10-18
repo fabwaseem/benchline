@@ -1,33 +1,42 @@
 import { z } from "zod";
+import { mcpFileSchema, readMcpBytes } from "@/lib/mcp/bytes";
+import { convertImage } from "@/lib/mcp/image";
 import type { BenchTool } from "@/lib/mcp/types";
 import { outputFormats } from "@/lib/image-format";
-import { conversionPlan } from "@/tools/image-convert/lib/convert";
 
 export const inputSchema = z.object({
-  filename: z.string().describe("Original file name, including the extension when you have one."),
-  mime: z.string().default("").describe("MIME type from the file, or an empty string."),
+  file: mcpFileSchema.describe("The image. Provide url or data."),
   target: z.enum(outputFormats).default("jpeg"),
 });
 
 export const outputSchema = z.object({
   source: z.string(),
-  heic: z.boolean(),
   filename: z.string(),
   mime: z.string(),
   extension: z.string(),
+  width: z.number().int(),
+  height: z.number().int(),
+  bytes: z.number().int(),
+  data: z.string().describe("Encoded image as base64."),
 });
 
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
-  return outputSchema.parse(conversionPlan(parsed.filename, parsed.mime, parsed.target));
+  const file = await readMcpBytes(parsed.file, "Image");
+  return outputSchema.parse(await convertImage({
+    bytes: file.bytes,
+    filename: file.filename,
+    mime: parsed.file.mimeType || file.mimeType,
+    target: parsed.target,
+  }));
 }
 
 export const tool: BenchTool = {
   slug: "image-convert",
-  name: "plan_image_conversion",
-  title: "Plan an image conversion",
-  description: "Return the output filename, extension, and MIME type for converting an image to JPEG, PNG, WebP, or AVIF. Pixel encoding runs in the browser tool so the file stays on the device.",
-  openWorld: false,
+  name: "convert_image",
+  title: "Convert an image",
+  description: "Convert an image to JPEG, PNG, WebP, or AVIF. Send base64 or a public URL. Private addresses are refused and the decoded file is capped at 10 MB. Returns the image as base64. HEIC is not decoded here.",
+  openWorld: true,
   inputSchema,
   outputSchema,
   run,

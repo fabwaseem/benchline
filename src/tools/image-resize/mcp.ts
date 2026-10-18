@@ -1,10 +1,11 @@
 import { z } from "zod";
+import { mcpFileSchema, readMcpBytes } from "@/lib/mcp/bytes";
+import { resizeImage } from "@/lib/mcp/image";
 import type { BenchTool } from "@/lib/mcp/types";
-import { fitModes, placement, planResize, resizeModes } from "@/tools/image-resize/lib/resize";
+import { fitModes, resizeModes } from "@/tools/image-resize/lib/resize";
 
 export const inputSchema = z.object({
-  sourceWidth: z.number().positive(),
-  sourceHeight: z.number().positive(),
+  file: mcpFileSchema.describe("The image. Provide url or data."),
   mode: z.enum(resizeModes).default("pixels"),
   width: z.number().positive().nullable().default(null),
   height: z.number().positive().nullable().default(null),
@@ -14,33 +15,37 @@ export const inputSchema = z.object({
 });
 
 export const outputSchema = z.object({
-  width: z.number(),
-  height: z.number(),
-  crop: z.object({
-    sx: z.number(),
-    sy: z.number(),
-    sw: z.number(),
-    sh: z.number(),
-  }),
+  filename: z.string(),
+  mime: z.string(),
+  extension: z.string(),
+  width: z.number().int(),
+  height: z.number().int(),
+  bytes: z.number().int(),
+  data: z.string().describe("Resized image as base64."),
 });
 
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
-  const size = planResize(parsed);
-  const frame = placement(parsed.sourceWidth, parsed.sourceHeight, size.width, size.height, parsed.fit);
-  return outputSchema.parse({
-    width: size.width,
-    height: size.height,
-    crop: { sx: frame.sx, sy: frame.sy, sw: frame.sw, sh: frame.sh },
-  });
+  const file = await readMcpBytes(parsed.file, "Image");
+  return outputSchema.parse(await resizeImage({
+    bytes: file.bytes,
+    filename: file.filename,
+    mime: parsed.file.mimeType || file.mimeType,
+    mode: parsed.mode,
+    width: parsed.width,
+    height: parsed.height,
+    percent: parsed.percent,
+    lockAspect: parsed.lockAspect,
+    fit: parsed.fit,
+  }));
 }
 
 export const tool: BenchTool = {
   slug: "image-resize",
-  name: "plan_image_resize",
-  title: "Plan an image resize",
-  description: "Return the output pixel size and crop for a resize by pixels or percent, with aspect lock and contain, cover, or stretch. Drawing runs in the browser tool so the file stays on the device.",
-  openWorld: false,
+  name: "resize_image",
+  title: "Resize an image",
+  description: "Resize an image by pixels or percent. Fit is contain, cover, or stretch. Send base64 or a public URL. Private addresses are refused and the decoded file is capped at 10 MB. Returns the image as base64.",
+  openWorld: true,
   inputSchema,
   outputSchema,
   run,

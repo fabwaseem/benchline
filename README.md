@@ -18,8 +18,9 @@ pnpm lint && pnpm typecheck && pnpm test && pnpm build
 
 1. Create `src/tools/<slug>/` with `meta.ts` (name, category, tags, keywords, FAQs, SEO, how-to), `tool.tsx` and pure logic in `lib/`.
 2. Add `public/tools/<slug>/cover.png` (1600x900) and `logo.png` (256x256).
-3. Add `mcp.ts` beside `meta.ts`. It exports zod input and output schemas and a `run` function over the pure library.
-4. Run `pnpm gen:registry`. The build validates every tool's metadata and registers the MCP and HTTP API.
+3. Add `mcp.ts` beside `meta.ts`. It exports zod input and output schemas, a snake_case `verb_noun` name, and a `run` function over the pure library. File arguments accept base64 or a public URL.
+4. Add a call sample in `src/lib/mcp/endpoint.test.ts`. The coverage test fails if a registered tool has no handler or an invalid schema, and the endpoint test calls every tool through `/mcp`.
+5. Run `pnpm gen:registry`. The build validates every tool's metadata and registers the MCP and HTTP API.
 
 Directory, category, tag, sitemap, llms.txt and JSON-LD pages are generated from the registry. See `docs/ARCHITECTURE.md` and `docs/DESIGN.md`.
 
