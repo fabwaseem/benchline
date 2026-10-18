@@ -24,7 +24,7 @@ describe("taxonomy", () => {
     expect(nav.find((entry) => entry.name === "Math & Finance")).toMatchObject({ slug: "time", flat: true });
     expect(nav.find((entry) => entry.name === "Network")).toMatchObject({ slug: "urls", flat: true });
     const data = nav.find((entry) => entry.slug === "data");
-    expect(data?.children.map((child) => child.slug)).toEqual(["json", "tables", "encoding"]);
+    expect(data?.children.map((child) => child.slug)).toEqual(["json", "tables", "encoding", "markup"]);
     expect(nav.reduce((sum, entry) => sum + entry.count, 0)).toBe(tools.length);
   });
 

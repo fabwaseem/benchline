@@ -30,9 +30,15 @@ import { tool as pdfSplit } from "@/tools/pdf-split/mcp";
 import { tool as pdfCompress } from "@/tools/pdf-compress/mcp";
 import { tool as imageToPdf } from "@/tools/image-to-pdf/mcp";
 import { tool as qrCodeGenerator } from "@/tools/qr-code-generator/mcp";
+import { tool as pdfToText } from "@/tools/pdf-to-text/mcp";
+import { tool as pdfRotateOrganize } from "@/tools/pdf-rotate-organize/mcp";
+import { tool as pdfToImage } from "@/tools/pdf-to-image/mcp";
+import { tool as pdfProtectUnlock } from "@/tools/pdf-protect-unlock/mcp";
+import { tool as markdownHtml } from "@/tools/markdown-html/mcp";
+import { tool as htmlToMarkdownUrl } from "@/tools/html-to-markdown-url/mcp";
 import type { BenchTool } from "@/lib/mcp/types";
 
-export const mcpTools: BenchTool[] = [llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator];
+export const mcpTools: BenchTool[] = [llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator, pdfToText, pdfRotateOrganize, pdfToImage, pdfProtectUnlock, markdownHtml, htmlToMarkdownUrl];
 
 export function mcpToolBySlug(slug: string) {
   return mcpTools.find((tool) => tool.slug === slug);

@@ -131,6 +131,12 @@ describe("MCP endpoint", () => {
       compress_pdf: { data: pdf, preset: "light" },
       images_to_pdf: { images: [image] },
       generate_qr_code: { type: "text", text: "hello" },
+      extract_pdf_text: { data: pdf },
+      organize_pdf: { data: pdf, pages: [{ source: 1, rotate: 90 }] },
+      render_pdf_pages: { data: pdf, format: "png", dpi: 72 },
+      protect_pdf: { data: pdf, action: "protect", password: "secret" },
+      convert_markdown_html: { text: "# Hi\n", to: "html" },
+      fetch_page_markdown: { url: "https://1.1.1.1/" },
     };
 
     const missing = mcpTools.map((tool) => tool.name).filter((name) => !(name in samples));

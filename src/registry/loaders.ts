@@ -33,4 +33,10 @@ export const toolLoaders: Record<string, () => Promise<{ default: ComponentType 
   "pdf-compress": () => import("@/tools/pdf-compress/tool"),
   "image-to-pdf": () => import("@/tools/image-to-pdf/tool"),
   "qr-code-generator": () => import("@/tools/qr-code-generator/tool"),
+  "pdf-to-text": () => import("@/tools/pdf-to-text/tool"),
+  "pdf-rotate-organize": () => import("@/tools/pdf-rotate-organize/tool"),
+  "pdf-to-image": () => import("@/tools/pdf-to-image/tool"),
+  "pdf-protect-unlock": () => import("@/tools/pdf-protect-unlock/tool"),
+  "markdown-html": () => import("@/tools/markdown-html/tool"),
+  "html-to-markdown-url": () => import("@/tools/html-to-markdown-url/tool"),
 };
