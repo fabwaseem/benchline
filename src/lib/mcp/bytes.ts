@@ -1,5 +1,5 @@
 import { decodeBase64 } from "@/lib/base64";
-import { assertPublicHost, parsePublicHttpUrl, PublicUrlError } from "@/lib/net/ssrf";
+import { outboundFetch } from "@/lib/net/outbound";
 import { z } from "zod";
 
 export const MCP_MAX_BYTES = 10 * 1024 * 1024;
@@ -72,63 +72,27 @@ function bytesFromData(value: string, label: string, filename?: string, mimeType
 }
 
 async function bytesFromUrl(input: string, label: string, filename?: string, mimeType?: string): Promise<McpBytes> {
-  let current = parsePublicHttpUrl(input);
-  for (let hop = 0; hop <= REDIRECT_LIMIT; hop += 1) {
-    await assertPublicHost(current);
-    const response = await fetch(current, {
-      method: "GET",
-      redirect: "manual",
-      signal: AbortSignal.timeout(15_000),
-      headers: {
-        accept: "*/*",
-        "user-agent": "Benchline/1.0 (+https://tools.fabwaseem.com)",
-      },
-    });
-    if (response.status >= 300 && response.status < 400) {
-      const location = response.headers.get("location");
-      if (!location) throw new PublicUrlError("Redirect was missing a location.");
-      if (hop === REDIRECT_LIMIT) throw new PublicUrlError("Too many redirects.");
-      current = parsePublicHttpUrl(new URL(location, current).toString());
-      continue;
-    }
-    if (response.status >= 400) throw new Error(`${label} returned ${response.status}.`);
-    const declared = Number(response.headers.get("content-length") ?? "");
-    if (Number.isFinite(declared) && declared > MCP_MAX_BYTES) throw new Error(`${label} is larger than 10 MB.`);
-    const bytes = await readLimited(response, label);
-    const headerType = (response.headers.get("content-type") ?? "").split(";")[0]?.trim() ?? "";
-    return {
-      bytes,
-      filename: filename?.trim() || nameFromUrl(current),
-      mimeType: mimeType?.trim() || headerType,
-    };
-  }
-  throw new PublicUrlError("Too many redirects.");
-}
-
-async function readLimited(response: Response, label: string) {
-  const reader = response.body?.getReader();
-  if (!reader) throw new Error(`${label} was empty.`);
-  const chunks: Uint8Array[] = [];
-  let total = 0;
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    if (!value) continue;
-    total += value.byteLength;
-    if (total > MCP_MAX_BYTES) {
-      await reader.cancel();
-      throw new Error(`${label} is larger than 10 MB.`);
-    }
-    chunks.push(value);
-  }
-  if (total === 0) throw new Error(`${label} was empty.`);
-  const bytes = new Uint8Array(total);
-  let offset = 0;
-  for (const chunk of chunks) {
-    bytes.set(chunk, offset);
-    offset += chunk.byteLength;
-  }
-  return bytes;
+  const response = await outboundFetch(input, {
+    method: "GET",
+    allowMissingScheme: true,
+    ports: "web",
+    timeoutMs: 15_000,
+    maxBytes: MCP_MAX_BYTES,
+    maxRedirects: REDIRECT_LIMIT,
+    tooLargeMessage: `${label} is larger than 10 MB.`,
+    headers: {
+      accept: "*/*",
+      "user-agent": "Benchline/1.0 (+https://tools.fabwaseem.com)",
+    },
+  });
+  if (response.status >= 400) throw new Error(`${label} returned ${response.status}.`);
+  if (response.body.byteLength === 0) throw new Error(`${label} was empty.`);
+  const headerType = (response.headers.get("content-type") ?? "").split(";")[0]?.trim() ?? "";
+  return {
+    bytes: response.body,
+    filename: filename?.trim() || nameFromUrl(new URL(response.url)),
+    mimeType: mimeType?.trim() || headerType,
+  };
 }
 
 function nameFromUrl(url: URL) {

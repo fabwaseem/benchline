@@ -1,7 +1,8 @@
 import { isIP } from "node:net";
 import type tls from "node:tls";
 import { FETCH_LIMITS } from "@/lib/net/fetch-public";
-import { assertPublicHost, parsePublicHttpUrl, PublicUrlError } from "@/lib/net/ssrf";
+import { resolvePublicHost } from "@/lib/net/outbound";
+import { parsePublicHttpUrl, PublicUrlError } from "@/lib/net/ssrf";
 import { assessCertificate, parseSanList, toIso, type CertFields } from "@/tools/ssl-checker/lib/cert";
 import { openTls } from "@/tools/ssl-checker/lib/socket";
 
@@ -10,8 +11,10 @@ export type ChainLink = { subject: string; issuer: string; validTo: string };
 export async function checkSsl(input: string, now = Date.now()) {
   const host = parseHost(input);
   const url = parsePublicHttpUrl(`https://${host.includes(":") ? `[${host}]` : host}/`);
-  await assertPublicHost(url);
-  const peer = await connect(host, isIP(host) ? undefined : host);
+  const addresses = await resolvePublicHost(url.hostname);
+  const address = addresses[0];
+  if (!address) throw new PublicUrlError("Could not resolve that host.");
+  const peer = await connect(address.address, isIP(host) ? undefined : host);
   const fields = fieldsFromPeer(peer.certificate);
   const chain = chainOf(peer.certificate);
   const assessed = assessCertificate(fields, now, {
