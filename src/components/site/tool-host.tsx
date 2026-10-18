@@ -3,6 +3,7 @@
 
 import dynamic from "next/dynamic";
 import type { ComponentType } from "react";
+import { ToolBeacon } from "@/components/site/tool-beacon";
 
 const views: Record<string, ComponentType> = {
   "llms-txt-generator": dynamic(() => import("@/tools/llms-txt-generator/tool")),
@@ -92,5 +93,9 @@ const views: Record<string, ComponentType> = {
 export function ToolHost({ slug }: { slug: string }) {
   const View = views[slug];
   if (!View) return null;
-  return <View />;
+  return (
+    <ToolBeacon slug={slug}>
+      <View />
+    </ToolBeacon>
+  );
 }

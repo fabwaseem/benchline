@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { AppShell } from "@/components/shell/top-bar";
+import { AnalyticsListener } from "@/components/site/analytics-listener";
 import { DeferredChrome } from "@/components/site/deferred-chrome";
 import { Footer } from "@/components/site/footer";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -81,6 +82,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               ],
             }}
           />
+          <AnalyticsListener />
           <AppShell toolCount={searchRecords().length}>{children}</AppShell>
           <Footer />
           <DeferredChrome tools={searchRecords()} />

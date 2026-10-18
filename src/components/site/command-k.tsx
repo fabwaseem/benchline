@@ -12,6 +12,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { Cover } from "@/components/site/cover";
+import { scheduleSearchTrack } from "@/lib/analytics/browser";
 import { classifyPaste, stagePaste, type PasteKind } from "@/lib/paste";
 import type { SearchRecord } from "@/registry/schema";
 import { categories, parents } from "@/registry/categories";
@@ -104,7 +105,10 @@ export function CommandK({ tools, startOpen = false }: { tools: SearchRecord[]; 
       <Command className="bg-transparent" shouldFilter>
         <CommandInput
           value={query}
-          onValueChange={setQuery}
+          onValueChange={(value) => {
+            setQuery(value);
+            scheduleSearchTrack(value);
+          }}
           placeholder="Search tools, or paste a JWT, cron, URL, or JSON"
           className="h-12 text-[15px]"
         />

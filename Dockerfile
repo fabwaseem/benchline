@@ -10,6 +10,7 @@ RUN corepack enable && corepack prepare pnpm@10.33.4 --activate
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+RUN pnpm geo:download
 RUN pnpm build
 
 FROM node:22-alpine AS runner
@@ -20,6 +21,7 @@ ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 RUN addgroup -S nextjs && adduser -S nextjs -G nextjs
 COPY --from=build /app/public ./public
+COPY --from=build --chown=nextjs:nextjs /app/data ./data
 COPY --from=build --chown=nextjs:nextjs /app/.next/standalone ./
 COPY --from=build --chown=nextjs:nextjs /app/.next/static ./.next/static
 # Copy resolved wasm/native trees so MCP tools can require them in the standalone image
@@ -29,7 +31,7 @@ RUN --mount=from=build,source=/app/node_modules,target=/mnt/nm \
   && cp -aL /mnt/nm/zxing-wasm node_modules/zxing-wasm \
   && cp -aL /mnt/nm/tesseract.js node_modules/tesseract.js \
   && cp -aL /mnt/nm/tesseract.js-core node_modules/tesseract.js-core \
-  && for dep in bmp-js idb-keyval is-url node-fetch opencollective-postinstall regenerator-runtime wasm-feature-detect zlibjs whatwg-url tr46 webidl-conversions; do \
+  && for dep in bmp-js idb-keyval is-url node-fetch opencollective-postinstall regenerator-runtime wasm-feature-detect zlibjs whatwg-url tr46 webidl-conversions postgres mmdb-lib; do \
        if [ -e "/mnt/nm/.pnpm/node_modules/$dep" ]; then \
          src="/mnt/nm/.pnpm/node_modules/$dep"; \
        elif [ -e "/mnt/nm/$dep" ]; then \
