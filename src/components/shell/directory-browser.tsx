@@ -7,6 +7,7 @@ import { MobileCategories } from "@/components/shell/directory-frame";
 import { DirectorySearch as SearchField, FilterChip, SortSelect, TagMenu, ViewToggle } from "@/components/shell/filter-bar";
 import { ToolCard, ToolRow } from "@/components/shell/tool-card";
 import { EmptyState } from "@/components/kit/empty-state";
+import { Button } from "@/components/kit/primitives/button";
 import type { DirectoryCategory } from "@/lib/catalog";
 import {
   filterDirectory,
@@ -174,9 +175,9 @@ export function DirectoryBrowser({
             title="No tools match"
             hint="Try another word, or clear the filters."
             action={
-              <button
+              <Button
                 type="button"
-                className="btn"
+                variant="outline"
                 onClick={() => {
                   setDraft("");
                   setEpoch((value) => value + 1);
@@ -184,7 +185,7 @@ export function DirectoryBrowser({
                 }}
               >
                 Clear filters
-              </button>
+              </Button>
             }
           />
         ) : view === "grid" ? (

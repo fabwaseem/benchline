@@ -1,4 +1,5 @@
 import { useEffect, type ButtonHTMLAttributes, type ReactNode } from "react";
+import { Button } from "@/components/kit/primitives/button";
 import { StatusBar } from "@/components/kit/status-bar";
 import { ToolCard } from "@/components/kit/shell/tool-card";
 import { ToolPanes, type PaneRatio } from "@/components/kit/shell/tool-panes";
@@ -60,20 +61,21 @@ export function ToolTabs<T extends string>({
       {options.map((option) => {
         const selected = value === option.value;
         return (
-          <button
+          <Button
             key={option.value}
             type="button"
+            variant="ghost"
             role="tab"
             id={`tab-${option.value}`}
             aria-selected={selected}
             aria-controls={`panel-${option.value}`}
             tabIndex={selected ? 0 : -1}
             data-on={selected ? "true" : "false"}
-            className="utab bg-transparent"
+            className="utab h-control-lg bg-transparent px-0"
             onClick={() => onChange(option.value)}
           >
             {option.label}
-          </button>
+          </Button>
         );
       })}
     </div>
@@ -110,12 +112,12 @@ export function InkButton({
   const label = typeof children === "string" ? children : props["aria-label"];
   return (
     <>
-      <button type="button" {...props} className={cn("btn btn-ink hidden h-[30px] min-[700px]:inline-flex", className)}>
+      <Button type="button" variant="solid" size="md" {...props} className={cn("hidden min-[700px]:inline-flex", className)}>
         {children}
-      </button>
-      <button type="button" {...props} aria-label={label} className="btn btn-ink inline-flex size-11 p-0 min-[700px]:hidden">
+      </Button>
+      <Button type="button" variant="solid" size="icon-lg" {...props} aria-label={label} className="min-[700px]:hidden">
         {icon ?? children}
-      </button>
+      </Button>
     </>
   );
 }

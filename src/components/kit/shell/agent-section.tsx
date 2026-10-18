@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { Segmented } from "@/components/kit/segmented";
 import { CodeViewer } from "@/components/kit/code-viewer";
-import { cn } from "@/lib/utils";
 
 const clients = ["Cursor", "Claude Desktop", "VS Code", "cURL"] as const;
 type Client = (typeof clients)[number];
@@ -33,25 +33,8 @@ export function AgentSection({ name, endpoint, call }: { name: string; endpoint:
       <p className="mt-1 max-w-[68ch] text-[13px] leading-5 text-muted-foreground">
         Streamable HTTP at {endpoint}. No key. The tool name is <span className="font-mono text-foreground">{name}</span>.
       </p>
-      <div role="tablist" aria-label="MCP client" className="mt-4 flex flex-wrap gap-1">
-        {clients.map((item) => {
-          const selected = item === client;
-          return (
-            <button
-              key={item}
-              type="button"
-              role="tab"
-              aria-selected={selected}
-              className={cn(
-                "h-8 rounded-[4px] px-3 text-[13px] font-medium whitespace-nowrap",
-                selected ? "bg-foreground text-background" : "bg-sunken text-muted-foreground",
-              )}
-              onClick={() => setClient(item)}
-            >
-              {item}
-            </button>
-          );
-        })}
+      <div className="mt-4">
+        <Segmented label="MCP client" value={client} onChange={setClient} options={clients.map((item) => ({ value: item, label: item }))} />
       </div>
       <div className="mt-3 grid gap-3 min-[900px]:grid-cols-2">
         <Snippet label={configLabel(client)} value={config} />

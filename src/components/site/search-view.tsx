@@ -6,6 +6,8 @@ import { useSearchParams } from "next/navigation";
 import Fuse from "fuse.js";
 import { categories } from "@/registry/categories";
 import { allTags, tools } from "@/registry";
+import { ChipButton } from "@/components/kit/controls";
+import { Input } from "@/components/kit/primitives/input";
 import { Cover } from "@/components/site/cover";
 import { classifyPaste } from "@/lib/paste";
 
@@ -45,17 +47,16 @@ export function SearchView() {
         <p className="eyebrow">Search</p>
         <h1 className="d2 mt-3">Find a tool.</h1>
       </header>
-      <label className="plate grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-full py-2 pr-2 pl-5 shadow-[var(--in-hi),0_0_0_1px_var(--border)]">
-        <span className="font-mono text-[11px] text-faint">/</span>
-        <input
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="Name, tag, or paste a JWT, cron, URL, JSON…"
-          className="h-11 bg-transparent text-[16px] outline-none placeholder:text-faint"
-          autoFocus
-        />
-        <span className="font-mono text-[11px] text-faint">{results.length}</span>
-      </label>
+      <Input
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        placeholder="Name, tag, or paste a JWT, cron, URL, JSON…"
+        aria-label="Search"
+        autoFocus
+        prefix={<span className="font-mono text-[11px]">/</span>}
+        suffix={<span className="font-mono text-[11px]">{results.length}</span>}
+        className="h-control-lg text-[16px]"
+      />
       {kind && query.trim() ? (
         <p className="mt-3 font-mono text-[12px] text-muted-foreground">
           Looks like {kind}.{" "}
@@ -77,19 +78,18 @@ export function SearchView() {
       ) : null}
 
       <div className="mt-6 flex flex-wrap gap-2">
-        <button type="button" data-on={category === "all"} className="chip" onClick={() => setCategory("all")}>
+        <ChipButton pressed={category === "all"} onClick={() => setCategory("all")} className="h-control-sm rounded-sm px-2.5 text-[13px]">
           All
-        </button>
+        </ChipButton>
         {categories.map((cat) => (
-          <button
+          <ChipButton
             key={cat.slug}
-            type="button"
-            data-on={category === cat.slug}
-            className="chip"
+            pressed={category === cat.slug}
             onClick={() => setCategory(cat.slug)}
+            className="h-control-sm rounded-sm px-2.5 text-[13px]"
           >
             {cat.name}
-          </button>
+          </ChipButton>
         ))}
       </div>
 

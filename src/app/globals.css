@@ -61,13 +61,22 @@
   --radius-md: 4px;
   --radius-lg: 4px;
   --radius-xl: 6px;
-  --radius-2xl: 8px;
+  --radius-2xl: 6px;
   --radius-3xl: 8px;
   --radius-4xl: 8px;
+  --height-control-sm: 28px;
+  --height-control-md: 32px;
+  --height-control-lg: 40px;
+  --width-control-sm: 28px;
+  --width-control-md: 32px;
+  --width-control-lg: 40px;
+  --spacing-grid: 8px;
+  --color-destructive-foreground: var(--destructive-foreground);
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-:root {
+:root,
+.kit-light {
   --background: #F6F4EF;
   --surface: #FFFcf8;
   --raised: #FFFcf8;
@@ -115,6 +124,7 @@
   --accent: var(--sunken);
   --accent-foreground: var(--foreground);
   --destructive: var(--danger);
+  --destructive-foreground: #F6F4EF;
   --input: var(--border-strong);
   --chart-1: var(--accent-brand);
   --chart-2: oklch(55% 0.1 185);
@@ -135,7 +145,8 @@
   --dur-3: 260ms;
 }
 
-.dark {
+.dark,
+.kit-dark {
   --background: #141210;
   --surface: #1C1916;
   --raised: #24201C;
@@ -173,6 +184,7 @@
   --cover-glyph-c: 0.1;
   --primary: var(--foreground);
   --primary-foreground: var(--background);
+  --destructive-foreground: #F6F4EF;
 }
 
 @layer base {
@@ -288,8 +300,8 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    height: 36px;
-    padding: 0 14px;
+    height: var(--height-control-md);
+    padding: 0 12px;
     border-radius: var(--radius-sm);
     font-weight: 500;
     font-size: 13.5px;
@@ -316,17 +328,17 @@
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-brand) 70%, #16130F);
   }
   .btn-brand {
-    height: 40px;
+    height: var(--height-control-lg);
     padding: 0 16px;
     border-radius: var(--radius-sm);
     font-size: 14px;
     font-weight: 600;
   }
   .btn-lg {
-    height: 44px;
-    padding: 0 18px;
+    height: var(--height-control-lg);
+    padding: 0 16px;
     border-radius: var(--radius-sm);
-    font-size: 14.5px;
+    font-size: 14px;
   }
   .btn-ghost {
     background: transparent;
@@ -433,8 +445,8 @@
   .field {
     display: flex;
     align-items: center;
-    gap: 10px;
-    height: 38px;
+    gap: 8px;
+    height: var(--height-control-md);
     padding: 0 12px;
     border-radius: var(--radius-sm);
     background: var(--surface);
@@ -470,7 +482,9 @@
     cursor: pointer;
   }
   .seg > .on,
-  .seg > button[aria-checked="true"] {
+  .seg > button[aria-checked="true"],
+  .seg > button[aria-pressed="true"],
+  .seg > button[data-pressed] {
     background: var(--surface);
     color: var(--foreground);
     box-shadow: var(--in-hi), 0 0 0 1px var(--border), var(--shadow-1);
@@ -539,7 +553,11 @@
   background: var(--sunken);
 }
 .dark .seg > .on,
-.dark .seg > button[aria-checked="true"] {
+.dark .seg > button[aria-checked="true"],
+.kit-dark .seg > button[aria-pressed="true"],
+.kit-dark .seg > button[data-pressed],
+.dark .seg > button[aria-pressed="true"],
+.dark .seg > button[data-pressed] {
   background: var(--raised);
 }
 .dark .spot::before {

@@ -71,11 +71,15 @@ A tool is a folder. The directory, sitemap, `llms.txt`, MCP server, and HTTP API
 
 ## UI
 
-Build the workspace from `src/components/kit`. Do not restyle primitives ad hoc, and do not invent one-off colors. Tokens live in `src/app/globals.css`.
+Use kit components only. Interactive controls come from `src/components/kit` (buttons, fields, menus, uploaders, and the tool shell). Do not render a raw `button`, `input`, `select`, `textarea`, color input, or file input, and do not import `@base-ui/react` or Radix outside that folder. ESLint rejects those in `src/**` except `src/components/kit/**`. If a tool needs a new control, add a variant or component to the kit.
+
+The headless base is `@base-ui/react` (MIT). The deprecated package name `@base-ui-components/react` is not a dependency. Style with `cva`, `cn`, and the CSS variables in `src/app/globals.css`. Do not invent one-off colors.
+
+Spacing is an 8px grid (`--spacing-grid`). Control heights are 28 / 32 / 40 (`--height-control-sm`, `--height-control-md`, `--height-control-lg`). Toolbars, pane headers, and status strips share those heights.
 
 `ToolPage` is the centered column (`max-w-[1240px]`). Inside it, the workspace is a `ToolCard`: `ToolToolbar`, then `ToolPanes` (`50/50`, `40/60`, `35/65`, or `60/40`). Panes stack under 900px. Checkers use `35/65` with a `ScoreCard` and a `ResultsTable`. There is no third column and no directory sidebar on a tool page.
 
-Both themes have to work. `next-themes` toggles the `dark` class. Radii stay low: `--radius` is 4px, and the largest token is 8px. Do not introduce large corner radii.
+Both themes have to work. `next-themes` toggles the `dark` class. Radii stay low: controls are 4px, cards are 6px. Do not use pill-shaped controls. `/kit` is a dev-only showcase (noindex, omitted from the sitemap).
 
 ## Libraries
 
@@ -87,7 +91,7 @@ Permissive licenses only: MIT, Apache-2.0, BSD, ISC, and similar. No AGPL, GPL, 
 
 - [ ] `pnpm lint && pnpm typecheck && pnpm test && pnpm build`
 - [ ] Light and dark both look right
-- [ ] UI uses kit components and the existing tokens
+- [ ] UI uses kit components only, and the existing tokens
 - [ ] New packages are permissively licensed
 - [ ] For a tool: folder layout, `toolOrder`, artwork, MCP name, `isError` on failure, both call samples, `pnpm gen:registry`, and the docs generators
 - [ ] For wasm, native, or worker code: `serverExternalPackages`, `mcpNativeAssets`, and the Dockerfile copy

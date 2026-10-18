@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Button } from "@/components/kit/primitives/button";
 import { Cover } from "@/components/site/cover";
 import { ToolActions } from "@/components/site/tool-actions";
 import { McpNameChip } from "@/components/shell/mcp-name-chip";
@@ -52,9 +53,9 @@ export function ToolHeader({
       </div>
       <div className="flex shrink-0 items-center gap-2">
         <ToolActions slug={slug} title={name} />
-        <Link href="#agent" className="btn btn-accent">
+        <Button variant="primary" nativeButton={false} render={<Link href="#agent" />}>
           Use via MCP
-        </Link>
+        </Button>
       </div>
     </header>
   );

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ChangeEvent, type CSSProperties, type FocusEvent } from "react";
 import { highlightCode, languageFor, shouldHighlight, type HighlightLine } from "@/components/kit/code-highlight";
+import { Button } from "@/components/kit/primitives/button";
 import { CopyButton } from "@/components/kit/copy-button";
 import { DownloadButton } from "@/components/kit/download-button";
 import { cn } from "@/lib/utils";
@@ -63,9 +64,9 @@ export function CodeViewer({
           <span className="truncate font-mono text-[11px] tracking-[0.06em] text-muted-foreground uppercase">{label}</span>
           <span className="font-mono text-[11px] text-faint">{lang}</span>
           <div className="ml-auto flex gap-1">
-            <button type="button" className="btn h-7 px-2 text-[12px]" aria-pressed={wrap} onClick={() => setWrap((value) => !value)}>
+            <Button type="button" variant={wrap ? "secondary" : "outline"} size="sm" aria-pressed={wrap} onClick={() => setWrap((value) => !value)}>
               Wrap
-            </button>
+            </Button>
             <CopyButton value={text} />
             {filename ? <DownloadButton filename={filename} content={text} /> : null}
           </div>
@@ -138,9 +139,9 @@ export function CodeEditor({
         <span className="font-mono text-[11px] tracking-[0.06em] text-muted-foreground uppercase">{label}</span>
         <span className="font-mono text-[11px] text-faint">{lang}</span>
         <div className="ml-auto flex gap-1">
-          <button type="button" className="btn h-7 px-2 text-[12px]" aria-pressed={wrap} onClick={() => setWrap((current) => !current)}>
+          <Button type="button" variant={wrap ? "secondary" : "outline"} size="sm" aria-pressed={wrap} onClick={() => setWrap((current) => !current)}>
             Wrap
-          </button>
+          </Button>
           <CopyButton value={value} />
           {filename ? <DownloadButton filename={filename} content={value} /> : null}
         </div>

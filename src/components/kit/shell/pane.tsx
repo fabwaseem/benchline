@@ -21,7 +21,7 @@ export function Pane({
   return (
     <section className={cn("flex min-h-0 min-w-0 flex-col", className)}>
       {label || actions ? (
-        <header className="flex h-10 shrink-0 items-center gap-2 border-b border-border px-3">
+        <header className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-3">
           {label ? (
             <h2 className="truncate font-mono text-[11px] font-medium tracking-[0.08em] text-faint uppercase whitespace-nowrap" title={label}>
               {label}

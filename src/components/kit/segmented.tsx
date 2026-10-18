@@ -1,5 +1,7 @@
 "use client";
 
+import { Toggle } from "@base-ui/react/toggle";
+import { ToggleGroup } from "@base-ui/react/toggle-group";
 import { cn } from "@/lib/utils";
 
 export function SegmentedControl<T extends string>(props: {
@@ -26,22 +28,20 @@ export function Segmented<T extends string>({
   className?: string;
 }) {
   return (
-    <div role="radiogroup" aria-label={label} className={cn("seg max-w-full flex-wrap", className)}>
-      {options.map((option) => {
-        const selected = value === option.value;
-        return (
-          <button
-            key={option.value}
-            type="button"
-            role="radio"
-            aria-checked={selected}
-            onClick={() => onChange(option.value)}
-            className="shrink-0 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none max-[699px]:h-11"
-          >
-            {option.label}
-          </button>
-        );
-      })}
-    </div>
+    <ToggleGroup
+      aria-label={label}
+      value={[value]}
+      onValueChange={(next) => {
+        const picked = next.find((item) => item !== value) ?? next[0];
+        if (picked) onChange(picked as T);
+      }}
+      className={cn("seg max-w-full flex-wrap", className)}
+    >
+      {options.map((option) => (
+        <Toggle key={option.value} value={option.value} className="shrink-0 max-[699px]:h-control-lg">
+          {option.label}
+        </Toggle>
+      ))}
+    </ToggleGroup>
   );
 }

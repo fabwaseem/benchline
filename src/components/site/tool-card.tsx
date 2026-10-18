@@ -10,7 +10,7 @@ export function StatusChip({ status }: { status: SearchRecord["status"] }) {
   return (
     <span
       className={cn(
-        "rounded-full px-2 py-0.5 text-[11px] tracking-tight",
+        "rounded-sm px-2 py-0.5 text-[11px] tracking-tight",
         status === "new"
           ? "bg-amber text-amber-foreground"
           : status === "deprecated"
@@ -95,7 +95,7 @@ export function TagChip({
       href={href}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-xs whitespace-nowrap",
+        "inline-flex h-control-sm shrink-0 items-center gap-1 rounded-sm border px-2.5 text-xs whitespace-nowrap",
         active ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground hover:border-primary/40",
       )}
     >

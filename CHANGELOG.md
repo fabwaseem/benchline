@@ -8,6 +8,8 @@ Entries are the merged pull requests that built the directory.
 
 ### Added
 
+- Benchline component kit on Base UI (`@base-ui/react`): controls, menus, color picker, and file uploaders, with a dev-only `/kit` showcase.
+- ESLint rule that keeps raw form elements and Base UI imports inside the kit.
 - 18 Open Graph templates, a visual picker, PNG export, and the `build_open_graph` and `list_og_templates` MCP tools (#19).
 - Shiki code viewer and editor for code blocks across the tools, with light and dark themes (#19).
 - MIT license, community health files, generated tool and MCP docs, and issue templates.

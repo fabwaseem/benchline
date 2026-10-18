@@ -3,6 +3,7 @@
 import { useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/kit/primitives/button";
 import { visibleTabIndexes } from "@/components/kit/shell/fit-tabs";
 import { cn } from "@/lib/utils";
 
@@ -53,7 +54,7 @@ export function ToolToolbar<T extends string>({
   const overflowSelected = hidden.find((option) => option.value === value);
 
   return (
-    <div className={cn("flex flex-col gap-2 border-b border-border px-3 py-2 min-[700px]:flex-row min-[700px]:items-center min-[700px]:px-4", className)}>
+    <div className={cn("flex min-h-12 flex-col gap-2 border-b border-border px-3 py-2 min-[700px]:flex-row min-[700px]:items-center min-[700px]:px-3", className)}>
       <div className="flex min-w-0 flex-1 items-center">
         {leading}
         {tabs.length > 0 ? (
@@ -73,7 +74,7 @@ export function ToolToolbar<T extends string>({
               ref={rowRef}
               role="tablist"
               aria-label={label}
-              className="flex h-10 items-center gap-5 overflow-hidden"
+              className="flex h-control-lg items-center gap-5 overflow-hidden"
               onKeyDown={(event) => {
                 if (!onChange || (event.key !== "ArrowRight" && event.key !== "ArrowLeft")) return;
                 event.preventDefault();
@@ -89,18 +90,20 @@ export function ToolToolbar<T extends string>({
                 if (!visible.has(index)) return null;
                 const selected = value === option.value;
                 return (
-                  <button
+                  <Button
                     key={option.value}
                     type="button"
+                    variant="ghost"
+                    size="sm"
                     role="tab"
                     aria-selected={selected}
                     tabIndex={selected ? 0 : -1}
                     data-on={selected ? "true" : "false"}
-                    className="utab shrink-0 bg-transparent whitespace-nowrap"
+                    className="utab h-control-lg shrink-0 bg-transparent px-0 whitespace-nowrap"
                     onClick={() => onChange?.(option.value)}
                   >
                     {option.label}
-                  </button>
+                  </Button>
                 );
               })}
               {hidden.length > 0 ? (

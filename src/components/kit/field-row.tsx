@@ -31,8 +31,8 @@ export function FieldRow({
       })
     : children;
   return (
-    <div className={cn("flex flex-col", variant === "well" && "field-well", className)}>
-      <div className="mb-2 flex items-center justify-between gap-2">
+    <div className={cn("flex flex-col gap-2", variant === "well" && "field-well", className)}>
+      <div className="flex items-center justify-between gap-2">
         <label htmlFor={htmlFor} className="min-w-0 truncate text-[12.5px] font-medium whitespace-nowrap text-fg2" title={label}>
           {label}
         </label>
@@ -40,12 +40,12 @@ export function FieldRow({
       </div>
       {field}
       {error ? (
-        <p id={errorId} className="mt-1.5 text-xs text-status-bad">
+        <p id={errorId} className="text-xs text-status-bad">
           {error}
         </p>
       ) : null}
       {help ? (
-        <p id={helpId} className="mt-1.5 text-[12px] text-faint">
+        <p id={helpId} className="text-[12px] text-faint">
           {help}
         </p>
       ) : null}
