@@ -17,7 +17,7 @@ export const meta = {
   faqs: [
     { q: "Which delimiters work?", a: "Comma, tab, semicolon, and pipe. Auto counts separators outside quotes on the first record and uses the most common one. A tie stays a comma." },
     { q: "What does the header option do?", a: "With a header, the first CSV row becomes object keys and JSON objects become a header row. Without it, CSV becomes arrays of cells and JSON arrays of arrays are written as rows with no header." },
-    { q: "Which values are inferred?", a: "true, false, null, and plain numbers, in either case for the words. A leading zero such as a ZIP code stays a string. Turn inference off to keep every cell a string." },
+    { q: "Which values are inferred?", a: "true, false, null, and plain numbers, in either case for the words. A leading zero such as a ZIP code stays a string. A number that does not fit in a JavaScript number keeps the digits from the cell. Turn inference off to keep every cell a string." },
     { q: "How are nested objects written to CSV?", a: "Flatten joins keys with dots, so address.city becomes a column. Leave it off and the nested value is a JSON string in one cell." },
   ],
   seo: {

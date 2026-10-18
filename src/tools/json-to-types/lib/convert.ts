@@ -1,3 +1,5 @@
+import { inexactJsonNumberTokens } from "@/lib/json-lossless";
+
 export type Target = "typescript" | "zod" | "pydantic" | "dataclass" | "go";
 
 export const TARGETS: Target[] = ["typescript", "zod", "pydantic", "dataclass", "go"];
@@ -375,7 +377,13 @@ export function convertJsonToTypes(
   };
   const outputs: Partial<Record<Target, string>> = {};
   for (const target of targets) outputs[target] = generators[target](root);
-  return { outputs, warnings: collectWarnings(root) };
+  const warnings = collectWarnings(root);
+  const lost = inexactJsonNumberTokens(text);
+  if (lost.length > 0) {
+    const sample = lost.slice(0, 3).join(", ");
+    warnings.push(`${sample} ${lost.length === 1 ? "does" : "do"} not fit in a JavaScript number, so these types cannot keep those digits.`);
+  }
+  return { outputs, warnings };
 }
 
 export const exampleJson = `{

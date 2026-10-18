@@ -34,7 +34,7 @@ export const tool: BenchTool = {
   slug: "json-yaml-convert",
   name: "convert_data_format",
   title: "Convert JSON, YAML, TOML, or XML",
-  description: "Convert between JSON, YAML, TOML, and XML. Auto-detects the source. Errors include a line and column. TOML refuses null and a non-table root.",
+  description: "Convert between JSON, YAML, TOML, and XML. Auto-detects the source. Numbers that do not fit in a JavaScript number keep their digits. Errors include a line and column. TOML refuses null and a non-table root.",
   openWorld: false,
   inputSchema,
   outputSchema,

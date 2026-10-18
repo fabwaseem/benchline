@@ -1,4 +1,5 @@
 import { parse, unparse, type ParseError } from "papaparse";
+import { isJsonNumberToken, jsonNumberTokenIsExact, parseJsonLossless, rawJsonNumber, rawJsonNumberSource, stringifyJsonLossless, type RawJsonNumber } from "@/lib/json-lossless";
 
 export const delimiters = [",", "\t", ";", "|"] as const;
 
@@ -84,7 +85,7 @@ export function csvToJson(input: string, options: Pick<CsvOptions, "delimiter" |
     const columns = parsed.meta.fields?.length ?? columnCount(rows);
     return {
       ok: true,
-      output: JSON.stringify(rows, null, 2),
+      output: stringifyJsonLossless(rows, 2),
       error: "",
       warning: warningOf(parsed.errors),
       rows: rows.length,
@@ -100,7 +101,7 @@ export function csvToJson(input: string, options: Pick<CsvOptions, "delimiter" |
     .map((row) => (options.inferTypes ? row.map(inferCell) : row));
   return {
     ok: true,
-    output: JSON.stringify(rows, null, 2),
+    output: stringifyJsonLossless(rows, 2),
     error: "",
     warning: warningOf(parsed.errors),
     rows: rows.length,
@@ -115,7 +116,7 @@ export function jsonToCsv(input: string, options: Pick<CsvOptions, "delimiter" |
   const delimiter = options.delimiter === "auto" ? "," : options.delimiter;
   let value: unknown;
   try {
-    value = JSON.parse(text) as unknown;
+    value = parseJsonLossless(text);
   } catch (error) {
     const message = error instanceof Error ? error.message.replace(/\s+at position \d+/, "") : "Invalid JSON";
     return { ok: false, output: "", error: message, warning: "", rows: 0, columns: 0, delimiter };
@@ -202,22 +203,25 @@ function mapRow(row: Record<string, string>, inferTypes: boolean): Record<string
   return out;
 }
 
-export function inferCell(value: string): string | number | boolean | null {
+export function inferCell(value: string): string | number | boolean | null | RawJsonNumber {
   const trimmed = value.trim();
   if (trimmed === "true" || trimmed === "TRUE") return true;
   if (trimmed === "false" || trimmed === "FALSE") return false;
   if (trimmed === "null" || trimmed === "NULL") return null;
-  if (/^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$/.test(trimmed)) {
-    const number = Number(trimmed);
-    if (Number.isFinite(number)) return number;
+  if (isJsonNumberToken(trimmed)) {
+    if (jsonNumberTokenIsExact(trimmed)) return Number(trimmed);
+    return rawJsonNumber(trimmed);
   }
   return value;
 }
 
 function cell(value: unknown): string | number | boolean {
   if (value === null || value === undefined) return "";
+  const raw = rawJsonNumberSource(value);
+  if (raw !== null) return raw;
+  if (typeof value === "bigint") return value.toString();
   if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") return value;
-  return JSON.stringify(value);
+  return stringifyJsonLossless(value);
 }
 
 function columnCount(rows: Record<string, unknown>[]): number {

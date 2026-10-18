@@ -237,7 +237,7 @@ Generate a production Dockerfile, dockerignore, compose file, and next.config sn
 
 **Format and validate JSON**
 
-Pretty-print or minify JSON. Returns the formatted text when it is valid, or the line and column of each syntax error.
+Pretty-print or minify JSON. A number that does not fit in a JavaScript number keeps the digits you sent. Returns the formatted text when it is valid, or the line and column of each syntax error.
 
 - Page: https://tools.fabwaseem.com/t/json-formatter
 - HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/json-formatter`
@@ -254,7 +254,7 @@ Pretty-print or minify JSON. Returns the formatted text when it is valid, or the
 
 **Convert JSON, YAML, TOML, or XML**
 
-Convert between JSON, YAML, TOML, and XML. Auto-detects the source. Errors include a line and column. TOML refuses null and a non-table root.
+Convert between JSON, YAML, TOML, and XML. Auto-detects the source. Numbers that do not fit in a JavaScript number keep their digits. Errors include a line and column. TOML refuses null and a non-table root.
 
 - Page: https://tools.fabwaseem.com/t/json-yaml-convert
 - HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/json-yaml-convert`
@@ -270,7 +270,7 @@ Convert between JSON, YAML, TOML, and XML. Auto-detects the source. Errors inclu
 
 **Convert CSV and JSON**
 
-Convert CSV to JSON or JSON to CSV. Supports comma, tab, semicolon, and pipe delimiters, an optional header, type inference, and dotted flattening.
+Convert CSV to JSON or JSON to CSV. Supports comma, tab, semicolon, and pipe delimiters, an optional header, type inference, and dotted flattening. Inferred numbers that do not fit in a JavaScript number keep their digits.
 
 - Page: https://tools.fabwaseem.com/t/csv-json-convert
 - HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/csv-json-convert`
@@ -1220,7 +1220,7 @@ Compute RFC 4226/6238 one-time passcodes from a base32 secret. Supports 6/8 digi
 
 **Run a JSONPath query**
 
-Evaluate a JSONPath Plus query against a JSON document and return the matches with their paths.
+Evaluate a JSONPath Plus query against a JSON document and return the matches with their paths. A number that does not fit in a JavaScript number is returned as its original digits, with a precision warning.
 
 - Page: https://tools.fabwaseem.com/t/jsonpath-tester
 - HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/jsonpath-tester`

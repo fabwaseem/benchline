@@ -64,6 +64,19 @@ describe("JSONPath tester", () => {
     expect(result).toMatchObject({ error: expect.stringContaining("JSON is invalid") });
   });
 
+  it("keeps digits that do not fit in a JavaScript number", () => {
+    const doc = '{"id":9007199254740993,"ratio":0.10000000000000000001,"ok":1}';
+    const result = evaluateJsonPath(doc, "$.id");
+    expect(result).toMatchObject({ warning: expect.stringContaining("9007199254740993") });
+    if ("error" in result) return;
+    expect(result.matches[0]?.value).toBe("9007199254740993");
+    expect(formatValue(result.matches[0]?.value)).toBe("9007199254740993");
+    const root = evaluateJsonPath(doc, "$");
+    if ("error" in root) throw new Error(root.error);
+    expect(root.matches[0]?.value).toEqual({ id: "9007199254740993", ratio: "0.10000000000000000001", ok: 1 });
+    expect(formatValue(root.matches[0]?.value)).toContain("0.10000000000000000001");
+  });
+
   it("formats values for display", () => {
     expect(formatValue("hi")).toBe("hi");
     expect(formatValue({ a: 1 })).toBe('{"a":1}');

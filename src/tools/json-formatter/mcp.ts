@@ -33,7 +33,7 @@ export const tool: BenchTool = {
   slug: "json-formatter",
   name: "format_json",
   title: "Format and validate JSON",
-  description: "Pretty-print or minify JSON. Returns the formatted text when it is valid, or the line and column of each syntax error.",
+  description: "Pretty-print or minify JSON. A number that does not fit in a JavaScript number keeps the digits you sent. Returns the formatted text when it is valid, or the line and column of each syntax error.",
   openWorld: false,
   inputSchema,
   outputSchema,
