@@ -1,5 +1,6 @@
 import { FETCH_LIMITS } from "@/lib/net/fetch-public";
-import { assertPublicHost, parsePublicHttpUrl, PublicUrlError } from "@/lib/net/ssrf";
+import { outboundFetch } from "@/lib/net/outbound";
+import { parsePublicHttpUrl, PublicUrlError } from "@/lib/net/ssrf";
 import {
   dmarcName,
   parseDmarc,
@@ -41,50 +42,21 @@ async function queryType(name: string, type: RecordType, resolver: ResolverId): 
   const endpoint = parsePublicHttpUrl(resolverEndpoints[resolver]);
   endpoint.searchParams.set("name", name);
   endpoint.searchParams.set("type", type);
-  await assertPublicHost(endpoint);
-  const response = await fetch(endpoint, {
-    redirect: "manual",
-    signal: AbortSignal.timeout(FETCH_LIMITS.timeoutMs),
+  const response = await outboundFetch(endpoint.toString(), {
+    method: "GET",
+    ports: "web",
+    followRedirects: false,
+    redirectMessage: "The resolver redirected. That is refused.",
+    timeoutMs: FETCH_LIMITS.timeoutMs,
+    maxBytes: FETCH_LIMITS.maxBytes,
+    tooLargeMessage: "Response is larger than 800 KB.",
     headers: {
       accept: "application/dns-json",
       "user-agent": "Benchline/1.0 (+https://tools.fabwaseem.com)",
     },
   });
-  if (response.status >= 300 && response.status < 400) {
-    await response.body?.cancel();
-    throw new PublicUrlError("The resolver redirected. That is refused.");
-  }
-  if (response.status >= 400) {
-    await response.body?.cancel();
-    throw new PublicUrlError(`The resolver returned ${response.status}.`);
-  }
-  const text = await readCapped(response, FETCH_LIMITS.maxBytes);
-  const parsed = parseDoh(text, type);
+  if (response.status >= 400) throw new PublicUrlError(`The resolver returned ${response.status}.`);
+  const parsed = parseDoh(new TextDecoder().decode(response.body), type);
   if ("error" in parsed) throw new PublicUrlError(parsed.error);
   return parsed;
-}
-
-async function readCapped(response: Response, maxBytes: number) {
-  const reader = response.body?.getReader();
-  if (!reader) return "";
-  const chunks: Uint8Array[] = [];
-  let total = 0;
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    if (!value) continue;
-    total += value.byteLength;
-    if (total > maxBytes) {
-      await reader.cancel();
-      throw new PublicUrlError("Response is larger than 800 KB.");
-    }
-    chunks.push(value);
-  }
-  const bytes = new Uint8Array(total);
-  let offset = 0;
-  for (const chunk of chunks) {
-    bytes.set(chunk, offset);
-    offset += chunk.byteLength;
-  }
-  return new TextDecoder().decode(bytes);
 }

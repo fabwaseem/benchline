@@ -1,3 +1,5 @@
+import { parseOutboundUrl, PublicUrlError } from "@/lib/net/ssrf";
+
 export interface GraphqlHeader {
   name: string;
   value: string;
@@ -38,16 +40,19 @@ export function parseVariables(text: string): { variables: unknown } | { error: 
 }
 
 export function validateEndpoint(endpoint: string): { url: string } | { error: string } {
-  let url: URL;
   try {
-    url = new URL(endpoint.trim());
-  } catch {
+    const url = parseOutboundUrl(endpoint, { schemes: ["http", "https"], ports: "any" });
+    return { url: url.toString() };
+  } catch (error) {
+    if (error instanceof PublicUrlError) {
+      if (error.message === "Enter a URL." || error.message === "Enter a valid URL.") {
+        return { error: "The endpoint must be a valid http(s) URL." };
+      }
+      if (error.message.startsWith("Only ")) return { error: "The endpoint must use http or https." };
+      return { error: error.message };
+    }
     return { error: "The endpoint must be a valid http(s) URL." };
   }
-  if (url.protocol !== "http:" && url.protocol !== "https:") {
-    return { error: "The endpoint must use http or https." };
-  }
-  return { url: url.toString() };
 }
 
 export async function executeGraphql(
@@ -55,7 +60,7 @@ export async function executeGraphql(
   fetchImpl: typeof fetch = fetch,
 ): Promise<GraphqlResult> {
   const checked = validateEndpoint(args.endpoint);
-  if ("error" in checked) throw new Error(checked.error);
+  if ("error" in checked) throw new PublicUrlError(checked.error);
   const query = args.query.trim();
   if (!query) throw new Error("The query must not be empty.");
   const parsedVars = parseVariables(args.variablesText ?? "");
@@ -93,6 +98,7 @@ export async function executeGraphql(
     const data = payload && typeof payload === "object" && "data" in payload ? (payload as { data: unknown }).data : payload;
     return { ok: true, status: res.status, durationMs, data };
   } catch (error) {
+    if (error instanceof PublicUrlError) throw error;
     const durationMs = Date.now() - started;
     if (error instanceof DOMException && error.name === "AbortError") {
       return { ok: false, status: 0, durationMs, error: `The request timed out after ${timeoutMs} ms.` };

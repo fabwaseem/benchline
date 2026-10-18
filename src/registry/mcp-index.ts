@@ -78,7 +78,7 @@ export const mcpIndex: McpIndexEntry[] = [
   {"slug":"json-to-types","name":"convert_json_to_types","title":"Convert JSON to type definitions","description":"Infer types from a JSON document and generate TypeScript interfaces, Zod schemas, Python Pydantic models or dataclasses, and Go structs.","openWorld":false},
   {"slug":"code-minifier","name":"minify_code","title":"Minify JavaScript, CSS, or HTML","description":"Minify source code with Terser (JS), csso (CSS), or a structural HTML pass and report before/after byte counts.","openWorld":false},
   {"slug":"curl-converter","name":"convert_curl","title":"Convert a curl command to code","description":"Parse a curl command and generate equivalent JavaScript fetch, Python requests, Go, PHP, or Rust code.","openWorld":false},
-  {"slug":"graphql-client","name":"execute_graphql","title":"Execute a GraphQL query","description":"Send a GraphQL query with optional variables and headers to an endpoint and return the response data or errors.","openWorld":true},
+  {"slug":"graphql-client","name":"execute_graphql","title":"Execute a GraphQL query","description":"Send a GraphQL query with optional variables and headers to a public http or https endpoint and return the response data or errors. Local, private, and internal addresses are refused.","openWorld":true},
   {"slug":"websocket-tester","name":"validate_websocket_url","title":"Validate a WebSocket URL","description":"Validate and parse a ws:// or wss:// URL into its components, and optionally decode a WebSocket close code.","openWorld":false},
 ];
 

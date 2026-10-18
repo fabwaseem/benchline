@@ -1337,7 +1337,7 @@ Parse a curl command and generate equivalent JavaScript fetch, Python requests, 
 
 **Execute a GraphQL query**
 
-Send a GraphQL query with optional variables and headers to an endpoint and return the response data or errors.
+Send a GraphQL query with optional variables and headers to a public http or https endpoint and return the response data or errors. Local, private, and internal addresses are refused.
 
 - Page: https://tools.fabwaseem.com/t/graphql-client
 - HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/graphql-client`

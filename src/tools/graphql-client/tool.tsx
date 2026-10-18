@@ -64,6 +64,11 @@ export default function GraphqlClientTool() {
         }
         if (!r.ok) toast.error(r.error ?? "Request failed");
       })
+      .catch((error: unknown) => {
+        const message = error instanceof Error ? error.message : "The request failed.";
+        setResult({ ok: false, status: 0, durationMs: 0, error: message });
+        toast.error(message);
+      })
       .finally(() => setSending(false));
   };
 
@@ -99,7 +104,7 @@ export default function GraphqlClientTool() {
       />
       <ToolPanes>
         <Pane label="Request" scroll bodyClassName="flex min-h-[340px] flex-col gap-3 p-3">
-          <FieldRow label="Endpoint" htmlFor="gql-endpoint">
+          <FieldRow label="Endpoint" htmlFor="gql-endpoint" help="Local, private, and internal addresses are blocked.">
             <TextInput
               id="gql-endpoint"
               value={endpoint}
