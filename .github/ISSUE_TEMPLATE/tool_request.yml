@@ -1,0 +1,32 @@
+name: Tool request
+description: Ask for a tool the directory does not have
+title: "[Tool] "
+body:
+  - type: textarea
+    id: job
+    attributes:
+      label: What it should do
+      description: The input, the result, and the job it replaces.
+    validations:
+      required: true
+  - type: textarea
+    id: demand
+    attributes:
+      label: Demand evidence
+      description: Links to searches, docs, issues, or other signs people need this. A name alone is not enough.
+    validations:
+      required: true
+  - type: textarea
+    id: mcp
+    attributes:
+      label: MCP use case
+      description: The snake_case verb_noun you would call, the arguments an agent would send, and the fields it needs back.
+    validations:
+      required: true
+  - type: textarea
+    id: client
+    attributes:
+      label: Client-side feasibility
+      description: Can this run in the browser on the device, with no server secret? Name any library it would need, and whether that license is permissive (no AGPL, GPL, or LGPL).
+    validations:
+      required: true

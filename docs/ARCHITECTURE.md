@@ -1,45 +1,87 @@
 # Architecture
 
-Stack: Next.js 16 (App Router, Turbopack, RSC), React 19, TypeScript strict, Tailwind CSS v4, shadcn/ui (base-nova style, Base UI primitives) with a custom theme, zod 4, next-themes, fuse.js, lucide-react, pnpm.
+Benchline is a Next.js 16 App Router app. Pages are generated from a registry of tool metadata. Each tool's UI is a separate client chunk. The same functions are exposed on a stateless MCP server and a JSON API. There is no database and no account system.
 
-## Layout
-```
-src/
-  app/
-    page.tsx                      directory home: search, category + tag filters
-    [category]/page.tsx           category pages (SSG via generateStaticParams)
-    tags/[tag]/page.tsx           tag pages (SSG)
-    t/[slug]/page.tsx             tool page shell (SSG); loads tool UI lazily
-    t/[slug]/opengraph-image.tsx  per-tool OG image (next/og)
-    sitemap.ts robots.ts llms.txt/route.ts
-  tools/<slug>/
-    meta.ts       ToolMeta (validated by zod schema)
-    tool.tsx      "use client" UI, default export
-    lib/*.ts      pure logic + lib/*.test.ts
-    content.mdx?  optional long-form explainer
-  registry/
-    schema.ts     zod ToolMeta, Category, Tag schemas
-    categories.ts category list (slug, name, description, icon)
-    index.ts      imports every meta.ts (metadata only, never UI), validates at build
-    loaders.ts    generated map slug -> () => import("@/tools/<slug>/tool")
-  components/ui      shadcn primitives (themed)
-  components/kit     tool-building blocks: ToolShell, Panel, CodeOutput, Dropzone,
-                     Segmented, CopyButton, DownloadButton, FieldRow, ResultStat, FaqAccordion
-  components/site    header, footer, search (cmdk), cards, filters, breadcrumbs
-scripts/gen-registry.ts  scans src/tools/*/meta.ts -> writes registry index + loaders
-```
+## Registry
 
-## Scaling rules
-- Registry imports only `meta.ts`. Tool UI is reached only through `loaders.ts` with `next/dynamic`, so each tool is its own chunk and the directory pages never ship tool code.
-- Pages are SSG from the registry; search index is a small generated JSON (slug, name, description, tags, category) loaded client-side by fuse.js.
-- Heavy deps (tokenizers, image libs) are imported inside the tool module only, ideally in workers.
-- Build fails if any meta is invalid, a slug is duplicated, or a related tool / category / tag is unknown.
+`scripts/gen-registry.ts` (`pnpm gen:registry`, also the `prebuild` step) reads every `src/tools/<slug>/meta.ts` and `mcp.ts`.
 
-## ToolMeta fields
-slug, name, tagline, description, category, tags[], keywords[], status (stable|beta|new|deprecated), createdAt, updatedAt, icon (lucide name), accent?, related[], faqs[{q,a}], seo {title, description, ogTitle?}, howTo steps[], inputs/outputs summary, runsLocally (bool, privacy badge).
+It checks the metadata with `assertRegistry` in `src/registry/validate.ts`: zod schemas from `src/registry/schema.ts`, unique slugs, known categories and parents, known Lucide icons, known related tools, and a `toolOrder` that lists every tool once. A missing `mcp.ts` fails the script.
 
-## SEO
-Metadata API per page, canonical https://tools.fabwaseem.com, JSON-LD (WebApplication/SoftwareApplication + FAQPage + BreadcrumbList on tool pages, CollectionPage + ItemList on directory pages), sitemap from registry, robots, /llms.txt generated from registry.
+It writes:
 
-## Deploy
-Coolify (Nixpacks or Dockerfile with `output: "standalone"`), domain tools.fabwaseem.com.
+| File | Role |
+| --- | --- |
+| `src/registry/index.ts` | Imports every `meta.ts`, exports `tools` |
+| `src/registry/loaders.ts` | `slug -> () => import("@/tools/<slug>/tool")` |
+| `src/registry/mcp-registry.ts` | The `BenchTool` objects the server registers |
+| `src/registry/mcp-index.ts` | Name, title, description, `openWorld` for pages that must not load the handlers |
+| `src/registry/search-index.json` | Static snapshot of the catalog. The directory filters the in-memory registry; the command palette uses `searchRecords()` |
+| `src/components/site/tool-host.tsx` | `next/dynamic` map used by the tool page |
+
+`src/registry/categories.ts` is written by hand: parents, child categories, and `toolOrder`.
+
+Directory pages import `src/registry/index.ts` and never import `tool.tsx`. The tool page loads one tool through `ToolHost`.
+
+## Library and UI
+
+`src/tools/<slug>/lib/` is the function. vitest covers it. `tool.tsx` is the client workspace. `mcp.ts` calls the same `lib/` and returns the output schema.
+
+The page at `src/app/t/[slug]/page.tsx` is static (`generateStaticParams` from the registry). It renders `ToolPage` (centered, max 1240px, no sidebar), then the header, the lazy workspace, an agent section, related tools, and how-it-works. The workspace itself is kit components: `ToolCard`, `ToolToolbar`, `ToolPanes`.
+
+`runsLocally` on the meta is the privacy flag for the page. `openWorld` on the MCP tool means that handler reaches the network. They are not the same bit: an image tool runs in the browser and still accepts a public URL when an agent calls it.
+
+## MCP server
+
+`POST /mcp` is `src/app/mcp/route.ts`, which calls `handleMcpRequest` in `src/lib/mcp/handler.ts`.
+
+The handler builds an `McpServer` named `benchline` and registers every entry in `mcp-registry.ts`. The transport is `WebStandardStreamableHTTPServerTransport` with `sessionIdGenerator: undefined` and `enableJsonResponse: true`. Each request is its own server. `GET` and `DELETE` return 405.
+
+Limits and checks:
+
+- 60 requests a minute per address (`mcp:<ip>`).
+- `Origin`, when present, must match the request host, localhost, or `SITE_URL`.
+- Tool errors are caught and returned as `isError: true`.
+
+`SITE_URL` is `NEXT_PUBLIC_SITE_URL` or `https://tools.fabwaseem.com`.
+
+The guide for people is `src/app/mcp/guide/page.tsx` at `/mcp/guide`. The tool list for people is `/ai`.
+
+## HTTP API
+
+`POST /api/v1/tools/<slug>` runs the same `tool.run` as MCP. It has its own 60-a-minute bucket (`api:<ip>`). Unknown slugs are 404. Bad JSON or a thrown error is 400. `GET /openapi.json` is that surface as OpenAPI 3.1, built from the zod input schemas.
+
+Nine tools cannot do their job in the browser. Their pages post to a route under `src/app/api/tools/`:
+
+| Page | Route |
+| --- | --- |
+| llms.txt generator | `/api/tools/llms-txt` |
+| AI SEO checker | `/api/tools/ai-seo` |
+| robots.txt checker | `/api/tools/robots-txt` |
+| Meta tags inspector | `/api/tools/meta-tags` |
+| Page to Markdown | `/api/tools/html-markdown` |
+| DNS lookup | `/api/tools/dns-lookup` |
+| Sitemap validator | `/api/tools/sitemap` |
+| HTTP headers | `/api/tools/http-headers` |
+| SSL checker | `/api/tools/ssl` |
+
+Those routes call `guard()` in `src/lib/api.ts`: 8 requests per address every 10 minutes. `fetchPublic` (`src/lib/net/fetch-public.ts`) allows public `http`/`https` only, times out after 8 seconds, follows at most four redirects, and stops at 800 KB. The body reader refuses more than 200,000 characters. SSRF checks live in `src/lib/net/ssrf.ts`. The SSL checker opens a TLS socket on port 443 after the same host check.
+
+`/pdfjs/[...path]` serves pdf.js assets to the browser. `outputFileTracingIncludes` in `next.config.ts` traces those files, and traces `linkedom` for the HTML-to-markdown route.
+
+## Other routes
+
+- `/` directory, `/<category>`, `/tags/<tag>`, `/search`, `/explore`, `/categories`
+- `/about`
+- `/llms.txt` and `/llms-full.txt` from `src/lib/mcp/llms-doc.ts`
+- `sitemap.ts`, `robots.ts`, `manifest.ts`
+
+Category URLs come from `src/lib/taxonomy.ts`. A parent with a single child category is a flat nav item.
+
+## Deployment
+
+`next.config.ts` sets `output: "standalone"`. `Dockerfile` builds on Node 22 Alpine with pnpm 10.33.4 and runs `node server.js` as user `nextjs` on port 3000.
+
+`serverExternalPackages` lists `@napi-rs/canvas`, `pdfjs-dist`, `tesseract.js`, `tesseract.js-core`, `zxing-wasm`, and `sharp`. The `mcpNativeAssets` array is traced into `/mcp` and `/api/v1/tools/[slug]`. The image also copies `pdfjs-dist`, `zxing-wasm`, `tesseract.js`, and `tesseract.js-core` into the runner so those tools resolve outside the traced standalone output.
+
+CI (`.github/workflows/ci.yml`) runs install, lint, typecheck, test, and build on pull requests and on `main`.

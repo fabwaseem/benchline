@@ -2,9 +2,21 @@
   "name": "benchline",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
+  "author": "Waseem Anjum <66861984+fabwaseem@users.noreply.github.com>",
+  "homepage": "https://tools.fabwaseem.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabwaseem/benchline.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fabwaseem/benchline/issues"
+  },
   "scripts": {
     "dev": "next dev",
     "gen:registry": "tsx scripts/gen-registry.ts",
+    "gen:readme-tools": "tsx scripts/gen-readme-tools.ts",
+    "gen:mcp-docs": "tsx scripts/gen-mcp-docs.ts",
     "prebuild": "pnpm gen:registry",
     "build": "next build",
     "start": "next start",
