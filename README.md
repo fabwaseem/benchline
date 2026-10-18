@@ -43,7 +43,7 @@ The directory is the home page. The JSON formatter is one tool page (`/t/json-fo
 
 <!-- tools:start -->
 
-61 tools, in `toolOrder`. Run `pnpm gen:readme-tools` after adding one.
+66 tools, in `toolOrder`. Run `pnpm gen:readme-tools` after adding one.
 
 ### Developer
 
@@ -74,6 +74,7 @@ JSON, tables, and the encodings that move data between systems.
 - [JSON formatter](https://tools.fabwaseem.com/t/json-formatter) — Pretty-print, minify, and validate JSON, with the exact line and column when it fails.
 - [JSON YAML converter](https://tools.fabwaseem.com/t/json-yaml-convert) — Convert JSON, YAML, TOML, and XML in the browser, and keep the line number when a document fails.
 - [JSON Schema](https://tools.fabwaseem.com/t/json-schema-validate) — Infer a schema from JSON, validate against one, and export TypeScript and Zod.
+- [JSONPath tester](https://tools.fabwaseem.com/t/jsonpath-tester) — Query JSON with JSONPath Plus and inspect every match.
 
 **Tables.** Turn CSV into JSON and JSON into rows.
 
@@ -82,6 +83,7 @@ JSON, tables, and the encodings that move data between systems.
 **Encoding.** Base64 and the bytes a string is hiding.
 
 - [Base64 codec](https://tools.fabwaseem.com/t/base64-codec) — Encode and decode Base64 for text or a file, including the URL-safe alphabet.
+- [Programmer calculator](https://tools.fabwaseem.com/t/programmer-calculator) — Base conversions, bitwise ops, and a clickable bit grid.
 
 **Markup.** Markdown and HTML, converted in either direction.
 
@@ -150,6 +152,7 @@ Tokens, hashes, passwords, and the bits a permission is made of.
 **Auth debugging.** Read a JSON Web Token, check the signature, and see why a session expired.
 
 - [JWT decoder](https://tools.fabwaseem.com/t/jwt-decoder) — Paste a JSON Web Token, read the claims, and verify the signature in the browser.
+- [TOTP authenticator](https://tools.fabwaseem.com/t/totp-generator) — Live 2FA codes for your accounts, with otpauth:// import and QR export.
 
 **Crypto.** Hashes, passwords, UUIDs, and permission bits.
 
@@ -159,6 +162,7 @@ Tokens, hashes, passwords, and the bits a permission is made of.
 - [Chmod calculator](https://tools.fabwaseem.com/t/chmod-calculator) — Turn a permission grid into octal and symbolic chmod, and back.
 - [Bcrypt hash](https://tools.fabwaseem.com/t/htpasswd-bcrypt) — Hash and verify passwords with bcrypt or argon2id. Nothing is stored.
 - [Key pair](https://tools.fabwaseem.com/t/rsa-keypair) — Generate RSA, EC, and Ed25519 keys, and convert PEM and JWK.
+- [AES encryption](https://tools.fabwaseem.com/t/aes-crypto) — AES-GCM encrypt and decrypt in the browser, nothing uploaded.
 
 **Headers.** Content-Security-Policy and the headers a browser enforces.
 
@@ -222,6 +226,7 @@ DNS, certificates, response headers, and the URLs a request is built from.
 **HTTP.** Response headers, redirects, and a grade for the security headers.
 
 - [HTTP headers](https://tools.fabwaseem.com/t/http-headers-checker) — Follow redirects and grade the security headers on a public URL.
+- [HAR analyzer](https://tools.fabwaseem.com/t/har-analyzer) — Drop a HAR capture, see where the time went.
 
 **TLS.** Certificate expiry, the chain, and the names on a public host.
 
@@ -334,7 +339,7 @@ The full input list is [docs/MCP.md](docs/MCP.md).
 
 <!-- privacy:start -->
 
-52 tools run entirely in the browser. Text, files, and results stay on the device.
+57 tools run entirely in the browser. Text, files, and results stay on the device.
 
 9 tools can fetch a public URL through this site. The page posts the URL or hostname you submit, the route fetches that address and does not write it anywhere, and private addresses are refused. Those routes allow 8 requests from one address every 10 minutes.
 
