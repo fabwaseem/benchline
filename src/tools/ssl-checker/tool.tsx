@@ -3,14 +3,13 @@
 import { useRef, useState } from "react";
 import { ShieldCheck } from "lucide-react";
 import { ActionButton, TextInput } from "@/components/kit/controls";
-import { CheckRows } from "@/components/kit/check-row";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
-import { ResultStat } from "@/components/kit/result-stat";
-import { ResultTable } from "@/components/kit/result-table";
 import { SkeletonRows } from "@/components/kit/skeleton-rows";
-import { Panel, ToolShell, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, ResultsTable, ScoreCard, StatusStrip, ToolCard, ToolPanes } from "@/components/kit/shell";
+import { Truncate } from "@/components/kit/shell/truncate";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { postTool } from "@/lib/post-tool";
 import type { CertCheck } from "@/tools/ssl-checker/lib/cert";
 
@@ -30,12 +29,15 @@ type Report = {
   chain: { subject: string; issuer: string; validTo: string }[];
 };
 
+const GRADE_SCORE: Record<string, number> = { A: 96, B: 80, C: 64, D: 42, F: 18 };
+
 export default function SslTool() {
   const [host, setHost] = useState("");
   const [result, setResult] = useState<Report | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
+  const hostRef = useRef<HTMLInputElement>(null);
 
   async function run() {
     if (!host.trim()) return;
@@ -55,57 +57,67 @@ export default function SslTool() {
     }
   }
 
-  useWorkbenchKeys({ onEnter: () => void run(), onEscape: () => abortRef.current?.abort() });
+  function cancel() {
+    abortRef.current?.abort();
+    setBusy(false);
+    hostRef.current?.focus();
+  }
+
+  useWorkbenchKeys({ onEnter: () => void run(), onEscape: cancel });
   const days = result?.daysRemaining;
+  const note = busy ? "Opening TLS…" : error || (result ? `${result.protocol || "TLS"} · grade ${result.grade}` : "Waiting for a hostname");
 
   return (
-    <ToolShell
-      runsLocally={false}
-      busy={busy}
-      layout="split"
-      status={
-        <>
-          <span className={error ? "dot dot-warn" : "dot"} />
-          <span>{busy ? "Opening TLS…" : error || (result ? `${result.protocol || "TLS"} · grade ${result.grade}` : "Waiting for a hostname")}</span>
-        </>
-      }
-      input={
-        <Panel title="Host">
-          <FieldRow label="Hostname" htmlFor="ssl-host" help="Port 443 only. Private addresses are refused." error={error || undefined}>
-            <TextInput id="ssl-host" value={host} autoFocus className="font-mono" onChange={(event) => setHost(event.target.value)} />
-          </FieldRow>
-          <ActionButton disabled={!host.trim() || busy} onClick={() => void run()}>Check certificate</ActionButton>
-        </Panel>
-      }
-      output={
-        <Panel title="Certificate">
+    <ToolCard>
+      <div className="flex flex-col gap-3 border-b border-border p-3 min-[700px]:flex-row min-[700px]:items-end">
+        <FieldRow label="Hostname" htmlFor="ssl-host" className="min-w-0 flex-1" help="Port 443 only. Private addresses are refused." error={error || undefined}>
+          <TextInput ref={hostRef} id="ssl-host" value={host} autoFocus className="font-mono" aria-invalid={Boolean(error) || undefined} onChange={(event) => setHost(event.target.value)} />
+        </FieldRow>
+        <div className="flex flex-wrap gap-2">
+          <ActionButton type="button" className="btn btn-ink" disabled={!host.trim() || busy} onClick={() => void run()}>Check certificate</ActionButton>
+          {busy ? <ActionButton type="button" variant="outline" onClick={cancel}>Cancel</ActionButton> : null}
+        </div>
+      </div>
+      <ToolPanes ratio="35/65">
+        <Pane label="Certificate">
           {busy ? <SkeletonRows /> : result ? (
             <>
-              <div className="grid grid-cols-2 gap-2">
-                <ResultStat label="Days left" value={days === null ? "—" : String(days)} hint={result.validTo} />
-                <ResultStat label="Grade" value={result.grade} hint={result.authorized ? "Trusted chain" : "Not trusted"} />
-                <ResultStat label="Subject" value={result.subject || "—"} />
-                <ResultStat label="Issuer" value={result.issuer || "—"} />
-              </div>
-              <p className="font-mono text-[12px] break-all text-muted-foreground">{result.fingerprint}</p>
-              <ResultTable
-                caption="Names"
-                columns={[{ key: "name", label: "Name" }]}
-                rows={result.sans.map((name) => ({ key: name, cells: [name] }))}
+              <ScoreCard
+                score={GRADE_SCORE[result.grade] ?? 0}
+                verdict={days === null ? `Grade ${result.grade}` : `${days} days left`}
+                caption={result.authorized ? "Trusted chain" : "Not trusted"}
+                stats={[
+                  { label: "Subject", value: result.subject || "—" },
+                  { label: "Issuer", value: result.issuer || "—" },
+                ]}
               />
-              <ResultTable
-                caption="Chain"
-                columns={[{ key: "subject", label: "Subject" }, { key: "issuer", label: "Issuer" }]}
-                rows={result.chain.map((link, index) => ({ key: `${link.subject}-${index}`, cells: [link.subject, link.issuer] }))}
-              />
-              <CheckRows rows={result.checks} />
+              <Truncate value={result.fingerprint} className="font-mono text-[12px] text-muted-foreground" />
+              <ul className="text-[13px]">
+                {result.sans.map((name) => (
+                  <li key={name} className="truncate border-t border-border py-2 font-mono" title={name}>{name}</li>
+                ))}
+              </ul>
+              <ul className="text-[13px]">
+                {result.chain.map((link, index) => (
+                  <li key={`${link.subject}-${index}`} className="border-t border-border py-2">
+                    <Truncate value={link.subject} className="font-medium" />
+                    <Truncate value={link.issuer} className="text-muted-foreground" />
+                  </li>
+                ))}
+              </ul>
             </>
           ) : (
             <EmptyState art={<ShieldCheck size={22} />} title={error || "The certificate shows up here"} hint="Expiry, names, protocol, and the chain from a TLS handshake on port 443." />
           )}
           {error ? <Notice tone="bad" role="alert" title="The check failed." body={error} /> : null}
-        </Panel>
-      }
-    />
+        </Pane>
+        <Pane label="Checks" padded={false} scroll={false} bodyClassName="flex min-h-[280px] flex-col">
+          <div aria-live="polite" className="flex min-h-0 flex-1 flex-col">
+            {result ? <ResultsTable rows={result.checks} empty="No certificate checks." /> : <p className="px-3 py-6 text-sm text-muted-foreground">{busy ? "Opening TLS…" : "Nothing checked yet."}</p>}
+          </div>
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={note} tone={error ? "warn" : result ? (result.grade === "A" || result.grade === "B" ? "pass" : "warn") : "info"} trailing="⌘↵ check · esc cancel" />
+    </ToolCard>
   );
 }

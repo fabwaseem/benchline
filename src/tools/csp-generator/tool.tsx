@@ -1,14 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Shield } from "lucide-react";
-import { toast } from "sonner";
-import { ChipButton, TextArea, TextInput, Toggle } from "@/components/kit/controls";
-import { CheckRows } from "@/components/kit/check-row";
+import { ChipButton, OptionRow, TextArea, TextInput, Toggle } from "@/components/kit/controls";
 import { CodeOutput } from "@/components/kit/code-output";
+import { CopyButton } from "@/components/kit/copy-button";
 import { FieldRow } from "@/components/kit/field-row";
-import { OptionRow } from "@/components/kit/controls";
-import { InkButton, Panel, ToolShell, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, ResultsTable, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { documentFor, nextPreset, parsePolicy, sourceDirectives, strictPreset, type CspDraft, type SourceDirective } from "@/tools/csp-generator/lib/csp";
 
 export default function CspTool() {
@@ -27,23 +25,17 @@ export default function CspTool() {
 
   useWorkbenchKeys({
     onCopy: () => {
-      void navigator.clipboard.writeText(doc.header).then(() => toast.success("Header copied"));
+      void navigator.clipboard.writeText(doc.header);
     },
   });
 
+  const notes = doc.checks.filter((check) => check.level === "fail" || check.level === "warn").length;
+
   return (
-    <ToolShell
-      runsLocally
-      layout="split"
-      actions={<InkButton icon={<Shield size={15} />} onClick={() => void navigator.clipboard.writeText(doc.header).then(() => toast.success("Header copied"))}>Copy header</InkButton>}
-      status={
-        <>
-          <span className="dot" />
-          <span>{doc.checks.filter((check) => check.level === "fail" || check.level === "warn").length} notes</span>
-        </>
-      }
-      input={
-        <Panel title="Directives">
+    <ToolCard>
+      <ToolToolbar actions={<CopyButton value={doc.header} label="Copy header" toastMessage="Header copied" />} />
+      <ToolPanes ratio="40/60">
+        <Pane label="Directives">
           <div className="flex flex-wrap gap-2">
             <ChipButton onClick={() => apply(strictPreset)}>Strict</ChipButton>
             <ChipButton onClick={() => apply(nextPreset)}>Next.js</ChipButton>
@@ -72,15 +64,20 @@ export default function CspTool() {
           <OptionRow label="block-all-mixed-content">
             <Toggle checked={draft.blockAllMixedContent} aria-label="block-all-mixed-content" onCheckedChange={(value) => setDraft({ ...draft, blockAllMixedContent: value })} />
           </OptionRow>
-        </Panel>
-      }
-      output={
-        <Panel title="Header">
-          <CodeOutput code={doc.header} label="Content-Security-Policy" />
-          <CodeOutput code={doc.nextConfig} filename="next.config.ts" label="next.config.ts" />
-          <CheckRows rows={doc.checks} />
-        </Panel>
-      }
-    />
+        </Pane>
+        <Pane label="Header" padded={false} scroll={false} bodyClassName="flex min-h-[280px] flex-col">
+          <div className="flex flex-col gap-3 border-b border-border p-3">
+            <CodeOutput code={doc.header} label="Content-Security-Policy" />
+            <CodeOutput code={doc.nextConfig} filename="next.config.ts" label="next.config.ts" />
+          </div>
+          <ResultsTable rows={doc.checks} empty="No notes for this policy." />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip
+        note={`${notes} ${notes === 1 ? "note" : "notes"}`}
+        tone={notes > 0 ? "warn" : "pass"}
+        trailing="⌘⇧C copy header"
+      />
+    </ToolCard>
   );
 }

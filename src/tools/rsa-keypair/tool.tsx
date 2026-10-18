@@ -2,14 +2,15 @@
 
 import { useState } from "react";
 import { KeyRound, ShieldCheck } from "lucide-react";
-import { toast } from "sonner";
 import { ActionButton, Select, TextArea } from "@/components/kit/controls";
 import { CodeOutput } from "@/components/kit/code-output";
+import { CopyButton } from "@/components/kit/copy-button";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { generateMaterial, isKeyAlgorithm, jwkToMaterial, keyAlgorithms, pemToMaterial, type KeyAlgorithm, type KeyMaterial } from "@/tools/rsa-keypair/lib/keys";
 
 export default function KeypairTool() {
@@ -51,31 +52,31 @@ export default function KeypairTool() {
     onEnter: () => void run(),
     onCopy: () => {
       if (!result?.publicPem) return;
-      void navigator.clipboard.writeText(result.publicPem).then(() => toast.success("Public key copied"));
+      void navigator.clipboard.writeText(result.publicPem);
     },
     onEscape: clearSecrets,
   });
 
   return (
-    <ToolShell
-      runsLocally
-      busy={busy}
-      layout="split"
-      tabs={<ToolTabs label="Mode" value={tab} onChange={setTab} options={[{ value: "generate", label: "Generate" }, { value: "pem", label: "From PEM" }, { value: "jwk", label: "From JWK" }]} />}
-      actions={
-        <>
-          <InkButton onClick={clearSecrets}>Clear</InkButton>
-          <InkButton disabled={!result} icon={<KeyRound size={15} />} onClick={() => result && void navigator.clipboard.writeText(result.publicPem).then(() => toast.success("Public key copied"))}>Copy public</InkButton>
-        </>
-      }
-      status={
-        <>
-          <span className={error ? "dot dot-warn" : "dot"} />
-          <span>{error || (result ? result.alg : "The private key stays in this browser")}</span>
-        </>
-      }
-      input={
-        <Panel title="Key">
+    <ToolCard>
+      <ToolToolbar
+        label="Mode"
+        options={[
+          { value: "generate" as const, label: "Generate" },
+          { value: "pem" as const, label: "From PEM" },
+          { value: "jwk" as const, label: "From JWK" },
+        ]}
+        value={tab}
+        onChange={setTab}
+        actions={
+          <>
+            <ActionButton type="button" variant="outline" onClick={clearSecrets}>Clear</ActionButton>
+            <CopyButton value={result?.publicPem ?? ""} label="Copy public key" toastMessage="Public key copied" />
+          </>
+        }
+      />
+      <ToolPanes ratio="40/60">
+        <Pane label="Key">
           <Notice tone="neutral" icon={<ShieldCheck size={15} strokeWidth={1.75} />} title="Not sent, logged, or stored." body="Keys are generated and converted in this browser. The private key never leaves the page." />
           <FieldRow label="Algorithm" htmlFor="alg">
             <Select id="alg" value={alg} onChange={(event) => { if (isKeyAlgorithm(event.target.value)) setAlg(event.target.value); }}>
@@ -95,11 +96,11 @@ export default function KeypairTool() {
               <TextArea id="jwk" value={jwk} className="min-h-40 font-mono" onChange={(event) => setJwk(event.target.value)} />
             </FieldRow>
           ) : null}
-          <ActionButton disabled={busy || (tab === "pem" && !pem.trim()) || (tab === "jwk" && !jwk.trim())} onClick={() => void run()}>{busy ? "Working…" : tab === "generate" ? "Generate" : "Convert"}</ActionButton>
-        </Panel>
-      }
-      output={
-        <Panel title="Material">
+          <ActionButton type="button" className="btn btn-ink" disabled={busy || (tab === "pem" && !pem.trim()) || (tab === "jwk" && !jwk.trim())} onClick={() => void run()}>
+            {busy ? "Working…" : tab === "generate" ? "Generate" : "Convert"}
+          </ActionButton>
+        </Pane>
+        <Pane label="Material">
           {result ? (
             <>
               <CodeOutput code={result.publicPem} filename="public.pem" label="Public PEM" />
@@ -110,8 +111,9 @@ export default function KeypairTool() {
           ) : (
             <EmptyState art={<KeyRound size={22} />} title={error || "PEM and JWK show up here"} hint="RSA, EC, or Ed25519. The JWKS contains only the public key." />
           )}
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={error || (result ? result.alg : "The private key stays in this browser")} tone={error ? "warn" : result ? "pass" : "info"} trailing="⌘↵ generate · esc clear" />
+    </ToolCard>
   );
 }

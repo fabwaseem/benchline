@@ -2,14 +2,15 @@
 
 import { useState } from "react";
 import { Lock, ShieldCheck } from "lucide-react";
-import { toast } from "sonner";
-import { ActionButton, OptionRow, Slider, TextInput } from "@/components/kit/controls";
+import { ActionButton, Slider, TextInput } from "@/components/kit/controls";
 import { CodeOutput } from "@/components/kit/code-output";
+import { CopyButton } from "@/components/kit/copy-button";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { hashLimits, hashPassword, type HashAlgorithm, type HashResult } from "@/tools/htpasswd-bcrypt/lib/hash";
 
 export default function HtpasswdTool() {
@@ -55,31 +56,30 @@ export default function HtpasswdTool() {
     onEnter: () => void run(),
     onCopy: () => {
       if (!result) return;
-      void navigator.clipboard.writeText(result.htpasswd).then(() => toast.success("Copied"));
+      void navigator.clipboard.writeText(result.htpasswd);
     },
     onEscape: clearSecrets,
   });
 
+  const note = error || (result?.verified === true ? "Match" : result?.verified === false ? "Does not match" : result ? result.algorithm : "Password stays in this browser");
+  const tone = error || result?.verified === false ? "fail" : result ? "pass" : "info";
+
   return (
-    <ToolShell
-      runsLocally
-      busy={busy}
-      layout="split"
-      tabs={<ToolTabs label="Mode" value={tab} onChange={setTab} options={[{ value: "hash", label: "Hash" }, { value: "verify", label: "Verify" }]} />}
-      actions={
-        <>
-          <InkButton onClick={clearSecrets}>Clear</InkButton>
-          <InkButton disabled={!result} icon={<Lock size={15} />} onClick={() => result && void navigator.clipboard.writeText(result.htpasswd).then(() => toast.success("Copied"))}>Copy</InkButton>
-        </>
-      }
-      status={
-        <>
-          <span className={error ? "dot dot-warn" : "dot"} />
-          <span>{error || (result?.verified === true ? "Match" : result?.verified === false ? "Does not match" : result ? result.algorithm : "Password stays in this browser")}</span>
-        </>
-      }
-      input={
-        <Panel title="Password">
+    <ToolCard>
+      <ToolToolbar
+        label="Mode"
+        options={[{ value: "hash" as const, label: "Hash" }, { value: "verify" as const, label: "Verify" }]}
+        value={tab}
+        onChange={setTab}
+        actions={
+          <>
+            <ActionButton type="button" variant="outline" onClick={clearSecrets}>Clear</ActionButton>
+            <CopyButton value={result?.htpasswd ?? ""} label="Copy htpasswd" />
+          </>
+        }
+      />
+      <ToolPanes>
+        <Pane label="Password">
           <Notice tone="neutral" icon={<ShieldCheck size={15} strokeWidth={1.75} />} title="Not sent, logged, or stored." body="Hashing runs in this browser. The password never leaves the page." />
           <FieldRow label="Password" htmlFor="pw" error={error || undefined}>
             <TextInput id="pw" type="password" autoComplete="off" value={password} onChange={(event) => setPassword(event.target.value)} />
@@ -102,13 +102,11 @@ export default function HtpasswdTool() {
               <TextInput id="hash" value={hash} className="font-mono" onChange={(event) => setHash(event.target.value)} />
             </FieldRow>
           ) : null}
-          <OptionRow label={busy ? "Working…" : tab === "verify" ? "Verify" : "Hash"}>
-            <ActionButton disabled={!password || busy || (tab === "verify" && !hash.trim())} onClick={() => void run()}>{tab === "verify" ? "Verify" : "Hash"}</ActionButton>
-          </OptionRow>
-        </Panel>
-      }
-      output={
-        <Panel title="Hash">
+          <ActionButton type="button" className="btn btn-ink" disabled={!password || busy || (tab === "verify" && !hash.trim())} onClick={() => void run()}>
+            {busy ? "Working…" : tab === "verify" ? "Verify" : "Hash"}
+          </ActionButton>
+        </Pane>
+        <Pane label="Hash">
           {result ? (
             <>
               {result.verified !== null ? <Notice tone={result.verified ? "ok" : "bad"} title={result.verified ? "The password matches." : "The password does not match."} /> : null}
@@ -118,8 +116,9 @@ export default function HtpasswdTool() {
           ) : (
             <EmptyState art={<Lock size={22} />} title={error || "The hash shows up here"} hint="bcrypt or argon2id, plus an htpasswd line when you set a username." />
           )}
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={note} tone={tone} trailing="⌘↵ hash · esc clear" />
+    </ToolCard>
   );
 }
