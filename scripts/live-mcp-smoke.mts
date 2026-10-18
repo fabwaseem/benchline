@@ -132,6 +132,13 @@ async function main() {
     validate_sitemap: { url: "https://tools.fabwaseem.com/sitemap.xml", probe: false },
     check_http_headers: { url: "https://example.com/" },
     check_ssl: { host: "example.com" },
+    generate_totp: { secret: "JBSWY3DPEHPK3PXP", at: 1000000000000 },
+    query_jsonpath: { json: '{"store":{"book":[{"title":"A"}]}}', query: "$.store.book[*].title" },
+    calculate_programmer: { expression: "0xFF & 0x0F | (1 << 4)" },
+    aes_crypt: { mode: "encrypt", passphrase: "test-passphrase", text: "hello" },
+    analyze_har: {
+      har: '{"log":{"entries":[{"startedDateTime":"2026-10-18T10:00:00.000Z","time":100,"request":{"method":"GET","url":"https://example.com/"},"response":{"status":200,"statusText":"OK","content":{"size":10,"mimeType":"text/html"}},"timings":{"blocked":1,"dns":2,"connect":3,"send":4,"wait":80,"receive":10}}]}}',
+    },
   };
 
   const client = new Client({ name: "benchline-live-smoke", version: "1.0.0" });
