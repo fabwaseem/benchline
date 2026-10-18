@@ -80,7 +80,7 @@ describe("format_json adapters", () => {
   it("keeps the digits through the HTTP route", async () => {
     resetRateLimit();
     const response = await POST(
-      new Request("https://tools.fabwaseem.com/api/v1/tools/json-formatter", {
+      new Request("https://benchline.fabwaseem.com/api/v1/tools/json-formatter", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ json: wide }),

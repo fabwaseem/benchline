@@ -54,7 +54,7 @@ type DispatchInit = {
 
 type DispatchResult = { status: number; headers: Headers; body: Uint8Array };
 
-const USER_AGENT = "Benchline/1.0 (+https://tools.fabwaseem.com)";
+const USER_AGENT = "Benchline/1.0 (+https://benchline.fabwaseem.com)";
 
 async function defaultLookup(hostname: string): Promise<AddressRecord[]> {
   const records = await lookup(hostname, { all: true, verbatim: true });

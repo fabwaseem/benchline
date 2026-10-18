@@ -52,7 +52,7 @@ async function queryType(name: string, type: RecordType, resolver: ResolverId): 
     tooLargeMessage: "Response is larger than 800 KB.",
     headers: {
       accept: "application/dns-json",
-      "user-agent": "Benchline/1.0 (+https://tools.fabwaseem.com)",
+      "user-agent": "Benchline/1.0 (+https://benchline.fabwaseem.com)",
     },
   });
   if (response.status >= 400) throw new PublicUrlError(`The resolver returned ${response.status}.`);

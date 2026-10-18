@@ -44,8 +44,8 @@ function LlmsMini() {
   const text = useMemo(
     () =>
       renderLlmsTxt(site, "Exact tools for people who ship the web.", [
-        { url: "https://tools.fabwaseem.com/t/jwt-decoder", title: "JWT decoder", description: "Read and verify a token.", excerpt: "" },
-        { url: "https://tools.fabwaseem.com/t/llms-txt-generator", title: "llms.txt generator", description: "Write the index.", excerpt: "" },
+        { url: "https://benchline.fabwaseem.com/t/jwt-decoder", title: "JWT decoder", description: "Read and verify a token.", excerpt: "" },
+        { url: "https://benchline.fabwaseem.com/t/llms-txt-generator", title: "llms.txt generator", description: "Write the index.", excerpt: "" },
       ]),
     [site],
   );

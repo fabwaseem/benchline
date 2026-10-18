@@ -19,7 +19,7 @@ Tool pages use these pieces. A tool renders a card. The page around it (`src/app
 | `StatusStrip` | Full-width pass / warn / fail pills under the panes. |
 | `ResultsTable` | One row per check: badge, name, explanation. Filters are All, Fail, Warn, and Pass. |
 | `ScoreCard` | Score ring, verdict, and short stats. Pair it with `ResultsTable` for checkers. |
-| `AgentSection` | Client tabs and a real `tools/call` for `https://tools.fabwaseem.com/mcp`. |
+| `AgentSection` | Client tabs and a real `tools/call` for `https://benchline.fabwaseem.com/mcp`. |
 | `RelatedTools` | Up to four directory `ToolCard`s. |
 | `HowItWorks` | Short steps and FAQ when the meta has them. |
 

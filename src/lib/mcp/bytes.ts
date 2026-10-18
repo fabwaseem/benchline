@@ -83,7 +83,7 @@ async function bytesFromUrl(input: string, label: string, filename?: string, mim
     tooLargeMessage: `${label} is larger than 10 MB.`,
     headers: {
       accept: "*/*",
-      "user-agent": "Benchline/1.0 (+https://tools.fabwaseem.com)",
+      "user-agent": "Benchline/1.0 (+https://benchline.fabwaseem.com)",
     },
   });
   if (response.status >= 400) throw new Error(`${label} returned ${response.status}.`);

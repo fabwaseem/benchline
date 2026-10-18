@@ -42,7 +42,7 @@ export async function fetchExchange(
     tooLargeMessage: "Response is larger than 800 KB.",
     headers: {
       accept: init?.accept ?? "*/*",
-      "user-agent": "Benchline/1.0 (+https://tools.fabwaseem.com)",
+      "user-agent": "Benchline/1.0 (+https://benchline.fabwaseem.com)",
     },
   });
   return {

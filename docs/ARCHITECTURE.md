@@ -43,7 +43,7 @@ Limits and checks:
 - `Origin`, when present, must match the request host, localhost, or `SITE_URL`.
 - Tool errors are caught and returned as `isError: true`.
 
-`SITE_URL` is `NEXT_PUBLIC_SITE_URL` or `https://tools.fabwaseem.com`.
+`SITE_URL` is `NEXT_PUBLIC_SITE_URL` or `https://benchline.fabwaseem.com`.
 
 The guide for people is `src/app/mcp/guide/page.tsx` at `/mcp/guide`. The tool list for people is `/ai`.
 

@@ -32,7 +32,7 @@ export async function fetchPublic(
     tooLargeMessage: "Response is larger than 800 KB.",
     headers: {
       accept: init?.accept ?? "text/html,application/xhtml+xml,text/plain,application/xml;q=0.9,*/*;q=0.5",
-      "user-agent": "Benchline/1.0 (+https://tools.fabwaseem.com)",
+      "user-agent": "Benchline/1.0 (+https://benchline.fabwaseem.com)",
     },
   });
   return {

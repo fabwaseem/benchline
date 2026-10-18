@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for improving Benchline. The live site is [https://tools.fabwaseem.com](https://tools.fabwaseem.com). Issues and pull requests go to [github.com/fabwaseem/benchline](https://github.com/fabwaseem/benchline).
+Thanks for improving Benchline. The live site is [https://benchline.fabwaseem.com](https://benchline.fabwaseem.com). Issues and pull requests go to [github.com/fabwaseem/benchline](https://github.com/fabwaseem/benchline).
 
 ## Development setup
 

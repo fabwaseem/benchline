@@ -14,7 +14,7 @@ const blocked = ["http://127.0.0.1", "http://coolify:8080"];
 async function postTool(slug: string, body: unknown) {
   resetRateLimit();
   return POST(
-    new Request(`https://tools.fabwaseem.com/api/v1/tools/${slug}`, {
+    new Request(`https://benchline.fabwaseem.com/api/v1/tools/${slug}`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(body),

@@ -27,7 +27,7 @@ const emptyVcard = { name: "", phone: "", email: "", org: "", title: "", url: ""
 export default function QrTool() {
   const [type, setType] = useState<QrType>("url");
   const [text, setText] = useState("Hello from Benchline");
-  const [url, setUrl] = useState("https://tools.fabwaseem.com");
+  const [url, setUrl] = useState("https://benchline.fabwaseem.com");
   const [ssid, setSsid] = useState("");
   const [password, setPassword] = useState("");
   const [security, setSecurity] = useState<WifiSecurity>("WPA");
