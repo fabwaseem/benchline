@@ -76,6 +76,11 @@ const views: Record<string, ComponentType> = {
   "curl-converter": dynamic(() => import("@/tools/curl-converter/tool")),
   "graphql-client": dynamic(() => import("@/tools/graphql-client/tool")),
   "websocket-tester": dynamic(() => import("@/tools/websocket-tester/tool")),
+  "resume-builder": dynamic(() => import("@/tools/resume-builder/tool")),
+  "invoice-generator": dynamic(() => import("@/tools/invoice-generator/tool")),
+  "pdf-signature": dynamic(() => import("@/tools/pdf-signature/tool")),
+  "social-image-resizer": dynamic(() => import("@/tools/social-image-resizer/tool")),
+  "audio-trimmer": dynamic(() => import("@/tools/audio-trimmer/tool")),
 };
 
 export function ToolHost({ slug }: { slug: string }) {

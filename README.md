@@ -44,7 +44,7 @@ The directory is the home page. The JSON formatter is one tool page (`/t/json-fo
 
 <!-- tools:start -->
 
-71 tools, in `toolOrder`. Run `pnpm gen:readme-tools` after adding one.
+76 tools, in `toolOrder`. Run `pnpm gen:readme-tools` after adding one.
 
 ### Developer
 
@@ -123,10 +123,13 @@ Markup, crawlers, and the files an AI search engine can cite.
 
 - [OG image generator](https://tools.fabwaseem.com/t/og-image-generator) — Pick a template, watch the card update, then download the PNG or copy the Next.js file.
 - [Meta tags inspector](https://tools.fabwaseem.com/t/meta-tags-inspector) — Read title, description, canonical, robots, Open Graph, Twitter, and JSON-LD types from one public URL.
+- [Social Image Resizer](https://tools.fabwaseem.com/t/social-image-resizer) — Fit any photo to the exact dimensions for Instagram, YouTube, X, LinkedIn, and Facebook — cropped to the subject you pick.
 
 ### Image & Media
 
 Convert, compress, and resize pictures in the browser. The file stays on the device.
+
+**Image.** Convert, compress, and resize pictures in the browser. The file stays on the device.
 
 - [Image format converter](https://tools.fabwaseem.com/t/image-convert) — Convert HEIC, WebP, PNG, JPG, and AVIF in the browser. Nothing is uploaded.
 - [Image compressor](https://tools.fabwaseem.com/t/image-compress) — Shrink JPEG, PNG, WebP, and AVIF in the browser, with the real before and after size.
@@ -137,6 +140,10 @@ Convert, compress, and resize pictures in the browser. The file stays on the dev
 - [Image cropper](https://tools.fabwaseem.com/t/image-crop) — Crop with a free box or an aspect preset, including a circle.
 - [Image to text](https://tools.fabwaseem.com/t/ocr-image-to-text) — Read the words in a picture. The OCR model downloads once and runs in this browser.
 - [Background remover](https://tools.fabwaseem.com/t/background-remover) — Cut out a portrait in the browser, or clear a solid backdrop without a download.
+
+**Audio.** Trim and shape sound in the browser. The file stays on the device.
+
+- [Audio Trimmer](https://tools.fabwaseem.com/t/audio-trimmer) — Cut a section out of an audio file. See the waveform, drag the trim region, add fades, and export WAV.
 
 ### PDF & Documents
 
@@ -150,6 +157,8 @@ Merge, split, compress, and build PDFs in the browser. The files stay on this de
 - [Rotate PDF](https://tools.fabwaseem.com/t/pdf-rotate-organize) — Reorder, rotate, or drop pages, then download the PDF.
 - [PDF to Image](https://tools.fabwaseem.com/t/pdf-to-image) — Render PDF pages to PNG or JPEG, then download one image or a ZIP.
 - [Protect PDF](https://tools.fabwaseem.com/t/pdf-protect-unlock) — Add an AES password, or unlock a PDF when you already know the password.
+- [Resume Builder](https://tools.fabwaseem.com/t/resume-builder) — Build a polished resume in the browser: profile, experience, education, and skills, exported as a clean PDF.
+- [PDF Signature](https://tools.fabwaseem.com/t/pdf-signature) — Sign a PDF in the browser. Draw or type your signature, place it on any page, and download the signed file.
 
 ### Security & Crypto
 
@@ -208,6 +217,7 @@ Loans, percentages, units, and the timestamps a schedule is counted in.
 
 - [Loan EMI calculator](https://tools.fabwaseem.com/t/loan-emi-calculator) — A monthly installment and the full amortization table, rounded to the cent.
 - [Percentage calculator](https://tools.fabwaseem.com/t/percentage-calculator) — Percent of, percent change, reverse percent, and margin, with the formula shown.
+- [Invoice Generator](https://tools.fabwaseem.com/t/invoice-generator) — Build invoices and quotes in the browser. Add line items, tax and discounts, then download a clean PDF.
 
 **Units.** Convert length, mass, temperature, and data sizes.
 
@@ -348,7 +358,7 @@ The full input list is [docs/MCP.md](docs/MCP.md).
 
 <!-- privacy:start -->
 
-60 tools run entirely in the browser. Text, files, and results stay on the device.
+65 tools run entirely in the browser. Text, files, and results stay on the device.
 
 11 tools can fetch a public URL through this site. The page posts the URL or hostname you submit, the route fetches that address and does not write it anywhere, and private addresses are refused. Those routes allow 8 requests from one address every 10 minutes.
 

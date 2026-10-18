@@ -163,6 +163,14 @@ export const categories = [
     parent: "media",
   },
   {
+    slug: "audio",
+    name: "Audio",
+    description: "Trim and shape sound in the browser. The file stays on the device.",
+    icon: "AudioWaveform",
+    hue: 200,
+    parent: "media",
+  },
+  {
     slug: "pdf",
     name: "PDF",
     description: "Merge, split, compress, and build PDFs in the browser. The files stay on this device.",
@@ -388,4 +396,9 @@ export const toolOrder = [
   "curl-converter",
   "graphql-client",
   "websocket-tester",
+  "resume-builder",
+  "invoice-generator",
+  "pdf-signature",
+  "social-image-resizer",
+  "audio-trimmer",
 ] as const;

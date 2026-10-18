@@ -7,7 +7,6 @@ import { CopyButton } from "@/components/kit/copy-button";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
-import { Segmented } from "@/components/kit/segmented";
 import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
 import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import {

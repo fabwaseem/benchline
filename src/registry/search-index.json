@@ -1446,5 +1446,110 @@
     "status": "new",
     "icon": "Network",
     "runsLocally": false
+  },
+  {
+    "slug": "resume-builder",
+    "name": "Resume Builder",
+    "tagline": "Build a polished resume in the browser: profile, experience, education, and skills, exported as a clean PDF.",
+    "description": "Free resume builder. Fill in your profile, experience, education, and skills, preview three layouts, and download a PDF resume. Everything runs in this browser; nothing is uploaded.",
+    "category": "pdf",
+    "tags": [
+      "resume",
+      "cv"
+    ],
+    "keywords": [
+      "resume builder",
+      "cv maker",
+      "free resume pdf",
+      "resume template"
+    ],
+    "status": "new",
+    "icon": "FileUser",
+    "runsLocally": true
+  },
+  {
+    "slug": "invoice-generator",
+    "name": "Invoice Generator",
+    "tagline": "Build invoices and quotes in the browser. Add line items, tax and discounts, then download a clean PDF.",
+    "description": "Free invoice generator. Enter your company and client details, add line items, set tax and discounts in any currency, then download a professional PDF invoice or quote. Everything runs locally in the browser — nothing is uploaded.",
+    "category": "finance",
+    "tags": [
+      "invoice",
+      "billing"
+    ],
+    "keywords": [
+      "invoice generator",
+      "free invoice maker",
+      "quote generator",
+      "invoice pdf",
+      "billing tool"
+    ],
+    "status": "new",
+    "icon": "Receipt",
+    "runsLocally": true
+  },
+  {
+    "slug": "pdf-signature",
+    "name": "PDF Signature",
+    "tagline": "Sign a PDF in the browser. Draw or type your signature, place it on any page, and download the signed file.",
+    "description": "Free PDF signature tool. Draw your signature with a mouse or finger, or type your name in a script style, then drag-free position it on any page with sliders. The signature is drawn into the PDF in this browser. Nothing is uploaded.",
+    "category": "pdf",
+    "tags": [
+      "pdf",
+      "signature"
+    ],
+    "keywords": [
+      "pdf signature",
+      "sign pdf",
+      "electronic signature",
+      "draw signature"
+    ],
+    "status": "new",
+    "icon": "PenLine",
+    "runsLocally": true
+  },
+  {
+    "slug": "social-image-resizer",
+    "name": "Social Image Resizer",
+    "tagline": "Fit any photo to the exact dimensions for Instagram, YouTube, X, LinkedIn, and Facebook — cropped to the subject you pick.",
+    "description": "Free social image resizer. Upload a photo, pick a platform preset such as Instagram post 1080×1080 or YouTube thumbnail 1280×720, click to set the crop focal point, and export an exact-size PNG or JPEG. Everything runs in the browser; the image is never uploaded.",
+    "category": "social",
+    "tags": [
+      "image",
+      "social"
+    ],
+    "keywords": [
+      "social image resizer",
+      "instagram image size",
+      "youtube thumbnail size",
+      "resize image for instagram",
+      "facebook post image size",
+      "x header size"
+    ],
+    "status": "new",
+    "icon": "Share2",
+    "runsLocally": true
+  },
+  {
+    "slug": "audio-trimmer",
+    "name": "Audio Trimmer",
+    "tagline": "Cut a section out of an audio file. See the waveform, drag the trim region, add fades, and export WAV.",
+    "description": "Free audio trimmer that runs entirely in your browser. Upload audio, see the waveform, drag-select the part to keep, add fade in and fade out, and download a 16-bit WAV. Your audio never leaves this device.",
+    "category": "audio",
+    "tags": [
+      "audio",
+      "trim"
+    ],
+    "keywords": [
+      "audio trimmer",
+      "trim audio",
+      "cut audio",
+      "audio cutter",
+      "mp3 trimmer",
+      "wav trimmer"
+    ],
+    "status": "new",
+    "icon": "AudioWaveform",
+    "runsLocally": true
   }
 ]

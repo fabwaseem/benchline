@@ -48,6 +48,8 @@ vi.mock("@/tools/ssl-checker/lib/socket", () => ({
 
 const token = "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiJhZGEiLCJleHAiOjIwMDAwMDAwMDB9.e30";
 const png = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
+const wav =
+  "UklGRsQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YaAAAAAAADsN5hifIV4mlCY7ItUZYQ46Ae7zD+gF3+HZP9ky3UPlffCN/eUK9RZOINUl4yZYI58boRCtA0r2DOpm4H7aBNkn3IfjRe4b+4UI7hTdHiYlCydRJE0d0RIcBq/4Huzn4UDb8NhA2+fhHuyv+BwG0RJNHVEkCycmJd0e7hSFCBv7Re6H4yfcBNl+2mbgDOpK9q0DoRCfG1gj4ybVJU4g";
 const page = `<!doctype html><html lang="en"><head><title>Example page title</title>
 <meta name="description" content="A public example page used by the Benchline checker for agents.">
 <link rel="canonical" href="https://1.1.1.1/">
@@ -237,6 +239,41 @@ describe("MCP endpoint", () => {
       convert_curl: { command: "curl https://example.com", target: "fetch" },
       execute_graphql: { endpoint: "https://1.1.1.1/", query: "{ hello }" },
       validate_websocket_url: { url: "wss://echo.example.com/chat" },
+      generate_resume: {
+        resume: {
+          profile: { name: "Ada Lovelace", title: "Engineer", email: "ada@example.com", phone: "", location: "", website: "", summary: "" },
+          experience: [],
+          education: [],
+          skills: ["Analytical engines"],
+        },
+        template: "clean",
+      },
+      generate_invoice: {
+        invoice: {
+          kind: "invoice",
+          number: "INV-001",
+          issueDate: "2026-10-18",
+          dueDate: "2026-11-18",
+          currency: "USD",
+          from: { name: "Acme Co", address: "", email: "" },
+          to: { name: "Client Co", address: "", email: "" },
+          items: [{ description: "Work", quantity: 1, rate: 100 }],
+          taxRate: 0,
+          discount: { type: "percent", value: 0 },
+          notes: "",
+        },
+      },
+      sign_pdf: {
+        file: { name: "a.pdf", data: pdf },
+        signature: { data: png, filename: "sig.png", mimeType: "image/png" },
+        placements: [{ page: 1, x: 0.1, y: 0.1, width: 0.3 }],
+      },
+      resize_social_image: { file: image, preset: "instagram-post" },
+      trim_audio: {
+        file: { data: wav, filename: "tone.wav", mimeType: "audio/wav" },
+        startSec: 0,
+        endSec: 0.005,
+      },
     };
 
     const missing = mcpTools.map((tool) => tool.name).filter((name) => !(name in samples));
