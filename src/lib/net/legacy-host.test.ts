@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { describe, expect, it } from "vitest";
-import { middleware } from "@/middleware";
 import { legacyHostRedirect } from "@/lib/net/legacy-host";
+import { proxy } from "@/proxy";
 
 describe("legacyHostRedirect", () => {
   it("redirects the legacy host and keeps the path and query", () => {
@@ -22,9 +22,9 @@ describe("legacyHostRedirect", () => {
   });
 });
 
-describe("middleware", () => {
-  it("returns a 308 for the legacy host and continues for others", () => {
-    const legacy = middleware(
+describe("proxy", () => {
+  it("returns a 308 for the legacy host and keeps the method-preserving status", () => {
+    const legacy = proxy(
       new NextRequest("https://tools.fabwaseem.com/mcp?x=1", {
         method: "POST",
         headers: { host: "Tools.Fabwaseem.com:443" },
@@ -32,14 +32,26 @@ describe("middleware", () => {
     );
     expect(legacy.status).toBe(308);
     expect(legacy.headers.get("location")).toBe("https://benchline.fabwaseem.com/mcp?x=1");
+  });
 
-    const current = middleware(
+  it("keeps the MCP guide rewrite for the new host", () => {
+    const guide = proxy(
       new NextRequest("https://benchline.fabwaseem.com/mcp", {
-        method: "POST",
-        headers: { host: "benchline.fabwaseem.com" },
+        method: "GET",
+        headers: { host: "benchline.fabwaseem.com", accept: "text/html" },
       }),
     );
-    expect(current.status).toBe(200);
-    expect(current.headers.get("location")).toBeNull();
+    expect(guide.status).toBe(200);
+    expect(guide.headers.get("x-middleware-rewrite") ?? guide.headers.get("location")).toContain("/mcp/guide");
+
+    const post = proxy(
+      new NextRequest("https://benchline.fabwaseem.com/mcp", {
+        method: "POST",
+        headers: { host: "benchline.fabwaseem.com", accept: "text/html" },
+      }),
+    );
+    expect(post.status).toBe(200);
+    expect(post.headers.get("location")).toBeNull();
+    expect(post.headers.get("x-middleware-rewrite")).toBeNull();
   });
 });
