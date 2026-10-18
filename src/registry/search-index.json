@@ -1227,6 +1227,119 @@
     "runsLocally": false
   },
   {
+    "slug": "totp-generator",
+    "name": "TOTP authenticator",
+    "tagline": "Live 2FA codes for your accounts, with otpauth:// import and QR export.",
+    "description": "Free TOTP and HOTP authenticator. Add accounts with a base32 secret, watch live codes tick down with a countdown, copy with one click, and import or export otpauth:// provisioning URIs. Everything runs in the browser; secrets never leave the page.",
+    "category": "auth",
+    "tags": [
+      "totp",
+      "2fa",
+      "authenticator",
+      "otp"
+    ],
+    "keywords": [
+      "totp generator",
+      "2fa authenticator",
+      "hotp code",
+      "otpauth uri",
+      "authenticator app"
+    ],
+    "status": "new",
+    "icon": "Clock",
+    "runsLocally": true
+  },
+  {
+    "slug": "jsonpath-tester",
+    "name": "JSONPath tester",
+    "tagline": "Query JSON with JSONPath Plus and inspect every match.",
+    "description": "Free JSONPath tester. Paste a JSON document, write a JSONPath Plus query, and see each match with its path and a count. Syntax mistakes are reported with the position, and filters, slices, unions, and recursive descent all work.",
+    "category": "json",
+    "tags": [
+      "jsonpath",
+      "json",
+      "query"
+    ],
+    "keywords": [
+      "jsonpath tester",
+      "jsonpath online",
+      "json query",
+      "jsonpath plus",
+      "test jsonpath expression"
+    ],
+    "status": "new",
+    "icon": "FileJson",
+    "runsLocally": true
+  },
+  {
+    "slug": "programmer-calculator",
+    "name": "Programmer calculator",
+    "tagline": "Base conversions, bitwise ops, and a clickable bit grid.",
+    "description": "Free programmer calculator. Convert between binary, octal, decimal, and hexadecimal with live sync, evaluate expressions with C-like precedence, run bitwise AND, OR, XOR, NOT and shifts, toggle individual bits, and read signed and unsigned 8/16/32/64-bit interpretations plus the ASCII character.",
+    "category": "encoding",
+    "tags": [
+      "calculator",
+      "binary",
+      "hex",
+      "bitwise"
+    ],
+    "keywords": [
+      "programmer calculator",
+      "hex to decimal",
+      "binary calculator",
+      "bitwise calculator",
+      "base converter"
+    ],
+    "status": "new",
+    "icon": "Calculator",
+    "runsLocally": true
+  },
+  {
+    "slug": "aes-crypto",
+    "name": "AES encryption",
+    "tagline": "AES-GCM encrypt and decrypt in the browser, nothing uploaded.",
+    "description": "Free AES encryption playground. Encrypt text with AES-256-GCM: the key is derived from your passphrase with PBKDF2-SHA256, and a fresh random salt and IV are generated every time. Decrypt a bundle back to plaintext. Everything runs locally with WebCrypto.",
+    "category": "crypto",
+    "tags": [
+      "aes",
+      "encryption",
+      "crypto"
+    ],
+    "keywords": [
+      "aes encryption",
+      "aes gcm online",
+      "encrypt text",
+      "aes decrypt",
+      "pbkdf2"
+    ],
+    "status": "new",
+    "icon": "Lock",
+    "runsLocally": true
+  },
+  {
+    "slug": "har-analyzer",
+    "name": "HAR analyzer",
+    "tagline": "Drop a HAR capture, see where the time went.",
+    "description": "Free HAR file analyzer. Drop a .har capture or paste its JSON to get a request table with method, URL, status, size, and time, plus summary stats: totals, status-code distribution, the slowest requests, the largest payloads, top hosts, and a per-request timing breakdown of blocked, DNS, connect, send, wait, and receive.",
+    "category": "http",
+    "tags": [
+      "har",
+      "network",
+      "performance",
+      "waterfall"
+    ],
+    "keywords": [
+      "har analyzer",
+      "har viewer",
+      "analyze har file",
+      "waterfall chart",
+      "http archive"
+    ],
+    "status": "new",
+    "icon": "Network",
+    "runsLocally": true
+  },
+  {
     "slug": "json-to-types",
     "name": "JSON to Types",
     "tagline": "Paste JSON, get TypeScript, Zod, Pydantic, dataclass, and Go types.",
