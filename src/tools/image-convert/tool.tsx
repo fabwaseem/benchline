@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { TextButton } from "@/components/kit/controls";
+import { ActionButton, TextButton } from "@/components/kit/controls";
 import { Images } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -11,7 +11,8 @@ import { EmptyState } from "@/components/kit/empty-state";
 import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { encoderSupports, fileToBitmap, renderToBlob } from "@/lib/client-image";
 import { downloadBlob } from "@/lib/download-blob";
 import { encoderQuality, formatBytes, IMAGE_ACCEPT, type OutputFormat } from "@/lib/image-format";
@@ -167,30 +168,24 @@ export default function ImageConvertTool() {
   const saved = jobs.reduce((sum, job) => sum + (job.after ?? 0), 0);
 
   return (
-    <ToolShell
-      runsLocally
-      busy={busy}
-      layout="split+inspector"
-      flow="band"
-      tabs={<ToolTabs label="Mode" value="convert" onChange={() => {}} options={[{ value: "convert", label: "Convert" }]} />}
-      actions={<InkButton icon={<Images size={15} />} disabled={busy || jobs.length === 0} onClick={() => void convertAll()}>{busy ? "Converting" : "Convert"}</InkButton>}
-      status={
-        <>
-          <span className={busy ? "dot" : "dot"} />
-          <span>{jobs.length === 0 ? "Waiting for images" : `${done}/${jobs.length} converted · ${LABELS[target]}`}</span>
-          <span className="ml-auto hidden min-[700px]:inline">Files stay in this browser</span>
-        </>
-      }
-      input={
-        <Panel title="Images">
+    <ToolCard>
+      <ToolToolbar
+        actions={
+          <>
+            <TextButton onClick={clear} disabled={jobs.length === 0}>Clear</TextButton>
+            <ActionButton variant="outline" disabled={done === 0} onClick={() => void saveZip()}>Download ZIP</ActionButton>
+            <ActionButton className="btn btn-ink" disabled={busy || jobs.length === 0} onClick={() => void convertAll()}>{busy ? "Converting" : "Convert"}</ActionButton>
+          </>
+        }
+      />
+      <ToolPanes ratio="40/60">
+        <Pane label="Images">
           <Notice tone="neutral" title="Nothing is uploaded." body="Conversion runs in this browser. Camera metadata, including GPS, is dropped." />
           <Segmented label="Target format" value={target} onChange={setTarget} options={convertTargets.map((format) => ({ value: format, label: LABELS[format] }))} />
           <Dropzone accept={IMAGE_ACCEPT} multiple label="Drop images, or click to choose a batch" onFiles={addFiles} />
           <p className="text-[12px] text-faint">HEIC uses the decoder on this device. If the browser cannot read it, export a JPEG from Photos first.</p>
-        </Panel>
-      }
-      output={
-        <Panel title="Converted">
+        </Pane>
+        <Pane label="Converted">
           {jobs.length === 0 ? (
             <EmptyState art={<Images size={22} />} title="No images yet" hint="Drop HEIC, JPEG, PNG, WebP, AVIF, or GIF files. Pick a target, then convert." />
           ) : (
@@ -217,20 +212,14 @@ export default function ImageConvertTool() {
               onSave={save}
             />
           )}
-        </Panel>
-      }
-      inspector={
-        <Panel title="Batch">
-          <div className="grid grid-cols-2 gap-2">
-            <ResultStat variant="well" label="Files" value={String(jobs.length)} />
-            <ResultStat variant="well" label="Output" value={done ? formatBytes(saved) : "—"} hint={LABELS[target]} />
-          </div>
-          <InkButton icon={<Images size={15} />} disabled={done === 0} onClick={() => void saveZip()}>Download ZIP</InkButton>
-          <TextButton onClick={clear} disabled={jobs.length === 0}>
-            Clear the batch
-          </TextButton>
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={jobs.length === 0 ? "Waiting for images" : `${done}/${jobs.length} converted · ${LABELS[target]}`} tone="pass" trailing="Files stay in this browser">
+        <div className="grid w-full gap-2 min-[700px]:w-auto min-[700px]:grid-cols-2">
+          <ResultStat variant="well" label="Files" value={String(jobs.length)} />
+          <ResultStat variant="well" label="Output" value={done ? formatBytes(saved) : "—"} hint={LABELS[target]} />
+        </div>
+      </StatusStrip>
+    </ToolCard>
   );
 }

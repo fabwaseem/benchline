@@ -13,7 +13,7 @@ import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
 import { TokenSegments } from "@/components/kit/token-segments";
-import { ToolShell, ToolTabs } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
 import {
   claimViews,
   decodeJwt,
@@ -130,27 +130,21 @@ export default function JwtTool() {
   }
 
   const status = statusLine({ result, alg, verify, expired, now: openedAt });
+  const stripTone = status.color.includes("bad") ? "fail" : status.color.includes("warning") ? "warn" : status.color.includes("success") ? "pass" : "info";
 
   return (
     <div onKeyDown={onWindowKey}>
-      <ToolShell
-        runsLocally
-        layout="split+inspector"
-        tabs={<ToolTabs label="Mode" value={tab} onChange={setTab} options={[{ value: "decode", label: "Decode" }, { value: "encode", label: "Encode" }]} />}
-        actions={
-          <>
-            <CopyButton value={payloadText} label="Copy payload" toastMessage="Payload copied" icon={<Copy />} className="hidden h-[30px] min-[700px]:inline-flex" />
-            <CopyButton value={payloadText} label="Copy payload" toastMessage="Payload copied" icon={<Copy />} iconOnly className="min-[700px]:hidden" />
-          </>
-        }
-        status={
-          <>
-            <span className="dot" style={{ background: status.color }} />
-            <span>{hydrated ? status.text : "Decoding…"}</span>
-            <span className="ml-auto hidden min-[700px]:inline">⌘↵ verify · ⌘⇧C copy payload · esc clear</span>
-          </>
-        }
-        input={tab === "decode" ? (
+      <ToolCard>
+        <ToolToolbar
+          label="Mode"
+          options={[{ value: "decode", label: "Decode" }, { value: "encode", label: "Encode" }]}
+          value={tab}
+          onChange={setTab}
+          actions={<CopyButton value={payloadText} label="Copy payload" toastMessage="Payload copied" icon={<Copy />} />}
+        />
+        <ToolPanes ratio="40/60">
+          <Pane label={tab === "decode" ? "Token" : "Sign"} padded={false} bodyClassName="flex flex-col gap-3">
+            {tab === "decode" ? (
           <div id="panel-decode" role="tabpanel" aria-labelledby="tab-decode">
             <FieldRow
               className="px-4 pt-4"
@@ -214,26 +208,10 @@ export default function JwtTool() {
             <ActionButton type="button" className="h-[38px] max-[699px]:h-11" onClick={() => void encode()}>Sign test token</ActionButton>
           </div>
         )}
-        output={tab === "decode" ? <DecodedPane result={result} view={view} onView={setView} claims={claims} notices={notices} none={none} payloadText={payloadText} onExample={() => updateToken(EXAMPLE_TOKEN)} /> : (
-          <div className="flex flex-1 flex-col p-4" aria-live="polite">
-            {signError ? <Notice tone="bad" role="alert" icon={<X size={15} strokeWidth={1.75} />} title="Could not sign" body={signError} /> : null}
-            {signed ? (
-              <>
-                <TokenSegments header={signed.split(".")[0] ?? ""} payload={signed.split(".")[1] ?? ""} signature={signed.split(".")[2] ?? ""} className="well p-3.5" />
-                <div className="mt-3 flex gap-2">
-                  <CopyButton value={signed} label="Copy token" toastMessage="Token copied" />
-                  <ActionButton type="button" variant="outline" onClick={() => { setToken(signed); setVerify(IDLE); setAlert(""); setTab("decode"); }}>Open in Decode</ActionButton>
-                </div>
-              </>
-            ) : signError ? null : (
-              <EmptyState title="The test token shows up here" hint="HS256, HS384, or HS512. The secret stays in this browser." />
-            )}
-          </div>
-        )}
-        inspector={tab === "decode" ? (
-          <div className="flex flex-1 flex-col gap-3.5 p-4">
+        {tab === "decode" ? (
+          <div className="flex flex-col gap-3.5 border-t border-border p-3">
             <div className="flex items-center justify-between gap-2">
-              <span className="font-mono text-[11px] font-medium tracking-[0.07em] text-faint uppercase">Verify signature</span>
+              <span className="font-mono text-[11px] font-medium tracking-[0.07em] text-faint uppercase whitespace-nowrap">Verify signature</span>
               {alg ? <Badge variant="mono">{alg}</Badge> : null}
             </div>
             <FieldRow
@@ -274,24 +252,43 @@ export default function JwtTool() {
               >
                 <ShieldCheck />
                 Verify signature
-                <span className="keycap ml-1 bg-transparent text-inherit shadow-[inset_0_0_0_1px_oklch(100%_0_0/0.25)]">⌘↵</span>
               </ActionButton>
             )}
             {!ok && token.trim() ? <p className="text-[12px] text-faint">Fix the token first.</p> : null}
             {ok ? <VerifyNotice verify={verify} alg={alg} /> : null}
-            <div className="mt-auto grid grid-cols-2 gap-2">
-              <ResultStat variant="well" label="claims" value={ok ? String(Object.keys(result.payload).length) : "0"} />
-              <ResultStat variant="well" label="token size" value={ok ? `${new TextEncoder().encode(result.token).length} B` : "0 B"} />
-            </div>
           </div>
         ) : (
-          <div className="flex flex-1 flex-col gap-3 p-4">
-            <ResultStat variant="well" label="algorithm" value={signAlg} />
-            <ResultStat variant="well" label="claims" value={String(claimCount(payloadJson))} />
+          <div className="flex flex-col gap-3 border-t border-border p-3">
             <Notice tone="neutral" icon={<ShieldCheck size={15} strokeWidth={1.75} />} title="Test secrets aren’t for production." body="Signing stays in this browser. Asymmetric private keys are not accepted here." />
           </div>
         )}
-      />
+          </Pane>
+          <Pane label={tab === "decode" ? "Claims" : "Token"}>
+            {tab === "decode" ? <DecodedPane result={result} view={view} onView={setView} claims={claims} notices={notices} none={none} payloadText={payloadText} onExample={() => updateToken(EXAMPLE_TOKEN)} /> : (
+          <div className="flex flex-1 flex-col p-4" aria-live="polite">
+            {signError ? <Notice tone="bad" role="alert" icon={<X size={15} strokeWidth={1.75} />} title="Could not sign" body={signError} /> : null}
+            {signed ? (
+              <>
+                <TokenSegments header={signed.split(".")[0] ?? ""} payload={signed.split(".")[1] ?? ""} signature={signed.split(".")[2] ?? ""} className="well p-3.5" />
+                <div className="mt-3 flex gap-2">
+                  <CopyButton value={signed} label="Copy token" toastMessage="Token copied" />
+                  <ActionButton type="button" variant="outline" onClick={() => { setToken(signed); setVerify(IDLE); setAlert(""); setTab("decode"); }}>Open in Decode</ActionButton>
+                </div>
+              </>
+            ) : signError ? null : (
+              <EmptyState title="The test token shows up here" hint="HS256, HS384, or HS512. The secret stays in this browser." />
+            )}
+          </div>
+            )}
+          </Pane>
+        </ToolPanes>
+        <StatusStrip note={hydrated ? status.text : "Decoding…"} tone={stripTone} trailing="⌘↵ verify · ⌘⇧C copy payload · esc clear">
+          <div className="grid w-full gap-2 min-[700px]:w-auto min-[700px]:grid-cols-2">
+            <ResultStat variant="well" label="Claims" value={tab === "encode" ? String(claimCount(payloadJson)) : ok ? String(Object.keys(result.payload).length) : "0"} />
+            <ResultStat variant="well" label={tab === "encode" ? "Algorithm" : "Token size"} value={tab === "encode" ? signAlg : ok ? `${new TextEncoder().encode(result.token).length} B` : "0 B"} />
+          </div>
+        </StatusStrip>
+      </ToolCard>
     </div>
   );
 }

@@ -1,18 +1,17 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ChipButton, Slider, TextButton, TextInput, TextArea } from "@/components/kit/controls";
-import { Coins, Copy } from "lucide-react";
+import { ActionButton, ChipButton, Slider, TextButton, TextInput, TextArea } from "@/components/kit/controls";
+import { Coins } from "lucide-react";
 import { toast } from "sonner";
-import { CopyButton } from "@/components/kit/copy-button";
 import { Dropzone } from "@/components/kit/dropzone";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
 import { ResultTable } from "@/components/kit/result-table";
-import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { costMarkdown, money, priceSelected } from "@/tools/ai-token-counter/lib/cost";
 import { MODELS, PRICES_UPDATED } from "@/tools/ai-token-counter/lib/prices";
 import type { EncodingName } from "@/tools/ai-token-counter/lib/tokenize";
@@ -68,22 +67,16 @@ export default function TokenTool() {
     : "Waiting for a prompt";
 
   return (
-    <ToolShell
-      runsLocally
-      layout="split+inspector"
-      flow="band"
-      columns="min-[1280px]:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_300px]"
-      tabs={<ToolTabs label="Mode" value="count" onChange={() => {}} options={[{ value: "count", label: "Count" }]} />}
-      actions={<InkButton disabled={!text.trim()} icon={<Copy size={15} />} onClick={() => void navigator.clipboard.writeText(markdown).then(() => toast.success("Table copied"))}>Copy as Markdown</InkButton>}
-      status={
-        <>
-          <span className="dot" />
-          <span>{status}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘⇧C copy table · esc clear</span>
-        </>
-      }
-      input={
-        <Panel title="Prompt">
+    <ToolCard>
+      <ToolToolbar
+        label="Tokenizer"
+        options={[{ value: "o200k", label: "o200k_base" }, { value: "cl100k", label: "cl100k_base" }]}
+        value={encoding}
+        onChange={setEncoding}
+        actions={<ActionButton className="btn btn-ink" disabled={!text.trim()} onClick={() => void navigator.clipboard.writeText(markdown).then(() => toast.success("Table copied"))}>Copy as Markdown</ActionButton>}
+      />
+      <ToolPanes ratio="40/60">
+        <Pane label="Prompt">
           <FieldRow label="Prompt" htmlFor="tokens" help="Nothing is uploaded. The tokenizer runs in a worker.">
             {showTokens && count.segments.length > 0 && count.segments.join("") === text ? (
               <div className="relative">
@@ -111,13 +104,27 @@ export default function TokenTool() {
             <ResultStat variant="well" label="Characters" value={count.chars.toLocaleString("en-US")} />
             <ResultStat variant="well" label="Words" value={count.words.toLocaleString("en-US")} />
           </div>
-          <Segmented label="Tokenizer" value={encoding} onChange={setEncoding} options={[{ value: "o200k", label: "o200k_base" }, { value: "cl100k", label: "cl100k_base" }]} />
-        </Panel>
-      }
-      output={
-        <div aria-live="polite">
+          <FieldRow label="Output tokens" htmlFor="out-tokens"><TextInput id="out-tokens" type="number" min={0} value={outputTokens} onChange={(event) => setOutputTokens(Number(event.target.value) || 0)} /></FieldRow>
+          <FieldRow label="Requests / day" htmlFor="req-day"><TextInput id="req-day" type="number" min={0} value={requests} onChange={(event) => setRequests(Number(event.target.value) || 0)} /></FieldRow>
+          <FieldRow label={`Cached input ${cached}%`} htmlFor="cache">
+            <Slider id="cache" value={[cached]} min={0} max={100} onValueChange={(value) => setCached(value[0] ?? 0)} />
+          </FieldRow>
+          <div className="flex flex-wrap gap-1.5">
+            {shown.map((model) => {
+              const on = ids.includes(model.id);
+              return (
+                <ChipButton key={model.id} pressed={on} onClick={() => setIds(on ? ids.filter((id) => id !== model.id) : [...ids, model.id])}>
+                  {model.label}
+                </ChipButton>
+              );
+            })}
+            {hidden > 0 ? <ChipButton onClick={() => setMore(true)}>+{hidden}</ChipButton> : null}
+          </div>
+        </Pane>
+        <Pane label="Cost">
+        <div aria-live="polite" className="flex flex-col gap-3">
           {text.trim() ? (
-            <Panel title="Cost">
+            <>
               {long ? <Notice tone="warn" title="A long-context rate applies to at least one model." /> : null}
               <ResultTable
                 caption="Estimated model cost"
@@ -139,35 +146,14 @@ export default function TokenTool() {
                 }))}
               />
               <p className="text-[12px] text-muted-foreground">Claude, Gemini, and other non-OpenAI counts are o200k estimates. Prices checked {PRICES_UPDATED}.</p>
-            </Panel>
+            </>
           ) : (
             <EmptyState art={<Coins size={22} />} title="The table shows up here" hint={`Prices checked ${PRICES_UPDATED}. Paste a prompt to price it.`} />
           )}
         </div>
-      }
-      inspector={
-        <Panel title="Assumptions">
-          <div className="grid gap-3">
-            <FieldRow label="Output tokens" htmlFor="out-tokens"><TextInput id="out-tokens" type="number" min={0} value={outputTokens} onChange={(event) => setOutputTokens(Number(event.target.value) || 0)} className="max-[699px]:h-11" /></FieldRow>
-            <FieldRow label="Requests / day" htmlFor="req-day"><TextInput id="req-day" type="number" min={0} value={requests} onChange={(event) => setRequests(Number(event.target.value) || 0)} className="max-[699px]:h-11" /></FieldRow>
-            <FieldRow label={`Cached input ${cached}%`} htmlFor="cache">
-              <Slider id="cache" value={[cached]} min={0} max={100} onValueChange={(value) => setCached(value[0] ?? 0)} />
-            </FieldRow>
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {shown.map((model) => {
-              const on = ids.includes(model.id);
-              return (
-                <ChipButton key={model.id} pressed={on} onClick={() => setIds(on ? ids.filter((id) => id !== model.id) : [...ids, model.id])}>
-                  {model.label}
-                </ChipButton>
-              );
-            })}
-            {hidden > 0 ? <ChipButton onClick={() => setMore(true)}>+{hidden}</ChipButton> : null}
-          </div>
-          <CopyButton value={markdown} label="Copy as Markdown" toastMessage="Table copied" />
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={status} tone="pass" trailing="⌘⇧C copy table · esc clear" />
+    </ToolCard>
   );
 }

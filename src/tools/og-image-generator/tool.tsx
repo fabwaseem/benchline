@@ -1,17 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ActionButton, ChipButton, TextInput } from "@/components/kit/controls";
-import { Download, ImageIcon, RotateCcw } from "lucide-react";
+import { ActionButton, TextInput } from "@/components/kit/controls";
+import { ImageIcon, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import { CodeOutput } from "@/components/kit/code-output";
 import { downloadText } from "@/components/kit/download-button";
 import { Dropzone } from "@/components/kit/dropzone";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
-import { Panel } from "@/components/kit/tool-shell";
 import { Segmented } from "@/components/kit/segmented";
-import { InkButton, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { buildMetaTags, buildOpenGraphFile, ogExample, OG_HEIGHT, OG_WIDTH, templates, titleFit, type OgInput, type OgTemplate } from "@/tools/og-image-generator/lib/og";
 
 const LOGO_TYPES = new Set(["image/png", "image/jpeg", "image/webp", "image/gif"]);
@@ -23,10 +23,10 @@ export default function OgTool() {
   const [logoBytes, setLogoBytes] = useState(0);
   const [logoError, setLogoError] = useState("");
   const [png, setPng] = useState("");
-  const [tab, setTab] = useState<"code" | "meta">("code");
+  const [view, setView] = useState<"preview" | "code" | "meta">("preview");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fit = titleFit(input.title);
-  const code = tab === "code" ? buildOpenGraphFile(input) : buildMetaTags(input);
+  const code = view === "meta" ? buildMetaTags(input) : buildOpenGraphFile(input);
   const pristine = !logo && !logoError && JSON.stringify(input) === JSON.stringify(ogExample);
 
   useEffect(() => {
@@ -139,47 +139,33 @@ export default function OgTool() {
         : `${input.template} · ${input.font} · ${logoBytes ? `${logoBytes.toLocaleString("en-US")} B` : "no logo"}`;
 
   return (
-    <ToolShell
-      runsLocally
-      layout="split+inspector"
-      flow="band"
-      columns="min-[1280px]:grid-cols-[360px_minmax(0,1fr)_320px]"
-      tabs={<ToolTabs label="Mode" value="compose" onChange={() => {}} options={[{ value: "compose", label: "Compose" }]} />}
-      actions={<InkButton onClick={download} icon={<Download size={15} />}>Download PNG</InkButton>}
-      status={
-        <>
-          <span className={logoError || fit.clipped ? "dot dot-warn" : "dot"} />
-          <span>{status}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘↵ download PNG · ⌘⇧C copy code · esc blur</span>
-        </>
-      }
-      input={
-        <Panel title="Compose">
-          <div role="radiogroup" aria-label="Template" className="grid grid-cols-3 gap-2">
-            {templates.map((template) => (
-              <ChipButton
-                key={template}
-                role="radio"
-                pressed={input.template === template}
-                className="h-9 justify-center capitalize max-[699px]:h-11"
-                onClick={() => setInput({ ...input, template: template as OgTemplate })}
-              >
-                {template}
-              </ChipButton>
-            ))}
-          </div>
+    <ToolCard>
+      <ToolToolbar
+        label="Template"
+        options={templates.map((template) => ({ value: template, label: template[0]?.toUpperCase() + template.slice(1) }))}
+        value={input.template}
+        onChange={(template) => setInput({ ...input, template: template as OgTemplate })}
+        actions={
+          <>
+            <ActionButton type="button" variant="outline" onClick={reset}><RotateCcw size={14} /> Reset</ActionButton>
+            <ActionButton type="button" className="btn btn-ink" onClick={download}>Download PNG</ActionButton>
+          </>
+        }
+      />
+      <ToolPanes ratio="40/60">
+        <Pane label="Compose">
           <FieldRow
             label="Title"
             htmlFor="og-title"
-            actions={<span className={fit.clipped ? "font-mono text-[12px] text-status-warn" : "font-mono text-[12px] text-faint"}>{fit.counter}</span>}
+            actions={<span className={fit.clipped ? "font-mono text-[12px] whitespace-nowrap text-status-warn" : "font-mono text-[12px] whitespace-nowrap text-faint"}>{fit.counter}</span>}
           >
-            <TextInput id="og-title" value={input.title} onChange={(event) => setInput({ ...input, title: event.target.value })} className="max-[699px]:h-11" />
+            <TextInput id="og-title" value={input.title} onChange={(event) => setInput({ ...input, title: event.target.value })} />
           </FieldRow>
           <FieldRow label="Subtitle" htmlFor="og-sub">
-            <TextInput id="og-sub" value={input.subtitle} onChange={(event) => setInput({ ...input, subtitle: event.target.value })} className="max-[699px]:h-11" />
+            <TextInput id="og-sub" value={input.subtitle} onChange={(event) => setInput({ ...input, subtitle: event.target.value })} />
           </FieldRow>
           <FieldRow label="Author" htmlFor="og-author">
-            <TextInput id="og-author" value={input.author} onChange={(event) => setInput({ ...input, author: event.target.value })} className="max-[699px]:h-11" />
+            <TextInput id="og-author" value={input.author} onChange={(event) => setInput({ ...input, author: event.target.value })} />
           </FieldRow>
           <Segmented label="Font" value={input.font} onChange={(font) => setInput({ ...input, font })} options={[{ value: "sans", label: "Sans" }, { value: "mono", label: "Mono" }]} />
           <div className="grid grid-cols-3 gap-2">
@@ -189,47 +175,38 @@ export default function OgTool() {
           </div>
           <Dropzone accept="image/png,image/jpeg,image/webp,image/gif" label="Drop a logo. It stays in this browser." invalid={Boolean(logoError)} onFile={takeLogo} />
           {logoError ? <p role="alert" className="text-xs text-status-bad">{logoError}</p> : null}
-          {logoName && !logoError ? <p className="font-mono text-[12px] text-muted-foreground">{logoName} · {logoBytes.toLocaleString("en-US")} B</p> : null}
-          <ActionButton type="button" variant="outline" className="max-[699px]:h-11" onClick={reset}>
-            <RotateCcw size={14} /> Reset
-          </ActionButton>
-        </Panel>
-      }
-      output={
-        <Panel title="Preview">
+          {logoName && !logoError ? <p className="truncate font-mono text-[12px] text-muted-foreground" title={`${logoName} · ${logoBytes.toLocaleString("en-US")} B`}>{logoName} · {logoBytes.toLocaleString("en-US")} B</p> : null}
+        </Pane>
+        <Pane label="Preview" scroll={false} bodyClassName="flex min-h-[320px] flex-col gap-3 p-3">
           <canvas ref={canvasRef} width={OG_WIDTH} height={OG_HEIGHT} className="hidden" />
-          {png ? (
-            // The preview is a data URL drawn on this page.
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={png} alt="Open Graph preview at 1200 by 630" className="w-full rounded-lg border border-border" />
-          ) : null}
-          <div className="flex items-end gap-3">
-            {png ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={png} alt="" className="w-[120px] rounded-md border border-border" />
-            ) : null}
-            <p className="font-mono text-[12px] text-muted-foreground">1200 × 630 · feed and thumbnail</p>
-          </div>
-          <div aria-live="polite">
-            {logoError ? (
-              <Notice tone="bad" role="alert" icon={<ImageIcon size={15} />} title={logoError} />
-            ) : (
-              <Notice tone={fit.clipped ? "warn" : "ok"} icon={<ImageIcon size={15} />} title={fit.notice} />
-            )}
-          </div>
-        </Panel>
-      }
-      inspector={
-        <Panel title="Output">
-          <InkButton onClick={download} icon={<Download size={15} />} className="min-[700px]:inline-flex">Download PNG</InkButton>
-          <Segmented label="Code" value={tab} onChange={setTab} options={[{ value: "code", label: "opengraph-image.tsx" }, { value: "meta", label: "Meta tags" }]} />
-          <CodeOutput code={code} filename={tab === "code" ? "opengraph-image.tsx" : "meta.html"} label={tab === "code" ? "opengraph-image.tsx" : "Meta tags"} />
-          <ActionButton type="button" variant="outline" className="max-[699px]:h-11" onClick={() => downloadText(tab === "code" ? "opengraph-image.tsx" : "meta.html", code)}>
-            Download code
-          </ActionButton>
-        </Panel>
-      }
-    />
+          <Segmented label="Preview" value={view} onChange={setView} options={[{ value: "preview", label: "Preview" }, { value: "code", label: "opengraph-image.tsx" }, { value: "meta", label: "Meta tags" }]} />
+          {view === "preview" ? (
+            <>
+              {png ? (
+                // The preview is a data URL drawn on this page.
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={png} alt="Open Graph preview at 1200 by 630" className="w-full rounded-xl border border-border" />
+              ) : null}
+              <div aria-live="polite">
+                {logoError ? (
+                  <Notice tone="bad" role="alert" icon={<ImageIcon size={15} />} title={logoError} />
+                ) : (
+                  <Notice tone={fit.clipped ? "warn" : "ok"} icon={<ImageIcon size={15} />} title={fit.notice} />
+                )}
+              </div>
+            </>
+          ) : (
+            <>
+              <CodeOutput code={code} filename={view === "code" ? "opengraph-image.tsx" : "meta.html"} label={view === "code" ? "opengraph-image.tsx" : "Meta tags"} fill className="min-h-0 flex-1" />
+              <ActionButton type="button" variant="outline" onClick={() => downloadText(view === "code" ? "opengraph-image.tsx" : "meta.html", code)}>
+                Download code
+              </ActionButton>
+            </>
+          )}
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={`1200 × 630 · ${status}`} tone={logoError || fit.clipped ? "warn" : "pass"} trailing="⌘↵ download PNG · ⌘⇧C copy code · esc blur" />
+    </ToolCard>
   );
 }
 

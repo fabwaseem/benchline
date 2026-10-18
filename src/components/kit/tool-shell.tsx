@@ -1,6 +1,14 @@
 import { useEffect, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { StatusBar } from "@/components/kit/status-bar";
+import { ToolCard } from "@/components/kit/shell/tool-card";
+import { ToolPanes, type PaneRatio } from "@/components/kit/shell/tool-panes";
 import { cn } from "@/lib/utils";
+
+function ratioFrom(columns: string | undefined, layout: string | undefined): PaneRatio {
+  if (!columns || layout !== "split+inspector") return "50/50";
+  if (columns.includes("1.1fr") || columns.includes("0.9fr")) return "60/40";
+  return "50/50";
+}
 
 export function Panel({
   title,
@@ -121,7 +129,6 @@ export function ToolShell({
   tabs,
   status,
   layout,
-  flow = "rail",
   columns,
   busy = false,
 }: {
@@ -139,48 +146,23 @@ export function ToolShell({
   busy?: boolean;
 }) {
   if (layout) {
+    const ratio = ratioFrom(columns, layout);
     return (
-      <section className="flex min-w-0 flex-col bg-surface">
-        <div className="flex min-h-12 flex-wrap items-center gap-2 border-b border-border px-3 py-2 min-[700px]:px-4">
-          {tabs}
-          <div className="ml-auto flex flex-wrap items-center gap-2">
-            {actions}
-          </div>
+      <ToolCard>
+        <div className="flex min-h-12 flex-col gap-2 border-b border-border px-3 py-2 min-[700px]:flex-row min-[700px]:items-center min-[700px]:px-4">
+          <div className="min-w-0 flex-1 overflow-hidden">{tabs}</div>
+          <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>
         </div>
         {busy ? <div aria-hidden className="h-px w-full bg-foreground/40" /> : null}
-        <div
-          className={cn(
-            "grid",
-            layout === "split" && "min-[700px]:grid-cols-2",
-            layout === "split+inspector" && flow === "rail" && "min-[700px]:grid-cols-2 min-[1280px]:min-h-[620px] min-[1280px]:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)_340px]",
-            layout === "split+inspector" && flow === "band" && "min-[700px]:grid-cols-2 min-[1280px]:min-h-[620px]",
-            layout === "split+inspector" && flow === "band" && (columns ?? "min-[1280px]:grid-cols-[360px_minmax(0,1fr)_320px]"),
-          )}
-        >
-          {layout === "single" ? <div className="min-w-0">{children ?? input}</div> : null}
-          {layout === "split" ? (
-            <>
-              <div className="flex min-w-0 flex-col border-b border-border min-[700px]:border-r min-[700px]:border-b-0">{input}</div>
-              <div className="flex min-w-0 flex-col">{output}</div>
-            </>
-          ) : null}
-          {layout === "split+inspector" && flow === "rail" ? (
-            <>
-              <div className="flex min-w-0 flex-col border-b border-border min-[700px]:col-start-1 min-[700px]:border-r min-[1280px]:col-start-1 min-[1280px]:border-b-0">{input}</div>
-              <div className="flex min-w-0 flex-col border-b border-border min-[700px]:col-start-2 min-[700px]:row-span-2 min-[700px]:border-b-0 min-[1280px]:col-start-2 min-[1280px]:row-span-1 min-[1280px]:border-r">{output}</div>
-              <div className="flex min-w-0 flex-col min-[700px]:col-start-1 min-[700px]:border-r min-[700px]:border-border min-[1280px]:col-start-3 min-[1280px]:border-r-0">{inspector}</div>
-            </>
-          ) : null}
-          {layout === "split+inspector" && flow === "band" ? (
-            <>
-              <div className="flex min-w-0 flex-col border-b border-border min-[700px]:border-r min-[700px]:border-b-0">{input}</div>
-              <div className="flex min-w-0 flex-col border-b border-border min-[1280px]:border-r min-[1280px]:border-b-0">{output}</div>
-              <div className="flex min-w-0 flex-col min-[700px]:col-span-2 min-[1280px]:col-span-1">{inspector}</div>
-            </>
-          ) : null}
-        </div>
+        {layout === "single" ? <div className="min-w-0">{children ?? input}</div> : (
+          <ToolPanes ratio={layout === "split+inspector" ? ratio : "50/50"}>
+            <div className="flex min-w-0 flex-col">{input}</div>
+            <div className="flex min-w-0 flex-col">{output}</div>
+          </ToolPanes>
+        )}
+        {inspector ? <div className="border-t border-border">{inspector}</div> : null}
         {status ? <StatusBar>{status}</StatusBar> : null}
-      </section>
+      </ToolCard>
     );
   }
   return (

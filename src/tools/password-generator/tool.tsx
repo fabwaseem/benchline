@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChipButton, TextInput, Slider, OptionRow } from "@/components/kit/controls";
+import { ActionButton, ChipButton, TextInput, Slider, OptionRow } from "@/components/kit/controls";
 import { Copy, KeyRound } from "lucide-react";
 import { toast } from "sonner";
 import { CopyButton } from "@/components/kit/copy-button";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
-import { Panel, ToolShell, ToolTabs, useWorkbenchKeys, InkButton } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { generatePassphrases, generatePasswords, passphraseStrength, passwordStrength, type PasswordOptions } from "@/tools/password-generator/lib/password";
 
 export default function PasswordGeneratorTool() {
@@ -69,20 +70,19 @@ export default function PasswordGeneratorTool() {
     onEscape: () => setNonce((value) => value + 1),
   });
 
+  const note = error || ("error" in strength ? "" : `${strength.bits} bits · ${strength.label}`);
+
   return (
-    <ToolShell
-      runsLocally
-      layout="split"
-      tabs={<ToolTabs label="Style" value={tab} onChange={setTab} options={[{ value: "password", label: "Password" }, { value: "passphrase", label: "Passphrase" }]} />}
-      actions={<InkButton icon={<Copy size={15} />} onClick={() => text && void navigator.clipboard.writeText(text).then(() => toast.success("Copied"))}>Copy</InkButton>}
-      status={
-        <>
-          <span className={error ? "dot dot-warn" : "dot"} />
-          <span>{error || ("error" in strength ? "" : `${strength.bits} bits · ${strength.label}`)}</span>
-        </>
-      }
-      input={
-        <Panel title="Options">
+    <ToolCard>
+      <ToolToolbar
+        label="Style"
+        options={[{ value: "password", label: "Password" }, { value: "passphrase", label: "Passphrase" }]}
+        value={tab}
+        onChange={setTab}
+        actions={<ActionButton className="btn btn-ink" disabled={!text} onClick={() => void navigator.clipboard.writeText(text).then(() => toast.success("Copied"))}>Copy</ActionButton>}
+      />
+      <ToolPanes>
+        <Pane label="Options">
           {tab === "password" ? (
             <>
               <FieldRow label={`Length ${length}`} htmlFor="pw-length">
@@ -110,14 +110,12 @@ export default function PasswordGeneratorTool() {
             <TextInput id="pw-count" type="number" min={1} max={100} value={count} onChange={(event) => setCount(Number(event.target.value))} />
           </FieldRow>
           <ChipButton onClick={() => setNonce((value) => value + 1)}>Generate again</ChipButton>
-        </Panel>
-      }
-      output={
-        <Panel title="Generated">
+        </Pane>
+        <Pane label="Generated">
           {"error" in strength ? null : (
             <div>
               <div className="mb-1 flex items-baseline justify-between text-[12px]">
-                <span>{strength.label}</span>
+                <span className="whitespace-nowrap">{strength.label}</span>
                 <span className="font-mono text-muted-foreground">{strength.bits} bits</span>
               </div>
               <div className="h-1.5 overflow-hidden rounded-full bg-muted" aria-hidden>
@@ -132,15 +130,16 @@ export default function PasswordGeneratorTool() {
             <ul>
               {values.map((value, index) => (
                 <li key={`${index}-${value}`} className="flex items-center gap-2 border-t border-border py-2">
-                  <span className="min-w-0 flex-1 font-mono text-[14px] break-all">{value}</span>
+                  <span className="min-w-0 flex-1 truncate font-mono text-[14px]" title={value}>{value}</span>
                   <CopyButton value={value} iconOnly icon={<Copy size={14} />} label="Copy password" />
                 </li>
               ))}
             </ul>
           )}
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={note} tone={error ? "warn" : "pass"} />
+    </ToolCard>
   );
 }
 

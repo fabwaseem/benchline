@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { McpSnippet } from "@/components/shell/mcp-snippet";
-import { RelatedTools } from "@/components/shell/related-tools";
-import { ToolHeader } from "@/components/shell/tool-header";
-import { ToolWorkspace } from "@/components/shell/tool-workspace";
-import { FaqAccordion } from "@/components/kit/faq-accordion";
+import { AgentSection, HowItWorks, RelatedTools, ToolCard, ToolHeader, ToolPage } from "@/components/kit/shell";
 import { ToolHost } from "@/components/site/tool-host";
+import { directoryCatalog } from "@/lib/catalog";
 import { JsonLd, toolGraph } from "@/lib/jsonld";
-import { absoluteUrl } from "@/lib/site";
+import { exampleArguments, toolsCallParams } from "@/lib/mcp/example";
+import { absoluteUrl, SITE_URL } from "@/lib/site";
 import { COVER_SIZE, toolCover } from "@/lib/assets";
 import { mcpFor } from "@/registry/mcp-index";
 import { mcpToolBySlug } from "@/registry/mcp-registry";
-import { categories, getTool, relatedTools, tools } from "@/registry";
+import { getTool, relatedTools, tools } from "@/registry";
 import { parentHue, resolveListing } from "@/lib/taxonomy";
 
 export function generateStaticParams() {
@@ -48,26 +46,28 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 function WorkspaceSkeleton() {
   return (
-    <div className="animate-pulse" aria-hidden>
-      <div className="flex h-12 items-center gap-2 border-b border-border bg-sunken px-3">
-        <div className="h-6 w-16 rounded-sm bg-surface" />
-        <div className="h-6 w-16 rounded-sm bg-surface" />
-      </div>
-      <div className="grid min-h-72 md:grid-cols-2">
-        <div className="space-y-2 border-b border-border bg-surface p-4 md:border-r md:border-b-0">
-          <div className="h-3 w-1/3 rounded-sm bg-sunken" />
-          <div className="h-3 w-2/3 rounded-sm bg-sunken" />
-          <div className="h-3 w-1/2 rounded-sm bg-sunken" />
+    <ToolCard>
+      <div className="animate-pulse" aria-hidden>
+        <div className="flex h-12 items-center gap-2 border-b border-border px-3">
+          <div className="h-6 w-16 rounded-[4px] bg-sunken" />
+          <div className="h-6 w-16 rounded-[4px] bg-sunken" />
         </div>
-        <div className="bg-well p-4">
-          <div className="h-3 w-1/4 rounded-sm bg-sunken" />
+        <div className="grid min-h-72 grid-cols-1 min-[900px]:grid-cols-2">
+          <div className="space-y-2 border-b border-border p-4 min-[900px]:border-r min-[900px]:border-b-0">
+            <div className="h-3 w-1/3 rounded-[4px] bg-sunken" />
+            <div className="h-3 w-2/3 rounded-[4px] bg-sunken" />
+            <div className="h-3 w-1/2 rounded-[4px] bg-sunken" />
+          </div>
+          <div className="p-4">
+            <div className="h-3 w-1/4 rounded-[4px] bg-sunken" />
+          </div>
         </div>
       </div>
-    </div>
+    </ToolCard>
   );
 }
 
-export default async function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function ToolScreen({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const tool = getTool(slug);
   if (!tool) notFound();
@@ -79,10 +79,16 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
       : null;
   const hue = listing?.kind === "page" ? listing.hue : parentHue(tool.category);
   const categorySlug = listing?.kind === "page" ? listing.slug : tool.category;
-  const related = relatedTools(slug);
+  const catalogTools = directoryCatalog().tools;
+  const related = relatedTools(slug).flatMap((item) => {
+    const match = catalogTools.find((entry) => entry.slug === item.slug);
+    return match ? [match] : [];
+  });
   const mcp = mcpFor(tool.slug);
   const mcpTool = mcpToolBySlug(tool.slug);
-  const hues = Object.fromEntries(categories.map((item) => [item.slug, parentHue(item.slug)]));
+  const call = mcp && mcpTool
+    ? JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/call", params: toolsCallParams(mcp.name, exampleArguments(mcpTool.inputSchema)) }, null, 2)
+    : null;
   const crumbs =
     listing?.kind === "page"
       ? listing.breadcrumbs.slice(1).map((item) => ({ name: item.label, href: item.href }))
@@ -90,7 +96,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
   return (
     <>
       <JsonLd data={toolGraph(tool, categoryName, crumbs)} />
-      <div className="mx-auto w-full max-w-[1200px] px-4 py-6 lg:px-8">
+      <ToolPage>
         <ToolHeader
           name={tool.name}
           tagline={tool.tagline}
@@ -103,37 +109,23 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           mcpName={mcp?.name ?? null}
           slug={tool.slug}
         />
-        <div className="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
-          <div className="min-w-0">
-            <ToolWorkspace>
-              <Suspense fallback={<WorkspaceSkeleton />}>
-                <ToolHost slug={tool.slug} />
-              </Suspense>
-            </ToolWorkspace>
-            <p className="mt-8 max-w-[68ch] text-[15px] leading-7 text-muted-foreground">{tool.description}</p>
-            <section id="how-to" className="mt-8">
-              <h2 className="text-[15px] font-medium">How to use it</h2>
-              <ol className="mt-3 grid gap-3 sm:grid-cols-3">
-                {tool.howTo.map((step, index) => (
-                  <li key={step.name} className="rounded-xl border border-border bg-surface p-4 shadow-[0_0_0_1px_transparent] transition-shadow duration-150">
-                    <span className="font-mono text-[11px] text-faint">{String(index + 1).padStart(2, "0")}</span>
-                    <p className="mt-2 text-[14px] font-medium">{step.name}</p>
-                    <p className="mt-1 text-[13px] leading-5 text-muted-foreground">{step.text}</p>
-                  </li>
-                ))}
-              </ol>
-            </section>
-            <section id="questions" className="mt-10">
-              <h2 className="mb-2 text-[15px] font-medium">FAQ</h2>
-              <FaqAccordion faqs={tool.faqs} />
-            </section>
-          </div>
-          <aside id="next" className="flex flex-col gap-4 lg:sticky lg:top-20">
-            <RelatedTools tools={related} hues={hues} />
-            {mcp && mcpTool ? <McpSnippet name={mcp.name} inputSchema={mcpTool.inputSchema} /> : null}
-          </aside>
+        <div className="mt-6">
+          <Suspense fallback={<WorkspaceSkeleton />}>
+            <ToolHost slug={tool.slug} />
+          </Suspense>
         </div>
-      </div>
+        {mcp && call ? (
+          <div className="mt-8">
+            <AgentSection name={mcp.name} endpoint={`${SITE_URL}/mcp`} call={call} />
+          </div>
+        ) : null}
+        <div className="mt-10">
+          <RelatedTools tools={related} />
+        </div>
+        <div className="mt-10">
+          <HowItWorks description={tool.description} steps={tool.howTo} faqs={tool.faqs} />
+        </div>
+      </ToolPage>
     </>
   );
 }

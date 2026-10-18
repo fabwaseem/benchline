@@ -1,8 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ChipButton, OptionRow, TextArea } from "@/components/kit/controls";
-import { Copy, Diff } from "lucide-react";
+import { ActionButton, ChipButton, OptionRow, TextArea } from "@/components/kit/controls";
+import { Diff } from "lucide-react";
 import { toast } from "sonner";
 import { CodeOutput } from "@/components/kit/code-output";
 import { EmptyState } from "@/components/kit/empty-state";
@@ -10,7 +10,8 @@ import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { compareText, diffModes, exampleLeft, exampleRight, sidePieces, type DiffMode, type DiffPiece, type DiffRow } from "@/tools/diff-checker/lib/diff";
 
 type View = "side" | "inline";
@@ -48,66 +49,54 @@ export default function DiffCheckerTool() {
       : `${result.added.toLocaleString("en-US")} added · ${result.removed.toLocaleString("en-US")} removed ${result.unit}`;
 
   return (
-    <ToolShell
-      runsLocally
-      layout="split+inspector"
-      flow="band"
-      columns="min-[1280px]:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)_300px]"
-      tabs={<ToolTabs label="View" value={view} onChange={setView} options={[{ value: "side", label: "Side by side" }, { value: "inline", label: "Inline" }]} />}
-      actions={
-        <>
-          <ChipButton className="h-8 max-[699px]:h-11" onClick={swap}>Swap</ChipButton>
-          <InkButton icon={<Copy size={15} />} disabled={!result.patch} onClick={() => void navigator.clipboard.writeText(result.patch).then(() => toast.success("Patch copied"))}>Copy patch</InkButton>
-        </>
-      }
-      status={
-        <>
-          <span className={result.ok && result.unchanged ? "dot" : "dot dot-warn"} />
-          <span>{status}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘⇧C copy patch · esc reset</span>
-        </>
-      }
-      input={
-        <div className="flex min-w-0 flex-col">
-          <Panel title="Original">
-            <FieldRow label="Original" htmlFor="diff-left">
-              <TextArea id="diff-left" value={left} onChange={(event) => setLeft(event.target.value)} spellCheck={false} className="min-h-40 font-mono text-[13px]" />
-            </FieldRow>
-          </Panel>
-          <Panel title="Changed" className="border-t border-border">
-            <FieldRow label="Changed" htmlFor="diff-right">
-              <TextArea id="diff-right" value={right} onChange={(event) => setRight(event.target.value)} spellCheck={false} className="min-h-40 font-mono text-[13px]" />
-            </FieldRow>
-          </Panel>
-        </div>
-      }
-      output={
-        <div aria-live="polite" className="min-h-[240px]">
-          {!result.ok ? (
-            <Panel>
-              <Notice tone="bad" role="alert" title={result.error} />
-              <EmptyState art={<Diff size={22} />} title="JSON did not parse" hint="Both sides need to be JSON in this mode." />
-            </Panel>
-          ) : (
-            <Panel title={view === "side" ? "Side by side" : "Inline"}>
-              {result.unchanged ? <Notice tone="ok" title="No differences" body={mode === "json" ? "The values match. Object key order is ignored." : "The two texts match under this comparison."} /> : null}
-              {view === "inline" ? <Inline pieces={result.pieces} /> : mode === "word" || mode === "char" ? <PieceColumns pieces={result.pieces} /> : <LineRows rows={result.rows} />}
-            </Panel>
-          )}
-        </div>
-      }
-      inspector={
-        <Panel title="Comparison">
+    <ToolCard>
+      <ToolToolbar
+        label="View"
+        options={[{ value: "side", label: "Side by side" }, { value: "inline", label: "Inline" }]}
+        value={view}
+        onChange={setView}
+        actions={
+          <>
+            <ChipButton className="h-8 max-[699px]:h-11" onClick={swap}>Swap</ChipButton>
+            <ActionButton className="btn btn-ink" disabled={!result.patch} onClick={() => void navigator.clipboard.writeText(result.patch).then(() => toast.success("Patch copied"))}>Copy patch</ActionButton>
+          </>
+        }
+      />
+      <ToolPanes ratio="40/60">
+        <Pane label="Texts">
+          <FieldRow label="Original" htmlFor="diff-left">
+            <TextArea id="diff-left" value={left} onChange={(event) => setLeft(event.target.value)} spellCheck={false} className="min-h-40 font-mono text-[13px]" />
+          </FieldRow>
+          <FieldRow label="Changed" htmlFor="diff-right">
+            <TextArea id="diff-right" value={right} onChange={(event) => setRight(event.target.value)} spellCheck={false} className="min-h-40 font-mono text-[13px]" />
+          </FieldRow>
           <Segmented label="Mode" value={mode} onChange={setMode} options={diffModes.map((item) => ({ value: item, label: item }))} />
-            <OptionRow label="Ignore whitespace" checked={ignoreWhitespace} onChange={setIgnoreWhitespace} />
-          <div className="grid grid-cols-2 gap-2">
-            <ResultStat variant="well" label={`Added ${result.unit}`} value={String(result.added)} />
-            <ResultStat variant="well" label={`Removed ${result.unit}`} value={String(result.removed)} />
+          <OptionRow label="Ignore whitespace" checked={ignoreWhitespace} onChange={setIgnoreWhitespace} />
+        </Pane>
+        <Pane label={view === "side" ? "Side by side" : "Inline"}>
+          <div aria-live="polite" className="flex min-h-[240px] flex-col gap-3">
+            {!result.ok ? (
+              <>
+                <Notice tone="bad" role="alert" title={result.error} />
+                <EmptyState art={<Diff size={22} />} title="JSON did not parse" hint="Both sides need to be JSON in this mode." />
+              </>
+            ) : (
+              <>
+                {result.unchanged ? <Notice tone="ok" title="No differences" body={mode === "json" ? "The values match. Object key order is ignored." : "The two texts match under this comparison."} /> : null}
+                {view === "inline" ? <Inline pieces={result.pieces} /> : mode === "word" || mode === "char" ? <PieceColumns pieces={result.pieces} /> : <LineRows rows={result.rows} />}
+                {result.patch ? <CodeOutput code={result.patch} filename="changes.diff" label="Unified patch" /> : null}
+              </>
+            )}
           </div>
-          {result.patch ? <CodeOutput code={result.patch} filename="changes.diff" label="Unified patch" /> : null}
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={status} tone={result.ok && result.unchanged ? "pass" : result.ok ? "warn" : "fail"} trailing="⌘⇧C copy patch · esc reset">
+        <div className="grid w-full gap-2 min-[700px]:w-auto min-[700px]:grid-cols-2">
+          <ResultStat variant="well" label={`Added ${result.unit}`} value={String(result.added)} />
+          <ResultStat variant="well" label={`Removed ${result.unit}`} value={String(result.removed)} />
+        </div>
+      </StatusStrip>
+    </ToolCard>
   );
 }
 

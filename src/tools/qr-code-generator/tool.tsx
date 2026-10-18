@@ -9,7 +9,8 @@ import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import {
   DEFAULT_DARK,
   DEFAULT_LIGHT,
@@ -100,27 +101,21 @@ export default function QrTool() {
   });
 
   return (
-    <ToolShell
-      runsLocally
-      layout="split+inspector"
-      flow="band"
-      columns="min-[1280px]:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_300px]"
-      tabs={<ToolTabs label="QR contents" value={type} onChange={setType} options={[
-        { value: "text", label: "Text" },
-        { value: "url", label: "URL" },
-        { value: "wifi", label: "Wi-Fi" },
-        { value: "vcard", label: "vCard" },
-      ]} />}
-      actions={<InkButton icon={<Download size={15} />} onClick={downloadPng} disabled={!png}>Download PNG</InkButton>}
-      status={
-        <>
-          <span className={error ? "dot dot-warn" : "dot"} />
-          <span>{error || "Static code, drawn in this browser"}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘⇧C copy SVG · ⌘↵ PNG</span>
-        </>
-      }
-      input={
-        <Panel title="Contents">
+    <ToolCard>
+      <ToolToolbar
+        label="QR contents"
+        options={[
+          { value: "text", label: "Text" },
+          { value: "url", label: "URL" },
+          { value: "wifi", label: "Wi-Fi" },
+          { value: "vcard", label: "vCard" },
+        ]}
+        value={type}
+        onChange={setType}
+        actions={<ActionButton className="btn btn-ink" onClick={downloadPng} disabled={!png}><Download />Download PNG</ActionButton>}
+      />
+      <ToolPanes ratio="40/60">
+        <Pane label="Contents">
           {type === "text" ? (
             <FieldRow label="Text" htmlFor="qr-text" help="Up to 2,000 characters. The sample text is a placeholder.">
               <TextArea id="qr-text" value={text} onChange={(event) => setText(event.target.value)} />
@@ -159,10 +154,8 @@ export default function QrTool() {
               <FieldRow label="URL" htmlFor="vc-url"><TextInput id="vc-url" value={vcard.url} onChange={(event) => setVcard({ ...vcard, url: event.target.value })} /></FieldRow>
             </>
           ) : null}
-        </Panel>
-      }
-      output={
-        <Panel title="Code">
+        </Pane>
+        <Pane label="Code">
           {error ? <Notice tone="bad" role="alert" title="No code yet" body={error} /> : null}
           {png ? (
             <div className="flex flex-col items-start gap-3">
@@ -172,13 +165,9 @@ export default function QrTool() {
                 <ActionButton type="button" onClick={downloadPng}><Download />PNG</ActionButton>
                 <ActionButton type="button" variant="outline" onClick={downloadSvg}><Download />SVG</ActionButton>
               </div>
-              <p className="max-w-sm font-mono text-[12px] break-all text-muted-foreground">{payload}</p>
+              <p className="max-w-full truncate font-mono text-[12px] text-muted-foreground" title={payload}>{payload}</p>
             </div>
           ) : <EmptyState title="Fill in the fields" hint="The code updates as you type. It does not call a tracking service." />}
-        </Panel>
-      }
-      inspector={
-        <Panel title="Style">
           <FieldRow label="Error correction" htmlFor="ecc" help="L 7%, M 15%, Q 25%, H 30% recovery.">
             <Segmented label="Error correction" value={ecc} onChange={setEcc} options={[
               { value: "L", label: "L" },
@@ -213,9 +202,10 @@ export default function QrTool() {
               { value: "1024", label: "1024" },
             ]} />
           </FieldRow>
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={error || "Static code, drawn in this browser"} tone={error ? "warn" : "pass"} trailing="⌘⇧C copy SVG · ⌘↵ PNG" />
+    </ToolCard>
   );
 }
 

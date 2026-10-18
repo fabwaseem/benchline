@@ -33,7 +33,7 @@ export function FieldRow({
   return (
     <div className={cn("flex flex-col", variant === "well" && "field-well", className)}>
       <div className="mb-2 flex items-center justify-between gap-2">
-        <label htmlFor={htmlFor} className="text-[12.5px] font-medium text-fg2">
+        <label htmlFor={htmlFor} className="min-w-0 truncate text-[12.5px] font-medium whitespace-nowrap text-fg2" title={label}>
           {label}
         </label>
         {actions}

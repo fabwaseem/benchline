@@ -9,7 +9,7 @@ import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
-import { Panel, ToolShell, ToolTabs } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
 import { encodeText, hashAll, matchingAlgorithms, type HashRow } from "@/tools/hash-generator/lib/hash";
 
 const MAX_FILE = 32 * 1024 * 1024;
@@ -48,19 +48,18 @@ export default function HashGeneratorTool() {
   const matches = matchingAlgorithms(rows, expected);
   const waiting = useHmac && secret.length === 0;
 
+  const note = `${useHmac ? "HMAC" : "Digest"} · ${format} · ${tab === "file" ? file?.name ?? "no file" : `${new TextEncoder().encode(text).length} bytes`}`;
+
   return (
-    <ToolShell
-      runsLocally
-      layout="split"
-      tabs={<ToolTabs label="Input" value={tab} onChange={setTab} options={[{ value: "text", label: "Text" }, { value: "file", label: "File" }]} />}
-      status={
-        <>
-          <span className={fileError || waiting ? "dot dot-warn" : "dot"} />
-          <span>{useHmac ? "HMAC" : "Digest"} · {format} · {tab === "file" ? file?.name ?? "no file" : `${new TextEncoder().encode(text).length} bytes`}</span>
-        </>
-      }
-      input={
-        <Panel title={tab === "text" ? "Text" : "File"}>
+    <ToolCard>
+      <ToolToolbar
+        label="Input"
+        options={[{ value: "text", label: "Text" }, { value: "file", label: "File" }]}
+        value={tab}
+        onChange={setTab}
+      />
+      <ToolPanes>
+        <Pane label={tab === "text" ? "Text" : "File"}>
           {tab === "text" ? (
             <FieldRow label="Text" htmlFor="hash-text" help="Hashed as UTF-8.">
               <TextArea id="hash-text" value={text} onChange={(event) => setText(event.target.value)} className="min-h-40 font-mono" />
@@ -93,10 +92,8 @@ export default function HashGeneratorTool() {
           <FieldRow label="Expected digest" htmlFor="hash-expected" help="Hex or base64. Spaces and colons are ignored.">
             <TextInput id="hash-expected" value={expected} onChange={(event) => setExpected(event.target.value)} className="font-mono" />
           </FieldRow>
-        </Panel>
-      }
-      output={
-        <Panel title="Digests">
+        </Pane>
+        <Pane label="Digests">
           <Segmented label="Format" value={format} onChange={setFormat} options={[{ value: "hex", label: "Hex" }, { value: "base64", label: "Base64" }]} />
           <Notice tone="neutral" title="MD5 and SHA-1 are for checksums you were given." body="Use SHA-256 or SHA-512 for a new file hash. None of these are password hashes." />
           {rows.length === 0 ? (
@@ -109,8 +106,8 @@ export default function HashGeneratorTool() {
                 return (
                   <li key={row.algorithm} className="flex items-start gap-3 border-t border-border py-3">
                     <div className="min-w-0 flex-1">
-                      <p className="text-[12px] font-medium">{row.algorithm}{matched ? " · matches" : ""}</p>
-                      <p className="font-mono text-[12px] break-all">{value}</p>
+                      <p className="text-[12px] font-medium whitespace-nowrap">{row.algorithm}{matched ? " · matches" : ""}</p>
+                      <p className="truncate font-mono text-[12px]" title={value}>{value}</p>
                     </div>
                     <CopyButton value={value} label={`Copy ${row.algorithm}`} />
                   </li>
@@ -119,9 +116,10 @@ export default function HashGeneratorTool() {
             </ul>
           )}
           {expected.trim() && rows.length > 0 && matches.length === 0 ? <Notice tone="warn" title="That digest does not match any algorithm." /> : null}
-        </Panel>
-      }
-    />
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={fileError || note} tone={fileError || waiting ? "warn" : "pass"} />
+    </ToolCard>
   );
 }
 

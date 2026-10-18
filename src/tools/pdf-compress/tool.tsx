@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ActionButton } from "@/components/kit/controls";
-import { Download, Shrink } from "lucide-react";
+import { Download } from "lucide-react";
 import { downloadBytes } from "@/components/kit/download-button";
 import { Dropzone } from "@/components/kit/dropzone";
 import { EmptyState } from "@/components/kit/empty-state";
@@ -10,7 +10,8 @@ import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { ResultStat, SizeStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { formatBytes } from "@/lib/image-format";
 import { TARGET_BYTES, compressPdf, type CompressPreset, type CompressResult } from "@/tools/pdf-compress/lib/compress";
 
@@ -66,42 +67,17 @@ export default function PdfCompressTool() {
 
   useWorkbenchKeys({ onEnter: () => { if (result) download(); else void compress(); } });
 
+  const note = error || (busy ? "Compressing in this browser" : source ? `${source.name} · ${formatBytes(source.bytes.byteLength)}` : "The PDF stays in this browser");
+
   return (
-    <ToolShell
-      runsLocally
-      busy={busy}
-      layout="split+inspector"
-      flow="band"
-      columns="min-[1280px]:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)_300px]"
-      tabs={<ToolTabs label="Mode" value="compress" onChange={() => undefined} options={[{ value: "compress", label: "Compress" }]} />}
-      actions={<InkButton icon={<Shrink size={15} />} onClick={() => void compress()} disabled={busy || !source}>Compress</InkButton>}
-      status={
-        <>
-          <span className={error ? "dot dot-warn" : "dot"} />
-          <span>{error || (busy ? "Compressing in this browser" : source ? `${source.name} · ${formatBytes(source.bytes.byteLength)}` : "The PDF stays in this browser")}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘↵ compress</span>
-        </>
-      }
-      input={
-        <Panel title="PDF">
+    <ToolCard>
+      <ToolToolbar
+        actions={<ActionButton className="btn btn-ink" onClick={() => void compress()} disabled={busy || !source}>{busy ? "Compressing" : "Compress"}</ActionButton>}
+      />
+      <ToolPanes ratio="40/60">
+        <Pane label="PDF">
           <Dropzone accept="application/pdf,.pdf" onFile={(file) => void addFile(file)} label={source ? source.name : "Drop a PDF. It stays in this browser."} invalid={Boolean(error) && !source} />
           {source ? <ResultStat label="Original" value={formatBytes(source.bytes.byteLength)} /> : <EmptyState title="No PDF yet" hint="Image-heavy files shrink the most. Text stays selectable." />}
-        </Panel>
-      }
-      output={
-        <Panel title="Result">
-          {error ? <Notice tone="bad" role="alert" title="Could not compress" body={error} /> : null}
-          {result ? (
-            <div className="flex flex-col gap-3">
-              <SizeStat before={formatBytes(result.before)} after={formatBytes(result.after)} hint={result.saved ? `${result.percent}% smaller` : "No size change"} />
-              <Notice tone={result.metTarget ? "ok" : "warn"} title={result.metTarget ? "Ready" : "Above the target"} body={result.note} />
-              <ActionButton type="button" onClick={download}><Download />Download PDF</ActionButton>
-            </div>
-          ) : <EmptyState title="Nothing compressed yet" hint="Pick a preset, then compress. If a pass would grow the file, the original is kept." />}
-        </Panel>
-      }
-      inspector={
-        <Panel title="Settings">
           <FieldRow label="Preset" htmlFor="preset" help="Strong downsamples images. Light keeps more detail.">
             <Segmented label="Compression preset" value={preset} onChange={(value) => { setPreset(value); setResult(null); }} options={[
               { value: "light", label: "Light" },
@@ -114,8 +90,19 @@ export default function PdfCompressTool() {
           </FieldRow>
           {result ? <ResultStat variant="well" label="Images recompressed" value={`${result.recompressed}/${result.images}`} hint={`${result.pages} pages`} /> : null}
           <Notice tone="neutral" title="Nothing is uploaded." body="Document title, author, and subject are cleared when the compressed file is the one you download." />
-        </Panel>
-      }
-    />
+        </Pane>
+        <Pane label="Result">
+          {error ? <Notice tone="bad" role="alert" title="Could not compress" body={error} /> : null}
+          {result ? (
+            <div className="flex flex-col gap-3">
+              <SizeStat before={formatBytes(result.before)} after={formatBytes(result.after)} hint={result.saved ? `${result.percent}% smaller` : "No size change"} />
+              <Notice tone={result.metTarget ? "ok" : "warn"} title={result.metTarget ? "Ready" : "Above the target"} body={result.note} />
+              <ActionButton type="button" onClick={download}><Download />Download PDF</ActionButton>
+            </div>
+          ) : <EmptyState title="Nothing compressed yet" hint="Pick a preset, then compress. If a pass would grow the file, the original is kept." />}
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={note} tone={error ? "warn" : "pass"} trailing="⌘↵ compress" />
+    </ToolCard>
   );
 }

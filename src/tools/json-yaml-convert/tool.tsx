@@ -1,15 +1,16 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { TextArea } from "@/components/kit/controls";
-import { ArrowLeftRight, Copy } from "lucide-react";
+import { ActionButton, TextArea } from "@/components/kit/controls";
+import { ArrowLeftRight } from "lucide-react";
 import { toast } from "sonner";
 import { CodeOutput } from "@/components/kit/code-output";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
-import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
+import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
+import { useWorkbenchKeys } from "@/components/kit/tool-shell";
 import { convertData, dataFormats, exampleYaml, type DataFormat } from "@/tools/json-yaml-convert/lib/convert";
 
 const filenames: Record<DataFormat, string> = {
@@ -43,20 +44,18 @@ export default function JsonYamlTool() {
     : result.error;
 
   return (
-    <ToolShell
-      runsLocally
-      layout="split"
-      tabs={<ToolTabs label="Target format" value={to} onChange={setTo} options={dataFormats.map((format) => ({ value: format, label: format.toUpperCase() }))} />}
-      actions={<InkButton icon={<Copy size={15} />} disabled={!result.output} onClick={() => void navigator.clipboard.writeText(result.output).then(() => toast.success("Converted text copied"))}>Copy</InkButton>}
-      status={
-        <>
-          <span className={result.ok ? "dot" : "dot dot-warn"} />
-          <span>{status}</span>
-          <span className="ml-auto hidden min-[700px]:inline">⌘⇧C copy · esc reset</span>
-        </>
-      }
-      input={
-        <Panel title="Source">
+    <ToolCard>
+      <ToolToolbar
+        label="Target format"
+        options={dataFormats.map((format) => ({ value: format, label: format.toUpperCase() }))}
+        value={to}
+        onChange={setTo}
+        actions={
+          <ActionButton className="btn btn-ink" disabled={!result.output} onClick={() => void navigator.clipboard.writeText(result.output).then(() => toast.success("Converted text copied"))}>Copy</ActionButton>
+        }
+      />
+      <ToolPanes>
+        <Pane label="Source">
           <Segmented
             label="Source format"
             value={from}
@@ -66,22 +65,21 @@ export default function JsonYamlTool() {
           <FieldRow label="Document" htmlFor="convert-input" error={result.ok ? undefined : result.error} help={result.detected ? `Read as ${result.detected.toUpperCase()}.` : "Auto uses the first line."}>
             <TextArea id="convert-input" value={input} onChange={(event) => setInput(event.target.value)} spellCheck={false} aria-invalid={!result.ok} className="min-h-72 font-mono text-[13px]" />
           </FieldRow>
-        </Panel>
-      }
-      output={
-        <div aria-live="polite" className="min-h-[240px]">
-          {result.ok ? (
-            <Panel title={to.toUpperCase()}>
-              <CodeOutput code={result.output} filename={filenames[to]} label={to.toUpperCase()} />
-            </Panel>
-          ) : (
-            <Panel title="Error">
-              <Notice tone="bad" role="alert" title={where} body={result.error} />
-              <EmptyState art={<ArrowLeftRight size={22} />} title="No output" hint="The source has to parse before it can be written in the other format." />
-            </Panel>
-          )}
-        </div>
-      }
-    />
+        </Pane>
+        <Pane label={result.ok ? to.toUpperCase() : "Error"}>
+          <div aria-live="polite" className="flex min-h-[240px] flex-col gap-3">
+            {result.ok ? (
+              <CodeOutput code={result.output} filename={filenames[to]} label={to.toUpperCase()} fill />
+            ) : (
+              <>
+                <Notice tone="bad" role="alert" title={where} body={result.error} />
+                <EmptyState art={<ArrowLeftRight size={22} />} title="No output" hint="The source has to parse before it can be written in the other format." />
+              </>
+            )}
+          </div>
+        </Pane>
+      </ToolPanes>
+      <StatusStrip note={status} tone={result.ok ? "pass" : "warn"} trailing="⌘⇧C copy · esc reset" />
+    </ToolCard>
   );
 }
