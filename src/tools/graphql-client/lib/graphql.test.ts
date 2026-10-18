@@ -26,6 +26,11 @@ describe("validateEndpoint", () => {
     expect(validateEndpoint("http://2130706433")).toMatchObject({ error: expect.stringMatching(/not public/) });
     expect(validateEndpoint("http://host.docker.internal")).toMatchObject({ error: expect.stringMatching(/not public/) });
   });
+
+  it("rejects a public address on port 8000 and allows https", () => {
+    expect(validateEndpoint("http://1.2.3.4:8000")).toMatchObject({ error: "Only ports 80 and 443 are allowed." });
+    expect(validateEndpoint("https://example.com")).toEqual({ url: "https://example.com/" });
+  });
 });
 
 describe("parseVariables", () => {
@@ -87,6 +92,15 @@ describe("executeGraphql", () => {
     await expect(executeGraphql({ endpoint: "http://127.0.0.1", query: "{ a }" }, fetchImpl)).rejects.toThrow(/not public/);
     await expect(executeGraphql({ endpoint: "http://coolify:8080/graphql", query: "{ a }" }, fetchImpl)).rejects.toThrow(/not public/);
     expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it("rejects a public address on port 8000 before fetching and allows https", async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse({ data: { ok: true } }));
+    await expect(executeGraphql({ endpoint: "http://1.2.3.4:8000", query: "{ a }" }, fetchImpl)).rejects.toThrow(/80 and 443/);
+    expect(fetchImpl).not.toHaveBeenCalled();
+    const result = await executeGraphql({ endpoint: "https://example.com", query: "{ a }" }, fetchImpl);
+    expect(result.ok).toBe(true);
+    expect(fetchImpl).toHaveBeenCalledOnce();
   });
 
   it("throws on an empty query", async () => {

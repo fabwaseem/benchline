@@ -1,4 +1,5 @@
 import { outboundFetch } from "@/lib/net/outbound";
+import { WEB_PORTS } from "@/lib/net/ssrf";
 
 export const FETCH_LIMITS = {
   timeoutMs: 8_000,
@@ -24,7 +25,7 @@ export async function fetchPublic(
   const response = await outboundFetch(input, {
     method: "GET",
     allowMissingScheme: true,
-    ports: "web",
+    allowedPorts: WEB_PORTS,
     timeoutMs: FETCH_LIMITS.timeoutMs,
     maxBytes: FETCH_LIMITS.maxBytes,
     maxRedirects: FETCH_LIMITS.maxRedirects,

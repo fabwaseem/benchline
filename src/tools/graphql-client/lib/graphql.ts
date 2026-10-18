@@ -1,4 +1,4 @@
-import { parseOutboundUrl, PublicUrlError } from "@/lib/net/ssrf";
+import { parseOutboundUrl, PublicUrlError, WEB_PORTS } from "@/lib/net/ssrf";
 
 export interface GraphqlHeader {
   name: string;
@@ -41,14 +41,14 @@ export function parseVariables(text: string): { variables: unknown } | { error: 
 
 export function validateEndpoint(endpoint: string): { url: string } | { error: string } {
   try {
-    const url = parseOutboundUrl(endpoint, { schemes: ["http", "https"], ports: "any" });
+    const url = parseOutboundUrl(endpoint, { schemes: ["http", "https"], allowedPorts: WEB_PORTS });
     return { url: url.toString() };
   } catch (error) {
     if (error instanceof PublicUrlError) {
       if (error.message === "Enter a URL." || error.message === "Enter a valid URL.") {
         return { error: "The endpoint must be a valid http(s) URL." };
       }
-      if (error.message.startsWith("Only ")) return { error: "The endpoint must use http or https." };
+      if (/^Only (?:http|ws)\b/.test(error.message)) return { error: "The endpoint must use http or https." };
       return { error: error.message };
     }
     return { error: "The endpoint must be a valid http(s) URL." };

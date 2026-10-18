@@ -1,5 +1,6 @@
 import { FETCH_LIMITS } from "@/lib/net/fetch-public";
 import { outboundFetch } from "@/lib/net/outbound";
+import { WEB_PORTS } from "@/lib/net/ssrf";
 
 export type HeaderField = { name: string; value: string };
 
@@ -33,7 +34,7 @@ export async function fetchExchange(
   const response = await outboundFetch(input, {
     method: "GET",
     allowMissingScheme: true,
-    ports: "web",
+    allowedPorts: WEB_PORTS,
     timeoutMs: FETCH_LIMITS.timeoutMs,
     maxBytes,
     maxRedirects: FETCH_LIMITS.maxRedirects,

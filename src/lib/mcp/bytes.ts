@@ -1,5 +1,6 @@
 import { decodeBase64 } from "@/lib/base64";
 import { outboundFetch } from "@/lib/net/outbound";
+import { WEB_PORTS } from "@/lib/net/ssrf";
 import { z } from "zod";
 
 export const MCP_MAX_BYTES = 10 * 1024 * 1024;
@@ -75,7 +76,7 @@ async function bytesFromUrl(input: string, label: string, filename?: string, mim
   const response = await outboundFetch(input, {
     method: "GET",
     allowMissingScheme: true,
-    ports: "web",
+    allowedPorts: WEB_PORTS,
     timeoutMs: 15_000,
     maxBytes: MCP_MAX_BYTES,
     maxRedirects: REDIRECT_LIMIT,

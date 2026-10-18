@@ -30,17 +30,27 @@ const dispatchInit = {
 };
 
 describe("vetOutboundUrl", () => {
+  it("rejects a public address on port 8000 and allows https", async () => {
+    await expect(vetOutboundUrl("http://1.2.3.4:8000")).rejects.toThrow(/Only ports 80 and 443 are allowed/);
+    const vetted = await vetOutboundUrl("https://example.com", { lookup: publicLookup });
+    expect(vetted.url.href).toBe("https://example.com/");
+    const dispatch = vi.spyOn(outboundTransport, "dispatch");
+    await expect(outboundFetch("http://1.2.3.4:8000")).rejects.toThrow(/Only ports 80 and 443 are allowed/);
+    expect(dispatch).not.toHaveBeenCalled();
+    dispatch.mockRestore();
+  });
+
   it("allows a public host when every resolved address is public", async () => {
-    const vetted = await vetOutboundUrl("https://example.com/a", { lookup: publicLookup, ports: "any" });
+    const vetted = await vetOutboundUrl("https://example.com/a", { lookup: publicLookup });
     expect(vetted.addresses).toEqual([{ address: "1.1.1.1", family: 4 }]);
-    const v6 = await vetOutboundUrl("https://v6.example/", { lookup: publicLookup, ports: "any" });
+    const v6 = await vetOutboundUrl("https://v6.example/", { lookup: publicLookup });
     expect(v6.addresses[0]?.address).toBe("2606:4700:4700::1111");
   });
 
   it("blocks a host when any resolved address is private", async () => {
-    await expect(vetOutboundUrl("https://dual.example/", { lookup: publicLookup, ports: "any" })).rejects.toThrow(/private address/);
-    await expect(vetOutboundUrl("https://rebind.example/", { lookup: publicLookup, ports: "any" })).rejects.toThrow(PublicUrlError);
-    await expect(vetOutboundUrl("https://missing.example/", { lookup: publicLookup, ports: "any" })).rejects.toThrow(/resolve/);
+    await expect(vetOutboundUrl("https://dual.example/", { lookup: publicLookup })).rejects.toThrow(/private address/);
+    await expect(vetOutboundUrl("https://rebind.example/", { lookup: publicLookup })).rejects.toThrow(PublicUrlError);
+    await expect(vetOutboundUrl("https://missing.example/", { lookup: publicLookup })).rejects.toThrow(/resolve/);
   });
 });
 
@@ -81,7 +91,7 @@ describe("outboundFetch", () => {
       };
       return Object.assign(req, { end, write: () => req, destroy: () => req, setTimeout: () => req });
     }) as unknown as typeof https.request);
-    const result = await outboundFetch("https://example.com/hello", { lookup, ports: "any" });
+    const result = await outboundFetch("https://example.com/hello", { lookup });
     expect(new TextDecoder().decode(result.body)).toBe("ok");
     expect(seenHost).toBe("example.com");
     expect(pinned).toBe("1.1.1.1");
@@ -99,7 +109,7 @@ describe("outboundFetch", () => {
       }
       return { status: 302, headers: new Headers({ location: "http://127.0.0.1/secret" }), body: new Uint8Array() };
     });
-    const ok = await outboundFetch("https://example.com/start", { lookup: publicLookup, ports: "any" });
+    const ok = await outboundFetch("https://example.com/start", { lookup: publicLookup });
     expect(new TextDecoder().decode(ok.body)).toBe("landed");
     expect(ok.redirects).toHaveLength(1);
     dispatch.mockImplementation(async () => ({
@@ -107,13 +117,13 @@ describe("outboundFetch", () => {
       headers: new Headers({ location: "http://coolify:8080/admin" }),
       body: new Uint8Array(),
     }));
-    await expect(outboundFetch("https://example.com/jump", { lookup: publicLookup, ports: "any" })).rejects.toThrow(PublicUrlError);
+    await expect(outboundFetch("https://example.com/jump", { lookup: publicLookup })).rejects.toThrow(PublicUrlError);
     dispatch.mockImplementation(async () => ({
       status: 302,
       headers: new Headers({ location: "http://10.0.0.1/" }),
       body: new Uint8Array(),
     }));
-    await expect(outboundFetch("https://example.com/jump", { lookup: publicLookup, ports: "any" })).rejects.toThrow(/not public/);
+    await expect(outboundFetch("https://example.com/jump", { lookup: publicLookup })).rejects.toThrow(/not public/);
     vi.restoreAllMocks();
   });
 
@@ -124,7 +134,7 @@ describe("outboundFetch", () => {
       body: new Uint8Array(),
     });
     await expect(
-      outboundFetch("https://1.1.1.1/graphql", { followRedirects: false, ports: "any", redirectMessage: "Redirects are not followed." }),
+      outboundFetch("https://1.1.1.1/graphql", { followRedirects: false, redirectMessage: "Redirects are not followed." }),
     ).rejects.toThrow(/not followed/);
     vi.restoreAllMocks();
   });
@@ -135,7 +145,7 @@ describe("outboundFetch", () => {
       headers: new Headers(),
       body: new Uint8Array(50),
     });
-    await expect(outboundFetch("https://1.1.1.1/", { maxBytes: 10, tooLargeMessage: "Response is larger than 10 bytes.", ports: "any" })).rejects.toThrow(/10 bytes/);
+    await expect(outboundFetch("https://1.1.1.1/", { maxBytes: 10, tooLargeMessage: "Response is larger than 10 bytes." })).rejects.toThrow(/10 bytes/);
     vi.restoreAllMocks();
   });
 });

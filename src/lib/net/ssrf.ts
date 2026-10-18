@@ -21,9 +21,12 @@ const INTERNAL_SUFFIXES = [
 
 export type OutboundScheme = "http" | "https" | "ws" | "wss";
 
+export const WEB_PORTS = [80, 443] as const;
+
 export type ParseOutboundOptions = {
   schemes?: OutboundScheme[];
-  ports?: "web" | "any";
+  /** Destination ports this call may use. Defaults to 80 and 443. */
+  allowedPorts?: readonly number[];
   allowMissingScheme?: boolean;
 };
 
@@ -178,9 +181,27 @@ function schemeMessage(schemes: OutboundScheme[]): string {
   return `Only ${schemes.join(" and ")} URLs are allowed.`;
 }
 
+function resolveAllowedPorts(options: ParseOutboundOptions): ReadonlySet<number> {
+  if (options.allowedPorts) return new Set(options.allowedPorts);
+  return new Set<number>(WEB_PORTS);
+}
+
+function portMessage(allowed: ReadonlySet<number>): string {
+  const web = allowed.size === WEB_PORTS.length && WEB_PORTS.every((port) => allowed.has(port));
+  return web ? "Only ports 80 and 443 are allowed." : "That port is not allowed.";
+}
+
+function assertAllowedPort(url: URL, allowed: ReadonlySet<number>): void {
+  const explicit = url.port ? Number(url.port) : null;
+  if (explicit !== null && (!Number.isInteger(explicit) || explicit < 1 || explicit > 65535)) {
+    throw new PublicUrlError("That port is not allowed.");
+  }
+  const port = explicit ?? (url.protocol === "https:" || url.protocol === "wss:" ? 443 : 80);
+  if (!allowed.has(port)) throw new PublicUrlError(portMessage(allowed));
+}
+
 export function parseOutboundUrl(input: string, options: ParseOutboundOptions = {}): URL {
   const schemes = options.schemes ?? ["http", "https"];
-  const ports = options.ports ?? "web";
   const trimmed = input.trim();
   if (!trimmed) throw new PublicUrlError("Enter a URL.");
   const hasScheme = /^[a-z][a-z0-9+.-]*:\/\//i.test(trimmed);
@@ -195,14 +216,10 @@ export function parseOutboundUrl(input: string, options: ParseOutboundOptions = 
   if (!schemes.includes(scheme as OutboundScheme)) throw new PublicUrlError(schemeMessage(schemes));
   if (url.username || url.password) throw new PublicUrlError("URLs with credentials are not allowed.");
   assertPublicHostname(url.hostname);
-  if (url.port) {
-    const port = Number(url.port);
-    if (!Number.isInteger(port) || port < 1 || port > 65535) throw new PublicUrlError("That port is not allowed.");
-    if (ports === "web" && port !== 80 && port !== 443) throw new PublicUrlError("Only ports 80 and 443 are allowed.");
-  }
+  assertAllowedPort(url, resolveAllowedPorts(options));
   return url;
 }
 
 export function parsePublicHttpUrl(input: string): URL {
-  return parseOutboundUrl(input, { allowMissingScheme: true, ports: "web", schemes: ["http", "https"] });
+  return parseOutboundUrl(input, { allowMissingScheme: true, allowedPorts: WEB_PORTS, schemes: ["http", "https"] });
 }

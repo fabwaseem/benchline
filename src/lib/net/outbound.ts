@@ -242,7 +242,7 @@ export async function outboundFetch(input: string, init: OutboundInit = {}): Pro
   const tooLargeMessage = init.tooLargeMessage ?? "Response is larger than 800 KB.";
   const policy: ParseOutboundOptions = {
     schemes: init.schemes,
-    ports: init.ports,
+    allowedPorts: init.allowedPorts,
     allowMissingScheme: init.allowMissingScheme,
   };
   let current = await vetOutboundUrl(input, { ...policy, lookup: init.lookup });

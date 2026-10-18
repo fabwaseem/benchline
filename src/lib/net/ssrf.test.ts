@@ -119,23 +119,28 @@ describe("parseOutboundUrl", () => {
       "http://user:pass@1.1.1.1/",
     ];
     for (const input of urls) {
-      expect(() => parseOutboundUrl(input, { ports: "any" }), input).toThrow(PublicUrlError);
+      expect(() => parseOutboundUrl(input), input).toThrow(PublicUrlError);
     }
   });
 
-  it("accepts a public host on a non-web port when ports are unrestricted", () => {
-    const url = parseOutboundUrl("https://example.com:8443/graphql", { ports: "any" });
-    expect(url.hostname).toBe("example.com");
+  it("rejects a public address on port 8000 and allows https by default", () => {
+    expect(() => parseOutboundUrl("http://1.2.3.4:8000")).toThrow(/Only ports 80 and 443 are allowed/);
+    expect(parseOutboundUrl("https://example.com").href).toBe("https://example.com/");
+  });
+
+  it("allows a non-web port only when that port is listed", () => {
+    const url = parseOutboundUrl("https://example.com:8443/graphql", { allowedPorts: [8443] });
     expect(url.port).toBe("8443");
+    expect(() => parseOutboundUrl("http://1.2.3.4:8000", { allowedPorts: [8443] })).toThrow(/That port is not allowed/);
   });
 
   it("accepts public addresses and ws schemes when asked", () => {
     expect(parseOutboundUrl("https://1.1.1.1/path").hostname).toBe("1.1.1.1");
     expect(parseOutboundUrl("https://[2606:4700:4700::1111]/").hostname).toContain("2606:4700:4700");
-    const socket = parseOutboundUrl("wss://echo.example.com/chat", { schemes: ["ws", "wss"], ports: "any" });
+    const socket = parseOutboundUrl("wss://echo.example.com/chat", { schemes: ["ws", "wss"] });
     expect(socket.protocol).toBe("wss:");
-    expect(() => parseOutboundUrl("ws://127.0.0.1:8080", { schemes: ["ws", "wss"], ports: "any" })).toThrow(PublicUrlError);
-    expect(() => parseOutboundUrl("ws://coolify:8080", { schemes: ["ws", "wss"], ports: "any" })).toThrow(PublicUrlError);
-    expect(() => parseOutboundUrl("http://example.com", { schemes: ["ws", "wss"], ports: "any" })).toThrow(/ws and wss/);
+    expect(() => parseOutboundUrl("ws://127.0.0.1:8080", { schemes: ["ws", "wss"] })).toThrow(PublicUrlError);
+    expect(() => parseOutboundUrl("ws://coolify:8080", { schemes: ["ws", "wss"] })).toThrow(PublicUrlError);
+    expect(() => parseOutboundUrl("http://example.com", { schemes: ["ws", "wss"] })).toThrow(/ws and wss/);
   });
 });
