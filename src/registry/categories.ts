@@ -370,4 +370,9 @@ export const toolOrder = [
   "sitemap-validator",
   "http-headers-checker",
   "ssl-checker",
+  "totp-generator",
+  "jsonpath-tester",
+  "programmer-calculator",
+  "aes-crypto",
+  "har-analyzer",
 ] as const;

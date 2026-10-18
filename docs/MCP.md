@@ -14,7 +14,7 @@ File fields take either `url` or `data`, not both. `data` is base64 or a data UR
 
 The handler validates with the input schema, runs the tool, and validates the output. A thrown error comes back as `isError: true` and a text message. It is not a successful result.
 
-62 tools.
+67 tools.
 
 ## `generate_llms_txt`
 
@@ -1195,3 +1195,90 @@ Connect to a public host on port 443 and report certificate expiry, subject alte
 ### Input
 
 - `host` (string, required) — Public hostname or https URL. Only port 443 is contacted. Private addresses are refused.
+
+## `generate_totp`
+
+**Generate a TOTP/HOTP one-time code**
+
+Compute RFC 4226/6238 one-time passcodes from a base32 secret. Supports 6/8 digits, SHA1/SHA256/SHA512, and custom periods.
+
+- Page: https://tools.fabwaseem.com/t/totp-generator
+- HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/totp-generator`
+- Fetches the network: no
+
+### Input
+
+- `secret` (string, required, min length 1) — Base32 TOTP/HOTP secret
+- `mode` (`totp` \| `hotp`, optional, default `totp`)
+- `digits` (`6` or `8`, optional, default `6`)
+- `period` (integer, optional, default `30`, maximum 9007199254740991, exclusive minimum 0) — TOTP period in seconds
+- `algorithm` (`SHA1` \| `SHA256` \| `SHA512`, optional, default `SHA1`)
+- `at` (integer, optional, maximum 9007199254740991, exclusive minimum 0) — Unix time in milliseconds; defaults to now
+- `counter` (integer, optional, default `0`, minimum 0, maximum 9007199254740991) — HOTP counter
+
+## `query_jsonpath`
+
+**Run a JSONPath query**
+
+Evaluate a JSONPath Plus query against a JSON document and return the matches with their paths.
+
+- Page: https://tools.fabwaseem.com/t/jsonpath-tester
+- HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/jsonpath-tester`
+- Fetches the network: no
+
+### Input
+
+- `json` (string, required, min length 1) — JSON document text
+- `query` (string, required, min length 1) — JSONPath query, e.g. $.store.book[*].author
+- `limit` (integer, optional, default `50`, minimum 1, maximum 500) — Maximum matches to return
+
+## `calculate_programmer`
+
+**Evaluate a programmer expression**
+
+Evaluate integer expressions with C-like precedence (hex/octal/binary literals, bitwise ops, shifts) and report base conversions plus signed/unsigned interpretations.
+
+- Page: https://tools.fabwaseem.com/t/programmer-calculator
+- HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/programmer-calculator`
+- Fetches the network: no
+
+### Input
+
+- `expression` (string, optional) — Integer expression, e.g. '0xFF & 0x0F | (1 << 4)'
+- `op` (`and` \| `or` \| `xor` \| `not` \| `shl` \| `shr`, optional) — Bitwise operation (alternative to expression)
+- `a` (string, optional) — First operand, e.g. '0xFF' or '255'
+- `b` (string, optional) — Second operand (not needed for 'not')
+- `bits` (`8` \| `16` \| `32` \| `64`, optional, default `64`) — Bit width for masking and signed interpretation
+
+## `aes_crypt`
+
+**Encrypt or decrypt with AES-GCM**
+
+AES-256-GCM encryption with PBKDF2-SHA256 key derivation. Encrypt returns a base64 bundle (salt, IV, ciphertext); decrypt reverses it.
+
+- Page: https://tools.fabwaseem.com/t/aes-crypto
+- HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/aes-crypto`
+- Fetches the network: no
+
+### Input
+
+- `mode` (`encrypt` \| `decrypt`, required)
+- `passphrase` (string, required, min length 1)
+- `text` (string, optional) — Plaintext to encrypt (encrypt mode)
+- `bundle` (string, optional) — Base64 bundle from a previous encryption (decrypt mode)
+- `iterations` (integer, optional, default `100000`, minimum 10000, maximum 2000000)
+
+## `analyze_har`
+
+**Analyze a HAR file**
+
+Parse a HAR (HTTP Archive) capture and summarize it: request counts, status distribution, slowest and largest requests, top hosts, and per-request timings.
+
+- Page: https://tools.fabwaseem.com/t/har-analyzer
+- HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/har-analyzer`
+- Fetches the network: no
+
+### Input
+
+- `har` (string, required, min length 1) — HAR file contents as JSON text
+- `top` (integer, optional, default `5`, minimum 1, maximum 20) — How many slowest/largest requests and top hosts to include
