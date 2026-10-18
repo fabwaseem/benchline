@@ -55,4 +55,12 @@ export const toolLoaders: Record<string, () => Promise<{ default: ComponentType 
   "loan-emi-calculator": () => import("@/tools/loan-emi-calculator/tool"),
   "percentage-calculator": () => import("@/tools/percentage-calculator/tool"),
   "unit-converter": () => import("@/tools/unit-converter/tool"),
+  "dns-lookup": () => import("@/tools/dns-lookup/tool"),
+  "ip-cidr-calculator": () => import("@/tools/ip-cidr-calculator/tool"),
+  "htpasswd-bcrypt": () => import("@/tools/htpasswd-bcrypt/tool"),
+  "rsa-keypair": () => import("@/tools/rsa-keypair/tool"),
+  "csp-generator": () => import("@/tools/csp-generator/tool"),
+  "sitemap-validator": () => import("@/tools/sitemap-validator/tool"),
+  "http-headers-checker": () => import("@/tools/http-headers-checker/tool"),
+  "ssl-checker": () => import("@/tools/ssl-checker/tool"),
 };

@@ -22,7 +22,8 @@ describe("taxonomy", () => {
     expect(nav.find((entry) => entry.name === "Design")).toMatchObject({ slug: "design", flat: true });
     expect(nav.find((entry) => entry.name === "Text")).toMatchObject({ slug: "text", flat: false });
     expect(nav.find((entry) => entry.name === "Math & Finance")).toMatchObject({ slug: "math", flat: false });
-    expect(nav.find((entry) => entry.name === "Network")).toMatchObject({ slug: "urls", flat: true });
+    expect(nav.find((entry) => entry.name === "Network")).toMatchObject({ slug: "network", flat: false });
+    expect(nav.find((entry) => entry.name === "Network")?.children.map((child) => child.slug)).toEqual(["urls", "dns", "ip", "http", "tls"]);
     const data = nav.find((entry) => entry.slug === "data");
     expect(data?.children.map((child) => child.slug)).toEqual(["json", "tables", "encoding", "markup", "sql"]);
     expect(nav.find((entry) => entry.slug === "text")?.children.map((child) => child.slug)).toEqual(["diff", "writing"]);
@@ -52,7 +53,11 @@ describe("taxonomy", () => {
     const text = resolveListing("text");
     expect(text?.kind).toBe("page");
     if (text?.kind === "page") expect(text.chips?.map((chip) => chip.slug)).toEqual(["diff", "writing"]);
-    expect(resolveListing("network")).toEqual({ kind: "redirect", href: "/urls" });
+    const network = resolveListing("network");
+    expect(network?.kind).toBe("page");
+    if (network?.kind === "page") {
+      expect(network.chips?.map((chip) => chip.slug)).toEqual(["urls", "dns", "ip", "http", "tls"]);
+    }
 
     const image = resolveListing("image");
     expect(image?.kind).toBe("page");

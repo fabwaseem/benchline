@@ -58,6 +58,14 @@ const views: Record<string, ComponentType> = {
   "loan-emi-calculator": dynamic(() => import("@/tools/loan-emi-calculator/tool")),
   "percentage-calculator": dynamic(() => import("@/tools/percentage-calculator/tool")),
   "unit-converter": dynamic(() => import("@/tools/unit-converter/tool")),
+  "dns-lookup": dynamic(() => import("@/tools/dns-lookup/tool")),
+  "ip-cidr-calculator": dynamic(() => import("@/tools/ip-cidr-calculator/tool")),
+  "htpasswd-bcrypt": dynamic(() => import("@/tools/htpasswd-bcrypt/tool")),
+  "rsa-keypair": dynamic(() => import("@/tools/rsa-keypair/tool")),
+  "csp-generator": dynamic(() => import("@/tools/csp-generator/tool")),
+  "sitemap-validator": dynamic(() => import("@/tools/sitemap-validator/tool")),
+  "http-headers-checker": dynamic(() => import("@/tools/http-headers-checker/tool")),
+  "ssl-checker": dynamic(() => import("@/tools/ssl-checker/tool")),
 };
 
 export function ToolHost({ slug }: { slug: string }) {
