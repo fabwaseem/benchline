@@ -81,6 +81,11 @@ const views: Record<string, ComponentType> = {
   "pdf-signature": dynamic(() => import("@/tools/pdf-signature/tool")),
   "social-image-resizer": dynamic(() => import("@/tools/social-image-resizer/tool")),
   "audio-trimmer": dynamic(() => import("@/tools/audio-trimmer/tool")),
+  "currency-converter": dynamic(() => import("@/tools/currency-converter/tool")),
+  "meme-generator": dynamic(() => import("@/tools/meme-generator/tool")),
+  "zip-tools": dynamic(() => import("@/tools/zip-tools/tool")),
+  "photo-collage": dynamic(() => import("@/tools/photo-collage/tool")),
+  "pdf-form-filler": dynamic(() => import("@/tools/pdf-form-filler/tool")),
 };
 
 export function ToolHost({ slug }: { slug: string }) {

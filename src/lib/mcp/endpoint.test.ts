@@ -274,6 +274,18 @@ describe("MCP endpoint", () => {
         startSec: 0,
         endSec: 0.005,
       },
+      convert_currency: { amount: 100, from: "USD", to: "EUR" },
+      generate_meme: { top: "hello", bottom: "world" },
+      zip_files: { mode: "zip", files: [{ name: "a.txt", data: "aGk=" }] },
+      make_collage: {
+        images: [
+          { data: png, filename: "a.png", mimeType: "image/png" },
+          { data: png, filename: "b.png", mimeType: "image/png" },
+        ],
+        layout: "duo",
+        width: 256,
+      },
+      fill_pdf_form: { file: { name: "a.pdf", data: pdf }, inspectOnly: true },
     };
 
     const missing = mcpTools.map((tool) => tool.name).filter((name) => !(name in samples));
