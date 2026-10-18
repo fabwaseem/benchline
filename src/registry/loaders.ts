@@ -68,4 +68,9 @@ export const toolLoaders: Record<string, () => Promise<{ default: ComponentType 
   "programmer-calculator": () => import("@/tools/programmer-calculator/tool"),
   "aes-crypto": () => import("@/tools/aes-crypto/tool"),
   "har-analyzer": () => import("@/tools/har-analyzer/tool"),
+  "json-to-types": () => import("@/tools/json-to-types/tool"),
+  "code-minifier": () => import("@/tools/code-minifier/tool"),
+  "curl-converter": () => import("@/tools/curl-converter/tool"),
+  "graphql-client": () => import("@/tools/graphql-client/tool"),
+  "websocket-tester": () => import("@/tools/websocket-tester/tool"),
 };

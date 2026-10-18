@@ -226,6 +226,11 @@ describe("MCP endpoint", () => {
       analyze_har: {
         har: "{\"log\":{\"entries\":[{\"startedDateTime\":\"2026-10-18T10:00:00.000Z\",\"time\":100,\"request\":{\"method\":\"GET\",\"url\":\"https://example.com/\"},\"response\":{\"status\":200,\"statusText\":\"OK\",\"content\":{\"size\":10,\"mimeType\":\"text/html\"}},\"timings\":{\"blocked\":1,\"dns\":2,\"connect\":3,\"send\":4,\"wait\":80,\"receive\":10}}]}}",
       },
+      convert_json_to_types: { json: "{\"name\":\"Ada\"}", targets: ["typescript"] },
+      minify_code: { language: "js", code: "function foo() { return 1; }" },
+      convert_curl: { command: "curl https://example.com", target: "fetch" },
+      execute_graphql: { endpoint: "https://1.1.1.1/", query: "{ hello }" },
+      validate_websocket_url: { url: "wss://echo.example.com/chat" },
     };
 
     const missing = mcpTools.map((tool) => tool.name).filter((name) => !(name in samples));

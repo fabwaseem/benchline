@@ -43,7 +43,7 @@ The directory is the home page. The JSON formatter is one tool page (`/t/json-fo
 
 <!-- tools:start -->
 
-66 tools, in `toolOrder`. Run `pnpm gen:readme-tools` after adding one.
+71 tools, in `toolOrder`. Run `pnpm gen:readme-tools` after adding one.
 
 ### Developer
 
@@ -65,6 +65,10 @@ Build files, schedules, and the small programs a deploy depends on.
 
 - [Regex tester](https://tools.fabwaseem.com/t/regex-tester) — Test a JavaScript pattern, read the groups, and preview a replacement.
 
+**Code.** Minify and convert source code.
+
+- [Code Minifier](https://tools.fabwaseem.com/t/code-minifier) — Minify JavaScript, CSS, and HTML with byte-level savings.
+
 ### Data & Formats
 
 JSON, tables, and the encodings that move data between systems.
@@ -75,6 +79,7 @@ JSON, tables, and the encodings that move data between systems.
 - [JSON YAML converter](https://tools.fabwaseem.com/t/json-yaml-convert) — Convert JSON, YAML, TOML, and XML in the browser, and keep the line number when a document fails.
 - [JSON Schema](https://tools.fabwaseem.com/t/json-schema-validate) — Infer a schema from JSON, validate against one, and export TypeScript and Zod.
 - [JSONPath tester](https://tools.fabwaseem.com/t/jsonpath-tester) — Query JSON with JSONPath Plus and inspect every match.
+- [JSON to Types](https://tools.fabwaseem.com/t/json-to-types) — Paste JSON, get TypeScript, Zod, Pydantic, dataclass, and Go types.
 
 **Tables.** Turn CSV into JSON and JSON into rows.
 
@@ -227,6 +232,9 @@ DNS, certificates, response headers, and the URLs a request is built from.
 
 - [HTTP headers](https://tools.fabwaseem.com/t/http-headers-checker) — Follow redirects and grade the security headers on a public URL.
 - [HAR analyzer](https://tools.fabwaseem.com/t/har-analyzer) — Drop a HAR capture, see where the time went.
+- [cURL Converter](https://tools.fabwaseem.com/t/curl-converter) — Turn any curl command into fetch, Python, Go, PHP, or Rust.
+- [GraphQL Client](https://tools.fabwaseem.com/t/graphql-client) — Query any GraphQL endpoint with variables, headers, and history.
+- [WebSocket Tester](https://tools.fabwaseem.com/t/websocket-tester) — Connect to any ws/wss endpoint and inspect live frames.
 
 **TLS.** Certificate expiry, the chain, and the names on a public host.
 
@@ -339,9 +347,9 @@ The full input list is [docs/MCP.md](docs/MCP.md).
 
 <!-- privacy:start -->
 
-57 tools run entirely in the browser. Text, files, and results stay on the device.
+60 tools run entirely in the browser. Text, files, and results stay on the device.
 
-9 tools can fetch a public URL through this site. The page posts the URL or hostname you submit, the route fetches that address and does not write it anywhere, and private addresses are refused. Those routes allow 8 requests from one address every 10 minutes.
+11 tools can fetch a public URL through this site. The page posts the URL or hostname you submit, the route fetches that address and does not write it anywhere, and private addresses are refused. Those routes allow 8 requests from one address every 10 minutes.
 
 - [llms.txt generator](https://tools.fabwaseem.com/t/llms-txt-generator) — Read a public sitemap and write an llms.txt index, plus an optional llms-full.txt.
 - [AI SEO checker](https://tools.fabwaseem.com/t/ai-seo-checker) — Score crawler access, llms.txt, structured data, and the on-page signals AI search uses.
@@ -352,6 +360,8 @@ The full input list is [docs/MCP.md](docs/MCP.md).
 - [Sitemap validator](https://tools.fabwaseem.com/t/sitemap-validator) — Check a sitemap URL or XML, or generate a urlset from a list.
 - [HTTP headers](https://tools.fabwaseem.com/t/http-headers-checker) — Follow redirects and grade the security headers on a public URL.
 - [SSL checker](https://tools.fabwaseem.com/t/ssl-checker) — Expiry, names, and the chain for a certificate on port 443.
+- [GraphQL Client](https://tools.fabwaseem.com/t/graphql-client) — Query any GraphQL endpoint with variables, headers, and history.
+- [WebSocket Tester](https://tools.fabwaseem.com/t/websocket-tester) — Connect to any ws/wss endpoint and inspect live frames.
 
 <!-- privacy:end -->
 

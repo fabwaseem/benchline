@@ -75,6 +75,11 @@ export const mcpIndex: McpIndexEntry[] = [
   {"slug":"programmer-calculator","name":"calculate_programmer","title":"Evaluate a programmer expression","description":"Evaluate integer expressions with C-like precedence (hex/octal/binary literals, bitwise ops, shifts) and report base conversions plus signed/unsigned interpretations.","openWorld":false},
   {"slug":"aes-crypto","name":"aes_crypt","title":"Encrypt or decrypt with AES-GCM","description":"AES-256-GCM encryption with PBKDF2-SHA256 key derivation. Encrypt returns a base64 bundle (salt, IV, ciphertext); decrypt reverses it.","openWorld":false},
   {"slug":"har-analyzer","name":"analyze_har","title":"Analyze a HAR file","description":"Parse a HAR (HTTP Archive) capture and summarize it: request counts, status distribution, slowest and largest requests, top hosts, and per-request timings.","openWorld":false},
+  {"slug":"json-to-types","name":"convert_json_to_types","title":"Convert JSON to type definitions","description":"Infer types from a JSON document and generate TypeScript interfaces, Zod schemas, Python Pydantic models or dataclasses, and Go structs.","openWorld":false},
+  {"slug":"code-minifier","name":"minify_code","title":"Minify JavaScript, CSS, or HTML","description":"Minify source code with Terser (JS), csso (CSS), or a structural HTML pass and report before/after byte counts.","openWorld":false},
+  {"slug":"curl-converter","name":"convert_curl","title":"Convert a curl command to code","description":"Parse a curl command and generate equivalent JavaScript fetch, Python requests, Go, PHP, or Rust code.","openWorld":false},
+  {"slug":"graphql-client","name":"execute_graphql","title":"Execute a GraphQL query","description":"Send a GraphQL query with optional variables and headers to an endpoint and return the response data or errors.","openWorld":true},
+  {"slug":"websocket-tester","name":"validate_websocket_url","title":"Validate a WebSocket URL","description":"Validate and parse a ws:// or wss:// URL into its components, and optionally decode a WebSocket close code.","openWorld":false},
 ];
 
 export function mcpFor(slug: string) {

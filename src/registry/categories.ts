@@ -243,6 +243,14 @@ export const categories = [
     parent: "developer",
   },
   {
+    slug: "code",
+    name: "Code",
+    description: "Minify and convert source code.",
+    icon: "FileCode",
+    hue: 205,
+    parent: "developer",
+  },
+  {
     slug: "sql",
     name: "SQL",
     description: "Format a query without running it.",
@@ -375,4 +383,9 @@ export const toolOrder = [
   "programmer-calculator",
   "aes-crypto",
   "har-analyzer",
+  "json-to-types",
+  "code-minifier",
+  "curl-converter",
+  "graphql-client",
+  "websocket-tester",
 ] as const;

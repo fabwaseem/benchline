@@ -65,9 +65,14 @@ import { tool as jsonpathTester } from "@/tools/jsonpath-tester/mcp";
 import { tool as programmerCalculator } from "@/tools/programmer-calculator/mcp";
 import { tool as aesCrypto } from "@/tools/aes-crypto/mcp";
 import { tool as harAnalyzer } from "@/tools/har-analyzer/mcp";
+import { tool as jsonToTypes } from "@/tools/json-to-types/mcp";
+import { tool as codeMinifier } from "@/tools/code-minifier/mcp";
+import { tool as curlConverter } from "@/tools/curl-converter/mcp";
+import { tool as graphqlClient } from "@/tools/graphql-client/mcp";
+import { tool as websocketTester } from "@/tools/websocket-tester/mcp";
 import type { BenchTool } from "@/lib/mcp/types";
 
-export const mcpTools: BenchTool[] = [llmsTxtGenerator, aiSeoChecker, ...ogImageGeneratorTools, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator, pdfToText, pdfRotateOrganize, pdfToImage, pdfProtectUnlock, markdownHtml, htmlToMarkdownUrl, qrCodeReader, svgOptimizer, exifViewerRemover, imageCrop, faviconGenerator, ocrImageToText, backgroundRemover, wordCounter, caseConverter, loremIpsum, regexTester, sqlFormatter, jsonSchemaValidate, loanEmiCalculator, percentageCalculator, unitConverter, dnsLookup, ipCidrCalculator, htpasswdBcrypt, rsaKeypair, cspGenerator, sitemapValidator, httpHeadersChecker, sslChecker, totpGenerator, jsonpathTester, programmerCalculator, aesCrypto, harAnalyzer];
+export const mcpTools: BenchTool[] = [llmsTxtGenerator, aiSeoChecker, ...ogImageGeneratorTools, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator, pdfToText, pdfRotateOrganize, pdfToImage, pdfProtectUnlock, markdownHtml, htmlToMarkdownUrl, qrCodeReader, svgOptimizer, exifViewerRemover, imageCrop, faviconGenerator, ocrImageToText, backgroundRemover, wordCounter, caseConverter, loremIpsum, regexTester, sqlFormatter, jsonSchemaValidate, loanEmiCalculator, percentageCalculator, unitConverter, dnsLookup, ipCidrCalculator, htpasswdBcrypt, rsaKeypair, cspGenerator, sitemapValidator, httpHeadersChecker, sslChecker, totpGenerator, jsonpathTester, programmerCalculator, aesCrypto, harAnalyzer, jsonToTypes, codeMinifier, curlConverter, graphqlClient, websocketTester];
 
 export function mcpToolBySlug(slug: string) {
   return mcpTools.find((tool) => tool.slug === slug);

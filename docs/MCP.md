@@ -14,7 +14,7 @@ File fields take either `url` or `data`, not both. `data` is base64 or a data UR
 
 The handler validates with the input schema, runs the tool, and validates the output. A thrown error comes back as `isError: true` and a text message. It is not a successful result.
 
-67 tools.
+72 tools.
 
 ## `generate_llms_txt`
 
@@ -1282,3 +1282,86 @@ Parse a HAR (HTTP Archive) capture and summarize it: request counts, status dist
 
 - `har` (string, required, min length 1) — HAR file contents as JSON text
 - `top` (integer, optional, default `5`, minimum 1, maximum 20) — How many slowest/largest requests and top hosts to include
+
+## `convert_json_to_types`
+
+**Convert JSON to type definitions**
+
+Infer types from a JSON document and generate TypeScript interfaces, Zod schemas, Python Pydantic models or dataclasses, and Go structs.
+
+- Page: https://tools.fabwaseem.com/t/json-to-types
+- HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/json-to-types`
+- Fetches the network: no
+
+### Input
+
+- `json` (string, required, min length 1, max length 500000)
+- `rootName` (string, optional, default `Root`, max length 80)
+- `targets` (array of `typescript` \| `zod` \| `pydantic` \| `dataclass` \| `go`, optional, default `["typescript"]`, min items 1)
+
+## `minify_code`
+
+**Minify JavaScript, CSS, or HTML**
+
+Minify source code with Terser (JS), csso (CSS), or a structural HTML pass and report before/after byte counts.
+
+- Page: https://tools.fabwaseem.com/t/code-minifier
+- HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/code-minifier`
+- Fetches the network: no
+
+### Input
+
+- `language` (`js` \| `css` \| `html`, required)
+- `code` (string, required, min length 1, max length 500000)
+- `jsMangle` (boolean, optional, default `true`)
+- `jsCompress` (boolean, optional, default `true`)
+- `cssLevel` (`1` or `2`, optional, default `2`)
+- `htmlAggressive` (boolean, optional, default `false`)
+
+## `convert_curl`
+
+**Convert a curl command to code**
+
+Parse a curl command and generate equivalent JavaScript fetch, Python requests, Go, PHP, or Rust code.
+
+- Page: https://tools.fabwaseem.com/t/curl-converter
+- HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/curl-converter`
+- Fetches the network: no
+
+### Input
+
+- `command` (string, required, min length 1, max length 20000)
+- `target` (`fetch` \| `python` \| `go` \| `php` \| `rust`, optional, default `fetch`)
+
+## `execute_graphql`
+
+**Execute a GraphQL query**
+
+Send a GraphQL query with optional variables and headers to an endpoint and return the response data or errors.
+
+- Page: https://tools.fabwaseem.com/t/graphql-client
+- HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/graphql-client`
+- Fetches the network: yes
+
+### Input
+
+- `endpoint` (string, required, format `uri`, max length 2000)
+- `query` (string, required, min length 1, max length 50000)
+- `variables` (object, optional)
+- `headers` (object, optional)
+- `timeoutMs` (integer, optional, default `15000`, minimum 1000, maximum 60000)
+
+## `validate_websocket_url`
+
+**Validate a WebSocket URL**
+
+Validate and parse a ws:// or wss:// URL into its components, and optionally decode a WebSocket close code.
+
+- Page: https://tools.fabwaseem.com/t/websocket-tester
+- HTTP: `POST https://tools.fabwaseem.com/api/v1/tools/websocket-tester`
+- Fetches the network: no
+
+### Input
+
+- `url` (string, required, min length 1, max length 2000)
+- `explainCloseCode` (integer, optional, minimum 1000, maximum 4999)
