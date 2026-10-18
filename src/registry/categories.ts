@@ -402,4 +402,9 @@ export const toolOrder = [
   "pdf-signature",
   "social-image-resizer",
   "audio-trimmer",
+  "currency-converter",
+  "meme-generator",
+  "zip-tools",
+  "photo-collage",
+  "pdf-form-filler",
 ] as const;

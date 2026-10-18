@@ -76,11 +76,16 @@ import { meta as invoiceGenerator } from "@/tools/invoice-generator/meta";
 import { meta as pdfSignature } from "@/tools/pdf-signature/meta";
 import { meta as socialImageResizer } from "@/tools/social-image-resizer/meta";
 import { meta as audioTrimmer } from "@/tools/audio-trimmer/meta";
+import { meta as currencyConverter } from "@/tools/currency-converter/meta";
+import { meta as memeGenerator } from "@/tools/meme-generator/meta";
+import { meta as zipTools } from "@/tools/zip-tools/meta";
+import { meta as photoCollage } from "@/tools/photo-collage/meta";
+import { meta as pdfFormFiller } from "@/tools/pdf-form-filler/meta";
 import { categories, parents, toolOrder } from "@/registry/categories";
 import type { SearchRecord } from "@/registry/schema";
 import { assertRegistry } from "@/registry/validate";
 
-const tools = assertRegistry([llmsTxtGenerator, aiSeoChecker, ogImageGenerator, ogTemplateList, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator, pdfToText, pdfRotateOrganize, pdfToImage, pdfProtectUnlock, markdownHtml, htmlToMarkdownUrl, qrCodeReader, svgOptimizer, exifViewerRemover, imageCrop, faviconGenerator, ocrImageToText, backgroundRemover, wordCounter, caseConverter, loremIpsum, regexTester, sqlFormatter, jsonSchemaValidate, loanEmiCalculator, percentageCalculator, unitConverter, dnsLookup, ipCidrCalculator, htpasswdBcrypt, rsaKeypair, cspGenerator, sitemapValidator, httpHeadersChecker, sslChecker, totpGenerator, jsonpathTester, programmerCalculator, aesCrypto, harAnalyzer, jsonToTypes, codeMinifier, curlConverter, graphqlClient, websocketTester, resumeBuilder, invoiceGenerator, pdfSignature, socialImageResizer, audioTrimmer], [...categories], toolOrder, [...parents]);
+const tools = assertRegistry([llmsTxtGenerator, aiSeoChecker, ogImageGenerator, ogTemplateList, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator, pdfToText, pdfRotateOrganize, pdfToImage, pdfProtectUnlock, markdownHtml, htmlToMarkdownUrl, qrCodeReader, svgOptimizer, exifViewerRemover, imageCrop, faviconGenerator, ocrImageToText, backgroundRemover, wordCounter, caseConverter, loremIpsum, regexTester, sqlFormatter, jsonSchemaValidate, loanEmiCalculator, percentageCalculator, unitConverter, dnsLookup, ipCidrCalculator, htpasswdBcrypt, rsaKeypair, cspGenerator, sitemapValidator, httpHeadersChecker, sslChecker, totpGenerator, jsonpathTester, programmerCalculator, aesCrypto, harAnalyzer, jsonToTypes, codeMinifier, curlConverter, graphqlClient, websocketTester, resumeBuilder, invoiceGenerator, pdfSignature, socialImageResizer, audioTrimmer, currencyConverter, memeGenerator, zipTools, photoCollage, pdfFormFiller], [...categories], toolOrder, [...parents]);
 
 export { categories, parents, tools };
 

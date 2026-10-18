@@ -79,4 +79,9 @@ export const toolLoaders: Record<string, () => Promise<{ default: ComponentType 
   "pdf-signature": () => import("@/tools/pdf-signature/tool"),
   "social-image-resizer": () => import("@/tools/social-image-resizer/tool"),
   "audio-trimmer": () => import("@/tools/audio-trimmer/tool"),
+  "currency-converter": () => import("@/tools/currency-converter/tool"),
+  "meme-generator": () => import("@/tools/meme-generator/tool"),
+  "zip-tools": () => import("@/tools/zip-tools/tool"),
+  "photo-collage": () => import("@/tools/photo-collage/tool"),
+  "pdf-form-filler": () => import("@/tools/pdf-form-filler/tool"),
 };

@@ -1509,3 +1509,106 @@ Trim a WAV audio file to a time range with optional fade in and out, returning a
 - `endSec` (number, required, exclusive minimum 0) — Trim end in seconds, after startSec.
 - `fadeInSec` (number, optional, default `0`, minimum 0) — Linear fade-in length in seconds.
 - `fadeOutSec` (number, optional, default `0`, minimum 0) — Linear fade-out length in seconds.
+
+## `convert_currency`
+
+**Convert an amount between currencies**
+
+Convert money between ISO 4217 currencies using live exchange rates from the Frankfurter API, fetched through the SSRF-safe outbound guard. Supports historical dates.
+
+- Page: https://benchline.fabwaseem.com/t/currency-converter
+- HTTP: `POST https://benchline.fabwaseem.com/api/v1/tools/currency-converter`
+- Fetches the network: yes
+
+### Input
+
+- `amount` (number, optional, default `1`, maximum 1000000000000000, exclusive minimum 0)
+- `from` (string, optional, default `USD`, min length 3, max length 3) — ISO 4217 currency code.
+- `to` (string, optional, default `EUR`, min length 3, max length 3) — ISO 4217 currency code.
+- `date` (string, optional) — Historical date; omit for the latest rates.
+
+## `generate_meme`
+
+**Generate a meme image**
+
+Render a classic top/bottom-caption meme as a PNG. Give it an image (base64, data URI, or public URL) or pick a gradient style, and it returns captioned meme artwork.
+
+- Page: https://benchline.fabwaseem.com/t/meme-generator
+- HTTP: `POST https://benchline.fabwaseem.com/api/v1/tools/meme-generator`
+- Fetches the network: yes
+
+### Input
+
+- `image` (object, optional) — Base image as base64, a data URI, or a public URL. Private addresses are refused. 10 MB cap. Omit to use a gradient style background.
+  - `url` (string, optional) — Public http or https URL. Private and local addresses are refused.
+  - `data` (string, optional) — Base64 bytes or a data URI. Decoded size is capped at 10 MB.
+  - `mimeType` (string, optional) — MIME type when you know it.
+  - `filename` (string, optional) — File name, including the extension when you have one.
+- `styleId` (string, optional) — Gradient style id when no image is given: sunset, ocean, grape, forest, mono, candy. Default: sunset.
+- `top` (string, optional, default `""`, max length 500)
+- `bottom` (string, optional, default `""`, max length 500)
+- `upper` (boolean, optional, default `true`) — Uppercase captions, classic meme style.
+- `fontScale` (number, optional, default `1`, minimum 0.5, maximum 1.5) — Caption size multiplier.
+
+## `zip_files`
+
+**Zip files or unzip an archive**
+
+Create a ZIP archive from files or list and extract the contents of a ZIP archive. Everything is handled in memory; no files are stored.
+
+- Page: https://benchline.fabwaseem.com/t/zip-tools
+- HTTP: `POST https://benchline.fabwaseem.com/api/v1/tools/zip-tools`
+- Fetches the network: yes
+
+### Input
+
+- `mode` (`zip` \| `unzip`, optional, default `zip`)
+- `files` (array of object, optional, max items 200) — Files to zip (zip mode).
+  - `name` (string, required, min length 1, max length 256)
+  - `data` (string, required) — Base64 file bytes.
+- `archive` (object, optional) — Archive to extract (unzip mode).
+  - `data` (string, required) — Base64 ZIP bytes.
+  - `name` (string, optional)
+
+## `make_collage`
+
+**Make a photo collage**
+
+Arrange up to 9 photos into a collage layout (duo, trio, focus, quad, six, nine) with a gap and background color, and get back a square PNG.
+
+- Page: https://benchline.fabwaseem.com/t/photo-collage
+- HTTP: `POST https://benchline.fabwaseem.com/api/v1/tools/photo-collage`
+- Fetches the network: yes
+
+### Input
+
+- `images` (array of object, required, min items 1, max items 9) — Photos as base64, data URIs, or public URLs. Private addresses are refused. 10 MB cap each.
+  - `url` (string, optional) — Public http or https URL. Private and local addresses are refused.
+  - `data` (string, optional) — Base64 bytes or a data URI. Decoded size is capped at 10 MB.
+  - `mimeType` (string, optional) — MIME type when you know it.
+  - `filename` (string, optional) — File name, including the extension when you have one.
+- `layout` (string, optional, default `quad`) — Layout id: duo, duo-stack, trio, focus, quad, six, nine. Unknown ids fall back to quad.
+- `gap` (integer, optional, default `8`, minimum 0, maximum 64) — Gap between cells in pixels.
+- `background` (string, optional, default `#000000`)
+- `width` (integer, optional, default `1600`, minimum 256, maximum 4096) — Output width in pixels; the collage is square.
+
+## `fill_pdf_form`
+
+**Fill a PDF form**
+
+Fill an interactive PDF form's text fields, checkboxes, dropdowns, and radios by field name, with an option to flatten the result. Pass inspectOnly to list the fields first.
+
+- Page: https://benchline.fabwaseem.com/t/pdf-form-filler
+- HTTP: `POST https://benchline.fabwaseem.com/api/v1/tools/pdf-form-filler`
+- Fetches the network: yes
+
+### Input
+
+- `file` (object, required) — PDF as base64, a data URI, or a public URL. Private addresses are refused. 10 MB cap.
+  - `url` (string, optional) — Public http or https URL. Private and local addresses are refused.
+  - `data` (string, optional) — Base64 bytes or a data URI. Decoded size is capped at 10 MB.
+  - `mimeType` (string, optional) — MIME type when you know it.
+  - `filename` (string, optional) — File name, including the extension when you have one.
+- `values` (object, optional, default `{}`) — Field name to value. Checkboxes take booleans; dropdowns and radios take one of their options.
+- `flatten` (boolean, optional, default `false`) — Flatten the form so fields become plain page content.
+- `inspectOnly` (boolean, optional, default `false`) — List the form fields without changing anything.

@@ -1570,5 +1570,115 @@
     "status": "new",
     "icon": "AudioWaveform",
     "runsLocally": true
+  },
+  {
+    "slug": "currency-converter",
+    "name": "Currency Converter",
+    "tagline": "Live exchange rates, historical trends, and multi-currency tables.",
+    "description": "Free currency converter with live exchange rates. Convert any amount between 30+ currencies, see a 30/90/365-day trend chart, and compare one currency against a full table. Rates come from the Frankfurter API (ECB reference data).",
+    "category": "finance",
+    "tags": [
+      "currency",
+      "exchange",
+      "forex"
+    ],
+    "keywords": [
+      "currency converter",
+      "exchange rate",
+      "forex converter",
+      "usd to eur",
+      "money converter"
+    ],
+    "status": "new",
+    "icon": "Coins",
+    "runsLocally": false
+  },
+  {
+    "slug": "meme-generator",
+    "name": "Meme Generator",
+    "tagline": "Classic top/bottom caption memes from styles or your own images.",
+    "description": "Free meme maker that runs entirely in your browser. Pick a gradient style or upload an image, add top and bottom captions in the classic outlined style, drag them into place, and download a PNG. Nothing is uploaded.",
+    "category": "social",
+    "tags": [
+      "meme",
+      "image",
+      "captions"
+    ],
+    "keywords": [
+      "meme generator",
+      "meme maker",
+      "caption image",
+      "make a meme",
+      "meme text generator"
+    ],
+    "status": "new",
+    "icon": "Sparkles",
+    "runsLocally": true
+  },
+  {
+    "slug": "zip-tools",
+    "name": "ZIP Tools",
+    "tagline": "Create ZIP archives and extract them, entirely in your browser.",
+    "description": "Free ZIP creator and extractor with no uploads. Drop files to bundle them into a ZIP, or drop a ZIP to list and download its contents one by one. Path traversal is blocked and everything runs on this device.",
+    "category": "encoding",
+    "tags": [
+      "zip",
+      "archive",
+      "files"
+    ],
+    "keywords": [
+      "zip files online",
+      "create zip",
+      "unzip online",
+      "extract zip",
+      "zip archive"
+    ],
+    "status": "new",
+    "icon": "Box",
+    "runsLocally": true
+  },
+  {
+    "slug": "photo-collage",
+    "name": "Photo Collage",
+    "tagline": "Arrange photos into grid layouts and export high-res PNGs.",
+    "description": "Free photo collage maker that runs entirely in your browser. Pick from 7 layouts, drop up to 9 photos, pan and zoom each cell, tune the gap and background, and download a 2400px PNG. Nothing is uploaded.",
+    "category": "image",
+    "tags": [
+      "collage",
+      "photos",
+      "grid"
+    ],
+    "keywords": [
+      "photo collage maker",
+      "picture collage",
+      "collage grid",
+      "combine photos",
+      "photo grid maker"
+    ],
+    "status": "new",
+    "icon": "Images",
+    "runsLocally": true
+  },
+  {
+    "slug": "pdf-form-filler",
+    "name": "PDF Form Filler",
+    "tagline": "Fill interactive PDF forms in the browser and export.",
+    "description": "Free PDF form filler that runs entirely in your browser. Drop a PDF with an interactive form, fill its text fields, checkboxes, dropdowns, and radios by name, validate required fields, and download the filled PDF — flattened or still editable. Nothing is uploaded.",
+    "category": "pdf",
+    "tags": [
+      "pdf",
+      "form",
+      "fill"
+    ],
+    "keywords": [
+      "fill pdf form",
+      "pdf form filler",
+      "fill pdf online",
+      "pdf form fields",
+      "flatten pdf form"
+    ],
+    "status": "new",
+    "icon": "PenLine",
+    "runsLocally": true
   }
 ]
