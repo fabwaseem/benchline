@@ -9,9 +9,14 @@ import { tool as schemaGenerator } from "@/tools/schema-generator/mcp";
 import { tool as aiTokenCounter } from "@/tools/ai-token-counter/mcp";
 import { tool as cronExpressionBuilder } from "@/tools/cron-expression-builder/mcp";
 import { tool as nextjsDockerfileGenerator } from "@/tools/nextjs-dockerfile-generator/mcp";
+import { tool as jsonFormatter } from "@/tools/json-formatter/mcp";
+import { tool as jsonYamlConvert } from "@/tools/json-yaml-convert/mcp";
+import { tool as csvJsonConvert } from "@/tools/csv-json-convert/mcp";
+import { tool as diffChecker } from "@/tools/diff-checker/mcp";
+import { tool as base64Codec } from "@/tools/base64-codec/mcp";
 import type { BenchTool } from "@/lib/mcp/types";
 
-export const mcpTools: BenchTool[] = [llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator];
+export const mcpTools: BenchTool[] = [llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec];
 
 export function mcpToolBySlug(slug: string) {
   return mcpTools.find((tool) => tool.slug === slug);

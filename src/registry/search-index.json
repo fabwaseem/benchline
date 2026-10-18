@@ -214,5 +214,109 @@
     "status": "new",
     "icon": "Container",
     "runsLocally": true
+  },
+  {
+    "slug": "json-formatter",
+    "name": "JSON formatter",
+    "tagline": "Pretty-print, minify, and validate JSON, with the exact line and column when it fails.",
+    "description": "Free JSON formatter and JSON validator that runs in the browser. Choose an indent of 2, 4, or a tab, sort object keys, minify, and read a tree of the value. Invalid JSON reports the line, the column, and the line of source.",
+    "category": "developer",
+    "tags": [
+      "json",
+      "format",
+      "validate"
+    ],
+    "keywords": [
+      "json formatter",
+      "json validator",
+      "json minify",
+      "json pretty print"
+    ],
+    "status": "new",
+    "icon": "Braces",
+    "runsLocally": true
+  },
+  {
+    "slug": "json-yaml-convert",
+    "name": "JSON YAML converter",
+    "tagline": "Convert JSON, YAML, TOML, and XML in the browser, and keep the line number when a document fails.",
+    "description": "Free converter for JSON to YAML, YAML to JSON, TOML, and XML to JSON. The source format can be detected automatically. Errors include a line and column. Conversion stays in the browser.",
+    "category": "developer",
+    "tags": [
+      "json",
+      "yaml",
+      "toml",
+      "xml",
+      "convert"
+    ],
+    "keywords": [
+      "json to yaml",
+      "yaml to json",
+      "xml to json",
+      "toml to json"
+    ],
+    "status": "new",
+    "icon": "ArrowLeftRight",
+    "runsLocally": true
+  },
+  {
+    "slug": "csv-json-convert",
+    "name": "CSV JSON converter",
+    "tagline": "Convert CSV to JSON and JSON back to CSV, with a delimiter and a header row you choose.",
+    "description": "Free CSV to JSON and JSON to CSV converter. Pick a comma, tab, semicolon, or pipe, or let the first row decide. Keep or drop the header, infer booleans and numbers, and flatten nested JSON into dotted columns. It runs in the browser.",
+    "category": "developer",
+    "tags": [
+      "csv",
+      "json",
+      "convert"
+    ],
+    "keywords": [
+      "csv to json",
+      "json to csv",
+      "csv converter"
+    ],
+    "status": "new",
+    "icon": "Table2",
+    "runsLocally": true
+  },
+  {
+    "slug": "diff-checker",
+    "name": "Diff checker",
+    "tagline": "Compare two texts side by side or inline, and download a unified patch.",
+    "description": "Free diff checker for text and JSON. Compare by line, word, or character, ignore whitespace, or diff JSON so key order does not matter. The result is a side-by-side view, an inline view, and a unified patch. It runs in the browser.",
+    "category": "developer",
+    "tags": [
+      "diff",
+      "compare"
+    ],
+    "keywords": [
+      "diff checker",
+      "compare text",
+      "text diff",
+      "json diff"
+    ],
+    "status": "new",
+    "icon": "Diff",
+    "runsLocally": true
+  },
+  {
+    "slug": "base64-codec",
+    "name": "Base64 codec",
+    "tagline": "Encode and decode Base64 for text or a file, including the URL-safe alphabet.",
+    "description": "Free Base64 encode and Base64 decode tool for text and files. Turn on URL-safe output, wrap a file as a data URI, or decode a data URI back to text or a download. The file never leaves the browser.",
+    "category": "developer",
+    "tags": [
+      "base64",
+      "encode"
+    ],
+    "keywords": [
+      "base64 decode",
+      "base64 encode",
+      "base64 to file",
+      "url safe base64"
+    ],
+    "status": "new",
+    "icon": "Binary",
+    "runsLocally": true
   }
 ]

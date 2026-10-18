@@ -9,11 +9,16 @@ import { meta as schemaGenerator } from "@/tools/schema-generator/meta";
 import { meta as aiTokenCounter } from "@/tools/ai-token-counter/meta";
 import { meta as cronExpressionBuilder } from "@/tools/cron-expression-builder/meta";
 import { meta as nextjsDockerfileGenerator } from "@/tools/nextjs-dockerfile-generator/meta";
+import { meta as jsonFormatter } from "@/tools/json-formatter/meta";
+import { meta as jsonYamlConvert } from "@/tools/json-yaml-convert/meta";
+import { meta as csvJsonConvert } from "@/tools/csv-json-convert/meta";
+import { meta as diffChecker } from "@/tools/diff-checker/meta";
+import { meta as base64Codec } from "@/tools/base64-codec/meta";
 import { categories, toolOrder } from "@/registry/categories";
 import type { SearchRecord } from "@/registry/schema";
 import { assertRegistry } from "@/registry/validate";
 
-const tools = assertRegistry([llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator], [...categories], toolOrder);
+const tools = assertRegistry([llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec], [...categories], toolOrder);
 
 export { categories, tools };
 

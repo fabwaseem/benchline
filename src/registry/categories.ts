@@ -43,7 +43,7 @@ export const categories = [
   {
     slug: "developer",
     name: "Developer",
-    description: "Schedules and the small expressions a deploy depends on.",
+    description: "Schedules, formats, and the small expressions a deploy depends on.",
     icon: "Terminal",
     hue: 200,
   },
@@ -67,4 +67,9 @@ export const toolOrder = [
   "ai-token-counter",
   "cron-expression-builder",
   "nextjs-dockerfile-generator",
+  "json-formatter",
+  "json-yaml-convert",
+  "csv-json-convert",
+  "diff-checker",
+  "base64-codec",
 ] as const;
