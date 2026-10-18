@@ -33,7 +33,7 @@ function filterFrom(url: URL): StatsFilter | null {
 
 export async function GET(request: Request) {
   if (!statsAuthorized(request.headers.get("authorization"))) return missing();
-  const store = getAnalyticsStore();
+  const store = await getAnalyticsStore();
   if (!store) {
     return Response.json(
       { error: "Analytics database is not configured." },
