@@ -51,7 +51,7 @@ The guide for people is `src/app/mcp/guide/page.tsx` at `/mcp/guide`. The tool l
 
 `POST /api/v1/tools/<slug>` runs the same `tool.run` as MCP. It has its own 60-a-minute bucket (`api:<ip>`). Unknown slugs are 404. Bad JSON or a thrown error is 400. `GET /openapi.json` is that surface as OpenAPI 3.1, built from the zod input schemas.
 
-Nine tools cannot do their job in the browser. Their pages post to a route under `src/app/api/tools/`:
+These tools cannot do their job in the browser. Their pages post to a route under `src/app/api/tools/`:
 
 | Page | Route |
 | --- | --- |

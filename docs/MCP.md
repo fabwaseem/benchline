@@ -14,7 +14,7 @@ File fields take either `url` or `data`, not both. `data` is base64 or a data UR
 
 The handler validates with the input schema, runs the tool, and validates the output. A thrown error comes back as `isError: true` and a text message. It is not a successful result.
 
-77 tools.
+Every registered tool is listed below.
 
 ## `generate_llms_txt`
 
