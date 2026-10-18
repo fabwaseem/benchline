@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { ActionButton, TextInput, TextArea } from "@/components/kit/controls";
+import { ActionButton, TextInput } from "@/components/kit/controls";
+import { CodeEditor } from "@/components/kit/code-viewer";
 import { Shield } from "lucide-react";
 import { toast } from "sonner";
 import { CodeOutput } from "@/components/kit/code-output";
@@ -120,7 +121,7 @@ export default function RobotsTool() {
           </div>
         ) : (
           <FieldRow label="robots.txt" htmlFor="robots-paste" help="Audited in the browser. Nothing is sent.">
-            <TextArea id="robots-paste" value={pasted} onChange={(event) => setPasted(event.target.value)} className="min-h-40 font-mono text-xs" />
+            <CodeEditor id="robots-paste" label="robots.txt" language="ini" filename="robots.txt" value={pasted} onChange={(event) => setPasted(event.target.value)} />
           </FieldRow>
         )}
       </div>

@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ActionButton, TextArea } from "@/components/kit/controls";
+import { ActionButton } from "@/components/kit/controls";
+import { CodeEditor } from "@/components/kit/code-viewer";
 import { ArrowLeftRight } from "lucide-react";
 import { toast } from "sonner";
 import { CodeOutput } from "@/components/kit/code-output";
@@ -63,7 +64,7 @@ export default function JsonYamlTool() {
             options={[{ value: "auto", label: "Auto" }, ...dataFormats.map((format) => ({ value: format, label: format.toUpperCase() }))]}
           />
           <FieldRow label="Document" htmlFor="convert-input" error={result.ok ? undefined : result.error} help={result.detected ? `Read as ${result.detected.toUpperCase()}.` : "Auto uses the first line."}>
-            <TextArea id="convert-input" value={input} onChange={(event) => setInput(event.target.value)} spellCheck={false} aria-invalid={!result.ok} className="min-h-72 font-mono text-[13px]" />
+            <CodeEditor id="convert-input" label="Document" language={from === "auto" ? undefined : from} value={input} onChange={(event) => setInput(event.target.value)} aria-invalid={!result.ok} />
           </FieldRow>
         </Pane>
         <Pane label={result.ok ? to.toUpperCase() : "Error"}>

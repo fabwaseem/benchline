@@ -8,7 +8,8 @@ import { Dropzone } from "@/components/kit/dropzone";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
-import { ActionButton, OptionRow, Slider, TextArea } from "@/components/kit/controls";
+import { ActionButton, OptionRow, Slider } from "@/components/kit/controls";
+import { CodeEditor } from "@/components/kit/code-viewer";
 import { CodeOutput } from "@/components/kit/code-output";
 import { SizeStat } from "@/components/kit/result-stat";
 import { Pane, StatusStrip, ToolCard, ToolPanes, ToolToolbar } from "@/components/kit/shell";
@@ -78,7 +79,7 @@ export default function SvgOptimizerTool() {
           <Notice tone="neutral" title="Nothing is uploaded." body="The viewBox stays unless you turn that pass on. Scripts are always removed." />
           <Dropzone accept=".svg,image/svg+xml" label="Drop an .svg, or paste markup below" onFile={loadFile} />
           <FieldRow label="SVG" htmlFor="svg-source">
-            <TextArea id="svg-source" value={source} onChange={(event) => setSource(event.target.value)} className="min-h-40 font-mono text-xs" spellCheck={false} />
+            <CodeEditor id="svg-source" label="SVG" language="xml" filename="image.svg" value={source} onChange={(event) => setSource(event.target.value)} />
           </FieldRow>
           <FieldRow label="Precision" htmlFor="svg-precision" help="Decimal places kept in paths and transforms.">
             <Slider id="svg-precision" min={0} max={8} step={1} value={[options.precision]} onValueChange={([value]) => setOptions({ ...options, precision: value ?? 3 })} />

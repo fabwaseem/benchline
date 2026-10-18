@@ -5,6 +5,7 @@ import { ActionButton, IconButton, TextArea } from "@/components/kit/controls";
 import { Badge } from "@/components/kit/tag";
 import { Check, Clock, Copy, Eye, EyeOff, KeyRound, ShieldCheck, X } from "lucide-react";
 import { toast } from "sonner";
+import { CodeEditor, CodeViewer } from "@/components/kit/code-viewer";
 import { CopyButton } from "@/components/kit/copy-button";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
@@ -197,10 +198,10 @@ export default function JwtTool() {
               <Segmented label="Algorithm" value={signAlg} onChange={setSignAlg} options={[{ value: "HS256", label: "HS256" }, { value: "HS384", label: "HS384" }, { value: "HS512", label: "HS512" }]} className="w-full" />
             </div>
             <FieldRow variant="well" label="Header JSON" htmlFor="jwt-header" error={jsonError(headerJson)}>
-              <TextArea id="jwt-header" value={headerJson} spellCheck={false} onChange={(event) => setHeaderJson(event.target.value)} className={`${FIELD} min-h-24`} />
+              <CodeEditor id="jwt-header" label="Header JSON" language="json" value={headerJson} onChange={(event) => setHeaderJson(event.target.value)} maxHeight={180} />
             </FieldRow>
             <FieldRow variant="well" label="Payload JSON" htmlFor="jwt-payload" error={jsonError(payloadJson)}>
-              <TextArea id="jwt-payload" value={payloadJson} spellCheck={false} onChange={(event) => setPayloadJson(event.target.value)} className={`${FIELD} min-h-28`} />
+              <CodeEditor id="jwt-payload" label="Payload JSON" language="json" value={payloadJson} onChange={(event) => setPayloadJson(event.target.value)} maxHeight={220} />
             </FieldRow>
             <FieldRow variant="well" label="HMAC secret" htmlFor="jwt-sign-secret" help={SIGN_HELP}>
               <TextArea id="jwt-sign-secret" value={signSecret} spellCheck={false} onChange={(event) => setSignSecret(event.target.value)} className={`${FIELD} min-h-16`} />
@@ -335,7 +336,7 @@ function DecodedPane({
               {typeof header.typ === "string" ? <Badge variant="mono">{header.typ}</Badge> : null}
             </span>
           </div>
-          <pre className="well mx-4 mb-2 overflow-auto px-3.5 py-3 font-mono text-[12.5px] leading-[1.75] break-all whitespace-pre-wrap">{JSON.stringify(header, null, 2)}</pre>
+          <CodeViewer className="mx-4 mb-2" code={JSON.stringify(header, null, 2)} label="Header" language="json" maxHeight={220} wrapDefault />
         </>
       ) : null}
       <div className="flex items-center gap-2 px-4 pt-2 pb-2">
@@ -356,7 +357,7 @@ function DecodedPane({
         <Notice key={notice.title} className="mx-4 mb-3" tone="warn" icon={<Clock size={15} strokeWidth={1.75} />} title={notice.title} body={notice.body} />
       ))}
       {payload && view === "claims" ? <KvList items={claims} /> : null}
-      {payload && view === "json" ? <pre className="well mx-4 mb-4 overflow-auto px-3.5 py-3 font-mono text-[12.5px] leading-[1.75] break-all whitespace-pre-wrap">{JSON.stringify(payload, null, 2)}</pre> : null}
+      {payload && view === "json" ? <CodeViewer className="mx-4 mb-4" code={JSON.stringify(payload, null, 2)} label="Payload" language="json" maxHeight={320} wrapDefault /> : null}
       {!payload && "error" in result ? <p className="px-4 pb-4 font-mono text-[12px] break-all text-muted-foreground">{result.error}</p> : null}
     </div>
   );

@@ -2,7 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { Regex } from "lucide-react";
-import { OptionRow, TextArea, TextInput } from "@/components/kit/controls";
+import { OptionRow, TextInput } from "@/components/kit/controls";
+import { CodeEditor } from "@/components/kit/code-viewer";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
@@ -48,7 +49,7 @@ export default function RegexTesterTool() {
             ))}
           </div>
           <FieldRow label="Sample" htmlFor="regex-text">
-            <TextArea id="regex-text" value={text} onChange={(event) => setText(event.target.value)} spellCheck={false} className="min-h-40 font-mono text-[13px]" />
+            <CodeEditor id="regex-text" label="Sample" language="plaintext" value={text} onChange={(event) => setText(event.target.value)} />
           </FieldRow>
           <FieldRow label="Replacement" htmlFor="regex-replace" help="Optional. $1 and $<name> follow JavaScript.">
             <TextInput id="regex-replace" value={replacement} onChange={(event) => setReplacement(event.target.value)} spellCheck={false} className="font-mono" />

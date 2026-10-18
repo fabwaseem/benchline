@@ -1,3 +1,4 @@
+import { CodeViewer } from "@/components/kit/code-viewer";
 import { CopyButton } from "@/components/kit/copy-button";
 import { exampleArguments, mcpServerConfig, toolsCallParams } from "@/lib/mcp/example";
 import { SITE_URL } from "@/lib/site";
@@ -14,14 +15,13 @@ export function McpSnippet({ name, inputSchema }: { name: string; inputSchema: z
         <h2 className="font-mono text-[11px] tracking-[0.08em] text-faint uppercase">Call from your agent</h2>
         <CopyButton value={config} label="Copy config" />
       </div>
-      <p className="mt-3 font-mono text-[11px] tracking-[0.06em] text-faint uppercase">Streamable HTTP</p>
-      <pre className="mt-1.5 overflow-x-auto rounded-lg bg-sunken p-3 font-mono text-[12px] leading-5 text-foreground">{config}</pre>
+      <CodeViewer className="mt-3" code={config} label="Streamable HTTP" language="json" maxHeight={220} />
       <div className="mt-4 flex items-center justify-between gap-2">
         <p className="font-mono text-[11px] tracking-[0.06em] text-faint uppercase">tools/call</p>
         <CopyButton value={call} label="Copy call" />
       </div>
-      <p className="mt-1.5 font-mono text-[12.5px] text-brand-text">{name}</p>
-      <pre className="mt-1.5 overflow-x-auto rounded-lg bg-sunken p-3 font-mono text-[12px] leading-5 text-foreground">{call}</pre>
+      <p className="mt-4 font-mono text-[12.5px] text-brand-text">{name}</p>
+      <CodeViewer className="mt-1.5" code={call} label="tools/call" language="json" maxHeight={240} />
     </section>
   );
 }

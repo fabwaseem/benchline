@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ActionButton, TextArea, OptionRow } from "@/components/kit/controls";
+import { ActionButton, OptionRow } from "@/components/kit/controls";
+import { CodeEditor } from "@/components/kit/code-viewer";
 import { Binary } from "lucide-react";
 import { toast } from "sonner";
 import { CodeOutput } from "@/components/kit/code-output";
@@ -88,13 +89,13 @@ export default function Base64Tool() {
             </FieldRow>
           ) : (
             <FieldRow label={action === "encode" ? "Text" : "Base64 or data URI"} htmlFor="b64-input" error={decoded && !decoded.ok ? decoded.error : undefined}>
-              <TextArea
+              <CodeEditor
                 id="b64-input"
+                label={action === "encode" ? "Text" : "Base64"}
+                language="plaintext"
                 value={action === "encode" ? text : payload}
                 onChange={(event) => (action === "encode" ? setText(event.target.value) : setPayload(event.target.value))}
-                spellCheck={false}
                 aria-invalid={Boolean(decoded && !decoded.ok)}
-                className="min-h-72 font-mono text-[13px]"
               />
             </FieldRow>
           )}

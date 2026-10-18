@@ -14,14 +14,15 @@ describe("MCP coverage", () => {
     const slugs = entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort();
     expect(slugs.length).toBeGreaterThan(0);
     expect(tools.map((tool) => tool.slug).sort()).toEqual(slugs);
-    expect(mcpTools.map((tool) => tool.slug).sort()).toEqual(slugs);
+    expect([...new Set(mcpTools.map((tool) => tool.slug))].sort()).toEqual(slugs);
+    expect(mcpTools.length).toBeGreaterThanOrEqual(slugs.length);
 
-    const names = new Set<string>();
     for (const slug of slugs) {
       await access(path.join(root, "src/tools", slug, "mcp.ts"));
-      const tool = mcpTools.find((item) => item.slug === slug);
-      expect(tool, slug).toBeTruthy();
-      if (!tool) continue;
+    }
+    const names = new Set<string>();
+    for (const tool of mcpTools) {
+      expect(slugs, tool.slug).toContain(tool.slug);
       expect(names.has(tool.name), tool.name).toBe(false);
       names.add(tool.name);
       expect(() => assertToolContract(tool)).not.toThrow();

@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ActionButton, ChipButton, OptionRow, TextArea } from "@/components/kit/controls";
+import { ActionButton, ChipButton, OptionRow } from "@/components/kit/controls";
+import { CodeEditor, CodeViewer } from "@/components/kit/code-viewer";
 import { Diff } from "lucide-react";
 import { toast } from "sonner";
 import { CodeOutput } from "@/components/kit/code-output";
@@ -65,10 +66,10 @@ export default function DiffCheckerTool() {
       <ToolPanes ratio="40/60">
         <Pane label="Texts">
           <FieldRow label="Original" htmlFor="diff-left">
-            <TextArea id="diff-left" value={left} onChange={(event) => setLeft(event.target.value)} spellCheck={false} className="min-h-40 font-mono text-[13px]" />
+            <CodeEditor id="diff-left" label="Original" language="plaintext" value={left} onChange={(event) => setLeft(event.target.value)} />
           </FieldRow>
           <FieldRow label="Changed" htmlFor="diff-right">
-            <TextArea id="diff-right" value={right} onChange={(event) => setRight(event.target.value)} spellCheck={false} className="min-h-40 font-mono text-[13px]" />
+            <CodeEditor id="diff-right" label="Changed" language="plaintext" value={right} onChange={(event) => setRight(event.target.value)} />
           </FieldRow>
           <Segmented label="Mode" value={mode} onChange={setMode} options={diffModes.map((item) => ({ value: item, label: item }))} />
           <OptionRow label="Ignore whitespace" checked={ignoreWhitespace} onChange={setIgnoreWhitespace} />
@@ -102,40 +103,12 @@ export default function DiffCheckerTool() {
 
 function LineRows({ rows }: { rows: DiffRow[] }) {
   if (rows.length === 0) return <EmptyState title="Nothing to compare" hint="Paste text on both sides." />;
-  return (
-    <div className="max-h-96 overflow-auto rounded-lg border border-border font-mono text-[12.5px] leading-5" tabIndex={0} aria-label="Side by side diff">
-      {rows.map((row, index) => (
-        <div key={`${row.kind}-${index}`} className="grid grid-cols-2">
-          <Line side="left" kind={row.kind} number={row.leftNumber} text={row.left} />
-          <Line side="right" kind={row.kind} number={row.rightNumber} text={row.right} />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function Line({ side, kind, number, text }: { side: "left" | "right"; kind: DiffRow["kind"]; number: number | null; text: string }) {
-  const marked = (kind === "remove" && side === "left") || (kind === "add" && side === "right") || (kind === "change" && text !== "");
-  const tone = side === "left"
-    ? "bg-[color-mix(in_srgb,var(--danger)_14%,transparent)]"
-    : "bg-[color-mix(in_srgb,var(--success)_16%,transparent)]";
-  return (
-    <div className={marked ? `flex ${tone}` : "flex"}>
-      <span className="w-8 shrink-0 pr-2 text-right text-muted-foreground tabular-nums">{number ?? ""}</span>
-      <span className="min-w-0 flex-1 pr-2 whitespace-pre-wrap">{text || " "}</span>
-    </div>
-  );
+  return <CodeViewer label="Side by side" diff={{ view: "split", rows }} wrapDefault />;
 }
 
 function Inline({ pieces }: { pieces: DiffPiece[] }) {
   if (pieces.length === 0) return <EmptyState title="Nothing to compare" hint="Paste text on both sides." />;
-  return (
-    <pre className="max-h-96 overflow-auto rounded-lg border border-border p-3 font-mono text-[12.5px] leading-5 whitespace-pre-wrap" tabIndex={0} aria-label="Inline diff">
-      {pieces.map((piece, index) => (
-        <span key={index} className={pieceClass(piece.type)}>{piece.value}</span>
-      ))}
-    </pre>
-  );
+  return <CodeViewer label="Inline diff" diff={{ view: "inline", pieces }} wrapDefault />;
 }
 
 function PieceColumns({ pieces }: { pieces: DiffPiece[] }) {
@@ -148,17 +121,5 @@ function PieceColumns({ pieces }: { pieces: DiffPiece[] }) {
 }
 
 function PieceList({ label, pieces }: { label: string; pieces: DiffPiece[] }) {
-  return (
-    <pre className="max-h-96 overflow-auto rounded-lg border border-border p-3 font-mono text-[12.5px] leading-5 whitespace-pre-wrap" aria-label={label}>
-      {pieces.map((piece, index) => (
-        <span key={index} className={pieceClass(piece.type)}>{piece.value}</span>
-      ))}
-    </pre>
-  );
-}
-
-function pieceClass(type: DiffPiece["type"]): string {
-  if (type === "add") return "bg-[color-mix(in_srgb,var(--success)_28%,transparent)]";
-  if (type === "remove") return "bg-[color-mix(in_srgb,var(--danger)_24%,transparent)]";
-  return "";
+  return <CodeViewer label={label} diff={{ view: "inline", pieces }} wrapDefault />;
 }

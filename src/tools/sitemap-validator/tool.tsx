@@ -2,7 +2,8 @@
 
 import { useMemo, useRef, useState } from "react";
 import { FileSearch } from "lucide-react";
-import { ActionButton, TextArea, TextInput } from "@/components/kit/controls";
+import { ActionButton, TextInput } from "@/components/kit/controls";
+import { CodeEditor } from "@/components/kit/code-viewer";
 import { CodeOutput } from "@/components/kit/code-output";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
@@ -92,12 +93,12 @@ export default function SitemapTool() {
           ) : null}
           {tab === "xml" ? (
             <FieldRow label="XML" htmlFor="sm-xml" error={localError || undefined}>
-              <TextArea id="sm-xml" value={xml} className="min-h-64 font-mono" onChange={(event) => setXml(event.target.value)} />
+              <CodeEditor id="sm-xml" label="XML" language="xml" filename="sitemap.xml" value={xml} onChange={(event) => setXml(event.target.value)} />
             </FieldRow>
           ) : null}
           {tab === "generate" ? (
             <FieldRow label="URLs" htmlFor="sm-lines" help="One absolute URL per line. Checked in the browser." error={localError || undefined}>
-              <TextArea id="sm-lines" value={lines} className="min-h-64 font-mono" onChange={(event) => setLines(event.target.value)} />
+              <CodeEditor id="sm-lines" label="URLs" language="plaintext" value={lines} onChange={(event) => setLines(event.target.value)} />
             </FieldRow>
           ) : null}
         </Pane>

@@ -8,7 +8,8 @@ import { decodeJwt, isDecoded } from "@/tools/jwt-decoder/lib/jwt";
 import { explainCron } from "@/tools/cron-expression-builder/lib/cron";
 import { buildDockerfile, dockerfileDefaults } from "@/tools/nextjs-dockerfile-generator/lib/dockerfile";
 import { buildSchema, exampleValues } from "@/tools/schema-generator/lib/schema";
-import { buildMetaTags, ogExample } from "@/tools/og-image-generator/lib/og";
+import { CodeViewer } from "@/components/kit/code-viewer";
+import { metaTagsFor, resolveState } from "@/tools/og-image-generator/lib/og";
 
 export function Flagship({ category, href, name }: { category: string; href: string; name: string }) {
   return (
@@ -50,7 +51,7 @@ function LlmsMini() {
   return (
     <div className="grid gap-3">
       <input value={site} onChange={(event) => setSite(event.target.value)} className="field text-foreground" aria-label="Site name" />
-      <pre className="well max-h-48 overflow-auto p-3 font-mono text-[12px] leading-relaxed">{text}</pre>
+      <CodeViewer code={text} label="llms.txt" language="markdown" filename="llms.txt" maxHeight={192} dense />
     </div>
   );
 }
@@ -62,7 +63,7 @@ function JwtMini() {
   return (
     <div className="grid gap-3">
       <input value={token} onChange={(event) => setToken(event.target.value)} className="field font-mono text-foreground" aria-label="Token" />
-      <pre className="well max-h-40 overflow-auto p-3 font-mono text-[12px]">{isDecoded(decoded) ? JSON.stringify(decoded.payload, null, 2) : decoded.error}</pre>
+      <CodeViewer code={isDecoded(decoded) ? JSON.stringify(decoded.payload, null, 2) : decoded.error} label="Payload" language="json" maxHeight={160} dense />
     </div>
   );
 }
@@ -80,20 +81,20 @@ function CronMini() {
 
 function DockerMini() {
   const text = buildDockerfile(dockerfileDefaults).split("\n").slice(0, 8).join("\n");
-  return <pre className="well max-h-48 overflow-auto p-3 font-mono text-[12px] leading-relaxed">{text}</pre>;
+  return <CodeViewer code={text} label="Dockerfile" language="dockerfile" filename="Dockerfile" maxHeight={192} dense />;
 }
 
 function SchemaMini() {
   const json = JSON.stringify(buildSchema("SoftwareApplication", exampleValues("SoftwareApplication")), null, 2);
-  return <pre className="well max-h-48 overflow-auto p-3 font-mono text-[12px] leading-relaxed">{json}</pre>;
+  return <CodeViewer code={json} label="JSON-LD" language="json" filename="schema.json" maxHeight={192} dense />;
 }
 
 function OgMini() {
-  const [title, setTitle] = useState(ogExample.title);
+  const [title, setTitle] = useState("Designing tools people return to");
   return (
     <div className="grid gap-3">
       <input value={title} onChange={(event) => setTitle(event.target.value)} className="field text-foreground" aria-label="Card title" />
-      <pre className="well max-h-40 overflow-auto p-3 font-mono text-[11px]">{buildMetaTags({ ...ogExample, title })}</pre>
+      <CodeViewer code={metaTagsFor(resolveState({ template: "editorial", title }))} label="Meta tags" language="html" maxHeight={160} dense />
     </div>
   );
 }

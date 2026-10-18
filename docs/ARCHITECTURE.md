@@ -82,6 +82,6 @@ Category URLs come from `src/lib/taxonomy.ts`. A parent with a single child cate
 
 `next.config.ts` sets `output: "standalone"`. `Dockerfile` builds on Node 22 Alpine with pnpm 10.33.4 and runs `node server.js` as user `nextjs` on port 3000.
 
-`serverExternalPackages` lists `@napi-rs/canvas`, `pdfjs-dist`, `tesseract.js`, `tesseract.js-core`, `zxing-wasm`, and `sharp`. The `mcpNativeAssets` array is traced into `/mcp` and `/api/v1/tools/[slug]`. The image also copies `pdfjs-dist`, `zxing-wasm`, `tesseract.js`, and `tesseract.js-core` into the runner so those tools resolve outside the traced standalone output.
+`serverExternalPackages` lists `@napi-rs/canvas`, `@resvg/resvg-js`, `satori`, `pdfjs-dist`, `tesseract.js`, `tesseract.js-core`, `zxing-wasm`, and `sharp`. The `mcpNativeAssets` array is traced into `/mcp` and `/api/v1/tools/[slug]`, including Satori, Resvg, and the Tesseract worker dependencies (`bmp-js`, `zlibjs`, `wasm-feature-detect`, and the rest of that closure). The image copies those packages into the runner so the tools resolve outside the traced standalone output.
 
 CI (`.github/workflows/ci.yml`) runs install, lint, typecheck, test, and build on pull requests and on `main`.

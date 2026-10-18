@@ -1,20 +1,53 @@
 import type { NextConfig } from "next";
 
+// tesseract.js package.json dependencies, plus the node-fetch closure (whatwg-url → tr46, webidl-conversions).
+const tesseractRuntimeDeps = [
+  "bmp-js",
+  "idb-keyval",
+  "is-url",
+  "node-fetch",
+  "opencollective-postinstall",
+  "regenerator-runtime",
+  "tesseract.js-core",
+  "wasm-feature-detect",
+  "zlibjs",
+  "whatwg-url",
+  "tr46",
+  "webidl-conversions",
+];
+
+const tesseractAssetGlobs = tesseractRuntimeDeps.flatMap((dep) => [
+  `./node_modules/.pnpm/node_modules/${dep}/**/*`,
+  `./node_modules/.pnpm/${dep}@*/**/*`,
+  `./node_modules/.pnpm/tesseract.js@*/node_modules/${dep}/**/*`,
+]);
+
 const mcpNativeAssets = [
   "./node_modules/pdfjs-dist/**/*",
   "./node_modules/zxing-wasm/**/*",
   "./node_modules/tesseract.js/**/*",
   "./node_modules/tesseract.js-core/**/*",
+  "./node_modules/.pnpm/tesseract.js@*/node_modules/**/*",
+  ...tesseractAssetGlobs,
   "./node_modules/@napi-rs/canvas/**/*",
+  "./node_modules/@resvg/resvg-js/**/*",
+  "./node_modules/.pnpm/@resvg+resvg-js@*/**/*",
+  "./node_modules/.pnpm/@resvg+resvg-js-linux-*/**/*",
+  "./node_modules/.pnpm/node_modules/@resvg/**/*",
+  "./node_modules/satori/**/*",
+  "./public/fonts/og/**/*",
 ];
 
 const nextConfig: NextConfig = {
   output: "standalone",
   serverExternalPackages: [
     "@napi-rs/canvas",
+    "@resvg/resvg-js",
+    "satori",
     "pdfjs-dist",
     "tesseract.js",
     "tesseract.js-core",
+    ...tesseractRuntimeDeps.filter((dep) => dep !== "tesseract.js-core"),
     "zxing-wasm",
     "sharp",
   ],

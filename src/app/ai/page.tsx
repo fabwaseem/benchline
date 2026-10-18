@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CodeViewer } from "@/components/kit/code-viewer";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { mcpIndex } from "@/registry/mcp-index";
 
@@ -40,7 +41,7 @@ export default function AiPage() {
           <p className="mt-2 text-[14.5px] leading-relaxed text-muted-foreground">
             Add a remote MCP server. Cursor sends JSON-RPC to the URL below. The server answers with JSON and does not keep a session.
           </p>
-          <pre className="mt-4 overflow-x-auto rounded-[10px] bg-sunken p-3 font-mono text-[12px] leading-relaxed">{cursorConfig}</pre>
+          <CodeViewer className="mt-4" code={cursorConfig} label="Cursor MCP" language="json" filename="mcp.json" maxHeight={220} />
         </article>
         <article className="card p-6">
           <p className="font-mono text-[11px] text-faint">02</p>

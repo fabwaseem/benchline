@@ -29,7 +29,33 @@ RUN --mount=from=build,source=/app/node_modules,target=/mnt/nm \
   && cp -aL /mnt/nm/zxing-wasm node_modules/zxing-wasm \
   && cp -aL /mnt/nm/tesseract.js node_modules/tesseract.js \
   && cp -aL /mnt/nm/tesseract.js-core node_modules/tesseract.js-core \
-  && chown -R nextjs:nextjs node_modules/pdfjs-dist node_modules/zxing-wasm node_modules/tesseract.js node_modules/tesseract.js-core
+  && for dep in bmp-js idb-keyval is-url node-fetch opencollective-postinstall regenerator-runtime wasm-feature-detect zlibjs whatwg-url tr46 webidl-conversions; do \
+       if [ -e "/mnt/nm/.pnpm/node_modules/$$dep" ]; then cp -aL "/mnt/nm/.pnpm/node_modules/$$dep" "node_modules/$$dep"; fi; \
+     done \
+  && mkdir -p node_modules/@resvg \
+  && cp -aL /mnt/nm/@resvg/resvg-js node_modules/@resvg/resvg-js \
+  && cp -aL /mnt/nm/satori node_modules/satori \
+  && for pkg in /mnt/nm/.pnpm/node_modules/@resvg/resvg-js-linux-*; do \
+       if [ -d "$$pkg" ]; then cp -aL "$$pkg" "node_modules/@resvg/$$(basename "$$pkg")"; fi; \
+     done \
+  && chown -R nextjs:nextjs \
+       node_modules/pdfjs-dist \
+       node_modules/zxing-wasm \
+       node_modules/tesseract.js \
+       node_modules/tesseract.js-core \
+       node_modules/bmp-js \
+       node_modules/idb-keyval \
+       node_modules/is-url \
+       node_modules/node-fetch \
+       node_modules/opencollective-postinstall \
+       node_modules/regenerator-runtime \
+       node_modules/wasm-feature-detect \
+       node_modules/zlibjs \
+       node_modules/whatwg-url \
+       node_modules/tr46 \
+       node_modules/webidl-conversions \
+       node_modules/@resvg \
+       node_modules/satori
 USER nextjs
 EXPOSE 3000
 CMD ["node", "server.js"]

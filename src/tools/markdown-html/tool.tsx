@@ -2,7 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { ActionButton, OptionRow, TextArea } from "@/components/kit/controls";
+import { ActionButton, OptionRow } from "@/components/kit/controls";
+import { CodeEditor } from "@/components/kit/code-viewer";
 import { CodeOutput } from "@/components/kit/code-output";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
@@ -48,7 +49,7 @@ export default function MarkdownHtmlTool() {
         <Pane label={to === "html" ? "Markdown" : "HTML"}>
           <OptionRow label="Sanitize output" hint="The preview is cleaned either way." checked={sanitize} onChange={setSanitize} />
           <FieldRow label="Source" htmlFor="markup-source">
-            <TextArea id="markup-source" value={text} onChange={(event) => setText(event.target.value)} spellCheck={false} className="min-h-72 font-mono text-[13px]" />
+            <CodeEditor id="markup-source" label="Source" language={to === "html" ? "markdown" : "html"} value={text} onChange={(event) => setText(event.target.value)} />
           </FieldRow>
         </Pane>
         <Pane label={to === "html" ? "HTML" : "Markdown"}>

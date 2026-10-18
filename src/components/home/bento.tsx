@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { CodeViewer } from "@/components/kit/code-viewer";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Cover } from "@/components/site/cover";
@@ -119,7 +120,7 @@ export function Bento() {
       </SpotCard>
       <SpotCard href="/t/robots-txt-checker" className="min-[700px]:col-span-4">
         <Head hue={185} icon="Shield" title="robots.txt checker" meta="AI search" />
-        <pre className="well mt-4 p-3 font-mono text-[12px] leading-7">{`User-agent: GPTBot\nAllow: /blog/\nDisallow: /admin/`}</pre>
+        <CodeViewer className="mt-4" code={"User-agent: GPTBot\nAllow: /blog/\nDisallow: /admin/"} label="robots.txt" language="ini" maxHeight={140} dense />
       </SpotCard>
       <SpotCard href="/t/meta-tags-inspector" className="min-[700px]:col-span-4">
         <Head hue={300} icon="Tags" title="Meta tags inspector" meta="Social previews" />
@@ -134,15 +135,12 @@ export function Bento() {
       </SpotCard>
       <SpotCard href="/t/nextjs-dockerfile-generator" className="min-[700px]:col-span-4">
         <Head hue={0} icon="Container" title="Next.js Dockerfile generator" meta="Next.js" />
-        <pre className="well mt-4 p-3 font-mono text-[12px] leading-7">
-          {docker.join("\n")}
-          {"\n"}
-          <span className="text-faint">{estimatedSize(dockerfileDefaults)}</span>
-        </pre>
+        <CodeViewer className="mt-4" code={docker.join("\n")} label="Dockerfile" language="dockerfile" maxHeight={160} dense />
+        <p className="mt-2 font-mono text-[12px] text-faint">{estimatedSize(dockerfileDefaults)}</p>
       </SpotCard>
       <SpotCard href="/t/llms-txt-generator" className="min-[700px]:col-span-4">
         <Head hue={185} icon="FileText" title="llms.txt generator" meta="AI search" />
-        <pre className="well mt-4 p-3 font-mono text-[12px] leading-7">{llms.split("\n").slice(0, 4).join("\n")}</pre>
+        <CodeViewer className="mt-4" code={llms.split("\n").slice(0, 4).join("\n")} label="llms.txt" language="markdown" maxHeight={140} dense />
       </SpotCard>
       <Link href="/t/schema-generator" className="sr-only">Schema generator</Link>
     </div>
