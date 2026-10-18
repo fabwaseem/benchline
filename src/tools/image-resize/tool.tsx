@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ChipButton, OptionRow, TextButton, TextInput } from "@/components/kit/controls";
 import { Scaling } from "lucide-react";
 import { toast } from "sonner";
 import { BatchList } from "@/components/kit/batch-list";
@@ -11,8 +12,6 @@ import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
 import { encoderSupports, fileToBitmap, renderToBlob } from "@/lib/client-image";
 import { downloadBlob } from "@/lib/download-blob";
 import { encoderQuality, formatBytes, IMAGE_ACCEPT, outputFilename, resolveOutput, sniffFormat } from "@/lib/image-format";
@@ -203,24 +202,19 @@ export default function ImageResizeTool() {
             <>
               <div className="grid grid-cols-2 gap-3">
                 <FieldRow label="Width" htmlFor="resize-w">
-                  <Input id="resize-w" inputMode="numeric" value={widthText} placeholder="1280" onChange={(event) => setWidthText(event.target.value)} className="max-[699px]:h-11" />
+                  <TextInput id="resize-w" inputMode="numeric" value={widthText} placeholder="1280" onChange={(event) => setWidthText(event.target.value)} className="max-[699px]:h-11" />
                 </FieldRow>
                 <FieldRow label="Height" htmlFor="resize-h">
-                  <Input id="resize-h" inputMode="numeric" value={heightText} placeholder="auto" onChange={(event) => setHeightText(event.target.value)} className="max-[699px]:h-11" />
+                  <TextInput id="resize-h" inputMode="numeric" value={heightText} placeholder="auto" onChange={(event) => setHeightText(event.target.value)} className="max-[699px]:h-11" />
                 </FieldRow>
               </div>
-              <label className="flex min-h-11 items-center justify-between gap-3 text-sm">
-                Lock aspect ratio
-                <Switch checked={lock} onCheckedChange={setLock} />
-              </label>
+              <OptionRow label="Lock aspect ratio" checked={lock} onChange={setLock} />
               <Segmented label="Fit" value={fit} onChange={setFit} options={fitModes.map((item) => ({ value: item, label: FIT_LABELS[item] }))} />
               <div className="flex flex-wrap gap-1.5">
                 {resizePresets.map((preset) => (
-                  <button
+                  <ChipButton
                     key={preset.id}
-                    type="button"
-                    className="chip"
-                    data-on={widthText === String(preset.width) && heightText === String(preset.height) ? "true" : "false"}
+                    pressed={widthText === String(preset.width) && heightText === String(preset.height)}
                     onClick={() => {
                       setMode("pixels");
                       setWidthText(String(preset.width));
@@ -229,13 +223,13 @@ export default function ImageResizeTool() {
                     }}
                   >
                     {preset.label}
-                  </button>
+                  </ChipButton>
                 ))}
               </div>
             </>
           ) : (
             <FieldRow label="Percent" htmlFor="resize-pct" help="50 halves both sides. 200 doubles them. Each image keeps its ratio.">
-              <Input id="resize-pct" inputMode="numeric" value={percent} onChange={(event) => setPercent(event.target.value)} className="max-[699px]:h-11" />
+              <TextInput id="resize-pct" inputMode="numeric" value={percent} onChange={(event) => setPercent(event.target.value)} className="max-[699px]:h-11" />
             </FieldRow>
           )}
         </Panel>
@@ -278,7 +272,7 @@ export default function ImageResizeTool() {
             <ResultStat variant="well" label="Fit" value={mode === "percent" ? "Percent" : FIT_LABELS[fit]} hint={formatLabel === "original" ? "Keep format" : LABELS[formatLabel]} />
           </div>
           <InkButton icon={<Scaling size={15} />} disabled={done === 0} onClick={() => void saveZip()}>Download ZIP</InkButton>
-          <button type="button" className="text-left text-[12px] text-muted-foreground" onClick={clear}>Clear the batch</button>
+          <TextButton onClick={clear}>Clear the batch</TextButton>
         </Panel>
       }
     />

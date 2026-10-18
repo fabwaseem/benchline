@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { ChipButton, Select, TextInput } from "@/components/kit/controls";
 import { Clock, Copy } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -10,7 +11,6 @@ import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Input } from "@/components/ui/input";
 import { dialects, explainCron, presets, setField, type Dialect } from "@/tools/cron-expression-builder/lib/cron";
 
 const ZONES = ["UTC", "America/New_York", "America/Los_Angeles", "Europe/London", "Europe/Paris", "Asia/Karachi", "Asia/Kolkata", "Asia/Singapore", "Asia/Tokyo", "Australia/Sydney"];
@@ -66,7 +66,7 @@ export default function CronTool() {
       input={
         <Panel title="Expression">
           <FieldRow label="Expression" htmlFor="cron" error={result.valid ? undefined : result.error} help="Minute, hour, day of month, month, day of week.">
-            <Input id="cron" value={expr} onChange={(event) => setExpr(event.target.value)} className="font-mono max-[699px]:h-11" aria-invalid={!result.valid} />
+            <TextInput id="cron" value={expr} onChange={(event) => setExpr(event.target.value)} className="font-mono max-[699px]:h-11" aria-invalid={!result.valid} />
           </FieldRow>
           {reboot ? null : (
             <div className="grid grid-cols-5 gap-2">
@@ -84,7 +84,7 @@ export default function CronTool() {
           <Segmented label="Dialect" value={dialect} onChange={setDialect} options={dialects.map((item) => ({ value: item, label: item }))} />
           <div className="flex flex-wrap gap-1.5">
             {presets.map((preset) => (
-              <button key={preset.id} type="button" data-on={expr === preset.expr ? "true" : "false"} className="chip" onClick={() => setExpr(preset.expr)}>{preset.label}</button>
+              <ChipButton key={preset.id} pressed={expr === preset.expr} onClick={() => setExpr(preset.expr)}>{preset.label}</ChipButton>
             ))}
           </div>
           <FieldChips label="Minute" values={["*", "*/5", "*/15", "*/30", "0"]} onPick={(value) => setExpr(setField(expr, expr.trim().split(/\s+/).length >= 6 ? 1 : 0, value))} />
@@ -121,9 +121,9 @@ export default function CronTool() {
       inspector={
         <Panel title="Snippets">
           <FieldRow label="Timezone" htmlFor="cron-tz">
-            <select id="cron-tz" value={zone} onChange={(event) => setZone(event.target.value)} className="h-11 rounded-lg border border-input bg-transparent px-2 text-sm min-[700px]:h-8">
+            <Select id="cron-tz" value={zone} onChange={(event) => setZone(event.target.value)}>
               {zones.map((item) => <option key={item} value={item}>{item}</option>)}
-            </select>
+            </Select>
           </FieldRow>
           {result.valid && activeSnippet ? (
             <>
@@ -145,7 +145,7 @@ function FieldChips({ label, values, onPick }: { label: string; values: string[]
     <div className="flex flex-wrap items-center gap-1.5">
       <span className="w-16 text-[12px] text-muted-foreground">{label}</span>
       {values.map((value) => (
-        <button key={value} type="button" className="chip font-mono" onClick={() => onPick(value)}>{value}</button>
+        <ChipButton key={value} className="font-mono" onClick={() => onPick(value)}>{value}</ChipButton>
       ))}
     </div>
   );

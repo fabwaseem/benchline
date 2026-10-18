@@ -1,12 +1,15 @@
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export function Breadcrumbs({
   items,
+  className,
 }: {
   items: { href: string; label: string }[];
+  className?: string;
 }) {
   return (
-    <nav aria-label="Breadcrumb" className="text-xs text-muted-foreground">
+    <nav aria-label="Breadcrumb" className={cn("font-mono text-[11px] tracking-[0.08em] text-muted-foreground uppercase", className)}>
       <ol className="flex flex-wrap items-center gap-1.5">
         {items.map((item, index) => {
           const last = index === items.length - 1;
@@ -16,7 +19,7 @@ export function Breadcrumbs({
               {last ? (
                 <span className="text-foreground">{item.label}</span>
               ) : (
-                <Link href={item.href} className="hover:text-foreground">
+                <Link href={item.href} className="transition-colors duration-150 hover:text-foreground">
                   {item.label}
                 </Link>
               )}

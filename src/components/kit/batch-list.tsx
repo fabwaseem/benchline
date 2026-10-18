@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { ActionButton } from "@/components/kit/controls";
 
 export type BatchItem = {
   id: string;
@@ -37,12 +37,12 @@ export function BatchList({
               {item.error ?? item.meta}
             </span>
           </span>
-          <Button type="button" variant="outline" size="sm" disabled={item.status !== "done"} onClick={() => onSave(item.id)}>
+          <ActionButton variant="outline" size="sm" disabled={item.status !== "done"} onClick={() => onSave(item.id)}>
             Save
-          </Button>
-          <Button type="button" variant="ghost" size="sm" aria-label={`Remove ${item.name}`} onClick={() => onRemove(item.id)}>
+          </ActionButton>
+          <ActionButton variant="ghost" size="sm" aria-label={`Remove ${item.name}`} onClick={() => onRemove(item.id)}>
             Remove
-          </Button>
+          </ActionButton>
         </li>
       ))}
     </ul>

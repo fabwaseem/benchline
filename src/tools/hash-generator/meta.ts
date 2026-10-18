@@ -6,7 +6,7 @@ export const meta = {
   tagline: "MD5, SHA-1, SHA-256, and SHA-512 checksums for text or a file, with HMAC.",
   description:
     "Free SHA-256 and MD5 hash generator. Checksum text or a file with MD5, SHA-1, SHA-256, and SHA-512, copy hex or base64, compare an expected digest, and compute HMAC. The bytes stay in the browser.",
-  category: "developer",
+  category: "crypto",
   tags: ["hash", "sha256", "md5", "checksum"],
   keywords: ["sha256 generator", "md5 hash", "file checksum", "hmac generator"],
   status: "new",

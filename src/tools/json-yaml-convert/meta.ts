@@ -6,7 +6,7 @@ export const meta = {
   tagline: "Convert JSON, YAML, TOML, and XML in the browser, and keep the line number when a document fails.",
   description:
     "Free converter for JSON to YAML, YAML to JSON, TOML, and XML to JSON. The source format can be detected automatically. Errors include a line and column. Conversion stays in the browser.",
-  category: "developer",
+  category: "json",
   tags: ["json", "yaml", "toml", "xml", "convert"],
   keywords: ["json to yaml", "yaml to json", "xml to json", "toml to json"],
   status: "new",

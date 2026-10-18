@@ -5,11 +5,11 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: SITE_NAME,
     short_name: SITE_NAME,
-    description: "A quiet bench for exact work. Local developer tools, in the browser.",
+    description: "Free browser tools. Search the directory, or call the same tools over MCP.",
     start_url: "/",
     display: "standalone",
-    background_color: "oklch(98.9% 0.0015 250)",
-    theme_color: "oklch(98.9% 0.0015 250)",
+    background_color: "#F6F4EF",
+    theme_color: "#F6F4EF",
     icons: [
       { src: "/app-icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
       { src: "/app-icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },

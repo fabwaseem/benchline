@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { ActionButton, ChipButton, TextInput } from "@/components/kit/controls";
 import { Download, ImageIcon, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import { CodeOutput } from "@/components/kit/code-output";
@@ -11,8 +12,6 @@ import { Notice } from "@/components/kit/notice";
 import { Panel } from "@/components/kit/tool-shell";
 import { Segmented } from "@/components/kit/segmented";
 import { InkButton, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { buildMetaTags, buildOpenGraphFile, ogExample, OG_HEIGHT, OG_WIDTH, templates, titleFit, type OgInput, type OgTemplate } from "@/tools/og-image-generator/lib/og";
 
 const LOGO_TYPES = new Set(["image/png", "image/jpeg", "image/webp", "image/gif"]);
@@ -158,17 +157,15 @@ export default function OgTool() {
         <Panel title="Compose">
           <div role="radiogroup" aria-label="Template" className="grid grid-cols-3 gap-2">
             {templates.map((template) => (
-              <button
+              <ChipButton
                 key={template}
-                type="button"
                 role="radio"
-                aria-checked={input.template === template}
-                data-on={input.template === template ? "true" : "false"}
-                className="chip h-9 justify-center capitalize max-[699px]:h-11"
+                pressed={input.template === template}
+                className="h-9 justify-center capitalize max-[699px]:h-11"
                 onClick={() => setInput({ ...input, template: template as OgTemplate })}
               >
                 {template}
-              </button>
+              </ChipButton>
             ))}
           </div>
           <FieldRow
@@ -176,13 +173,13 @@ export default function OgTool() {
             htmlFor="og-title"
             actions={<span className={fit.clipped ? "font-mono text-[12px] text-status-warn" : "font-mono text-[12px] text-faint"}>{fit.counter}</span>}
           >
-            <Input id="og-title" value={input.title} onChange={(event) => setInput({ ...input, title: event.target.value })} className="max-[699px]:h-11" />
+            <TextInput id="og-title" value={input.title} onChange={(event) => setInput({ ...input, title: event.target.value })} className="max-[699px]:h-11" />
           </FieldRow>
           <FieldRow label="Subtitle" htmlFor="og-sub">
-            <Input id="og-sub" value={input.subtitle} onChange={(event) => setInput({ ...input, subtitle: event.target.value })} className="max-[699px]:h-11" />
+            <TextInput id="og-sub" value={input.subtitle} onChange={(event) => setInput({ ...input, subtitle: event.target.value })} className="max-[699px]:h-11" />
           </FieldRow>
           <FieldRow label="Author" htmlFor="og-author">
-            <Input id="og-author" value={input.author} onChange={(event) => setInput({ ...input, author: event.target.value })} className="max-[699px]:h-11" />
+            <TextInput id="og-author" value={input.author} onChange={(event) => setInput({ ...input, author: event.target.value })} className="max-[699px]:h-11" />
           </FieldRow>
           <Segmented label="Font" value={input.font} onChange={(font) => setInput({ ...input, font })} options={[{ value: "sans", label: "Sans" }, { value: "mono", label: "Mono" }]} />
           <div className="grid grid-cols-3 gap-2">
@@ -193,9 +190,9 @@ export default function OgTool() {
           <Dropzone accept="image/png,image/jpeg,image/webp,image/gif" label="Drop a logo. It stays in this browser." invalid={Boolean(logoError)} onFile={takeLogo} />
           {logoError ? <p role="alert" className="text-xs text-status-bad">{logoError}</p> : null}
           {logoName && !logoError ? <p className="font-mono text-[12px] text-muted-foreground">{logoName} · {logoBytes.toLocaleString("en-US")} B</p> : null}
-          <Button type="button" variant="outline" className="max-[699px]:h-11" onClick={reset}>
+          <ActionButton type="button" variant="outline" className="max-[699px]:h-11" onClick={reset}>
             <RotateCcw size={14} /> Reset
-          </Button>
+          </ActionButton>
         </Panel>
       }
       output={
@@ -227,9 +224,9 @@ export default function OgTool() {
           <InkButton onClick={download} icon={<Download size={15} />} className="min-[700px]:inline-flex">Download PNG</InkButton>
           <Segmented label="Code" value={tab} onChange={setTab} options={[{ value: "code", label: "opengraph-image.tsx" }, { value: "meta", label: "Meta tags" }]} />
           <CodeOutput code={code} filename={tab === "code" ? "opengraph-image.tsx" : "meta.html"} label={tab === "code" ? "opengraph-image.tsx" : "Meta tags"} />
-          <Button type="button" variant="outline" className="max-[699px]:h-11" onClick={() => downloadText(tab === "code" ? "opengraph-image.tsx" : "meta.html", code)}>
+          <ActionButton type="button" variant="outline" className="max-[699px]:h-11" onClick={() => downloadText(tab === "code" ? "opengraph-image.tsx" : "meta.html", code)}>
             Download code
-          </Button>
+          </ActionButton>
         </Panel>
       }
     />
@@ -239,7 +236,7 @@ export default function OgTool() {
 function ColorField({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
   return (
     <FieldRow label={label} htmlFor={`og-${label}`}>
-      <Input id={`og-${label}`} value={value} onChange={(event) => onChange(event.target.value)} className="font-mono text-xs max-[699px]:h-11" />
+      <TextInput id={`og-${label}`} value={value} onChange={(event) => onChange(event.target.value)} className="font-mono text-xs max-[699px]:h-11" />
     </FieldRow>
   );
 }

@@ -6,7 +6,7 @@ export const meta = {
   tagline: "Pretty-print, minify, and validate JSON, with the exact line and column when it fails.",
   description:
     "Free JSON formatter and JSON validator that runs in the browser. Choose an indent of 2, 4, or a tab, sort object keys, minify, and read a tree of the value. Invalid JSON reports the line, the column, and the line of source.",
-  category: "developer",
+  category: "json",
   tags: ["json", "format", "validate"],
   keywords: ["json formatter", "json validator", "json minify", "json pretty print"],
   status: "new",

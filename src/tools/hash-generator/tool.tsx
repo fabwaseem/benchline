@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { OptionRow, TextInput, TextArea } from "@/components/kit/controls";
 import { Hash } from "lucide-react";
 import { CopyButton } from "@/components/kit/copy-button";
 import { Dropzone } from "@/components/kit/dropzone";
@@ -9,9 +10,6 @@ import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
 import { Panel, ToolShell, ToolTabs } from "@/components/kit/tool-shell";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
 import { encodeText, hashAll, matchingAlgorithms, type HashRow } from "@/tools/hash-generator/lib/hash";
 
 const MAX_FILE = 32 * 1024 * 1024;
@@ -65,7 +63,7 @@ export default function HashGeneratorTool() {
         <Panel title={tab === "text" ? "Text" : "File"}>
           {tab === "text" ? (
             <FieldRow label="Text" htmlFor="hash-text" help="Hashed as UTF-8.">
-              <Textarea id="hash-text" value={text} onChange={(event) => setText(event.target.value)} className="min-h-40 font-mono" />
+              <TextArea id="hash-text" value={text} onChange={(event) => setText(event.target.value)} className="min-h-40 font-mono" />
             </FieldRow>
           ) : (
             <>
@@ -86,17 +84,14 @@ export default function HashGeneratorTool() {
               {fileError ? <Notice tone="bad" role="alert" title={fileError} /> : null}
             </>
           )}
-          <label className="flex min-h-11 items-center justify-between gap-3 text-sm">
-            HMAC
-            <Switch checked={useHmac} onCheckedChange={setUseHmac} />
-          </label>
+          <OptionRow label="HMAC" checked={useHmac} onChange={setUseHmac} />
           {useHmac ? (
             <FieldRow label="HMAC key" htmlFor="hash-key" error={secret.length === 0 ? "Enter a key." : undefined}>
-              <Input id="hash-key" value={secret} onChange={(event) => setSecret(event.target.value)} className="font-mono" aria-invalid={secret.length === 0} />
+              <TextInput id="hash-key" value={secret} onChange={(event) => setSecret(event.target.value)} className="font-mono" aria-invalid={secret.length === 0} />
             </FieldRow>
           ) : null}
           <FieldRow label="Expected digest" htmlFor="hash-expected" help="Hex or base64. Spaces and colons are ignored.">
-            <Input id="hash-expected" value={expected} onChange={(event) => setExpected(event.target.value)} className="font-mono" />
+            <TextInput id="hash-expected" value={expected} onChange={(event) => setExpected(event.target.value)} className="font-mono" />
           </FieldRow>
         </Panel>
       }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { ChipButton, TextInput } from "@/components/kit/controls";
 import { Clock, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { EmptyState } from "@/components/kit/empty-state";
@@ -9,7 +10,6 @@ import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Input } from "@/components/ui/input";
 import { commonTimeZones, convertToDate, convertToEpoch, relativeTime, timeZones, wallFromInputs, type UnitChoice } from "@/tools/unix-timestamp/lib/epoch";
 
 const units: { value: UnitChoice; label: string }[] = [
@@ -87,23 +87,23 @@ export default function UnixTimestampTool() {
           {tab === "to-date" ? (
             <>
               <FieldRow label="Timestamp or date" htmlFor="epoch" error={"error" in result ? result.error : undefined} help="A number, ISO-8601, RFC 2822, or now.">
-                <Input id="epoch" value={raw} onChange={(event) => setRaw(event.target.value)} className="font-mono" aria-invalid={"error" in result} />
+                <TextInput id="epoch" value={raw} onChange={(event) => setRaw(event.target.value)} className="font-mono" aria-invalid={"error" in result} />
               </FieldRow>
               <Segmented label="Unit" value={unit} onChange={setUnit} options={units} />
-              <button type="button" className="chip" onClick={() => now !== null && setRaw(String(Math.trunc(now / 1000)))}>Use current time</button>
+              <ChipButton onClick={() => now !== null && setRaw(String(Math.trunc(now / 1000)))}>Use current time</ChipButton>
             </>
           ) : (
             <>
               <FieldRow label="Date" htmlFor="epoch-date">
-                <Input id="epoch-date" type="date" value={date} onChange={(event) => setDate(event.target.value)} />
+                <TextInput id="epoch-date" type="date" value={date} onChange={(event) => setDate(event.target.value)} />
               </FieldRow>
               <FieldRow label="Time" htmlFor="epoch-time" help="Interpreted as wall time in the selected zone.">
-                <Input id="epoch-time" type="time" step={1} value={time} onChange={(event) => setTime(event.target.value)} />
+                <TextInput id="epoch-time" type="time" step={1} value={time} onChange={(event) => setTime(event.target.value)} />
               </FieldRow>
             </>
           )}
           <FieldRow label="Time zone" htmlFor="epoch-zone" help="Any IANA zone. A date with no offset uses this zone.">
-            <Input id="epoch-zone" list="epoch-zones" value={zone} onChange={(event) => setZone(event.target.value)} className="font-mono" />
+            <TextInput id="epoch-zone" list="epoch-zones" value={zone} onChange={(event) => setZone(event.target.value)} className="font-mono" />
             <datalist id="epoch-zones">
               {zones.map((item) => <option key={item} value={item} />)}
             </datalist>

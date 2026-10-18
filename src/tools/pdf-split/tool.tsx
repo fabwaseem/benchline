@@ -1,17 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { ActionButton, TextInput } from "@/components/kit/controls";
 import { Download, Scissors } from "lucide-react";
 import { downloadBytes } from "@/components/kit/download-button";
 import { Dropzone } from "@/components/kit/dropzone";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
+import { FileList } from "@/components/kit/file-list";
 import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { formatBytes } from "@/lib/image-format";
 import { inspectPdf, splitPdf, type SplitMode, type SplitResult } from "@/tools/pdf-split/lib/split";
 
@@ -82,7 +82,7 @@ export default function PdfSplitTool() {
         <Panel title="PDF">
           <Dropzone accept="application/pdf,.pdf" onFile={(file) => void addFile(file)} label={source ? source.name : "Drop a PDF. It stays in this browser."} invalid={Boolean(error) && !source} />
           <FieldRow label="Pages" htmlFor="range" help="Blank keeps every page. Example: 1-3,5">
-            <Input id="range" value={range} placeholder="all pages" onChange={(event) => { setRange(event.target.value); setResult(null); }} />
+            <TextInput id="range" value={range} placeholder="all pages" onChange={(event) => { setRange(event.target.value); setResult(null); }} />
           </FieldRow>
           {source ? <p className="font-mono text-[12px] text-muted-foreground">{source.pageCount} {source.pageCount === 1 ? "page" : "pages"} · {formatBytes(source.bytes.byteLength)}</p> : null}
         </Panel>
@@ -92,18 +92,16 @@ export default function PdfSplitTool() {
           {error ? <Notice tone="bad" role="alert" title="Could not split" body={error} /> : null}
           {result ? (
             <div className="flex flex-col gap-3">
-              <ul className="flex flex-col gap-2" aria-label="Split files">
-                {result.files.map((file) => (
-                  <li key={file.name} className="flex items-center gap-2 rounded-lg border border-border px-3 py-2">
-                    <div className="min-w-0 flex-1">
-                      <div className="truncate text-sm font-medium">{file.name}</div>
-                      <div className="font-mono text-[12px] text-muted-foreground">{formatBytes(file.bytes.byteLength)}</div>
-                    </div>
-                    <Button type="button" variant="outline" size="sm" onClick={() => downloadBytes(file.name, file.bytes, "application/pdf")}>PDF</Button>
-                  </li>
-                ))}
-              </ul>
-              <Button type="button" onClick={downloadAll}><Download />{result.zip ? "Download ZIP" : "Download PDF"}</Button>
+              <FileList
+                label="Split files"
+                items={result.files.map((file) => ({
+                  id: file.name,
+                  name: file.name,
+                  meta: formatBytes(file.bytes.byteLength),
+                  trailing: <ActionButton variant="outline" size="sm" onClick={() => downloadBytes(file.name, file.bytes, "application/pdf")}>PDF</ActionButton>,
+                }))}
+              />
+              <ActionButton type="button" onClick={downloadAll}><Download />{result.zip ? "Download ZIP" : "Download PDF"}</ActionButton>
             </div>
           ) : <EmptyState title="Nothing split yet" hint="Choose a range and a mode, then split. Several files become a ZIP." />}
         </Panel>
@@ -119,7 +117,7 @@ export default function PdfSplitTool() {
           </FieldRow>
           {mode === "chunks" ? (
             <FieldRow label="Pages per file" htmlFor="every" help="A whole number from 1 to 500.">
-              <Input id="every" inputMode="numeric" value={every} onChange={(event) => { setEvery(event.target.value); setResult(null); }} />
+              <TextInput id="every" inputMode="numeric" value={every} onChange={(event) => { setEvery(event.target.value); setResult(null); }} />
             </FieldRow>
           ) : null}
           <ResultStat variant="well" label="Selected mode" value={mode === "extract" ? "One PDF" : mode === "pages" ? "A page each" : `Every ${every || "N"}`} />

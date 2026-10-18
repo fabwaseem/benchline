@@ -6,7 +6,7 @@ export const meta = {
   tagline: "Cryptographic passwords and passphrases, with an entropy strength meter.",
   description:
     "Free strong password generator. Build a password with crypto.getRandomValues, choose the length and character sets, skip ambiguous characters, or make a passphrase. The strength meter shows the entropy in bits.",
-  category: "developer",
+  category: "crypto",
   tags: ["password", "random"],
   keywords: ["password generator", "strong password generator", "passphrase generator"],
   status: "new",

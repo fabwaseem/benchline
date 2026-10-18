@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Slider, TextButton, TextInput } from "@/components/kit/controls";
 import { ImageDown } from "lucide-react";
 import { toast } from "sonner";
 import { BatchList } from "@/components/kit/batch-list";
@@ -8,11 +9,9 @@ import { Dropzone } from "@/components/kit/dropzone";
 import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
-import { ResultStat } from "@/components/kit/result-stat";
+import { ResultStat, SizeStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Slider } from "@/components/ui/slider";
-import { Input } from "@/components/ui/input";
 import { encoderSupports, fileToBitmap, renderToBlob } from "@/lib/client-image";
 import { downloadBlob } from "@/lib/download-blob";
 import { capBox, encoderQuality, formatBytes, IMAGE_ACCEPT, outputFilename, savings } from "@/lib/image-format";
@@ -197,10 +196,10 @@ export default function ImageCompressTool() {
           <Segmented label="Format" value={choice} onChange={setChoice} options={compressChoices.map((item) => ({ value: item, label: LABELS[item] }))} />
           <Dropzone accept={IMAGE_ACCEPT} multiple label="Drop images, or click to choose a batch" onFiles={addFiles} />
           <FieldRow label={`Quality ${quality}`} htmlFor="quality" help="1 is smallest. 100 is highest quality.">
-            <Slider id="quality" value={[quality]} min={1} max={100} onValueChange={(value) => setQuality(Array.isArray(value) ? value[0] ?? 80 : value)} />
+            <Slider id="quality" value={[quality]} min={1} max={100} onValueChange={(value) => setQuality(value[0] ?? 80)} />
           </FieldRow>
           <FieldRow label="Max edge" htmlFor="max-edge" help="Longest side in pixels. Leave empty to keep the original size.">
-            <Input id="max-edge" inputMode="numeric" value={maxEdge} placeholder="1600" onChange={(event) => setMaxEdge(event.target.value)} className="max-[699px]:h-11" />
+            <TextInput id="max-edge" inputMode="numeric" value={maxEdge} placeholder="1600" onChange={(event) => setMaxEdge(event.target.value)} className="max-[699px]:h-11" />
           </FieldRow>
         </Panel>
       }
@@ -236,13 +235,14 @@ export default function ImageCompressTool() {
       }
       inspector={
         <Panel title="Savings">
-          <div className="grid grid-cols-2 gap-2">
-            <ResultStat variant="well" label="Before" value={jobs.length ? formatBytes(before) : "—"} />
-            <ResultStat variant="well" label="After" value={finished ? formatBytes(after) : "—"} hint={outputNote === "original" ? "Per file" : LABELS[outputNote]} />
-          </div>
+          <SizeStat
+            before={jobs.length ? formatBytes(before) : "—"}
+            after={finished ? formatBytes(after) : "—"}
+            hint={outputNote === "original" ? "Per file" : LABELS[outputNote]}
+          />
           <ResultStat label="Saved" value={batchSavings ? formatBytes(Math.abs(batchSavings.savedBytes)) : "—"} hint={batchSavings ? `${batchSavings.label} across the batch` : "Shown after compression"} />
           <InkButton icon={<ImageDown size={15} />} disabled={finished === 0} onClick={() => void saveZip()}>Download ZIP</InkButton>
-          <button type="button" className="text-left text-[12px] text-muted-foreground" onClick={clear}>Clear the batch</button>
+          <TextButton onClick={clear}>Clear the batch</TextButton>
         </Panel>
       }
     />

@@ -30,13 +30,13 @@ import { meta as pdfSplit } from "@/tools/pdf-split/meta";
 import { meta as pdfCompress } from "@/tools/pdf-compress/meta";
 import { meta as imageToPdf } from "@/tools/image-to-pdf/meta";
 import { meta as qrCodeGenerator } from "@/tools/qr-code-generator/meta";
-import { categories, toolOrder } from "@/registry/categories";
+import { categories, parents, toolOrder } from "@/registry/categories";
 import type { SearchRecord } from "@/registry/schema";
 import { assertRegistry } from "@/registry/validate";
 
-const tools = assertRegistry([llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator], [...categories], toolOrder);
+const tools = assertRegistry([llmsTxtGenerator, aiSeoChecker, ogImageGenerator, jwtDecoder, robotsTxtChecker, metaTagsInspector, schemaGenerator, aiTokenCounter, cronExpressionBuilder, nextjsDockerfileGenerator, jsonFormatter, jsonYamlConvert, csvJsonConvert, diffChecker, base64Codec, imageConvert, imageCompress, imageResize, colorConverter, unixTimestamp, dateDifference, hashGenerator, uuidGenerator, urlCodec, passwordGenerator, chmodCalculator, pdfMerge, pdfSplit, pdfCompress, imageToPdf, qrCodeGenerator], [...categories], toolOrder, [...parents]);
 
-export { categories, tools };
+export { categories, parents, tools };
 
 export function getTool(slug: string) {
   return tools.find((tool) => tool.slug === slug);

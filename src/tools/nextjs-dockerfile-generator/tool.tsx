@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { TextInput, OptionRow } from "@/components/kit/controls";
 import { Container, Download } from "lucide-react";
 import { zipSync, strToU8 } from "fflate";
 import { toast } from "sonner";
@@ -11,8 +12,6 @@ import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
 import { buildArgWarnings, buildCommands, buildCompose, buildDockerfile, buildDockerignore, buildNextConfig, dockerfileDefaults, estimatedSize, type BaseImage, type DockerfileOptions, type NodeVersion, type PackageManager } from "@/tools/nextjs-dockerfile-generator/lib/dockerfile";
 
 export default function DockerTool() {
@@ -95,17 +94,17 @@ export default function DockerTool() {
           <FieldRow label="Base" htmlFor="base">
             <Segmented label="Base" value={options.base} onChange={(base) => setOptions({ ...options, base })} options={([{ value: "alpine", label: "Alpine" }, { value: "slim", label: "Debian slim" }] as { value: BaseImage; label: string }[])} />
           </FieldRow>
-          <Toggle label="Standalone output" checked={options.standalone} onChange={(standalone) => setOptions({ ...options, standalone })} />
-          <Toggle label="Prisma" checked={options.prisma} onChange={(prisma) => setOptions({ ...options, prisma })} />
-          <Toggle label="prisma migrate deploy" checked={options.migrate} onChange={(migrate) => setOptions({ ...options, migrate })} />
-          <Toggle label="Healthcheck" checked={options.healthcheck} onChange={(healthcheck) => setOptions({ ...options, healthcheck })} />
-          <Toggle label="Disable telemetry" checked={options.telemetryDisabled} onChange={(telemetryDisabled) => setOptions({ ...options, telemetryDisabled })} />
-          <Toggle label="BuildKit cache mounts" checked={options.cacheMounts} onChange={(cacheMounts) => setOptions({ ...options, cacheMounts })} />
-          <Toggle label="Monorepo note" checked={options.turbo} onChange={(turbo) => setOptions({ ...options, turbo })} />
-          <FieldRow label="Port" htmlFor="port"><Input id="port" type="number" value={options.port} onChange={(event) => setOptions({ ...options, port: Number(event.target.value) || 3000 })} className="max-[699px]:h-11" /></FieldRow>
-          <FieldRow label="Health path" htmlFor="health"><Input id="health" value={options.healthPath} onChange={(event) => setOptions({ ...options, healthPath: event.target.value })} className="max-[699px]:h-11" /></FieldRow>
+          <OptionRow label="Standalone output" checked={options.standalone} onChange={(standalone) => setOptions({ ...options, standalone })} />
+          <OptionRow label="Prisma" checked={options.prisma} onChange={(prisma) => setOptions({ ...options, prisma })} />
+          <OptionRow label="prisma migrate deploy" checked={options.migrate} onChange={(migrate) => setOptions({ ...options, migrate })} />
+          <OptionRow label="Healthcheck" checked={options.healthcheck} onChange={(healthcheck) => setOptions({ ...options, healthcheck })} />
+          <OptionRow label="Disable telemetry" checked={options.telemetryDisabled} onChange={(telemetryDisabled) => setOptions({ ...options, telemetryDisabled })} />
+          <OptionRow label="BuildKit cache mounts" checked={options.cacheMounts} onChange={(cacheMounts) => setOptions({ ...options, cacheMounts })} />
+          <OptionRow label="Monorepo note" checked={options.turbo} onChange={(turbo) => setOptions({ ...options, turbo })} />
+          <FieldRow label="Port" htmlFor="port"><TextInput id="port" type="number" value={options.port} onChange={(event) => setOptions({ ...options, port: Number(event.target.value) || 3000 })} className="max-[699px]:h-11" /></FieldRow>
+          <FieldRow label="Health path" htmlFor="health"><TextInput id="health" value={options.healthPath} onChange={(event) => setOptions({ ...options, healthPath: event.target.value })} className="max-[699px]:h-11" /></FieldRow>
           <FieldRow label="Build-time NEXT_PUBLIC_ names" htmlFor="envs" help="Comma-separated. They become ARG lines. Server secrets stay runtime env." error={warnings[0]}>
-            <Input id="envs" value={envText} aria-invalid={warnings.length > 0 || undefined} onChange={(event) => setEnvText(event.target.value)} className="max-[699px]:h-11" />
+            <TextInput id="envs" value={envText} aria-invalid={warnings.length > 0 || undefined} onChange={(event) => setEnvText(event.target.value)} className="max-[699px]:h-11" />
           </FieldRow>
         </Panel>
       }
@@ -135,11 +134,3 @@ export default function DockerTool() {
   );
 }
 
-function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (value: boolean) => void }) {
-  return (
-    <label className="flex min-h-11 items-center justify-between gap-3 text-sm">
-      {label}
-      <Switch checked={checked} onCheckedChange={onChange} />
-    </label>
-  );
-}

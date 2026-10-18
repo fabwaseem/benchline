@@ -1,16 +1,21 @@
 import { absoluteUrl, SITE_NAME, SITE_URL } from "@/lib/site";
 import { mcpIndex } from "@/registry/mcp-index";
-import { categories, tools } from "@/registry";
+import { parents, categories, tools } from "@/registry";
 
 export function benchLlms() {
-  const sections = categories
-    .map((category) => {
-      const items = tools.filter((tool) => tool.category === category.slug);
-      if (items.length === 0) return "";
-      const links = items
-        .map((tool) => `- [${tool.name}](${absoluteUrl(`/t/${tool.slug}`)}): ${tool.tagline}`)
-        .join("\n");
-      return `## ${category.name}\n\n${links}`;
+  const sections = parents
+    .map((parent) => {
+      const children = categories.filter((category) => category.parent === parent.slug);
+      const blocks = children.flatMap((category) => {
+        const items = tools.filter((tool) => tool.category === category.slug);
+        if (items.length === 0) return [];
+        const links = items
+          .map((tool) => `- [${tool.name}](${absoluteUrl(`/t/${tool.slug}`)}): ${tool.tagline}`)
+          .join("\n");
+        const heading = children.length === 1 ? parent.name : `${parent.name} / ${category.name}`;
+        return [`## ${heading}\n\n${links}`];
+      });
+      return blocks.join("\n\n");
     })
     .filter(Boolean)
     .join("\n\n");

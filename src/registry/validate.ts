@@ -1,9 +1,17 @@
 import { ICON_NAMES } from "@/lib/icons";
-import { categorySchema, toolMetaSchema, type Category, type ToolMeta } from "@/registry/schema";
+import { categorySchema, parentSchema, toolMetaSchema, type Category, type ToolMeta } from "@/registry/schema";
 
 const iconNames = new Set(ICON_NAMES);
 
-export function assertRegistry(metas: unknown[], cats: unknown[], order: readonly string[]): ToolMeta[] {
+export function assertRegistry(metas: unknown[], cats: unknown[], order: readonly string[], groups: unknown[] = []): ToolMeta[] {
+  const parents = groups.map((parent) => parentSchema.parse(parent));
+  const parentSlugs = new Set<string>();
+  for (const parent of parents) {
+    if (parentSlugs.has(parent.slug)) throw new Error(`Duplicate parent ${parent.slug}`);
+    parentSlugs.add(parent.slug);
+    if (!iconNames.has(parent.icon)) throw new Error(`Unknown icon ${parent.icon} on parent ${parent.slug}`);
+    if (parent.hue >= 25 && parent.hue <= 60) throw new Error(`Parent ${parent.slug} uses a reserved orange hue`);
+  }
   const categories = cats.map((category) => categorySchema.parse(category));
   const tools = metas.map((meta) => toolMetaSchema.parse(meta));
   const categorySlugs = new Set<string>();
@@ -13,6 +21,12 @@ export function assertRegistry(metas: unknown[], cats: unknown[], order: readonl
       throw new Error(`Duplicate category ${category.slug}`);
     }
     categorySlugs.add(category.slug);
+    if (!parentSlugs.has(category.parent)) {
+      throw new Error(`Unknown parent ${category.parent} on category ${category.slug}`);
+    }
+    if (parentSlugs.has(category.slug) && category.parent !== category.slug) {
+      throw new Error(`Category ${category.slug} uses a parent slug`);
+    }
     if (!iconNames.has(category.icon)) {
       throw new Error(`Unknown icon ${category.icon} on category ${category.slug}`);
     }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { ChipButton, TextInput, Slider, OptionRow } from "@/components/kit/controls";
 import { Copy, KeyRound } from "lucide-react";
 import { toast } from "sonner";
 import { CopyButton } from "@/components/kit/copy-button";
@@ -8,9 +9,6 @@ import { EmptyState } from "@/components/kit/empty-state";
 import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Panel, ToolShell, ToolTabs, useWorkbenchKeys, InkButton } from "@/components/kit/tool-shell";
-import { Input } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
 import { generatePassphrases, generatePasswords, passphraseStrength, passwordStrength, type PasswordOptions } from "@/tools/password-generator/lib/password";
 
 export default function PasswordGeneratorTool() {
@@ -88,30 +86,30 @@ export default function PasswordGeneratorTool() {
           {tab === "password" ? (
             <>
               <FieldRow label={`Length ${length}`} htmlFor="pw-length">
-                <Slider id="pw-length" value={[length]} min={4} max={128} onValueChange={(value) => setLength(Array.isArray(value) ? value[0] ?? length : value)} />
+                <Slider id="pw-length" value={[length]} min={4} max={128} onValueChange={(value) => setLength(value[0] ?? length)} />
               </FieldRow>
-              <Toggle label="Lowercase" checked={lowercase} onChange={setLowercase} />
-              <Toggle label="Uppercase" checked={uppercase} onChange={setUppercase} />
-              <Toggle label="Digits" checked={digits} onChange={setDigits} />
-              <Toggle label="Symbols" checked={symbols} onChange={setSymbols} />
-              <Toggle label="Exclude ambiguous characters" checked={excludeAmbiguous} onChange={setExcludeAmbiguous} />
+              <OptionRow label="Lowercase" checked={lowercase} onChange={setLowercase} />
+              <OptionRow label="Uppercase" checked={uppercase} onChange={setUppercase} />
+              <OptionRow label="Digits" checked={digits} onChange={setDigits} />
+              <OptionRow label="Symbols" checked={symbols} onChange={setSymbols} />
+              <OptionRow label="Exclude ambiguous characters" checked={excludeAmbiguous} onChange={setExcludeAmbiguous} />
             </>
           ) : (
             <>
               <FieldRow label={`Words ${words}`} htmlFor="pw-words" help="EFF short wordlist, 1,296 words.">
-                <Slider id="pw-words" value={[words]} min={3} max={12} onValueChange={(value) => setWords(Array.isArray(value) ? value[0] ?? words : value)} />
+                <Slider id="pw-words" value={[words]} min={3} max={12} onValueChange={(value) => setWords(value[0] ?? words)} />
               </FieldRow>
               <FieldRow label="Separator" htmlFor="pw-sep">
-                <Input id="pw-sep" value={separator} onChange={(event) => setSeparator(event.target.value)} className="font-mono" />
+                <TextInput id="pw-sep" value={separator} onChange={(event) => setSeparator(event.target.value)} className="font-mono" />
               </FieldRow>
-              <Toggle label="Capitalize words" checked={capitalize} onChange={setCapitalize} />
-              <Toggle label="Add a digit" checked={digit} onChange={setDigit} />
+              <OptionRow label="Capitalize words" checked={capitalize} onChange={setCapitalize} />
+              <OptionRow label="Add a digit" checked={digit} onChange={setDigit} />
             </>
           )}
           <FieldRow label="How many" htmlFor="pw-count">
-            <Input id="pw-count" type="number" min={1} max={100} value={count} onChange={(event) => setCount(Number(event.target.value))} />
+            <TextInput id="pw-count" type="number" min={1} max={100} value={count} onChange={(event) => setCount(Number(event.target.value))} />
           </FieldRow>
-          <button type="button" className="chip" onClick={() => setNonce((value) => value + 1)}>Generate again</button>
+          <ChipButton onClick={() => setNonce((value) => value + 1)}>Generate again</ChipButton>
         </Panel>
       }
       output={
@@ -146,11 +144,3 @@ export default function PasswordGeneratorTool() {
   );
 }
 
-function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (value: boolean) => void }) {
-  return (
-    <label className="flex min-h-11 items-center justify-between gap-3 text-sm">
-      {label}
-      <Switch checked={checked} onCheckedChange={onChange} />
-    </label>
-  );
-}

@@ -6,7 +6,7 @@ export const meta = {
   tagline: "Compare two texts side by side or inline, and download a unified patch.",
   description:
     "Free diff checker for text and JSON. Compare by line, word, or character, ignore whitespace, or diff JSON so key order does not matter. The result is a side-by-side view, an inline view, and a unified patch. It runs in the browser.",
-  category: "developer",
+  category: "text",
   tags: ["diff", "compare"],
   keywords: ["diff checker", "compare text", "text diff", "json diff"],
   status: "new",

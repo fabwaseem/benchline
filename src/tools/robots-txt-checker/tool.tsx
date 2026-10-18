@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
+import { ActionButton, TextInput, TextArea } from "@/components/kit/controls";
 import { Copy, Shield } from "lucide-react";
 import { toast } from "sonner";
 import { CheckRows } from "@/components/kit/check-row";
@@ -12,9 +13,6 @@ import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
 import { SkeletonRows } from "@/components/kit/skeleton-rows";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { postTool } from "@/lib/post-tool";
 import { parseRobots, robotsIssues, type RobotsDocument } from "@/lib/robots";
 
@@ -106,7 +104,7 @@ export default function RobotsTool() {
       flow="band"
       columns="min-[1280px]:grid-cols-[360px_minmax(0,1fr)_340px]"
       tabs={<ToolTabs label="Mode" value="audit" onChange={() => {}} options={[{ value: "audit", label: "Audit" }]} />}
-      actions={busy ? <Button type="button" variant="outline" className="h-[30px]" onClick={cancel}>Cancel</Button> : <InkButton disabled={!report} icon={<Copy size={15} />} onClick={() => void navigator.clipboard.writeText(report).then(() => toast.success("Report copied"))}>Copy report</InkButton>}
+      actions={busy ? <ActionButton type="button" variant="outline" className="h-[30px]" onClick={cancel}>Cancel</ActionButton> : <InkButton disabled={!report} icon={<Copy size={15} />} onClick={() => void navigator.clipboard.writeText(report).then(() => toast.success("Report copied"))}>Copy report</InkButton>}
       status={
         <>
           <span className={fails || error ? "dot dot-warn" : "dot"} />
@@ -120,15 +118,15 @@ export default function RobotsTool() {
           <Segmented label="Source" value={mode} onChange={setMode} options={[{ value: "url", label: "Fetch URL" }, { value: "paste", label: "Paste file" }]} />
           {mode === "url" ? (
             <FieldRow label="Domain or robots.txt URL" htmlFor="robots-url" help="A bare domain is fetched at /robots.txt." error={blocked ? error : undefined}>
-              <Input ref={urlRef} id="robots-url" value={url} autoFocus aria-invalid={blocked || undefined} onChange={(event) => setUrl(event.target.value)} className="max-[699px]:h-11" />
+              <TextInput ref={urlRef} id="robots-url" value={url} autoFocus aria-invalid={blocked || undefined} onChange={(event) => setUrl(event.target.value)} className="max-[699px]:h-11" />
             </FieldRow>
           ) : (
             <FieldRow label="robots.txt" htmlFor="robots-paste" help="Audited in the browser. Nothing is sent.">
-              <Textarea id="robots-paste" value={pasted} onChange={(event) => setPasted(event.target.value)} className="min-h-48 font-mono text-xs" />
+              <TextArea id="robots-paste" value={pasted} onChange={(event) => setPasted(event.target.value)} className="min-h-48 font-mono text-xs" />
             </FieldRow>
           )}
           {mode === "url" ? (
-            <Button type="button" className="btn btn-ink h-11" aria-busy={busy} disabled={!url.trim() || busy} onClick={() => void run()}>Fetch</Button>
+            <ActionButton type="button" className="btn btn-ink h-11" aria-busy={busy} disabled={!url.trim() || busy} onClick={() => void run()}>Fetch</ActionButton>
           ) : null}
           {mode === "url" && result?.text ? <CodeOutput code={result.text} filename="robots.txt" label="Fetched file" /> : null}
         </Panel>

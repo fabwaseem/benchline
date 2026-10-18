@@ -1,13 +1,12 @@
 "use client";
 
 import { Fragment, useState } from "react";
+import { TextInput, Toggle, OptionRow } from "@/components/kit/controls";
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
 import { CodeOutput } from "@/components/kit/code-output";
 import { FieldRow } from "@/components/kit/field-row";
 import { InkButton, Panel, ToolShell, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
 import { blankMode, formatMode, parseMode, type Mode, type Triad } from "@/tools/chmod-calculator/lib/chmod";
 
 const rows = ["owner", "group", "other"] as const;
@@ -54,17 +53,17 @@ export default function ChmodCalculatorTool() {
                 <span className="text-sm capitalize">{who}</span>
                 {bits.map((bit) => (
                   <span key={`${who}-${bit}`} className="flex justify-center">
-                    <Switch checked={mode[who][bit]} aria-label={`${who} ${bit}`} onCheckedChange={(value) => toggle(who, bit, value)} />
+                    <Toggle checked={mode[who][bit]} aria-label={`${who} ${bit}`} onCheckedChange={(value) => toggle(who, bit, value)} />
                   </span>
                 ))}
               </Fragment>
             ))}
           </div>
-          <Toggle label="Setuid" checked={mode.setuid} onChange={(value) => { setDraft(null); setMode({ ...mode, setuid: value }); }} />
-          <Toggle label="Setgid" checked={mode.setgid} onChange={(value) => { setDraft(null); setMode({ ...mode, setgid: value }); }} />
-          <Toggle label="Sticky" checked={mode.sticky} onChange={(value) => { setDraft(null); setMode({ ...mode, sticky: value }); }} />
+          <OptionRow label="Setuid" checked={mode.setuid} onChange={(value) => { setDraft(null); setMode({ ...mode, setuid: value }); }} />
+          <OptionRow label="Setgid" checked={mode.setgid} onChange={(value) => { setDraft(null); setMode({ ...mode, setgid: value }); }} />
+          <OptionRow label="Sticky" checked={mode.sticky} onChange={(value) => { setDraft(null); setMode({ ...mode, sticky: value }); }} />
           <FieldRow label="Octal or symbolic" htmlFor="chmod-mode" error={error || undefined} help="755 or rwxr-xr-x.">
-            <Input
+            <TextInput
               id="chmod-mode"
               value={shown}
               onChange={(event) => {
@@ -78,7 +77,7 @@ export default function ChmodCalculatorTool() {
             />
           </FieldRow>
           <FieldRow label="Path" htmlFor="chmod-path">
-            <Input id="chmod-path" value={path} onChange={(event) => setPath(event.target.value)} className="font-mono" />
+            <TextInput id="chmod-path" value={path} onChange={(event) => setPath(event.target.value)} className="font-mono" />
           </FieldRow>
         </Panel>
       }
@@ -93,11 +92,3 @@ export default function ChmodCalculatorTool() {
   );
 }
 
-function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (value: boolean) => void }) {
-  return (
-    <label className="flex min-h-11 items-center justify-between gap-3 text-sm">
-      {label}
-      <Switch checked={checked} onCheckedChange={onChange} />
-    </label>
-  );
-}

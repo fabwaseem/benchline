@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { TextButton } from "@/components/kit/controls";
 import { Images } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -225,9 +226,9 @@ export default function ImageConvertTool() {
             <ResultStat variant="well" label="Output" value={done ? formatBytes(saved) : "—"} hint={LABELS[target]} />
           </div>
           <InkButton icon={<Images size={15} />} disabled={done === 0} onClick={() => void saveZip()}>Download ZIP</InkButton>
-          <button type="button" className="text-left text-[12px] text-muted-foreground" onClick={clear} disabled={jobs.length === 0}>
+          <TextButton onClick={clear} disabled={jobs.length === 0}>
             Clear the batch
-          </button>
+          </TextButton>
         </Panel>
       }
     />

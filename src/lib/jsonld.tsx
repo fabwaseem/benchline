@@ -13,7 +13,11 @@ export function JsonLd({ data }: { data: unknown }) {
   );
 }
 
-export function toolGraph(tool: ToolMeta, categoryName: string) {
+export function toolGraph(
+  tool: ToolMeta,
+  categoryName: string,
+  crumbs?: { name: string; href: string }[],
+) {
   const url = absoluteUrl(`/t/${tool.slug}`);
   return {
     "@context": "https://schema.org",
@@ -70,8 +74,18 @@ export function toolGraph(tool: ToolMeta, categoryName: string) {
         "@id": `${url}#breadcrumb`,
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-          { "@type": "ListItem", position: 2, name: categoryName, item: absoluteUrl(`/${tool.category}`) },
-          { "@type": "ListItem", position: 3, name: tool.name, item: url },
+          ...(crumbs ?? [{ name: categoryName, href: `/${tool.category}` }]).map((crumb, index) => ({
+            "@type": "ListItem",
+            position: index + 2,
+            name: crumb.name,
+            item: absoluteUrl(crumb.href),
+          })),
+          {
+            "@type": "ListItem",
+            position: (crumbs?.length ?? 1) + 2,
+            name: tool.name,
+            item: url,
+          },
         ],
       },
     ],

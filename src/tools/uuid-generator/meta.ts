@@ -6,7 +6,7 @@ export const meta = {
   tagline: "Generate UUID v4 or v7 in bulk, and read the time stored in a v7 id.",
   description:
     "Free UUID and GUID generator for version 4 and version 7. Create one id or a bulk list from cryptographic randomness, then inspect a UUID to see its version, variant, and v7 timestamp.",
-  category: "developer",
+  category: "crypto",
   tags: ["uuid", "guid"],
   keywords: ["uuid generator", "guid generator", "uuid v4", "uuid v7"],
   status: "new",

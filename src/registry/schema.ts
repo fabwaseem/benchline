@@ -21,12 +21,16 @@ export const howToStepSchema = z.object({
   text: z.string().min(1),
 });
 
-export const categorySchema = z.object({
+export const parentSchema = z.object({
   slug,
   name: z.string().min(1),
   description: z.string().min(1),
   icon: z.string().min(1),
   hue: z.number().int().min(0).max(359),
+});
+
+export const categorySchema = parentSchema.extend({
+  parent: slug,
 });
 
 export const toolMetaSchema = z.object({
@@ -59,6 +63,7 @@ export const toolMetaSchema = z.object({
 export type ToolStatus = z.infer<typeof toolStatusSchema>;
 export type Faq = z.infer<typeof faqSchema>;
 export type HowToStep = z.infer<typeof howToStepSchema>;
+export type ParentCategory = z.infer<typeof parentSchema>;
 export type Category = z.infer<typeof categorySchema>;
 export type ToolMeta = z.infer<typeof toolMetaSchema>;
 

@@ -51,7 +51,7 @@ export default function McpGuidePage() {
         <p className="eyebrow">
           <span className="font-mono">MCP</span> Server
         </p>
-        <h1 className="d2 mt-4">One endpoint for every tool.</h1>
+        <h1 className="mt-4 text-[40px] font-semibold tracking-[-0.045em]">One endpoint for every tool.</h1>
         <p className="lede mt-5">
           {endpoint} is a stateless Streamable HTTP server. No key. Sixty calls a minute per address. The same functions are at{" "}
           <span className="font-mono text-[14px]">POST /api/v1/tools/&lt;slug&gt;</span>.

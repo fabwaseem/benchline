@@ -13,7 +13,7 @@ export function Cover({
   size?: number;
   className?: string;
 }) {
-  const radius = Math.max(6, Math.round(size * 0.26));
+  const radius = size >= 48 ? "var(--radius-xl)" : "var(--radius-sm)";
   return (
     <span
       className={cn("cover", className)}

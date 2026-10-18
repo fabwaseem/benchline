@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { ChipButton, ColorInput, TextInput } from "@/components/kit/controls";
 import { Palette } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -9,7 +10,6 @@ import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { ResultStat } from "@/components/kit/result-stat";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Input } from "@/components/ui/input";
 import { contrastPair, convertColor } from "@/tools/color-converter/lib/color";
 
 const SAMPLES = ["#2563eb", "#ff0000", "rebeccapurple", "oklch(72% 0.14 160)", "cmyk(0%, 100%, 100%, 0%)"];
@@ -68,21 +68,15 @@ export default function ColorConverterTool() {
         <Panel title="Color">
           <FieldRow label="Any color" htmlFor="color-input" error={color ? undefined : "Use HEX, rgb(), hsl(), oklch(), cmyk(), or a CSS name."} help="One value fills every format.">
             <div className="flex items-center gap-2">
-              <input
-                type="color"
-                aria-label="Pick a color"
-                value={color?.hex ?? "#000000"}
-                onChange={(event) => setRaw(event.target.value)}
-                className="size-11 shrink-0 cursor-pointer rounded-lg border border-border bg-transparent"
-              />
-              <Input id="color-input" value={raw} onChange={(event) => setRaw(event.target.value)} className="font-mono max-[699px]:h-11" aria-invalid={!color} />
+              <ColorInput aria-label="Pick a color" value={color?.hex ?? "#000000"} onChange={(event) => setRaw(event.target.value)} />
+              <TextInput id="color-input" value={raw} onChange={(event) => setRaw(event.target.value)} className="font-mono max-[699px]:h-11" aria-invalid={!color} />
             </div>
           </FieldRow>
           <div className="flex flex-wrap gap-1.5">
             {SAMPLES.map((sample) => (
-              <button key={sample} type="button" className="chip font-mono" data-on={raw === sample ? "true" : "false"} onClick={() => setRaw(sample)}>
+              <ChipButton key={sample} pressed={raw === sample} className="font-mono" onClick={() => setRaw(sample)}>
                 {sample}
-              </button>
+              </ChipButton>
             ))}
           </div>
           {color ? (
@@ -121,14 +115,8 @@ export default function ColorConverterTool() {
         <Panel title="Contrast">
           <FieldRow label="Background" htmlFor="bg-input" error={back ? undefined : "The background is not a color."}>
             <div className="flex items-center gap-2">
-              <input
-                type="color"
-                aria-label="Pick a background"
-                value={back?.hex ?? "#ffffff"}
-                onChange={(event) => setBackground(event.target.value)}
-                className="size-11 shrink-0 cursor-pointer rounded-lg border border-border bg-transparent"
-              />
-              <Input id="bg-input" value={background} onChange={(event) => setBackground(event.target.value)} className="font-mono max-[699px]:h-11" aria-invalid={!back} />
+              <ColorInput aria-label="Pick a background" value={back?.hex ?? "#ffffff"} onChange={(event) => setBackground(event.target.value)} />
+              <TextInput id="bg-input" value={background} onChange={(event) => setBackground(event.target.value)} className="font-mono max-[699px]:h-11" aria-invalid={!back} />
             </div>
           </FieldRow>
           {contrast ? (

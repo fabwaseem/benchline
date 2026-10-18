@@ -1,23 +1,24 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { Cover } from "@/components/site/cover";
-import { ToolActions } from "@/components/site/tool-actions";
-import { ToolHost } from "@/components/site/tool-host";
+import { McpSnippet } from "@/components/shell/mcp-snippet";
+import { RelatedTools } from "@/components/shell/related-tools";
+import { ToolHeader } from "@/components/shell/tool-header";
+import { ToolWorkspace } from "@/components/shell/tool-workspace";
 import { FaqAccordion } from "@/components/kit/faq-accordion";
+import { ToolHost } from "@/components/site/tool-host";
 import { JsonLd, toolGraph } from "@/lib/jsonld";
-import { absoluteUrl, SITE_URL } from "@/lib/site";
+import { absoluteUrl } from "@/lib/site";
 import { COVER_SIZE, toolCover } from "@/lib/assets";
 import { mcpFor } from "@/registry/mcp-index";
-import { getCategory, getTool, relatedTools, tools, toolsInCategory } from "@/registry";
+import { mcpToolBySlug } from "@/registry/mcp-registry";
+import { categories, getTool, relatedTools, tools } from "@/registry";
+import { parentHue, resolveListing } from "@/lib/taxonomy";
 
 export function generateStaticParams() {
   return tools.map((tool) => ({ slug: tool.slug }));
 }
 
-// Cache Components rejects `dynamicParams`. `not-found` is the same closed set:
-// params outside generateStaticParams 404 before the page shell streams.
 export const unstable_paramMatching = { slug: "not-found" };
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -45,122 +46,94 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+function WorkspaceSkeleton() {
+  return (
+    <div className="animate-pulse" aria-hidden>
+      <div className="flex h-12 items-center gap-2 border-b border-border bg-sunken px-3">
+        <div className="h-6 w-16 rounded-sm bg-surface" />
+        <div className="h-6 w-16 rounded-sm bg-surface" />
+      </div>
+      <div className="grid min-h-72 md:grid-cols-2">
+        <div className="space-y-2 border-b border-border bg-surface p-4 md:border-r md:border-b-0">
+          <div className="h-3 w-1/3 rounded-sm bg-sunken" />
+          <div className="h-3 w-2/3 rounded-sm bg-sunken" />
+          <div className="h-3 w-1/2 rounded-sm bg-sunken" />
+        </div>
+        <div className="bg-well p-4">
+          <div className="h-3 w-1/4 rounded-sm bg-sunken" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default async function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const tool = getTool(slug);
   if (!tool) notFound();
-  const category = getCategory(tool.category);
-  const categoryName = category?.name ?? tool.category;
-  const hue = category?.hue ?? 200;
-  const siblings = toolsInCategory(tool.category);
+  const listing = resolveListing(tool.category);
+  const categoryName = listing?.kind === "page" ? listing.name : tool.category;
+  const parent =
+    listing?.kind === "page" && listing.breadcrumbs.length > 2
+      ? { href: listing.breadcrumbs[1]?.href ?? "/", label: listing.breadcrumbs[1]?.label ?? "" }
+      : null;
+  const hue = listing?.kind === "page" ? listing.hue : parentHue(tool.category);
+  const categorySlug = listing?.kind === "page" ? listing.slug : tool.category;
   const related = relatedTools(slug);
   const mcp = mcpFor(tool.slug);
-  const badges = tool.badges ?? [];
+  const mcpTool = mcpToolBySlug(tool.slug);
+  const hues = Object.fromEntries(categories.map((item) => [item.slug, parentHue(item.slug)]));
+  const crumbs =
+    listing?.kind === "page"
+      ? listing.breadcrumbs.slice(1).map((item) => ({ name: item.label, href: item.href }))
+      : undefined;
   return (
     <>
-      <JsonLd data={toolGraph(tool, categoryName)} />
-      <header className="page-x flex flex-col gap-6 py-6 min-[700px]:flex-row min-[700px]:items-end min-[700px]:py-10">
-        <nav className="flex items-center gap-2 font-mono text-[12px] text-faint min-[700px]:hidden" aria-label="Breadcrumb">
-          <Link href="/">Home</Link>
-          <span>/</span>
-          <Link href={`/${tool.category}`}>{categoryName}</Link>
-        </nav>
-        <Cover hue={hue} icon={tool.icon} size={badges.length ? 68 : 76} className="lgcv shadow-[var(--in-hi),inset_0_0_0_1px_var(--border),var(--shadow-2)]" />
-        <div className="min-w-0 flex-1">
-          <nav className="mb-3 hidden items-center gap-2 font-mono text-[12px] text-faint min-[700px]:flex" aria-label="Breadcrumb">
-            <Link href="/">Home</Link>
-            <span>/</span>
-            <Link href={`/${tool.category}`}>{categoryName}</Link>
-            <span>/</span>
-            <b className="font-medium text-foreground">{tool.name}</b>
-          </nav>
-          <h1 className={badges.length ? "d2 text-[40px] min-[700px]:text-[64px]" : "d2 text-[44px] min-[700px]:text-[72px]"}>{tool.name}</h1>
-          <p className="lede mt-3 max-w-[62ch]">{tool.tagline}</p>
-          {mcp ? (
-            <p className="mt-3 font-mono text-[12px] text-faint">
-              Use via MCP: {mcp.name}
-              {mcp.openWorld ? " · this call can fetch a URL" : " · runs with the arguments you send"}
-            </p>
-          ) : null}
-        </div>
-        <div className="flex flex-col items-start gap-3">
-          {badges.map((badge) => (
-            <span key={badge} className="chip">{badge}</span>
-          ))}
-          <ToolActions slug={tool.slug} title={tool.name} />
-        </div>
-      </header>
-      <div className="page-x">
-      <div className="win">
-        <div className="grid min-[1280px]:grid-cols-[248px_minmax(0,1fr)]">
-          <nav className="hidden border-r border-border bg-well p-3 min-[1280px]:block dark:bg-sunken" aria-label="Tools in this category">
-            <div className="px-2.5 pt-2 pb-1 font-mono text-[10.5px] tracking-[0.08em] text-faint uppercase">{categoryName}</div>
-            {siblings.map((item) => (
-              <Link
-                key={item.slug}
-                href={`/t/${item.slug}`}
-                className={item.slug === tool.slug ? "mt-0.5 flex items-center gap-2.5 rounded-lg bg-surface px-2.5 py-1.5 text-[13px] font-medium text-foreground shadow-[var(--in-hi),0_0_0_1px_var(--border),var(--shadow-1)] dark:bg-raised" : "mt-0.5 flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] text-muted-foreground"}
-              >
-                <Cover hue={hue} icon={item.icon} size={20} />
-                {item.name}
-              </Link>
-            ))}
-          </nav>
-          <Suspense fallback={<div className="h-48 animate-pulse bg-muted" />}>
-            <ToolHost slug={tool.slug} />
-          </Suspense>
-        </div>
-      </div>
-      </div>
-      <section className="page-x grid gap-3 pt-16 min-[700px]:grid-cols-3 min-[700px]:gap-4 min-[700px]:pt-24">
-        {tool.howTo.map((step, index) => (
-          <article key={step.name} className="card p-6">
-            <div className="font-mono text-[12px] text-faint">{String(index + 1).padStart(2, "0")}</div>
-            <h2 className="mt-4 text-[18px] font-semibold tracking-[-0.03em]">{step.name}</h2>
-            <p className="mt-2 text-sm text-muted-foreground">{step.text}</p>
-          </article>
-        ))}
-      </section>
-      <section className="page-x grid gap-10 pt-16 pb-20 min-[1100px]:grid-cols-[220px_minmax(0,1fr)_320px] min-[1100px]:gap-16 min-[1100px]:pt-24">
-        <nav className="text-[13.5px]" aria-label="On this page">
-          <a href="#how-to" className="block border-l-[1.5px] border-foreground py-1.5 pl-3.5 text-foreground">How to</a>
-          <a href="#questions" className="block border-l border-border py-1.5 pl-3.5 text-muted-foreground">Questions</a>
-          <a href="#next" className="block border-l border-border py-1.5 pl-3.5 text-muted-foreground">Next</a>
-        </nav>
-        <div>
-          <h2 id="how-to" className="h-panel">How to use it</h2>
-          <p className="mt-4 max-w-[60ch] text-[15.5px] leading-7 text-muted-foreground">{tool.description}</p>
-          <p className="mt-4 max-w-[60ch] text-[15.5px] leading-7 text-muted-foreground">
-            In: {tool.inputs} Out: {tool.outputs}
-          </p>
-          <h2 id="questions" className="h-panel mt-12">Questions</h2>
-          <FaqAccordion faqs={tool.faqs} />
-        </div>
-        <aside id="next">
-          <div className="eyebrow">Next on the bench</div>
-          <div className="mt-4 flex flex-col gap-3">
-            {related.map((item) => {
-              const itemCategory = getCategory(item.category);
-              return (
-                <Link key={item.slug} href={`/t/${item.slug}`} className="card flex items-center gap-3 p-3">
-                  <Cover hue={itemCategory?.hue ?? 200} icon={item.icon} size={40} />
-                  <span>
-                    <span className="block text-sm font-semibold">{item.name}</span>
-                    <span className="text-[12.5px] text-muted-foreground">{item.tagline}</span>
-                  </span>
-                </Link>
-              );
-            })}
+      <JsonLd data={toolGraph(tool, categoryName, crumbs)} />
+      <div className="mx-auto w-full max-w-[1200px] px-4 py-6 lg:px-8">
+        <ToolHeader
+          name={tool.name}
+          tagline={tool.tagline}
+          categorySlug={categorySlug}
+          categoryName={categoryName}
+          parent={parent}
+          hue={hue}
+          icon={tool.icon}
+          runsLocally={tool.runsLocally}
+          mcpName={mcp?.name ?? null}
+          slug={tool.slug}
+        />
+        <div className="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
+          <div className="min-w-0">
+            <ToolWorkspace>
+              <Suspense fallback={<WorkspaceSkeleton />}>
+                <ToolHost slug={tool.slug} />
+              </Suspense>
+            </ToolWorkspace>
+            <p className="mt-8 max-w-[68ch] text-[15px] leading-7 text-muted-foreground">{tool.description}</p>
+            <section id="how-to" className="mt-8">
+              <h2 className="text-[15px] font-medium">How to use it</h2>
+              <ol className="mt-3 grid gap-3 sm:grid-cols-3">
+                {tool.howTo.map((step, index) => (
+                  <li key={step.name} className="rounded-xl border border-border bg-surface p-4 shadow-[0_0_0_1px_transparent] transition-shadow duration-150">
+                    <span className="font-mono text-[11px] text-faint">{String(index + 1).padStart(2, "0")}</span>
+                    <p className="mt-2 text-[14px] font-medium">{step.name}</p>
+                    <p className="mt-1 text-[13px] leading-5 text-muted-foreground">{step.text}</p>
+                  </li>
+                ))}
+              </ol>
+            </section>
+            <section id="questions" className="mt-10">
+              <h2 className="mb-2 text-[15px] font-medium">FAQ</h2>
+              <FaqAccordion faqs={tool.faqs} />
+            </section>
           </div>
-          {mcp ? (
-            <p className="mt-6 font-mono text-[12px] leading-relaxed text-faint">
-              POST {SITE_URL}/api/v1/tools/{tool.slug}
-              <br />
-              MCP {SITE_URL}/mcp · {mcp.name}
-            </p>
-          ) : null}
-        </aside>
-      </section>
+          <aside id="next" className="flex flex-col gap-4 lg:sticky lg:top-20">
+            <RelatedTools tools={related} hues={hues} />
+            {mcp && mcpTool ? <McpSnippet name={mcp.name} inputSchema={mcpTool.inputSchema} /> : null}
+          </aside>
+        </div>
+      </div>
     </>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { ActionButton, TextInput, TextArea } from "@/components/kit/controls";
 import { Download, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { CopyButton } from "@/components/kit/copy-button";
@@ -13,9 +14,6 @@ import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
 import { SkeletonRows } from "@/components/kit/skeleton-rows";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { postTool } from "@/lib/post-tool";
 
 type Result = { pages: number; llms: string; full: string; sources?: string[] };
@@ -100,7 +98,7 @@ export default function LlmsTool() {
       tabs={<ToolTabs label="Mode" value="generate" onChange={() => {}} options={[{ value: "generate", label: "Generate" }]} />}
       actions={
         busy ? (
-          <Button type="button" variant="outline" className="h-[30px]" onClick={cancel}>Cancel</Button>
+          <ActionButton type="button" variant="outline" className="h-[30px]" onClick={cancel}>Cancel</ActionButton>
         ) : (
           <InkButton onClick={() => downloadText(file === "llms" ? "llms.txt" : "llms-full.txt", text)} disabled={!text} icon={<Download size={15} />}>
             Download llms.txt
@@ -120,17 +118,17 @@ export default function LlmsTool() {
           <Segmented label="Source" value={mode} onChange={setMode} options={[{ value: "site", label: "Site URL" }, { value: "urls", label: "Paste URLs" }]} />
           {mode === "site" ? (
             <FieldRow label="Site URL" htmlFor="llms-url" help="A bare domain is fine. Up to 30 pages. Private addresses are refused." error={blocked ? error : undefined}>
-              <Input ref={urlRef} id="llms-url" value={url} aria-invalid={blocked || undefined} onChange={(event) => setUrl(event.target.value)} className="max-[699px]:h-11" autoFocus />
+              <TextInput ref={urlRef} id="llms-url" value={url} aria-invalid={blocked || undefined} onChange={(event) => setUrl(event.target.value)} className="max-[699px]:h-11" autoFocus />
             </FieldRow>
           ) : (
             <FieldRow label="Page URLs" htmlFor="llms-urls" help="One URL per line, up to 30.">
-              <Textarea id="llms-urls" value={urls} onChange={(event) => setUrls(event.target.value)} className="min-h-40 max-[699px]:min-h-11" />
+              <TextArea id="llms-urls" value={urls} onChange={(event) => setUrls(event.target.value)} className="min-h-40 max-[699px]:min-h-11" />
             </FieldRow>
           )}
-          <Button type="button" className="btn btn-ink h-11" aria-busy={busy} disabled={!ready || busy} onClick={() => void run()}>
+          <ActionButton type="button" className="btn btn-ink h-11" aria-busy={busy} disabled={!ready || busy} onClick={() => void run()}>
             {busy ? "Cancel" : "Generate"}
-          </Button>
-          {busy ? <Button type="button" variant="outline" onClick={cancel}>Cancel</Button> : null}
+          </ActionButton>
+          {busy ? <ActionButton type="button" variant="outline" onClick={cancel}>Cancel</ActionButton> : null}
           <Notice tone="neutral" title="What is fetched" body="The server reads robots.txt and sitemap.xml, including Sitemap lines in robots.txt. If those are missing, it collects links from the homepage. Private addresses are refused." />
           <Segmented label="File" value={file} onChange={setFile} options={[{ value: "llms", label: "llms.txt" }, { value: "full", label: "llms-full.txt" }]} />
         </Panel>
@@ -139,10 +137,10 @@ export default function LlmsTool() {
         <div className="flex min-h-[280px] flex-col" aria-live="polite">
           {busy ? <SkeletonRows /> : text ? (
             <Panel title="Preview">
-              <Textarea aria-label="Editable preview" value={text} onChange={(event) => (file === "llms" ? setLlms(event.target.value) : setFull(event.target.value))} className="min-h-64 font-mono text-xs" />
+              <TextArea aria-label="Editable preview" value={text} onChange={(event) => (file === "llms" ? setLlms(event.target.value) : setFull(event.target.value))} className="min-h-64 font-mono text-xs" />
               <div className="flex flex-wrap gap-2">
                 <CopyButton value={text} label="Copy" toastMessage="File copied" />
-                <Button type="button" variant="outline" onClick={() => downloadText(file === "llms" ? "llms.txt" : "llms-full.txt", text)}>Download</Button>
+                <ActionButton type="button" variant="outline" onClick={() => downloadText(file === "llms" ? "llms.txt" : "llms-full.txt", text)}>Download</ActionButton>
               </div>
             </Panel>
           ) : (

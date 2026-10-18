@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Logo } from "@/components/site/logo";
 import { GITHUB_URL } from "@/lib/site";
-import { categories, tools } from "@/registry";
+import { navEntries } from "@/lib/taxonomy";
+import { tools } from "@/registry";
 
 export function Footer() {
   const featured = tools.slice(0, 5);
@@ -23,7 +24,7 @@ export function Footer() {
         </div>
         <div>
           <b className="mb-3.5 block text-[13px] font-medium">Tools</b>
-          <Link href="/explore" className="mt-2 block text-[13.5px] text-muted-foreground">Explore</Link>
+          <Link href="/" className="mt-2 block text-[13.5px] text-muted-foreground">All tools</Link>
           {featured.map((tool) => (
             <Link key={tool.slug} href={`/t/${tool.slug}`} className="mt-2 block text-[13.5px] text-muted-foreground">
               {tool.name}
@@ -33,7 +34,7 @@ export function Footer() {
         <div>
           <b className="mb-3.5 block text-[13px] font-medium">Categories</b>
           <Link href="/categories" className="mt-2 block text-[13.5px] text-muted-foreground">All categories</Link>
-          {categories.slice(0, 5).map((category) => (
+          {navEntries().slice(0, 5).map((category) => (
             <Link key={category.slug} href={`/${category.slug}`} className="mt-2 block text-[13.5px] text-muted-foreground">
               {category.name}
             </Link>
@@ -42,7 +43,7 @@ export function Footer() {
         <div>
           <b className="mb-3.5 block text-[13px] font-medium">Resources</b>
           <Link href="/ai" className="mt-2 block text-[13.5px] text-muted-foreground">AI access</Link>
-          <Link href="/mcp" className="mt-2 block text-[13.5px] text-muted-foreground">MCP</Link>
+          <Link href="/mcp/guide" className="mt-2 block text-[13.5px] text-muted-foreground">MCP</Link>
           <Link href="/llms.txt" className="mt-2 block text-[13.5px] text-muted-foreground">llms.txt</Link>
           <Link href="/llms-full.txt" className="mt-2 block text-[13.5px] text-muted-foreground">llms-full.txt</Link>
           <Link href="/openapi.json" className="mt-2 block text-[13.5px] text-muted-foreground">OpenAPI</Link>
@@ -55,8 +56,7 @@ export function Footer() {
           <a href={GITHUB_URL} className="mt-2 block text-[13.5px] text-muted-foreground">GitHub</a>
         </div>
       </div>
-      <div className="wm" aria-hidden>benchline</div>
-      <div className="mt-7 border-t border-border pt-5 text-[12.5px] text-faint">
+      <div className="mt-10 border-t border-border pt-5 text-[12.5px] text-faint">
         <span>© 2026 Benchline</span>
       </div>
       </div>

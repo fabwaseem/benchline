@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useRef, useState, useSyncExternalStore, type KeyboardEvent } from "react";
+import { ActionButton, IconButton, TextArea } from "@/components/kit/controls";
+import { Badge } from "@/components/kit/tag";
 import { Check, Clock, Copy, Eye, EyeOff, KeyRound, ShieldCheck, X } from "lucide-react";
 import { toast } from "sonner";
 import { CopyButton } from "@/components/kit/copy-button";
@@ -12,9 +14,6 @@ import { ResultStat } from "@/components/kit/result-stat";
 import { Segmented } from "@/components/kit/segmented";
 import { TokenSegments } from "@/components/kit/token-segments";
 import { ToolShell, ToolTabs } from "@/components/kit/tool-shell";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import {
   claimViews,
   decodeJwt,
@@ -161,8 +160,8 @@ export default function JwtTool() {
               help={TOKEN_HELP}
               actions={
                 <span className="flex gap-1.5">
-                  <Button type="button" variant="ghost" size="xs" onClick={() => updateToken(EXAMPLE_TOKEN)}>Example</Button>
-                  <Button type="button" variant="ghost" size="xs" onClick={clearToken}>Clear</Button>
+                  <ActionButton type="button" variant="ghost" size="xs" onClick={() => updateToken(EXAMPLE_TOKEN)}>Example</ActionButton>
+                  <ActionButton type="button" variant="ghost" size="xs" onClick={clearToken}>Clear</ActionButton>
                 </span>
               }
             >
@@ -172,7 +171,7 @@ export default function JwtTool() {
                     <TokenSegments header={parts[0] ?? ""} payload={parts[1] ?? ""} signature={parts[2] ?? ""} badSegment={isDecoded(result) ? undefined : result.segment} />
                   </div>
                 ) : null}
-                <Textarea
+                <TextArea
                   ref={tokenRef}
                   id="jwt"
                   value={token}
@@ -204,15 +203,15 @@ export default function JwtTool() {
               <Segmented label="Algorithm" value={signAlg} onChange={setSignAlg} options={[{ value: "HS256", label: "HS256" }, { value: "HS384", label: "HS384" }, { value: "HS512", label: "HS512" }]} className="w-full" />
             </div>
             <FieldRow variant="well" label="Header JSON" htmlFor="jwt-header" error={jsonError(headerJson)}>
-              <Textarea id="jwt-header" value={headerJson} spellCheck={false} onChange={(event) => setHeaderJson(event.target.value)} className={`${FIELD} min-h-24`} />
+              <TextArea id="jwt-header" value={headerJson} spellCheck={false} onChange={(event) => setHeaderJson(event.target.value)} className={`${FIELD} min-h-24`} />
             </FieldRow>
             <FieldRow variant="well" label="Payload JSON" htmlFor="jwt-payload" error={jsonError(payloadJson)}>
-              <Textarea id="jwt-payload" value={payloadJson} spellCheck={false} onChange={(event) => setPayloadJson(event.target.value)} className={`${FIELD} min-h-28`} />
+              <TextArea id="jwt-payload" value={payloadJson} spellCheck={false} onChange={(event) => setPayloadJson(event.target.value)} className={`${FIELD} min-h-28`} />
             </FieldRow>
             <FieldRow variant="well" label="HMAC secret" htmlFor="jwt-sign-secret" help={SIGN_HELP}>
-              <Textarea id="jwt-sign-secret" value={signSecret} spellCheck={false} onChange={(event) => setSignSecret(event.target.value)} className={`${FIELD} min-h-16`} />
+              <TextArea id="jwt-sign-secret" value={signSecret} spellCheck={false} onChange={(event) => setSignSecret(event.target.value)} className={`${FIELD} min-h-16`} />
             </FieldRow>
-            <Button type="button" className="h-[38px] max-[699px]:h-11" onClick={() => void encode()}>Sign test token</Button>
+            <ActionButton type="button" className="h-[38px] max-[699px]:h-11" onClick={() => void encode()}>Sign test token</ActionButton>
           </div>
         )}
         output={tab === "decode" ? <DecodedPane result={result} view={view} onView={setView} claims={claims} notices={notices} none={none} payloadText={payloadText} onExample={() => updateToken(EXAMPLE_TOKEN)} /> : (
@@ -223,7 +222,7 @@ export default function JwtTool() {
                 <TokenSegments header={signed.split(".")[0] ?? ""} payload={signed.split(".")[1] ?? ""} signature={signed.split(".")[2] ?? ""} className="well p-3.5" />
                 <div className="mt-3 flex gap-2">
                   <CopyButton value={signed} label="Copy token" toastMessage="Token copied" />
-                  <Button type="button" variant="outline" onClick={() => { setToken(signed); setVerify(IDLE); setAlert(""); setTab("decode"); }}>Open in Decode</Button>
+                  <ActionButton type="button" variant="outline" onClick={() => { setToken(signed); setVerify(IDLE); setAlert(""); setTab("decode"); }}>Open in Decode</ActionButton>
                 </div>
               </>
             ) : signError ? null : (
@@ -245,7 +244,7 @@ export default function JwtTool() {
               actions={keyKind ? <Badge variant="mono">detected: {keyKind}</Badge> : null}
             >
               <div className="relative">
-                <Textarea
+                <TextArea
                   id="jwt-key"
                   value={secret}
                   spellCheck={false}
@@ -256,9 +255,9 @@ export default function JwtTool() {
                   className={`${FIELD} min-h-[84px] pr-10 ${maskSecret ? "secret-mask" : ""}`}
                 />
                 {maskSecret || keyKind === "HMAC secret" || keyKind === "" ? (
-                  <button type="button" className="absolute top-2 right-2 grid size-7 place-items-center text-muted-foreground" aria-label={secretVisible ? "Hide secret" : "Show secret"} onClick={() => setSecretVisible((value) => !value)}>
+                  <IconButton label={secretVisible ? "Hide secret" : "Show secret"} className="absolute top-2 right-2" onClick={() => setSecretVisible((value) => !value)}>
                     {secretVisible ? <EyeOff size={14} /> : <Eye size={14} />}
-                  </button>
+                  </IconButton>
                 ) : null}
               </div>
             </FieldRow>
@@ -267,7 +266,7 @@ export default function JwtTool() {
               <Segmented label="Secret encoding" value={encoding} onChange={(value) => { setEncoding(value); setVerify(IDLE); }} options={[{ value: "utf8", label: "UTF-8" }, { value: "base64", label: "Base64" }]} className="w-full" />
             </div>
             {none ? null : (
-              <Button
+              <ActionButton
                 type="button"
                 className="h-[38px] w-full aria-disabled:opacity-45 max-[699px]:h-11"
                 aria-disabled={verifyDisabled || undefined}
@@ -276,7 +275,7 @@ export default function JwtTool() {
                 <ShieldCheck />
                 Verify signature
                 <span className="keycap ml-1 bg-transparent text-inherit shadow-[inset_0_0_0_1px_oklch(100%_0_0/0.25)]">⌘↵</span>
-              </Button>
+              </ActionButton>
             )}
             {!ok && token.trim() ? <p className="text-[12px] text-faint">Fix the token first.</p> : null}
             {ok ? <VerifyNotice verify={verify} alg={alg} /> : null}
@@ -322,7 +321,7 @@ function DecodedPane({
         art={<KeyRound size={28} strokeWidth={1.75} />}
         title="Paste a token to decode it"
         hint="Three segments, two JSON objects. Nothing is uploaded."
-        action={<Button type="button" variant="outline" onClick={onExample}>Load an example</Button>}
+        action={<ActionButton type="button" variant="outline" onClick={onExample}>Load an example</ActionButton>}
       />
     );
   }

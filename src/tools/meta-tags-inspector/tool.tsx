@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
+import { ActionButton, TextInput } from "@/components/kit/controls";
 import { Copy, Tags } from "lucide-react";
 import { toast } from "sonner";
 import { CheckRows } from "@/components/kit/check-row";
@@ -11,8 +12,6 @@ import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
 import { SkeletonRows } from "@/components/kit/skeleton-rows";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { postTool } from "@/lib/post-tool";
 import { characterBudget, tagsFromDraft, type Inspection, type TagDraft } from "@/tools/meta-tags-inspector/lib/meta";
 
@@ -116,7 +115,7 @@ export default function MetaTool() {
       flow="band"
       columns="min-[1280px]:grid-cols-[340px_minmax(0,1fr)_340px]"
       tabs={<ToolTabs label="Mode" value="inspect" onChange={() => {}} options={[{ value: "inspect", label: "Inspect" }]} />}
-      actions={busy ? <Button type="button" variant="outline" className="h-[30px]" onClick={cancel}>Cancel</Button> : <InkButton disabled={!metaText} icon={<Copy size={15} />} onClick={() => void navigator.clipboard.writeText(metaText).then(() => toast.success("Meta tags copied"))}>Copy meta tags</InkButton>}
+      actions={busy ? <ActionButton type="button" variant="outline" className="h-[30px]" onClick={cancel}>Cancel</ActionButton> : <InkButton disabled={!metaText} icon={<Copy size={15} />} onClick={() => void navigator.clipboard.writeText(metaText).then(() => toast.success("Meta tags copied"))}>Copy meta tags</InkButton>}
       status={
         <>
           <span className={error ? "dot dot-warn" : "dot"} />
@@ -131,9 +130,9 @@ export default function MetaTool() {
           {mode === "url" ? (
             <>
               <FieldRow label="Page URL" htmlFor="meta-url" help="A bare domain is fine. The image itself is loaded in your browser." error={blocked ? error : undefined}>
-                <Input ref={urlRef} id="meta-url" value={url} autoFocus aria-invalid={blocked || undefined} onChange={(event) => setUrl(event.target.value)} className="max-[699px]:h-11" />
+                <TextInput ref={urlRef} id="meta-url" value={url} autoFocus aria-invalid={blocked || undefined} onChange={(event) => setUrl(event.target.value)} className="max-[699px]:h-11" />
               </FieldRow>
-              <Button type="button" className="btn btn-ink h-11" aria-busy={busy} disabled={!url.trim() || busy} onClick={() => void run()}>Inspect</Button>
+              <ActionButton type="button" className="btn btn-ink h-11" aria-busy={busy} disabled={!url.trim() || busy} onClick={() => void run()}>Inspect</ActionButton>
             </>
           ) : (
             <div className="grid gap-3">
@@ -143,7 +142,7 @@ export default function MetaTool() {
                 help={titleBudget.state === "warn" ? `${titleBudget.length} characters. Usual range is 15–60.` : undefined}
                 actions={<span className={titleBudget.state === "ok" ? "font-mono text-[12px] text-faint" : "font-mono text-[12px] text-status-warn"}>{titleBudget.label}</span>}
               >
-                <Input id="meta-title" value={draft.title} aria-invalid={titleBudget.state === "warn" || undefined} onChange={(event) => setDraft({ ...draft, title: event.target.value })} className="max-[699px]:h-11" />
+                <TextInput id="meta-title" value={draft.title} aria-invalid={titleBudget.state === "warn" || undefined} onChange={(event) => setDraft({ ...draft, title: event.target.value })} className="max-[699px]:h-11" />
               </FieldRow>
               <FieldRow
                 label="Description"
@@ -151,11 +150,11 @@ export default function MetaTool() {
                 help={descriptionBudget.state === "warn" ? `${descriptionBudget.length} characters. Usual range is 50–160.` : undefined}
                 actions={<span className={descriptionBudget.state === "ok" ? "font-mono text-[12px] text-faint" : "font-mono text-[12px] text-status-warn"}>{descriptionBudget.label}</span>}
               >
-                <Input id="meta-desc" value={draft.description} aria-invalid={descriptionBudget.state === "warn" || undefined} onChange={(event) => setDraft({ ...draft, description: event.target.value })} className="max-[699px]:h-11" />
+                <TextInput id="meta-desc" value={draft.description} aria-invalid={descriptionBudget.state === "warn" || undefined} onChange={(event) => setDraft({ ...draft, description: event.target.value })} className="max-[699px]:h-11" />
               </FieldRow>
-              <FieldRow label="URL" htmlFor="meta-canonical"><Input id="meta-canonical" value={draft.url} onChange={(event) => setDraft({ ...draft, url: event.target.value })} className="max-[699px]:h-11" /></FieldRow>
-              <FieldRow label="Image URL" htmlFor="meta-image"><Input id="meta-image" value={draft.image} onChange={(event) => setDraft({ ...draft, image: event.target.value })} className="max-[699px]:h-11" /></FieldRow>
-              <FieldRow label="Site name" htmlFor="meta-site"><Input id="meta-site" value={draft.siteName} onChange={(event) => setDraft({ ...draft, siteName: event.target.value })} className="max-[699px]:h-11" /></FieldRow>
+              <FieldRow label="URL" htmlFor="meta-canonical"><TextInput id="meta-canonical" value={draft.url} onChange={(event) => setDraft({ ...draft, url: event.target.value })} className="max-[699px]:h-11" /></FieldRow>
+              <FieldRow label="Image URL" htmlFor="meta-image"><TextInput id="meta-image" value={draft.image} onChange={(event) => setDraft({ ...draft, image: event.target.value })} className="max-[699px]:h-11" /></FieldRow>
+              <FieldRow label="Site name" htmlFor="meta-site"><TextInput id="meta-site" value={draft.siteName} onChange={(event) => setDraft({ ...draft, siteName: event.target.value })} className="max-[699px]:h-11" /></FieldRow>
               <Segmented label="Twitter card" value={draft.card} onChange={(card) => setDraft({ ...draft, card })} options={[{ value: "summary_large_image", label: "Large image" }, { value: "summary", label: "Summary" }]} />
             </div>
           )}

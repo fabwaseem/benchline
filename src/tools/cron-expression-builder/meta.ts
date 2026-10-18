@@ -6,7 +6,7 @@ export const meta = {
   tagline: "Build or paste a cron schedule, read it in plain English, and see the next run times.",
   description:
     "Free cron expression generator and explainer. Build a schedule visually or paste one to translate it into plain English, validate it, and preview the next 10 run times in any timezone. Supports standard 5-field cron, seconds, Quartz, and macros.",
-  category: "developer",
+  category: "cron",
   tags: ["cron", "scheduling"],
   keywords: ["cron expression generator", "cron translator", "crontab", "cron validator", "vercel cron"],
   status: "new",

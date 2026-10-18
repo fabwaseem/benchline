@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { ChipButton, OptionRow, TextInput } from "@/components/kit/controls";
 import { Copy, Fingerprint } from "lucide-react";
 import { toast } from "sonner";
 import { CopyButton } from "@/components/kit/copy-button";
@@ -10,8 +11,6 @@ import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
 import { InkButton, Panel, ToolShell, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
 import { generateUuids, inspectUuid, type UuidVersion } from "@/tools/uuid-generator/lib/uuid";
 
 export default function UuidGeneratorTool() {
@@ -65,15 +64,12 @@ export default function UuidGeneratorTool() {
         <Panel title="Options">
           <Segmented label="Version" value={version} onChange={setVersion} options={[{ value: "v4", label: "UUID v4" }, { value: "v7", label: "UUID v7" }]} />
           <FieldRow label="Count" htmlFor="uuid-count" error={error || undefined} help="Up to 10,000. Each id uses crypto.getRandomValues.">
-            <Input id="uuid-count" type="number" min={1} max={10000} value={count} onChange={(event) => setCount(Number(event.target.value))} aria-invalid={Boolean(error)} />
+            <TextInput id="uuid-count" type="number" min={1} max={10000} value={count} onChange={(event) => setCount(Number(event.target.value))} aria-invalid={Boolean(error)} />
           </FieldRow>
-          <label className="flex min-h-11 items-center justify-between gap-3 text-sm">
-            Uppercase
-            <Switch checked={uppercase} onCheckedChange={setUppercase} />
-          </label>
-          <button type="button" className="chip" onClick={() => setNonce((value) => value + 1)}>Generate again</button>
+            <OptionRow label="Uppercase" checked={uppercase} onChange={setUppercase} />
+          <ChipButton onClick={() => setNonce((value) => value + 1)}>Generate again</ChipButton>
           <FieldRow label="Inspect a UUID" htmlFor="uuid-inspect">
-            <Input id="uuid-inspect" value={inspect} onChange={(event) => setInspect(event.target.value)} className="font-mono" placeholder="Paste a UUID" />
+            <TextInput id="uuid-inspect" value={inspect} onChange={(event) => setInspect(event.target.value)} className="font-mono" placeholder="Paste a UUID" />
           </FieldRow>
         </Panel>
       }

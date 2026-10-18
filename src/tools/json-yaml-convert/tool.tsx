@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { TextArea } from "@/components/kit/controls";
 import { ArrowLeftRight, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { CodeOutput } from "@/components/kit/code-output";
@@ -9,7 +10,6 @@ import { FieldRow } from "@/components/kit/field-row";
 import { Notice } from "@/components/kit/notice";
 import { Segmented } from "@/components/kit/segmented";
 import { InkButton, Panel, ToolShell, ToolTabs, useWorkbenchKeys } from "@/components/kit/tool-shell";
-import { Textarea } from "@/components/ui/textarea";
 import { convertData, dataFormats, exampleYaml, type DataFormat } from "@/tools/json-yaml-convert/lib/convert";
 
 const filenames: Record<DataFormat, string> = {
@@ -64,7 +64,7 @@ export default function JsonYamlTool() {
             options={[{ value: "auto", label: "Auto" }, ...dataFormats.map((format) => ({ value: format, label: format.toUpperCase() }))]}
           />
           <FieldRow label="Document" htmlFor="convert-input" error={result.ok ? undefined : result.error} help={result.detected ? `Read as ${result.detected.toUpperCase()}.` : "Auto uses the first line."}>
-            <Textarea id="convert-input" value={input} onChange={(event) => setInput(event.target.value)} spellCheck={false} aria-invalid={!result.ok} className="min-h-72 font-mono text-[13px]" />
+            <TextArea id="convert-input" value={input} onChange={(event) => setInput(event.target.value)} spellCheck={false} aria-invalid={!result.ok} className="min-h-72 font-mono text-[13px]" />
           </FieldRow>
         </Panel>
       }

@@ -6,7 +6,7 @@ export const meta = {
   tagline: "Turn a permission grid into octal and symbolic chmod, and back.",
   description:
     "Free chmod calculator. Check read, write, and execute for owner, group, and others, including setuid, setgid, and the sticky bit. See the octal mode, the symbolic mode, and the chmod command.",
-  category: "developer",
+  category: "crypto",
   tags: ["chmod", "linux"],
   keywords: ["chmod calculator", "file permission calculator", "octal permissions"],
   status: "new",
