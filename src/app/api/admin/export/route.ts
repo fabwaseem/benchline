@@ -25,7 +25,7 @@ async function bindRequest(): Promise<void> {
 export async function GET(request: Request) {
   await bindRequest();
   if (!adminEnv()) return notConfigured();
-  const gate = requireSession(request);
+  const gate = await requireSession(request);
   if (gate instanceof Response) return gate;
   const url = new URL(request.url);
   const table = url.searchParams.get("table");

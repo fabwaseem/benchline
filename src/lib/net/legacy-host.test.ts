@@ -43,23 +43,23 @@ function passesThrough(response: Response) {
 }
 
 describe("proxy", () => {
-  it("lets MCP paths on the legacy host through", () => {
-    passesThrough(toolsRequest("/mcp"));
-    passesThrough(toolsRequest("/mcp/"));
-    passesThrough(toolsRequest("/mcp/x"));
-    passesThrough(toolsRequest("/mcp", "GET"));
+  it("lets MCP paths on the legacy host through", async () => {
+    passesThrough(await toolsRequest("/mcp"));
+    passesThrough(await toolsRequest("/mcp/"));
+    passesThrough(await toolsRequest("/mcp/x"));
+    passesThrough(await toolsRequest("/mcp", "GET"));
   });
 
-  it("still redirects every other legacy path", () => {
+  it("still redirects every other legacy path", async () => {
     for (const pathname of ["/", "/tools/foo", "/mcp-docs", "/mcpfoo"]) {
-      const response = toolsRequest(pathname);
+      const response = await toolsRequest(pathname);
       expect(response.status).toBe(308);
       expect(response.headers.get("location")).toBe(`https://benchline.fabwaseem.com${pathname}`);
     }
   });
 
-  it("keeps the MCP guide rewrite for the new host", () => {
-    const guide = proxy(
+  it("keeps the MCP guide rewrite for the new host", async () => {
+    const guide = await proxy(
       new NextRequest("https://benchline.fabwaseem.com/mcp", {
         method: "GET",
         headers: { host: "benchline.fabwaseem.com", accept: "text/html" },
@@ -68,7 +68,7 @@ describe("proxy", () => {
     expect(guide.status).toBe(200);
     expect(guide.headers.get("x-middleware-rewrite") ?? guide.headers.get("location")).toContain("/mcp/guide");
 
-    const post = proxy(
+    const post = await proxy(
       new NextRequest("https://benchline.fabwaseem.com/mcp", {
         method: "POST",
         headers: { host: "benchline.fabwaseem.com", accept: "text/html" },
@@ -79,23 +79,26 @@ describe("proxy", () => {
     expect(post.headers.get("x-middleware-rewrite")).toBeNull();
   });
 
-  it("redirects admin off the legacy host and marks it noindex", () => {
-    const legacy = toolsRequest("/admin");
+  it("redirects admin off the legacy host and marks it noindex", async () => {
+    delete process.env.ADMIN_PASSWORD;
+    delete process.env.ADMIN_SESSION_SECRET;
+    const legacy = await toolsRequest("/admin");
     expect(legacy.status).toBe(308);
     expect(legacy.headers.get("location")).toBe("https://benchline.fabwaseem.com/admin");
-    const local = proxy(
+    const local = await proxy(
       new NextRequest("https://benchline.fabwaseem.com/admin/tools", {
         headers: { host: "benchline.fabwaseem.com" },
       }),
     );
+    expect(local.status).toBe(404);
     expect(local.headers.get("x-robots-tag")).toContain("noindex");
     expect(local.headers.get("cache-control")).toContain("no-store");
   });
 
-  it("leaves the canonical host alone", () => {
+  it("leaves the canonical host alone", async () => {
     for (const pathname of ["/", "/tools/foo", "/mcp-docs", "/mcpfoo"]) {
       passesThrough(
-        proxy(
+        await proxy(
           new NextRequest(`https://benchline.fabwaseem.com${pathname}`, {
             method: "POST",
             headers: { host: "benchline.fabwaseem.com" },

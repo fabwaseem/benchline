@@ -6,5 +6,5 @@ export async function currentAdminSession(): Promise<AdminSession | null> {
   const env = adminEnv();
   if (!env) return null;
   const jar = await cookies();
-  return readSession(jar.get(ADMIN_COOKIE)?.value, env.secret);
+  return await readSession(jar.get(ADMIN_COOKIE)?.value, env.secret);
 }
