@@ -15,16 +15,85 @@ const DRAINING = Symbol.for("benchline.draining");
 const HANDLE = Symbol.for("benchline.shutdown.handle");
 const LISTENING = Symbol.for("benchline.shutdown.listening");
 const CLEANUP = Symbol.for("benchline.shutdown.cleanup");
+const INFLIGHT = Symbol.for("benchline.http.inflight");
 const DEFAULT_DRAIN_MS = 9000;
 const FORCE_EXIT_MS = 25000;
 const MAX_DRAIN_MS = FORCE_EXIT_MS - 1000;
+const INFLIGHT_CLOSE_MS = 5000;
+const KEEP_ALIVE_TIMEOUT_MS = 65000;
+const HEADERS_TIMEOUT_MS = 66000;
 
 const servers = new Set();
 globalThis[SERVERS] = servers;
+globalThis[INFLIGHT] = 0;
+
+function inflightCount() {
+  const value = globalThis[INFLIGHT];
+  return typeof value === "number" && Number.isFinite(value) && value > 0 ? value : 0;
+}
+
+function changeInflight(delta) {
+  const next = inflightCount() + delta;
+  globalThis[INFLIGHT] = next > 0 ? next : 0;
+}
+
+function applyTimeouts(server) {
+  server.headersTimeout = HEADERS_TIMEOUT_MS;
+  server.keepAliveTimeout = KEEP_ALIVE_TIMEOUT_MS;
+}
+
+function seal(res, args) {
+  if (globalThis[DRAINING] !== true || res.headersSent) return;
+  res.shouldKeepAlive = false;
+  try {
+    res.setHeader("Connection", "close");
+  } catch {
+    // Headers were already flushed.
+  }
+  if (!args) return;
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    if (!arg || typeof arg !== "object") continue;
+    if (Array.isArray(arg)) {
+      arg.push(["Connection", "close"]);
+      continue;
+    }
+    arg.Connection = "close";
+    arg.connection = "close";
+  }
+}
+
+function watch(res) {
+  changeInflight(1);
+  let settled = false;
+  const done = () => {
+    if (settled) return;
+    settled = true;
+    changeInflight(-1);
+  };
+  res.on("close", done);
+  const writeHead = res.writeHead;
+  res.writeHead = function writeHeadWhileDraining() {
+    seal(this, arguments);
+    return writeHead.apply(this, arguments);
+  };
+  const end = res.end;
+  res.end = function endWhileDraining() {
+    seal(this, null);
+    return end.apply(this, arguments);
+  };
+}
 
 function track(server) {
   if (server && typeof server.on === "function") {
     servers.add(server);
+    applyTimeouts(server);
+    server.on("listening", () => {
+      applyTimeouts(server);
+    });
+    server.on("request", (_req, res) => {
+      watch(res);
+    });
     server.on("close", () => {
       servers.delete(server);
     });
@@ -55,6 +124,24 @@ function drainMs() {
   return Math.min(Math.floor(value), MAX_DRAIN_MS);
 }
 
+function exitWithCode(code) {
+  process.exitCode = code;
+  let remaining = 2;
+  const finish = () => {
+    remaining -= 1;
+    if (remaining === 0) process.exit();
+  };
+  const flush = (stream) => {
+    try {
+      stream.write("", finish);
+    } catch {
+      finish();
+    }
+  };
+  flush(process.stdout);
+  flush(process.stderr);
+}
+
 let fallbackStarted = false;
 
 function fallback(signal) {
@@ -64,24 +151,30 @@ function fallback(signal) {
   console.info(`[shutdown] ${signal}: draining for ${drainMs()}ms`);
   const force = setTimeout(() => {
     console.error(`[shutdown] force exit after ${FORCE_EXIT_MS}ms`);
-    process.exit(0);
+    console.info("exiting 0");
+    exitWithCode(0);
   }, FORCE_EXIT_MS);
   setTimeout(() => {
+    console.info("closing server");
+    const open = inflightCount();
     const pending = [...servers].map(
       (server) =>
         new Promise((resolve) => {
-          const idle = setInterval(() => {
-            if (typeof server.closeIdleConnections === "function") server.closeIdleConnections();
-          }, 200);
+          let settled = false;
+          if (typeof server.closeIdleConnections === "function") server.closeIdleConnections();
+          const kill = setTimeout(() => {
+            if (!settled && typeof server.closeAllConnections === "function") server.closeAllConnections();
+          }, INFLIGHT_CLOSE_MS);
           server.close(() => {
-            clearInterval(idle);
+            settled = true;
+            clearTimeout(kill);
             resolve();
           });
-          if (typeof server.closeIdleConnections === "function") server.closeIdleConnections();
         }),
     );
     Promise.all(pending)
       .then(async () => {
+        console.info(`closed, in-flight=${open}`);
         const list = globalThis[CLEANUP];
         if (!Array.isArray(list)) return;
         for (const fn of list) {
@@ -93,7 +186,8 @@ function fallback(signal) {
       })
       .finally(() => {
         clearTimeout(force);
-        process.exit(0);
+        console.info("exiting 0");
+        exitWithCode(0);
       });
   }, drainMs());
 }

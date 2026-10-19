@@ -1,9 +1,11 @@
 const DRAINING = Symbol.for("benchline.draining");
 const CLEANUP = Symbol.for("benchline.shutdown.cleanup");
+const INFLIGHT = Symbol.for("benchline.http.inflight");
 
 type ShutdownGlobal = typeof globalThis & {
   [DRAINING]?: boolean;
   [CLEANUP]?: Array<() => Promise<void>>;
+  [INFLIGHT]?: number;
 };
 
 function globals(): ShutdownGlobal {
@@ -12,6 +14,11 @@ function globals(): ShutdownGlobal {
 
 export function isDraining(): boolean {
   return globals()[DRAINING] === true;
+}
+
+export function inflightRequests(): number {
+  const value = globals()[INFLIGHT];
+  return typeof value === "number" && Number.isFinite(value) && value > 0 ? value : 0;
 }
 
 export function markDraining(): void {

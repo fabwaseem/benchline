@@ -1,4 +1,4 @@
-import { createShutdown, parseDrainMs, type ClosableServer } from "@/lib/shutdown/graceful";
+import { applyServerTimeouts, createShutdown, exitWithCode, parseDrainMs, type ClosableServer } from "@/lib/shutdown/graceful";
 
 const SERVERS = Symbol.for("benchline.http.servers");
 const HANDLE = Symbol.for("benchline.shutdown.handle");
@@ -30,14 +30,13 @@ function trackedServers(): ClosableServer[] {
 }
 
 export function installGracefulShutdown(): void {
+  for (const server of trackedServers()) applyServerTimeouts(server);
   const slot = globals();
   if (slot[HANDLE]) return;
   const shutdown = createShutdown({
     drainMs: parseDrainMs(process.env.SHUTDOWN_DRAIN_MS),
     servers: trackedServers,
-    exit: (code) => {
-      process.exit(code);
-    },
+    exit: exitWithCode,
     setTimeout: globalThis.setTimeout,
     clearTimeout: globalThis.clearTimeout,
   });
