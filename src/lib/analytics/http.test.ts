@@ -83,6 +83,14 @@ describe("usage endpoints", () => {
       }),
     );
     expect(admin.status).toBe(204);
+    const health = await track(
+      new Request("https://benchline.fabwaseem.com/api/track", {
+        method: "POST",
+        headers: { host: "benchline.fabwaseem.com", "content-type": "application/json" },
+        body: JSON.stringify({ type: "page", path: "/api/health" }),
+      }),
+    );
+    expect(health.status).toBe(204);
     expect(await settled(store)).toHaveLength(0);
   });
 

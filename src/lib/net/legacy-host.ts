@@ -18,7 +18,13 @@ export function isMcpPath(pathname: string): boolean {
   return pathname === "/mcp" || pathname.startsWith("/mcp/");
 }
 
+export function isHealthPath(pathname: string | null | undefined): boolean {
+  if (!pathname) return false;
+  const path = pathname.split("?")[0]?.split("#")[0] ?? "";
+  return path === "/api/health" || path === "/api/health/";
+}
+
 export function legacyHostRedirect(host: string | null | undefined, pathname: string, search: string): URL | null {
-  if (hostnameFromHost(host) !== LEGACY_HOST || isMcpPath(pathname)) return null;
+  if (hostnameFromHost(host) !== LEGACY_HOST || isMcpPath(pathname) || isHealthPath(pathname)) return null;
   return new URL(pathname + search, CANONICAL_ORIGIN);
 }

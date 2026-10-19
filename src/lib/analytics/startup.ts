@@ -1,7 +1,7 @@
 import { ensureGeoDb } from "@/lib/analytics/geodb";
 import { analyticsRuntime } from "@/lib/analytics/global";
 import { safeError } from "@/lib/analytics/clean";
-import { ensureAnalyticsStore } from "@/lib/analytics/store";
+import { ensureAnalyticsStore, installShutdownFlush } from "@/lib/analytics/store";
 
 function delay(ms: number, rejectOnTimeout: boolean): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -17,6 +17,7 @@ export async function startAnalytics() {
   const slot = analyticsRuntime();
   if (slot.started) return;
   slot.started = true;
+  installShutdownFlush();
   console.info("[analytics] starting");
   await Promise.race([ensureGeoDb(), delay(2000, false)]);
   if (!process.env.DATABASE_URL) {

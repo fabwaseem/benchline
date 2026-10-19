@@ -24,6 +24,7 @@ COPY --from=build /app/public ./public
 COPY --from=build --chown=nextjs:nextjs /app/data ./data
 COPY --from=build --chown=nextjs:nextjs /app/.next/standalone ./
 COPY --from=build --chown=nextjs:nextjs /app/.next/static ./.next/static
+COPY --from=build --chown=nextjs:nextjs /app/server-entry.js ./server-entry.js
 # Copy resolved wasm/native trees so MCP tools can require them in the standalone image
 RUN --mount=from=build,source=/app/node_modules,target=/mnt/nm \
   mkdir -p node_modules \
@@ -51,4 +52,4 @@ RUN --mount=from=build,source=/app/node_modules,target=/mnt/nm \
   && chown -R nextjs:nextjs node_modules
 USER nextjs
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD ["node", "server-entry.js"]
