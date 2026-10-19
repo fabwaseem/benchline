@@ -4,7 +4,7 @@ import { requestContext } from "@/lib/analytics/context";
 import { analyticsIp } from "@/lib/analytics/ip";
 import { trackRateLimit } from "@/lib/analytics/rate-limit";
 import { recordAction, recordPage, recordRun, recordSearch, recordToolOpen } from "@/lib/analytics/record";
-import { deviceClassFromUa } from "@/lib/analytics/text";
+import { deviceClassFromUa, isAdminPath } from "@/lib/analytics/text";
 import { parseTrackBody } from "@/lib/analytics/track-body";
 
 const MAX_BODY = 4096;
@@ -37,6 +37,7 @@ export async function POST(request: Request) {
   const parsed = parseTrackBody(json);
   if (parsed === "drop") return empty(204);
   if (!parsed) return empty(400);
+  if (parsed.type === "page" && isAdminPath(parsed.path)) return empty(204);
   const base = requestContext(request);
   const ctx = {
     ...base,

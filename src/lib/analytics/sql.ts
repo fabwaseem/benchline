@@ -127,6 +127,29 @@ export const MIGRATIONS: Migration[] = [
       `CREATE INDEX IF NOT EXISTS analytics_daily_day_kind_idx ON analytics_daily (day, kind)`,
     ],
   },
+  {
+    version: "002_admin_indexes",
+    statements: [
+      `CREATE INDEX IF NOT EXISTS tool_runs_outcome_ts_idx ON tool_runs (outcome, ts)`,
+      `CREATE INDEX IF NOT EXISTS tool_runs_error_slug_ts_idx ON tool_runs (slug, error_code, ts) WHERE outcome <> 'ok'`,
+      `CREATE INDEX IF NOT EXISTS tool_runs_mcp_client_ts_idx ON tool_runs (mcp_client_name, mcp_client_version, ts) WHERE source = 'mcp'`,
+      `CREATE INDEX IF NOT EXISTS tool_runs_mcp_host_ts_idx ON tool_runs (mcp_host, ts) WHERE source = 'mcp'`,
+      `CREATE INDEX IF NOT EXISTS tool_runs_mcp_protocol_ts_idx ON tool_runs (mcp_protocol, ts) WHERE source = 'mcp'`,
+      `CREATE INDEX IF NOT EXISTS tool_runs_visitor_ts_idx ON tool_runs (visitor_id, ts) WHERE visitor_id IS NOT NULL`,
+      `CREATE INDEX IF NOT EXISTS tool_runs_country_ts_idx ON tool_runs (country, ts) WHERE country IS NOT NULL`,
+      `CREATE INDEX IF NOT EXISTS page_views_day_idx ON page_views (day)`,
+      `CREATE INDEX IF NOT EXISTS page_views_visitor_ts_idx ON page_views (visitor_id, ts) WHERE visitor_id IS NOT NULL`,
+      `CREATE INDEX IF NOT EXISTS page_views_referrer_ts_idx ON page_views (referrer_host, ts) WHERE referrer_host IS NOT NULL`,
+      `CREATE INDEX IF NOT EXISTS page_views_device_ts_idx ON page_views (device_class, ts)`,
+      `CREATE INDEX IF NOT EXISTS page_views_utm_ts_idx ON page_views (utm_source, utm_medium, utm_campaign, ts)`,
+      `CREATE INDEX IF NOT EXISTS tool_opens_day_idx ON tool_opens (day)`,
+      `CREATE INDEX IF NOT EXISTS tool_opens_visitor_ts_idx ON tool_opens (visitor_id, ts) WHERE visitor_id IS NOT NULL`,
+      `CREATE INDEX IF NOT EXISTS search_queries_day_idx ON search_queries (day)`,
+      `CREATE INDEX IF NOT EXISTS search_queries_query_ts_idx ON search_queries (query, ts)`,
+      `CREATE INDEX IF NOT EXISTS ui_actions_day_idx ON ui_actions (day)`,
+      `CREATE INDEX IF NOT EXISTS analytics_daily_kind_day_slug_idx ON analytics_daily (kind, day, slug)`,
+    ],
+  },
 ];
 
 export const PRUNE_SQL = [

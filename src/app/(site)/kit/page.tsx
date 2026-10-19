@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { KitShowcase } from "@/app/kit/showcase";
+import { KitShowcase } from "@/app/(site)/kit/showcase";
 
 export const metadata: Metadata = {
   title: "Kit",

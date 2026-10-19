@@ -1,4 +1,4 @@
-import { sanitizeSearchQuery, slugFromPathname } from "@/lib/analytics/text";
+import { isAdminPath, sanitizeSearchQuery, slugFromPathname } from "@/lib/analytics/text";
 import type { DeviceClass, RunOutcome } from "@/lib/analytics/types";
 
 export type ClientRun = {
@@ -80,6 +80,8 @@ function recentlySent(key: string, windowMs: number): boolean {
 
 export function sendTrack(body: TrackBody) {
   if (typeof window === "undefined") return;
+  if (isAdminPath(window.location.pathname)) return;
+  if (body.type === "page" && typeof body.path === "string" && isAdminPath(body.path)) return;
   if (body.type === "page" && typeof body.path === "string" && recentlySent(`bl_page:${body.path}`, 1500)) return;
   if (body.type === "tool_open" && typeof body.slug === "string" && recentlySent(`bl_open:${body.slug}`, 1500)) return;
   const ids = ensureIds();

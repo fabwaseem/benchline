@@ -98,6 +98,8 @@ Browser tools mount `ToolBeacon` from the generated host. Network tools report t
 
 `GET /api/v1/stats` requires `Authorization: Bearer` matching `STATS_TOKEN` with a length check before `timingSafeEqual`. No token, or the wrong token, is 404. A valid token with no database is 503. Duration percentiles use `percentile_cont` on raw `duration_ms`. After those rows are rolled up, the same window uses the 11-bucket histogram on `analytics_daily`. A day that still has raw rows is not also counted from the rollup.
 
+`/admin` reads the same store. It is a 404 unless `ADMIN_PASSWORD` and `ADMIN_SESSION_SECRET` are both set. The session cookie is HMAC-SHA256, httpOnly, Secure, and SameSite=Strict, for 7 days. Login is rate limited on the daily IP hash. Mutating requests check a CSRF token stored inside the signed cookie. Admin SQL runs in a transaction with `statement_timeout`. Hourly charts read `tool_runs` only. Daily charts and totals add `analytics_daily` for days that no longer have raw rows. `/admin` is excluded from analytics, the sitemap, and robots.
+
 Retention takes `pg_advisory_xact_lock(814263002)`, inserts daily aggregates for rows older than the cutoff, then deletes those raw rows. The default cutoff is 90 days (`ANALYTICS_RETENTION_DAYS`, clamped to 1..3650). The job runs at startup and every 24 hours. `pnpm db:retain` is the same job.
 
 ## Deployment

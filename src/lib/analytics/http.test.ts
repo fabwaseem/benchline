@@ -75,6 +75,15 @@ describe("usage endpoints", () => {
     );
     expect(foreign.status).toBe(204);
     expect(await settled(store)).toHaveLength(0);
+    const admin = await track(
+      new Request("https://benchline.fabwaseem.com/api/track", {
+        method: "POST",
+        headers: { host: "benchline.fabwaseem.com", "content-type": "application/json" },
+        body: JSON.stringify({ type: "page", path: "/admin" }),
+      }),
+    );
+    expect(admin.status).toBe(204);
+    expect(await settled(store)).toHaveLength(0);
   });
 
   it("stores a search and then rate limits the address", async () => {

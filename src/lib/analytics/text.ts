@@ -121,6 +121,11 @@ export function deviceClassFromUa(userAgent: string | null | undefined): DeviceC
   return "desktop";
 }
 
+export function isAdminPath(pathname: string | null | undefined): boolean {
+  if (!pathname) return false;
+  return pathname === "/admin" || pathname.startsWith("/admin/");
+}
+
 export function slugFromPathname(pathname: string): string | null {
   const match = /^\/t\/([a-z0-9]+(?:-[a-z0-9]+)*)\/?$/.exec(pathname);
   return match?.[1] ?? null;
