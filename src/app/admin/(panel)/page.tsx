@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import { connection } from "next/server";
 import { RunsChart } from "@/components/admin/charts";
 import { KpiCard } from "@/components/admin/kpi";
 import { ExportLink } from "@/components/admin/export-link";
@@ -15,6 +16,7 @@ import { Notice } from "@/components/kit/notice";
 export const metadata: Metadata = { title: "Overview", robots: { index: false, follow: false } };
 
 export default async function OverviewPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  await connection();
   const range = await rangeFrom(searchParams);
   const loaded = await loadOverview(range);
   const query = rangeQuery(range);

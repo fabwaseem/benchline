@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { safeError } from "@/lib/analytics/clean";
 import type { Sql as Db } from "@/lib/analytics/db";
 import { analyticsRuntime } from "@/lib/analytics/global";
@@ -327,6 +328,7 @@ function liveEvents(rows: Record<string, unknown>[]): LiveEvent[] {
 }
 
 export async function loadLive(filter: { source: RunSource | null; slug: string | null; outcome: RunOutcome | null }): Promise<Load<LiveEvent[]>> {
+  await connection();
   const to = new Date();
   const from = new Date(to.getTime() - 24 * 60 * 60 * 1000);
   return withAdminDb(async (tx) => liveEvents(await query(tx, liveQuery({ from, to, ...filter }, filter.outcome, 80))));

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { connection } from "next/server";
 import { KpiCard } from "@/components/admin/kpi";
 import { ExportLink } from "@/components/admin/export-link";
 import { Failed, PageIntro, Panel, ShareList, shareOf } from "@/components/admin/panel";
@@ -14,6 +15,7 @@ import { Notice } from "@/components/kit/notice";
 export const metadata: Metadata = { title: "MCP", robots: { index: false, follow: false } };
 
 export default async function McpPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  await connection();
   const range = await rangeFrom(searchParams);
   const loaded = await loadMcp(range);
   const query = rangeQuery(range);

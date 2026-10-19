@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { connection } from "next/server";
 import { RunsChart } from "@/components/admin/charts";
 import { KpiCard } from "@/components/admin/kpi";
 import { Failed, PageIntro, Panel, ShareList, shareOf } from "@/components/admin/panel";
@@ -27,6 +28,7 @@ export default async function ToolDetailPage({
   params: Promise<{ slug: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  await connection();
   const { slug } = await params;
   const tool = getTool(slug);
   if (!tool) notFound();
