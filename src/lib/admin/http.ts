@@ -17,15 +17,15 @@ export function notConfigured(): Response {
   return new Response(null, { status: 404, headers: { "cache-control": "no-store", "x-robots-tag": "noindex, nofollow" } });
 }
 
-export function requireSession(request: Request): { secret: string; session: AdminSession } | Response {
+export async function requireSession(request: Request): Promise<{ secret: string; session: AdminSession } | Response> {
   const env = adminEnv();
   if (!env) return notConfigured();
-  const session = sessionFromRequest(request, env.secret);
+  const session = await sessionFromRequest(request, env.secret);
   if (!session) return privateJson({ error: "Sign in required." }, 401);
   return { secret: env.secret, session };
 }
 
-export function loginAttempt(request: Request, password: string): Response {
+export async function loginAttempt(request: Request, password: string): Promise<Response> {
   const env = adminEnv();
   if (!env) return notConfigured();
   const ip = analyticsIp(request) ?? "unknown";
@@ -33,12 +33,12 @@ export function loginAttempt(request: Request, password: string): Response {
   const limit = checkLoginLimit(key);
   if (!limit.ok) return privateJson({ error: "Too many attempts." }, 429, { "retry-after": String(limit.retryAfter) });
   if (!passwordsMatch(password, env.password)) return privateJson({ error: "Wrong password." }, 401);
-  const issued = issueSession(env.secret);
+  const issued = await issueSession(env.secret);
   return privateJson({ ok: true }, 200, { "set-cookie": sessionCookie(issued.token) });
 }
 
-export function logoutAttempt(request: Request, csrf: string | null): Response {
-  const gate = requireSession(request);
+export async function logoutAttempt(request: Request, csrf: string | null): Promise<Response> {
+  const gate = await requireSession(request);
   if (gate instanceof Response) return gate;
   if (!csrfMatches(csrf, gate.session.csrf)) return privateJson({ error: "Invalid session." }, 403);
   return privateJson({ ok: true }, 200, { "set-cookie": clearSessionCookie() });

@@ -1,3 +1,4 @@
+import { createHmac } from "node:crypto";
 import { afterEach, describe, expect, it } from "vitest";
 import { ADMIN_COOKIE, ADMIN_MAX_AGE_SEC, queryTimeoutMs, timeoutConfig } from "@/lib/admin/config";
 import { csrfMatches } from "@/lib/admin/csrf";
@@ -27,15 +28,18 @@ describe("admin auth", () => {
     resetLoginLimit();
   });
 
-  it("signs a cookie, rejects a bad mac, and expires it", () => {
-    const issued = issueSession(secret, 1_700_000_000_000);
-    const session = readSession(issued.token, secret, 1_700_000_000_000);
+  it("signs a cookie, rejects a bad mac, and expires it", async () => {
+    const issued = await issueSession(secret, 1_700_000_000_000);
+    const session = await readSession(issued.token, secret, 1_700_000_000_000);
     expect(session?.csrf).toBe(issued.session.csrf);
     expect(session?.exp).toBe(issued.session.exp);
-    expect(readSession(issued.token, "other-secret", 1_700_000_000_000)).toBeNull();
-    expect(readSession(`${issued.token}x`, secret, 1_700_000_000_000)).toBeNull();
-    expect(readSession(issued.token, secret, issued.session.exp)).toBeNull();
-    expect(readSession(issued.token, secret, issued.session.exp + 1000)).toBeNull();
+    const payload = Buffer.from(JSON.stringify(issued.session)).toString("base64url");
+    const mac = createHmac("sha256", secret).update(payload).digest("base64url");
+    expect(issued.token).toBe(`${payload}.${mac}`);
+    expect(await readSession(issued.token, "other-secret", 1_700_000_000_000)).toBeNull();
+    expect(await readSession(`${issued.token}x`, secret, 1_700_000_000_000)).toBeNull();
+    expect(await readSession(issued.token, secret, issued.session.exp)).toBeNull();
+    expect(await readSession(issued.token, secret, issued.session.exp + 1000)).toBeNull();
     const header = sessionCookie(issued.token);
     expect(header).toContain(`${ADMIN_COOKIE}=`);
     expect(header).toContain("HttpOnly");
@@ -90,7 +94,7 @@ describe("admin auth", () => {
     expect(cookie).toContain("Secure");
     expect(cookie).toContain("SameSite=Strict");
     const token = cookie.slice(cookie.indexOf("=") + 1, cookie.indexOf(";"));
-    const session = readSession(token, secret);
+    const session = await readSession(token, secret);
     expect(session).not.toBeNull();
 
     const denied = await csv(new Request("https://benchline.fabwaseem.com/api/admin/export?table=tools"));
@@ -108,7 +112,7 @@ describe("admin auth", () => {
       method: "POST",
       headers: { cookie, "x-csrf-token": session?.csrf ?? "" },
     });
-    expect(sessionFromRequest(request, secret)?.csrf).toBe(session?.csrf);
+    expect((await sessionFromRequest(request, secret))?.csrf).toBe(session?.csrf);
     const gone = await logout(request);
     expect(gone.status).toBe(200);
     expect(gone.headers.get("set-cookie")).toContain("Max-Age=0");

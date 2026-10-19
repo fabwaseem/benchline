@@ -1,4 +1,3 @@
-import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { ADMIN_COOKIE, ADMIN_MAX_AGE_SEC } from "@/lib/admin/config";
 import { readCookie } from "@/lib/analytics/text";
 
@@ -7,34 +6,47 @@ export type AdminSession = {
   csrf: string;
 };
 
-function sign(payload: string, secret: string): string {
-  return createHmac("sha256", secret).update(payload).digest("base64url");
+const hmac: HmacImportParams = { name: "HMAC", hash: "SHA-256" };
+
+async function sign(payload: string, secret: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey("raw", encoder.encode(secret), hmac, false, ["sign"]);
+  const mac = await crypto.subtle.sign("HMAC", key, encoder.encode(payload));
+  return Buffer.from(new Uint8Array(mac)).toString("base64url");
 }
 
 function safeEqual(left: string, right: string): boolean {
   const a = Buffer.from(left);
   const b = Buffer.from(right);
   if (a.length !== b.length) return false;
-  return timingSafeEqual(a, b);
+  let diff = 0;
+  for (let i = 0; i < a.length; i += 1) diff |= (a[i] ?? 0) ^ (b[i] ?? 0);
+  return diff === 0;
 }
 
-export function issueSession(secret: string, now = Date.now()): { token: string; session: AdminSession } {
+function randomCsrf(): string {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return Buffer.from(bytes).toString("base64url");
+}
+
+export async function issueSession(secret: string, now = Date.now()): Promise<{ token: string; session: AdminSession }> {
   const session: AdminSession = {
     exp: now + ADMIN_MAX_AGE_SEC * 1000,
-    csrf: randomBytes(32).toString("base64url"),
+    csrf: randomCsrf(),
   };
   const payload = Buffer.from(JSON.stringify(session)).toString("base64url");
-  return { token: `${payload}.${sign(payload, secret)}`, session };
+  return { token: `${payload}.${await sign(payload, secret)}`, session };
 }
 
-export function readSession(token: string | null | undefined, secret: string, now?: number): AdminSession | null {
+export async function readSession(token: string | null | undefined, secret: string, now?: number): Promise<AdminSession | null> {
   if (!token || !secret) return null;
   const current = now ?? Date.now();
   const dot = token.indexOf(".");
   if (dot <= 0 || token.indexOf(".", dot + 1) !== -1) return null;
   const payload = token.slice(0, dot);
   const mac = token.slice(dot + 1);
-  if (!safeEqual(mac, sign(payload, secret))) return null;
+  if (!safeEqual(mac, await sign(payload, secret))) return null;
   let parsed: unknown;
   try {
     parsed = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
@@ -51,7 +63,7 @@ export function readSession(token: string | null | undefined, secret: string, no
   return { exp, csrf };
 }
 
-export function sessionFromRequest(request: Request, secret: string, now?: number): AdminSession | null {
+export async function sessionFromRequest(request: Request, secret: string, now?: number): Promise<AdminSession | null> {
   return readSession(readCookie(request.headers.get("cookie"), ADMIN_COOKIE), secret, now);
 }
 
