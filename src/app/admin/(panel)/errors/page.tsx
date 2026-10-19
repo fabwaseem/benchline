@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import { connection } from "next/server";
 import { CountChart, Sparkline } from "@/components/admin/charts";
 import { ExportLink } from "@/components/admin/export-link";
 import { Failed, PageIntro, Panel } from "@/components/admin/panel";
@@ -15,6 +16,7 @@ import { rangeLabel, rangeQuery } from "@/lib/admin/range";
 export const metadata: Metadata = { title: "Errors", robots: { index: false, follow: false } };
 
 export default async function ErrorsPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  await connection();
   const range = await rangeFrom(searchParams);
   const loaded = await loadErrors(range);
   const query = rangeQuery(range);

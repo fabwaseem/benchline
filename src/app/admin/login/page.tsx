@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { LoginForm } from "@/components/admin/login-form";
 import { currentAdminSession } from "@/lib/admin/current";
 
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function LoginPage() {
+  await connection();
   if (await currentAdminSession()) redirect("/admin");
   return (
     <div className="grid min-h-screen place-items-center bg-background px-4 py-10">

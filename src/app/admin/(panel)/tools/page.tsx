@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { connection } from "next/server";
 import { ExportLink } from "@/components/admin/export-link";
 import { Failed, PageIntro, Panel } from "@/components/admin/panel";
 import { RangePicker } from "@/components/admin/range-picker";
@@ -11,6 +12,7 @@ import { rangeLabel, rangeQuery } from "@/lib/admin/range";
 export const metadata: Metadata = { title: "Tools", robots: { index: false, follow: false } };
 
 export default async function ToolsPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  await connection();
   const range = await rangeFrom(searchParams);
   const loaded = await loadTools(range);
   const query = rangeQuery(range);

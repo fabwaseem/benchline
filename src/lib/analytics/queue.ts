@@ -20,6 +20,7 @@ export function createQueue(options: QueueOptions) {
   let timer: ReturnType<typeof setTimeout> | null = null;
   let flushing = false;
   let dropped = 0;
+  const waiters: Array<() => void> = [];
 
   function schedule() {
     if (timer || buffer.length === 0) return;
@@ -31,7 +32,12 @@ export function createQueue(options: QueueOptions) {
   }
 
   async function flush() {
-    if (flushing) return;
+    if (flushing) {
+      await new Promise<void>((resolve) => {
+        waiters.push(resolve);
+      });
+      if (buffer.length === 0 || flushing) return;
+    }
     flushing = true;
     if (timer) {
       clearTimeout(timer);
@@ -48,6 +54,8 @@ export function createQueue(options: QueueOptions) {
       }
     } finally {
       flushing = false;
+      const pending = waiters.splice(0);
+      for (const resolve of pending) resolve();
       if (buffer.length > 0) schedule();
     }
   }
@@ -76,20 +84,8 @@ export function createQueue(options: QueueOptions) {
       dropped = 0;
       if (timer) clearTimeout(timer);
       timer = null;
+      const pending = waiters.splice(0);
+      for (const resolve of pending) resolve();
     },
-  };
-}
-
-export function bindProcessFlush(flush: () => Promise<void>) {
-  const onStop = () => {
-    void flush().catch((error: unknown) => {
-      console.warn("[analytics] shutdown flush failed", safeError(error));
-    });
-  };
-  process.on("SIGTERM", onStop);
-  process.on("SIGINT", onStop);
-  return () => {
-    process.off("SIGTERM", onStop);
-    process.off("SIGINT", onStop);
   };
 }

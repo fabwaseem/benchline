@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { connection } from "next/server";
 import { LiveBoard } from "@/components/admin/live-board";
 import { ExportLink } from "@/components/admin/export-link";
 import { Failed, PageIntro, Panel } from "@/components/admin/panel";
@@ -9,6 +10,7 @@ import { firstParam, liveFilters } from "@/lib/admin/range";
 export const metadata: Metadata = { title: "Live", robots: { index: false, follow: false } };
 
 export default async function LivePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  await connection();
   const params = await searchParams;
   const filters = liveFilters({
     source: firstParam(params.source),

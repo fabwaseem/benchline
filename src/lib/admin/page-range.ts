@@ -1,6 +1,8 @@
+import { connection } from "next/server";
 import { firstParam, resolveRange, type AdminRange } from "@/lib/admin/range";
 
 export async function rangeFrom(searchParams: Promise<Record<string, string | string[] | undefined>>): Promise<AdminRange> {
+  await connection();
   const params = await searchParams;
   return resolveRange({
     range: firstParam(params.range),

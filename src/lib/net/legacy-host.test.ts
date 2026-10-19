@@ -16,14 +16,17 @@ describe("legacyHostRedirect", () => {
     expect(legacyHostRedirect("tools.fabwaseem.com", "/mcpfoo", "")?.href).toBe("https://benchline.fabwaseem.com/mcpfoo");
   });
 
-  it("leaves the MCP paths and other hosts alone", () => {
+  it("leaves the MCP paths, health check, and other hosts alone", () => {
     expect(legacyHostRedirect("tools.fabwaseem.com", "/mcp", "?x=1")).toBeNull();
     expect(legacyHostRedirect("tools.fabwaseem.com", "/mcp/", "")).toBeNull();
     expect(legacyHostRedirect("Tools.Fabwaseem.com:443", "/mcp/x", "")).toBeNull();
+    expect(legacyHostRedirect("tools.fabwaseem.com", "/api/health", "")).toBeNull();
+    expect(legacyHostRedirect("tools.fabwaseem.com", "/api/health/", "?x=1")).toBeNull();
     expect(legacyHostRedirect("benchline.fabwaseem.com", "/mcp", "")).toBeNull();
     expect(legacyHostRedirect("example.com:443", "/", "?q=1")).toBeNull();
     expect(legacyHostRedirect(null, "/mcp", "")).toBeNull();
     expect(legacyHostRedirect("  ", "/mcp", "")).toBeNull();
+    expect(legacyHostRedirect("tools.fabwaseem.com", "/api/healthz", "")?.href).toBe("https://benchline.fabwaseem.com/api/healthz");
   });
 });
 
@@ -48,6 +51,19 @@ describe("proxy", () => {
     passesThrough(await toolsRequest("/mcp/"));
     passesThrough(await toolsRequest("/mcp/x"));
     passesThrough(await toolsRequest("/mcp", "GET"));
+  });
+
+  it("lets the health check through on both hosts", async () => {
+    passesThrough(await toolsRequest("/api/health", "GET"));
+    passesThrough(await toolsRequest("/api/health/", "GET"));
+    passesThrough(
+      await proxy(
+        new NextRequest("https://benchline.fabwaseem.com/api/health", {
+          method: "GET",
+          headers: { host: "benchline.fabwaseem.com" },
+        }),
+      ),
+    );
   });
 
   it("still redirects every other legacy path", async () => {

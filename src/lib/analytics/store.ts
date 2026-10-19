@@ -3,7 +3,8 @@ import { createPostgresStore, openDatabase, type Sql } from "@/lib/analytics/db"
 import { retentionDays } from "@/lib/analytics/duration";
 import { ensureGeoDb } from "@/lib/analytics/geodb";
 import { analyticsRuntime } from "@/lib/analytics/global";
-import { bindProcessFlush, createQueue } from "@/lib/analytics/queue";
+import { createQueue } from "@/lib/analytics/queue";
+import { registerShutdownCleanup } from "@/lib/shutdown/state";
 import type { AnalyticsEvent, AnalyticsStore } from "@/lib/analytics/types";
 
 const DROP_LOG_MS = 60_000;
@@ -68,18 +69,31 @@ function scheduleRetention() {
   slot.retainTimer = timer;
 }
 
+export async function shutdownAnalytics(): Promise<void> {
+  const slot = analyticsRuntime();
+  if (slot.retainTimer) {
+    clearInterval(slot.retainTimer);
+    slot.retainTimer = null;
+  }
+  try {
+    await queue().flush();
+  } catch (error) {
+    console.warn("[analytics] shutdown flush failed", safeError(error));
+  }
+  const sql = slot.sql as { end?: (options: { timeout: number }) => Promise<void> } | null;
+  slot.sql = null;
+  if (!sql?.end) return;
+  try {
+    await sql.end({ timeout: 2 });
+  } catch (error) {
+    console.warn("[analytics] shutdown flush failed", safeError(error));
+  }
+}
+
 export function installShutdownFlush() {
   const slot = analyticsRuntime();
   if (slot.stopSignals) return;
-  slot.stopSignals = bindProcessFlush(async () => {
-    await queue().flush();
-    const sql = analyticsRuntime().sql as { end?: (options: { timeout: number }) => Promise<void> } | null;
-    try {
-      await sql?.end?.({ timeout: 2 });
-    } catch (error) {
-      console.warn("[analytics] shutdown flush failed", safeError(error));
-    }
-  });
+  slot.stopSignals = registerShutdownCleanup(() => shutdownAnalytics());
 }
 
 async function runBoot(url: string): Promise<AnalyticsStore | null> {

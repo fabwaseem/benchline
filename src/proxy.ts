@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { adminEnv } from "@/lib/admin/config";
 import { sessionFromRequest } from "@/lib/admin/session";
 import { isAdminPath } from "@/lib/analytics/text";
-import { hostnameFromHost, isMcpPath, LEGACY_HOST, legacyHostRedirect } from "@/lib/net/legacy-host";
+import { hostnameFromHost, isHealthPath, isMcpPath, LEGACY_HOST, legacyHostRedirect } from "@/lib/net/legacy-host";
 
 function isAdminRoute(pathname: string): boolean {
   return isAdminPath(pathname) || pathname === "/api/admin" || pathname.startsWith("/api/admin/");
@@ -47,6 +47,7 @@ async function continueRequest(request: NextRequest): Promise<NextResponse> {
 
 export async function proxy(request: NextRequest): Promise<NextResponse> {
   const url = request.nextUrl;
+  if (isHealthPath(url.pathname)) return NextResponse.next();
   const host = request.headers.get("host");
   if (hostnameFromHost(host) === LEGACY_HOST && isMcpPath(url.pathname)) return NextResponse.next();
   const target = legacyHostRedirect(host, url.pathname, url.search);

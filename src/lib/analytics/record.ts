@@ -1,5 +1,6 @@
 import { cleanErrorCode } from "@/lib/analytics/text";
 import { enqueue } from "@/lib/analytics/store";
+import { isHealthPath } from "@/lib/net/legacy-host";
 import type { ActionEvent, PageViewEvent, RunOutcome, RunSource, SearchEvent, ToolOpenEvent, ToolRunEvent } from "@/lib/analytics/types";
 import type { RequestContext } from "@/lib/analytics/context";
 
@@ -50,6 +51,7 @@ export function recordRun(
 }
 
 export function recordPage(event: Omit<PageViewEvent, "kind" | "ts">) {
+  if (isHealthPath(event.path)) return;
   enqueue({ kind: "page", ts: nowIso(), ...event });
 }
 
