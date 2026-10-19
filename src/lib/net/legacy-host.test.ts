@@ -79,6 +79,19 @@ describe("proxy", () => {
     expect(post.headers.get("x-middleware-rewrite")).toBeNull();
   });
 
+  it("redirects admin off the legacy host and marks it noindex", () => {
+    const legacy = toolsRequest("/admin");
+    expect(legacy.status).toBe(308);
+    expect(legacy.headers.get("location")).toBe("https://benchline.fabwaseem.com/admin");
+    const local = proxy(
+      new NextRequest("https://benchline.fabwaseem.com/admin/tools", {
+        headers: { host: "benchline.fabwaseem.com" },
+      }),
+    );
+    expect(local.headers.get("x-robots-tag")).toContain("noindex");
+    expect(local.headers.get("cache-control")).toContain("no-store");
+  });
+
   it("leaves the canonical host alone", () => {
     for (const pathname of ["/", "/tools/foo", "/mcp-docs", "/mcpfoo"]) {
       passesThrough(

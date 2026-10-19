@@ -393,6 +393,8 @@ The client address for these counts comes from `X-Real-Ip`, then the first `X-Fo
 
 `GET /api/v1/stats` returns totals by tool, source, outcome, and day, plus MCP clients, countries, error rates, and p50/p95 duration. Send `Authorization: Bearer <STATS_TOKEN>`. A missing or wrong token is a 404. Filters are `from`, `to`, `slug`, and `source` (at most 366 days; the default window is 30).
 
+`/admin` is a private panel for the same database. It is a 404 unless both `ADMIN_PASSWORD` and `ADMIN_SESSION_SECRET` are set. The password is compared in constant time. A successful login sets an HMAC-signed, httpOnly, Secure, SameSite=Strict cookie for 7 days. Login attempts are rate limited per IP hash. Pages and CSV export run on the server and never send `STATS_TOKEN` to the browser. Admin paths are `noindex`, left out of the sitemap and robots allow list, and are not recorded as page views. Queries use raw tables for recent rows and `analytics_daily` for days that have already been rolled up, with `statement_timeout` (`ADMIN_QUERY_TIMEOUT_MS`, default 8s).
+
 Raw rows older than `ANALYTICS_RETENTION_DAYS` (default 90) are folded into `analytics_daily` and deleted. That job runs at startup and then once a day, and `pnpm db:retain` runs it by hand. `pnpm db:migrate` applies the same SQL the server applies on boot. Startup takes an advisory lock, creates `schema_migrations` if needed, and applies any version that is not already recorded. If `DATABASE_URL` is unset, or the database does not answer within a few seconds, tracking stays off and the site still serves tools.
 
 Without the rollup job, the same prune is:
@@ -489,6 +491,9 @@ The runner copies `pdfjs-dist`, `zxing-wasm`, `tesseract.js`, `tesseract.js-core
 | `DATABASE_URL` | Postgres 17 connection for anonymous usage counts | unset (tracking off) |
 | `ANALYTICS_SALT` | Daily IP hash | unset (hash omitted) |
 | `STATS_TOKEN` | Bearer token for `GET /api/v1/stats` | unset (the route is 404) |
+| `ADMIN_PASSWORD` | Password for `/admin` | unset (`/admin` is 404) |
+| `ADMIN_SESSION_SECRET` | HMAC key for the admin session cookie | unset (`/admin` is 404) |
+| `ADMIN_QUERY_TIMEOUT_MS` | Admin SQL `statement_timeout` | `8000` |
 | `ANALYTICS_RETENTION_DAYS` | Raw-event window before rollup | `90` |
 | `GEOIP_DB_PATH` | DB-IP country lite mmdb | `data/dbip-country-lite.mmdb` |
 | `GEOIP_DOWNLOAD` | `0` skips the startup download | download when the file is missing |

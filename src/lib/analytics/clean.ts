@@ -16,6 +16,7 @@ export {
   readCookie,
   referrerHost,
   sanitizeSearchQuery,
+  isAdminPath,
   slugFromPathname,
   uaFamily,
   utcDay,
