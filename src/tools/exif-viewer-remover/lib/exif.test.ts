@@ -1,5 +1,6 @@
 import sharp from "sharp";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+import nextConfig from "../../../../next.config";
 import { stripJpegGps, stampJpeg } from "@/tools/exif-viewer-remover/lib/gps";
 import { readExif } from "@/tools/exif-viewer-remover/lib/read";
 import { formatGps, listTags } from "@/tools/exif-viewer-remover/lib/tags";
@@ -28,5 +29,25 @@ describe("exif tags", () => {
     const after = await readExif(stripped);
     expect(after.gps).toBeNull();
     expect(after.camera).toMatch(/Benchline/);
+  });
+
+  it("reads a PNG and does not probe Node built-ins", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      await import("exifr");
+      const png = new Uint8Array(await sharp({
+        create: { width: 2, height: 2, channels: 3, background: { r: 10, g: 20, b: 30 } },
+      }).png().toBuffer());
+      const report = await readExif(png);
+      expect(report.tags.some((tag) => tag.name === "ImageWidth")).toBe(true);
+      const noisy = warn.mock.calls.map((args) => args.map(String).join(" ")).filter((line) => /Couldn't load/.test(line));
+      expect(noisy).toEqual([]);
+    } finally {
+      warn.mockRestore();
+    }
+  });
+
+  it("keeps exifr on Node's loader so fs and zlib are not bundled", () => {
+    expect(nextConfig.serverExternalPackages).toContain("exifr");
   });
 });

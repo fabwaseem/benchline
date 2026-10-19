@@ -52,6 +52,11 @@ const nextConfig: NextConfig = {
     "sharp",
     "postgres",
     "mmdb-lib",
+    // exifr's full build probes fs and zlib with a dynamic require. Turbopack's
+    // server bundle turns that into a failing require and logs "Couldn't load fs"
+    // / "Couldn't load zlib" on every tool page and API request. Loading the
+    // package with Node's own loader lets those built-ins resolve.
+    "exifr",
   ],
   outputFileTracingIncludes: {
     "/pdfjs/[...path]": [
