@@ -143,6 +143,18 @@ type Pass = {
 
 async function compressOnce(data: Uint8Array, step: Step): Promise<Pass> {
   const doc = await openPdf(data);
+  try {
+    return await compressLoaded(doc, step);
+  } catch (error) {
+    // pdf-lib loads damaged files leniently, so structural damage can surface
+    // here as a raw internal error. Report it like any other unreadable PDF;
+    // the tool's own messages (which start with "This ") pass through.
+    if (error instanceof Error && error.message.startsWith("This ")) throw error;
+    throw new Error("This PDF could not be read.");
+  }
+}
+
+async function compressLoaded(doc: PDFDocument, step: Step): Promise<Pass> {
   const pages = doc.getPageCount();
   if (pages < 1) throw new Error("This PDF has no pages.");
   stripMetadata(doc);

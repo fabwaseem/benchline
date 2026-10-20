@@ -148,4 +148,12 @@ describe("compressPdf", () => {
   it("rejects a file that is not a PDF", async () => {
     await expect(compressPdf(new Uint8Array([1, 2, 3, 4]), { preset: "light", targetBytes: null })).rejects.toThrow(/not a PDF/);
   });
+
+  it("rejects a PDF whose page tree is broken with a readable message", async () => {
+    const doc = await PDFDocument.create();
+    doc.addPage();
+    doc.catalog.delete(PDFName.of("Pages"));
+    const broken = await doc.save();
+    await expect(compressPdf(broken, { preset: "light", targetBytes: null })).rejects.toThrow(/could not be read/);
+  });
 });
