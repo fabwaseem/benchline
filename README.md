@@ -281,19 +281,9 @@ Open Graph is two calls. `list_og_templates` returns the template ids, categorie
 
 ### Claude Desktop
 
-`claude_desktop_config.json`
+Open Claude Desktop, then Customize > Connectors, and add a custom connector. Paste `https://benchline.fabwaseem.com/mcp`. The server has no sign-in. This is the setup to use.
 
-```json
-{
-  "mcpServers": {
-    "benchline": {
-      "url": "https://benchline.fabwaseem.com/mcp"
-    }
-  }
-}
-```
-
-A build that only starts a local command can use the same URL through `mcp-remote`:
+To bridge that URL as a stdio command, put this in `claude_desktop_config.json`:
 
 ```json
 {
