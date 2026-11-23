@@ -3,6 +3,7 @@ import { AppShell } from "@/components/shell/top-bar";
 import { AnalyticsListener } from "@/components/site/analytics-listener";
 import { DeferredChrome } from "@/components/site/deferred-chrome";
 import { Footer } from "@/components/site/footer";
+import { GoogleAnalytics } from "@/components/site/google-analytics";
 import { JsonLd, websiteNode } from "@/lib/jsonld";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { searchRecords } from "@/registry";
@@ -26,6 +27,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
           ],
         }}
       />
+      <GoogleAnalytics />
       <AnalyticsListener />
       <AppShell toolCount={records.length}>{children}</AppShell>
       <Footer />

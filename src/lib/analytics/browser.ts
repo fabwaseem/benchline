@@ -1,3 +1,4 @@
+import { gaEvent } from "@/lib/analytics/ga";
 import { isAdminPath, sanitizeSearchQuery, slugFromPathname } from "@/lib/analytics/text";
 import { isHealthPath } from "@/lib/net/legacy-host";
 import type { DeviceClass, RunOutcome } from "@/lib/analytics/types";
@@ -85,6 +86,9 @@ export function sendTrack(body: TrackBody) {
   if (body.type === "page" && typeof body.path === "string" && (isHealthPath(body.path) || isAdminPath(body.path))) return;
   if (body.type === "page" && typeof body.path === "string" && recentlySent(`bl_page:${body.path}`, 1500)) return;
   if (body.type === "tool_open" && typeof body.slug === "string" && recentlySent(`bl_open:${body.slug}`, 1500)) return;
+  if (body.type === "run" && typeof body.slug === "string") {
+    gaEvent("tool_used", { tool_slug: body.slug, outcome: typeof body.outcome === "string" ? body.outcome : "ok" });
+  }
   const ids = ensureIds();
   const payload = JSON.stringify({ ...body, visitorId: ids.visitorId, sessionId: ids.sessionId });
   if (payload.length > 3500) return;

@@ -373,6 +373,10 @@ The tools below can fetch a public URL through this site. The page posts the URL
 
 <!-- privacy:end -->
 
+### Google Analytics
+
+When `NEXT_PUBLIC_GA_ID` is set at build time, public pages also load Google Analytics 4. The `dataLayer` queue is set up inline and `gtag.js` loads from `www.googletagmanager.com` after the page has loaded. Besides page views, a browser tool run sends a `tool_used` event with the tool slug and outcome, never the input or output. `/admin` does not load the tag. Unset, nothing is rendered and nothing is sent to Google.
+
 ### Usage counts
 
 When `DATABASE_URL` is set, the server records anonymous counts: tool runs (MCP, `POST /api/v1/tools/<slug>`, and the browser), page views, tool opens, directory search text, and copy or download clicks. A run stores the time, tool slug, source, outcome, an error class such as `validation` or `timeout`, duration, and byte sizes. It does not store the tool input, the tool output, file bytes, submitted URLs, or the raw IP address.
@@ -477,6 +481,7 @@ The runner copies `pdfjs-dist`, `zxing-wasm`, `tesseract.js`, `tesseract.js-core
 | Variable | Used by | Default |
 | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Canonical URLs, Open Graph, and the MCP origin check | `https://benchline.fabwaseem.com` |
+| `NEXT_PUBLIC_GA_ID` | Google Analytics 4 measurement id, read at build time | unset (no GA tag) |
 | `MCP_URL` | `scripts/live-mcp-smoke.mts` only | `https://benchline.fabwaseem.com/mcp` |
 | `DATABASE_URL` | Postgres 17 connection for anonymous usage counts | unset (tracking off) |
 | `ANALYTICS_SALT` | Daily IP hash | unset (hash omitted) |
