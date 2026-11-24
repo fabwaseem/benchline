@@ -1,8 +1,8 @@
 {
   "endpoint": "https://benchline.fabwaseem.com/mcp",
-  "ranAt": "2026-11-24T09:01:42.022Z",
-  "connectMs": 444,
-  "listMs": 486,
+  "ranAt": "2026-11-24T09:26:18.110Z",
+  "connectMs": 687,
+  "listMs": 3928,
   "server": {
     "name": "benchline",
     "title": "Benchline",
@@ -36,7 +36,7 @@
         "pages"
       ],
       "sampled": true,
-      "ms": 185,
+      "ms": 201,
       "bytes": 582,
       "status": "ok",
       "text": "{\"llms\":\"# Benchline\\n\\n> Free web tools for people and agents.\\n\\n## Pages\\n\\n- [Tools](https://benchline.fabwaseem.com/tools)\\n\",\"full\":\"# Benchline\\n\\n> Free web tools for people and agents.\\n\\n## Tools\\n\\nhttps://benchline.fabwaseem.com/tools\\n\"}",
@@ -59,10 +59,10 @@
         "url"
       ],
       "sampled": true,
-      "ms": 476,
+      "ms": 610,
       "bytes": 6374,
       "status": "ok",
-      "text": "{\"finalUrl\":\"https://fabwaseem.com/\",\"status\":200,\"score\":98,\"checks\":[{\"id\":\"https\",\"level\":\"pass\",\"label\":\"HTTPS\",\"detail\":\"The final URL is https.\",\"weight\":8},{\"id\":\"time\",\"level\":\"pass\",\"label\":\"Response time\",\"detail\":\"The page responded in 113 ms.\",\"weight\":4},{\"id\":\"title\",\"level\":\"pass\",\"label\":\"Title\",\"detail\":\"49 characters.\",\"weight\":8},{\"id\":\"description\",\"level\":\"pass\",\"label\":\"Meta ",
+      "text": "{\"finalUrl\":\"https://fabwaseem.com/\",\"status\":200,\"score\":98,\"checks\":[{\"id\":\"https\",\"level\":\"pass\",\"label\":\"HTTPS\",\"detail\":\"The final URL is https.\",\"weight\":8},{\"id\":\"time\",\"level\":\"pass\",\"label\":\"Response time\",\"detail\":\"The page responded in 207 ms.\",\"weight\":4},{\"id\":\"title\",\"level\":\"pass\",\"label\":\"Title\",\"detail\":\"49 characters.\",\"weight\":8},{\"id\":\"description\",\"level\":\"pass\",\"label\":\"Meta ",
       "structured": "{\"finalUrl\":\"https://fabwaseem.com/\",\"status\":200,\"score\":98,\"checks\":[{\"id\":\"https\",\"level\":\"pass\",\"label\":\"HTTPS\",\"detail\":\"The final URL is https.\",\"weight\":8},{\"id\":\"time\",\"level\":\"pass\",\"label\":\"Response time\",\"deta…",
       "contentTypes": [
         "text"
@@ -80,10 +80,10 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 604,
-      "bytes": 57867,
+      "ms": 383,
+      "bytes": 33637,
       "status": "ok",
-      "text": "{\"template\":\"editorial\",\"png\":\"iVBORw0KGgoAAAANSUhEUgAABLAAAAJ2CAYAAABPQHtcAABG70lEQVR4nO3dbcweV2E3+NmvJc63GC1GasIjFWeT9EvBYdVKm9hB4jWJq+U9JGmgqxKbJEgPAcfQUprYkFbiLYFHW+BpQiiQrnASClTCd9KVulIw6ZcCjan0JKmEqZJ+2pj06+78r7snmXs8c73d120fx7+fdOK5r7nmzJkzM4jz15m5/qf/+H//7f9rAAAAAKBSAiwAAAAAqibAAgAAAKBqAiwAAAAAqibAAgAAAKBqAiwAAAAAqibAAgAAAKBqAiwAAAAAqibAAgAAAKBqAiwAAAAAqibAAgAAAKBqAiwAAAAAqibAAgAAAKBqAiwAA",
+      "text": "{\"template\":\"editorial\",\"png\":\"<base64, about 18 KB: full value in structuredContent.png>\",\"mimeType\":\"image/png\",\"width\":1200,\"height\":630,\"source\":\"import { ImageResponse } from \\\"next/og\\\";\\n\\nexport const alt = \\\"Ship notes\\\";\\nexport const size = { width: 1200, height: 630 };\\nexport const contentType = \\\"image/png\\\";\\n\\nexport default async function Image() {\\n  const load = (url: string) =>",
       "structured": "{\"template\":\"editorial\",\"png\":\"iVBORw0KGgoAAAANSUhEUgAABLAAAAJ2CAYAAABPQHtcAABG70lEQVR4nO3d…(24288 chars)\",\"mimeType\":\"image/png\",\"width\":1200,\"height\":630,\"source\":\"import { ImageResponse } from \\\"next/og\\\";\\n\\nexport c…",
       "contentTypes": [
         "text"
@@ -101,7 +101,7 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 206,
+      "ms": 225,
       "bytes": 39478,
       "status": "ok",
       "text": "{\"templates\":[{\"id\":\"editorial\",\"name\":\"Editorial\",\"category\":\"Blog\",\"fields\":[{\"key\":\"title\",\"label\":\"Title\",\"kind\":\"text\"},{\"key\":\"author\",\"label\":\"Author\",\"kind\":\"text\"},{\"key\":\"readTime\",\"label\":\"Read time\",\"kind\":\"text\"},{\"key\":\"brand\",\"label\":\"Brand\",\"kind\":\"text\"}],\"images\":[\"logo\"],\"defaults\":{\"title\":\"Designing tools people return to\",\"author\":\"Waseem Anjum\",\"readTime\":\"8 min read\",\"brand",
@@ -124,7 +124,7 @@
         "token"
       ],
       "sampled": true,
-      "ms": 174,
+      "ms": 193,
       "bytes": 854,
       "status": "ok",
       "text": "{\"ok\":true,\"error\":\"\",\"kind\":\"\",\"header\":{\"alg\":\"HS256\",\"typ\":\"JWT\"},\"payload\":{\"sub\":\"1234567890\",\"name\":\"Ada\",\"iat\":1516239022,\"exp\":2000000000},\"signature\":\"signature\",\"claims\":[{\"name\":\"sub\",\"iso\":\"\",\"raw\":\"1234567890\"},{\"name\":\"exp\",\"iso\":\"2033-05-18T03:33:20.000Z\",\"raw\":\"2000000000\"},{\"name\":\"iat\",\"iso\":\"2018-01-18T01:30:22.000Z\",\"raw\":\"1516239022\"}]}",
@@ -147,7 +147,7 @@
         "url"
       ],
       "sampled": true,
-      "ms": 373,
+      "ms": 450,
       "bytes": 112582,
       "status": "ok",
       "text": "{\"finalUrl\":\"https://github.com/robots.txt\",\"status\":200,\"text\":\"# If you would like to crawl GitHub contact us via https://support.github.com?tags=dotcom-robots\\n# We also provide an extensive API: https://docs.github.com\\nSitemap: https://github.com/sitemap_marketing.xml\\n\\nUser-agent: GPTBot\\nUser-agent: OAI-SearchBot\\nUser-agent: ChatGPT-User\\nUser-agent: ClaudeBot\\nUser-agent: Claude-SearchBo",
@@ -170,7 +170,7 @@
         "url"
       ],
       "sampled": true,
-      "ms": 309,
+      "ms": 445,
       "bytes": 6820,
       "status": "ok",
       "text": "{\"status\":200,\"redirects\":[],\"finalUrl\":\"https://fabwaseem.com/\",\"title\":\"Waseem Anjum: Full Stack & AI Automation Engineer\",\"description\":\"Waseem Anjum is a full stack and AI automation engineer in Lahore, Pakistan, building AI agents, MCP servers and Next.js, NestJS and TypeScript products.\",\"canonical\":\"https://fabwaseem.com/\",\"robots\":\"index, follow\",\"viewport\":\"width=device-width, initial-sca",
@@ -194,7 +194,7 @@
         "values"
       ],
       "sampled": true,
-      "ms": 188,
+      "ms": 196,
       "bytes": 1072,
       "status": "ok",
       "text": "{\"json\":{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"Benchline\",\"url\":\"https://benchline.fabwaseem.com\"},\"script\":\"<script type=\\\"application/ld+json\\\">\\n{\\n  \\\"@context\\\": \\\"https://schema.org\\\",\\n  \\\"@type\\\": \\\"Organization\\\",\\n  \\\"name\\\": \\\"Benchline\\\",\\n  \\\"url\\\": \\\"https://benchline.fabwaseem.com\\\"\\n}\\n</script>\\n\",\"checks\":[{\"level\":\"pass\",\"label\":\"name\",\"detail\":\"Present.",
@@ -217,7 +217,7 @@
         "text"
       ],
       "sampled": true,
-      "ms": 214,
+      "ms": 264,
       "bytes": 942,
       "status": "ok",
       "text": "{\"count\":10,\"chars\":44,\"words\":9,\"encoding\":\"o200k\",\"prices\":[{\"id\":\"gpt-6.1-sol\",\"label\":\"GPT-6.1 Sol\",\"inputUsd\":0.00002,\"outputUsd\":0,\"requestUsd\":0.00002,\"monthUsd\":0},{\"id\":\"claude-sonnet-5-5\",\"label\":\"Claude Sonnet 5.5\",\"inputUsd\":0.00002,\"outputUsd\":0,\"requestUsd\":0.00002,\"monthUsd\":0},{\"id\":\"gemini-4-argon\",\"label\":\"Gemini 4 Argon\",\"inputUsd\":0.00002,\"outputUsd\":0,\"requestUsd\":0.00002,\"mon",
@@ -240,7 +240,7 @@
         "expression"
       ],
       "sampled": true,
-      "ms": 303,
+      "ms": 270,
       "bytes": 2309,
       "status": "ok",
       "text": "{\"valid\":true,\"english\":\"At 09:00, only on Monday\",\"error\":\"\",\"fields\":[{\"name\":\"minute\",\"value\":\"0\"},{\"name\":\"hour\",\"value\":\"9\"},{\"name\":\"day of month\",\"value\":\"*\"},{\"name\":\"month\",\"value\":\"*\"},{\"name\":\"day of week\",\"value\":\"1\"}],\"runs\":[{\"utc\":\"30 Nov 2026, 09:00\"},{\"utc\":\"07 Dec 2026, 09:00\"},{\"utc\":\"14 Dec 2026, 09:00\"},{\"utc\":\"21 Dec 2026, 09:00\"},{\"utc\":\"28 Dec 2026, 09:00\"},{\"utc\":\"04 Jan 2",
@@ -261,7 +261,7 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 180,
+      "ms": 188,
       "bytes": 3601,
       "status": "ok",
       "text": "{\"dockerfile\":\"FROM node:22-bookworm-slim AS deps\\nWORKDIR /app\\nRUN corepack enable\\nENV NEXT_TELEMETRY_DISABLED=1\\nCOPY package.json pnpm-lock.yaml* package-lock.json* yarn.lock* bun.lock* ./\\nRUN --mount=type=cache,target=/pnpm/store pnpm install --frozen-lockfile\\n\\nFROM node:22-bookworm-slim AS builder\\nWORKDIR /app\\nRUN corepack enable\\nENV NEXT_TELEMETRY_DISABLED=1\\nCOPY --from=deps /app/no",
@@ -284,7 +284,7 @@
         "json"
       ],
       "sampled": true,
-      "ms": 217,
+      "ms": 198,
       "bytes": 331,
       "status": "ok",
       "text": "{\"output\":\"{\\n  \\\"b\\\": 2,\\n  \\\"a\\\": [\\n    1,\\n    2,\\n    {\\n      \\\"c\\\": true\\n    }\\n  ]\\n}\",\"valid\":true,\"errors\":[]}",
@@ -330,7 +330,7 @@
         "text"
       ],
       "sampled": true,
-      "ms": 215,
+      "ms": 192,
       "bytes": 499,
       "status": "ok",
       "text": "{\"ok\":true,\"output\":\"[\\n  {\\n    \\\"name\\\": \\\"Ada\\\",\\n    \\\"age\\\": 36\\n  },\\n  {\\n    \\\"name\\\": \\\"Alan\\\",\\n    \\\"age\\\": 41\\n  }\\n]\",\"error\":\"\",\"warning\":\"\",\"rows\":2,\"columns\":2,\"delimiter\":\",\"}",
@@ -354,7 +354,7 @@
         "right"
       ],
       "sampled": true,
-      "ms": 204,
+      "ms": 190,
       "bytes": 1674,
       "status": "ok",
       "text": "{\"ok\":true,\"error\":\"\",\"unchanged\":false,\"added\":2,\"removed\":1,\"unit\":\"lines\",\"patch\":\"===================================================================\\n--- original\\n+++ changed\\n@@ -1,3 +1,4 @@\\n alpha\\n-beta\\n+BETA\\n gamma\\n+delta\\n\",\"pieces\":[{\"type\":\"same\",\"value\":\"alpha\\n\"},{\"type\":\"remove\",\"value\":\"beta\\n\"},{\"type\":\"add\",\"value\":\"BETA\\n\"},{\"type\":\"same\",\"value\":\"gamma\\n\"},{\"type\":\"add\",\"v",
@@ -377,7 +377,7 @@
         "text"
       ],
       "sampled": true,
-      "ms": 187,
+      "ms": 181,
       "bytes": 266,
       "status": "ok",
       "text": "{\"ok\":true,\"error\":\"\",\"output\":\"aGVsbG8gYmVuY2hsaW5l\",\"mime\":\"\",\"filename\":\"\",\"binary\":false}",
@@ -400,7 +400,7 @@
         "file"
       ],
       "sampled": true,
-      "ms": 223,
+      "ms": 220,
       "bytes": 1186,
       "status": "ok",
       "text": "{\"source\":\"png\",\"filename\":\"dot.jpg\",\"mime\":\"image/jpeg\",\"extension\":\"jpg\",\"width\":1,\"height\":1,\"bytes\":324,\"data\":\"/9j/2wBDAAMDAwMDAwMDAwMEBAQEBAYFBQUFBgkGBwYHBgkOCAoICAoIDgwPDAsMDwwWEQ8PERYZFRQVGR4bGx4mJCYyMkP/2wBDAQMDAwMDAwMDAwMEBAQEBAYFBQUFBgkGBwYHBgkOCAoICAoIDgwPDAsMDwwWEQ8PERYZFRQVGR4bGx4mJCYyMkP/wgARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAj/xAAVAQEBAAAAAAAAAAAAAAAAAAAGCP/aAAwDAQAC",
@@ -423,10 +423,10 @@
         "file"
       ],
       "sampled": true,
-      "ms": 189,
-      "bytes": 814,
+      "ms": 274,
+      "bytes": 1094,
       "status": "ok",
-      "text": "{\"filename\":\"dot.webp\",\"mime\":\"image/webp\",\"extension\":\"webp\",\"format\":\"webp\",\"quality\":60,\"width\":1,\"height\":1,\"bytes\":94,\"before\":70,\"after\":94,\"savedBytes\":-24,\"savedPercent\":-34.285714285714285,\"label\":\"34% larger\",\"data\":\"UklGRlYAAABXRUJQVlA4WAoAAAAQAAAAAAAAAAAAQUxQSAIAAAAAf1ZQOCAuAAAA0AEAnQEqAQABAAKAQiWgAnS6AfgAA7AA/u921/4VbhiGar/72C+7Bfdgv9bAAA==\"}",
+      "text": "{\"filename\":\"dot.webp\",\"mime\":\"image/webp\",\"extension\":\"webp\",\"format\":\"webp\",\"quality\":60,\"width\":1,\"height\":1,\"bytes\":94,\"before\":70,\"after\":94,\"savedBytes\":-24,\"savedPercent\":-34.285714285714285,\"label\":\"34% larger\",\"keptOriginal\":false,\"note\":\"The WEBP is larger than the original. Send choice \\\"original\\\" to keep the format, or lower the quality.\",\"data\":\"UklGRlYAAABXRUJQVlA4WAoAAAAQAAAAAAAAAA",
       "structured": "{\"filename\":\"dot.webp\",\"mime\":\"image/webp\",\"extension\":\"webp\",\"format\":\"webp\",\"quality\":60,\"width\":1,\"height\":1,\"bytes\":94,\"before\":70,\"after\":94,\"savedBytes\":-24,\"savedPercent\":-34.285714285714285,\"label\":\"34% larger\",\"…",
       "contentTypes": [
         "text"
@@ -446,7 +446,7 @@
         "file"
       ],
       "sampled": true,
-      "ms": 216,
+      "ms": 227,
       "bytes": 578,
       "status": "ok",
       "text": "{\"filename\":\"dot.png\",\"mime\":\"image/png\",\"extension\":\"png\",\"width\":16,\"height\":16,\"bytes\":107,\"data\":\"iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsSAAALEgHS3X78AAAAHUlEQVQ4jWP4z8BQTwlmGDWgfjQMGEbDgGFYhAEA4Yh+EKbUM4sAAAAASUVORK5CYII=\"}",
@@ -469,7 +469,7 @@
         "color"
       ],
       "sampled": true,
-      "ms": 207,
+      "ms": 220,
       "bytes": 714,
       "status": "ok",
       "text": "{\"ok\":true,\"hex\":\"#163a17\",\"rgb\":\"rgb(22, 58, 23)\",\"hsl\":\"hsl(121.67, 45%, 15.69%)\",\"oklch\":\"oklch(31.21% 0.0728 144.08)\",\"cmyk\":\"cmyk(62.1%, 0%, 60.3%, 77.3%)\",\"tailwind\":\"lime-950\",\"contrastRatio\":12.714100861093979,\"contrastText\":\"12.71:1\",\"aaNormal\":true,\"aaLarge\":true,\"aaaNormal\":true,\"aaaLarge\":true}",
@@ -490,7 +490,7 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 224,
+      "ms": 232,
       "bytes": 656,
       "status": "ok",
       "text": "{\"seconds\":\"1700000000\",\"milliseconds\":\"1700000000000\",\"isoUtc\":\"2023-11-14T22:13:20.000Z\",\"isoLocal\":\"2023-11-14T22:13:20Z\",\"rfc2822\":\"Tue, 14 Nov 2023 22:13:20 +0000\",\"relative\":\"3 years ago\",\"weekday\":\"Tuesday\",\"offset\":\"Z\",\"timeZone\":\"UTC\",\"unit\":\"s\",\"alternateIsoUtc\":\"\"}",
@@ -514,7 +514,7 @@
         "endDate"
       ],
       "sampled": true,
-      "ms": 424,
+      "ms": 205,
       "bytes": 506,
       "status": "ok",
       "text": "{\"sign\":1,\"years\":0,\"months\":10,\"days\":23,\"totalDays\":327,\"countedDays\":327,\"weeks\":46,\"extraDays\":5,\"hours\":0,\"minutes\":0,\"seconds\":0,\"totalHours\":\"7848\",\"businessDays\":233,\"weekendDays\":94,\"holidayDays\":0}",
@@ -535,7 +535,7 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 184,
+      "ms": 195,
       "bytes": 1434,
       "status": "ok",
       "text": "{\"hashes\":[{\"algorithm\":\"MD5\",\"hex\":\"5d41402abc4b2a76b9719d911017c592\",\"base64\":\"XUFAKrxLKna5cZ2REBfFkg==\"},{\"algorithm\":\"SHA-1\",\"hex\":\"aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d\",\"base64\":\"qvTGHdzF6KLavt4PO0gs2a6pQ00=\"},{\"algorithm\":\"SHA-256\",\"hex\":\"2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824\",\"base64\":\"LPJNul+wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ=\"},{\"algorithm\":\"SHA-512\",\"hex\"",
@@ -556,11 +556,11 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 188,
+      "ms": 203,
       "bytes": 426,
       "status": "ok",
-      "text": "{\"ids\":[\"de60b4d6-b291-4d07-bf87-7322d083f794\",\"fbc29a3a-d6ae-4865-98c9-345f7d3f46a2\",\"cff14a9e-df55-4198-85ae-3687663efe6e\"],\"version\":4,\"variant\":\"RFC 4122\",\"timestamp\":\"\"}",
-      "structured": "{\"ids\":[\"de60b4d6-b291-4d07-bf87-7322d083f794\",\"fbc29a3a-d6ae-4865-98c9-345f7d3f46a2\",\"cff14a9e-df55-4198-85ae-3687663efe6e\"],\"version\":4,\"variant\":\"RFC 4122\",\"timestamp\":\"\"}",
+      "text": "{\"ids\":[\"ffd1bc35-382b-4f66-a0fd-0e6b91f6c986\",\"9644615a-6f37-4526-86f7-c40604cc42d8\",\"182a756c-632f-4279-a267-0e2f5fb52718\"],\"version\":4,\"variant\":\"RFC 4122\",\"timestamp\":\"\"}",
+      "structured": "{\"ids\":[\"ffd1bc35-382b-4f66-a0fd-0e6b91f6c986\",\"9644615a-6f37-4526-86f7-c40604cc42d8\",\"182a756c-632f-4279-a267-0e2f5fb52718\"],\"version\":4,\"variant\":\"RFC 4122\",\"timestamp\":\"\"}",
       "contentTypes": [
         "text"
       ]
@@ -579,7 +579,7 @@
         "value"
       ],
       "sampled": true,
-      "ms": 185,
+      "ms": 207,
       "bytes": 572,
       "status": "ok",
       "text": "{\"value\":\"https://example.com/a%20b?q=%C3%BC&x=1\",\"protocol\":\"https:\",\"username\":\"\",\"hostname\":\"example.com\",\"port\":\"\",\"pathname\":\"/a%20b\",\"hash\":\"\",\"query\":\"q=%C3%BC&x=1\",\"params\":[{\"key\":\"q\",\"value\":\"ü\"},{\"key\":\"x\",\"value\":\"1\"}]}",
@@ -600,11 +600,11 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 305,
+      "ms": 238,
       "bytes": 274,
       "status": "ok",
-      "text": "{\"values\":[\"acFMmgipDWWDz7KFpKGx\",\"6ugYyGM6E7fYitnf3gTj\"],\"bits\":116.1,\"label\":\"Strong\",\"score\":100}",
-      "structured": "{\"values\":[\"acFMmgipDWWDz7KFpKGx\",\"6ugYyGM6E7fYitnf3gTj\"],\"bits\":116.1,\"label\":\"Strong\",\"score\":100}",
+      "text": "{\"values\":[\"tsiQVKYssRWW3gzN7mDe\",\"594YB4HmMr7BXbaqMjqm\"],\"bits\":116.1,\"label\":\"Strong\",\"score\":100}",
+      "structured": "{\"values\":[\"tsiQVKYssRWW3gzN7mDe\",\"594YB4HmMr7BXbaqMjqm\"],\"bits\":116.1,\"label\":\"Strong\",\"score\":100}",
       "contentTypes": [
         "text"
       ]
@@ -623,7 +623,7 @@
         "mode"
       ],
       "sampled": true,
-      "ms": 228,
+      "ms": 204,
       "bytes": 298,
       "status": "ok",
       "text": "{\"octal\":\"755\",\"symbolic\":\"rwxr-xr-x\",\"command\":\"chmod 755 file\",\"setuid\":false,\"setgid\":false,\"sticky\":false}",
@@ -646,11 +646,11 @@
         "files"
       ],
       "sampled": true,
-      "ms": 297,
-      "bytes": 3120,
+      "ms": 384,
+      "bytes": 1698,
       "status": "ok",
-      "text": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjUgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbmd0aCAxMTYKPj4Kc3RyZWFtCnicHcq7CgJBDIXhPk+RWhAzmVxmQCzUBQsbIS8gsorLWiji8++MHPj5ivOGfQBh3+cBm9M4/8bv83ZdO9UihbxUTIJxB249Q/pfE3KLEsYLtsKmNli2YgerTcrU5dYlR8lKTC6mnl12GBPECoaACywXnRuICmVuZHN0cmVhbQplbmRvYmoKCjkgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbmd0aCAxMTYKPj4Kc3RyZWFtCnicHcq7CgJBDIXhPk+RWhAzmVxmQCzUBQsbIS8gsorLWij",
-      "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjUgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(1488 chars)\",\"pageCount\":4,\"bytes\":1115}",
+      "text": "{\"data\":\"<base64, about 1 KB: full value in structuredContent.data>\",\"pageCount\":4,\"bytes\":1120}",
+      "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjUgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(1496 chars)\",\"pageCount\":4,\"bytes\":1120}",
       "contentTypes": [
         "text"
       ]
@@ -667,11 +667,11 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 208,
-      "bytes": 2584,
+      "ms": 218,
+      "bytes": 1471,
       "status": "ok",
-      "text": "{\"files\":[{\"name\":\"a-extract.pdf\",\"data\":\"JVBERi0xLjcKJYGBgYEKCjUgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbmd0aCAxMTYKPj4Kc3RyZWFtCnicHcq7CgJBDIXhPk+RWhAzmVxmQCzUBQsbIS8gsorLWiji8++MHPj5ivOGfQBh3+cBm9M4/8bv83ZdO9UihbxUTIJxB249Q/pfE3KLEsYLtsKmNli2YgerTcrU5dYlR8lKTC6mnl12GBPECoaACywXnRuICmVuZHN0cmVhbQplbmRvYmoKCjggMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL1R5cGUgL09ialN0bQovTiA2Ci9GaXJzdCAzMgovTG",
-      "structured": "{\"files\":[{\"name\":\"a-extract.pdf\",\"data\":\"JVBERi0xLjcKJYGBgYEKCjUgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(1184 chars)\"}],\"zip\":null,\"pageCount\":2}",
+      "text": "{\"files\":[{\"name\":\"a-extract.pdf\",\"data\":\"<base64, about 1 KB: full value in structuredContent.files[0].data>\"}],\"zip\":null,\"pageCount\":2}",
+      "structured": "{\"files\":[{\"name\":\"a-extract.pdf\",\"data\":\"JVBERi0xLjcKJYGBgYEKCjUgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(1188 chars)\"}],\"zip\":null,\"pageCount\":2}",
       "contentTypes": [
         "text"
       ]
@@ -688,11 +688,11 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 294,
-      "bytes": 2866,
+      "ms": 251,
+      "bytes": 1736,
       "status": "ok",
-      "text": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjYgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbmd0aCAxMTYKPj4Kc3RyZWFtCnicHcq7CgJBDIXhPk+RWhAzmVxmQCzUBQsbIS8gsorLWiji8++MHPj5ivOGfQBh3+cBm9M4/8bv83ZdO9UihbxUTIJxB249Q/pfE3KLEsYLtsKmNli2YgerTcrU5dYlR8lKTC6mnl12GBPECoaACywXnRuICmVuZHN0cmVhbQplbmRvYmoKCjggMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL1R5cGUgL09ialN0bQovTiA2Ci9GaXJzdCAzMgovTGVuZ3RoIDM3MQo+PgpzdHJlYW0KeJyVUt9",
-      "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjYgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(1184 chars)\",\"before\":887,\"after\":886,\"saved\":1,\"percent\":0.1,\"pages\":2,\"images\":0,\"recompressed\":0,\"metTarget\":true,\"keptOriginal\":false,\"note\":\"No …",
+      "text": "{\"data\":\"<base64, about 1 KB: full value in structuredContent.data>\",\"before\":889,\"after\":884,\"saved\":5,\"percent\":0.6,\"pages\":2,\"images\":0,\"recompressed\":0,\"metTarget\":true,\"keptOriginal\":false,\"note\":\"No embedded images to recompress. Document info was cleared.\"}",
+      "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjYgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(1180 chars)\",\"before\":889,\"after\":884,\"saved\":5,\"percent\":0.6,\"pages\":2,\"images\":0,\"recompressed\":0,\"metTarget\":true,\"keptOriginal\":false,\"note\":\"No …",
       "contentTypes": [
         "text"
       ]
@@ -711,11 +711,11 @@
         "images"
       ],
       "sampled": true,
-      "ms": 223,
-      "bytes": 3256,
+      "ms": 205,
+      "bytes": 1762,
       "status": "ok",
-      "text": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjQgMCBvYmoKPDwKL1R5cGUgL1hPYmplY3QKL1N1YnR5cGUgL0ltYWdlCi9CaXRzUGVyQ29tcG9uZW50IDgKL1dpZHRoIDEKL0hlaWdodCAxCi9Db2xvclNwYWNlIC9EZXZpY2VSR0IKL1NNYXNrIDcgMCBSCi9GaWx0ZXIgL0ZsYXRlRGVjb2RlCi9MZW5ndGggMTEKPj4Kc3RyZWFtCnic+8/AAAADAAEACmVuZHN0cmVhbQplbmRvYmoKCjYgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbmd0aCA2NAo+PgpzdHJlYW0KeJwr5DJUMABCEGloZKxnbKiQnIskZgDimlqa6hlZgHlITEx",
-      "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjQgMCBvYmoKPDwKL1R5cGUgL1hPYmplY3QKL1N1…(1556 chars)\",\"pageCount\":1,\"bytes\":1167}",
+      "text": "{\"data\":\"<base64, about 1 KB: full value in structuredContent.data>\",\"pageCount\":1,\"bytes\":1168}",
+      "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjQgMCBvYmoKPDwKL1R5cGUgL1hPYmplY3QKL1N1…(1560 chars)\",\"pageCount\":1,\"bytes\":1168}",
       "contentTypes": [
         "text"
       ]
@@ -732,8 +732,8 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 523,
-      "bytes": 12101,
+      "ms": 349,
+      "bytes": 7884,
       "status": "ok",
       "text": "{\"payload\":\"https://benchline.fabwaseem.com/\",\"svg\":\"<svg xmlns=\\\"http://www.w3.org/2000/svg\\\" width=\\\"512\\\" height=\\\"512\\\" viewBox=\\\"0 0 33 33\\\" shape-rendering=\\\"crispEdges\\\"><path fill=\\\"#ffffff\\\" d=\\\"M0 0h33v33H0z\\\"/><path stroke=\\\"#111111\\\" d=\\\"M2 2.5h7m1 0h1m2 0h5m2 0h3m1 0h7M2 3.5h1m5 0h1m1 0h1m3 0h2m2 0h2m4 0h1m5 0h1M2 4.5h1m1 0h3m1 0h1m2 0h3m4 0h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1M2 5.5h1m1 0",
       "structured": "{\"payload\":\"https://benchline.fabwaseem.com/\",\"svg\":\"<svg xmlns=\\\"http://www.w3.org/2000/svg\\\" width=\\\"512\\\" height=\\\"…(1627 chars)\",\"pngBase64\":\"iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAAAklEQVR4Aewa…(4280 chars)\"…",
@@ -753,7 +753,7 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 760,
+      "ms": 459,
       "bytes": 706,
       "status": "ok",
       "text": "{\"pageCount\":2,\"pages\":[{\"page\":1,\"text\":\"Benchline live MCP test\",\"markdown\":\"Benchline live MCP test\"},{\"page\":2,\"text\":\"\",\"markdown\":\"\"}],\"text\":\"Benchline live MCP test\",\"markdown\":\"## Page 1\\n\\nBenchline live MCP test\\n\\n## Page 2\\n\\n_No selectable text on this page._\",\"tokens\":23,\"emptyPages\":1}",
@@ -776,11 +776,11 @@
         "pages"
       ],
       "sampled": true,
-      "ms": 213,
-      "bytes": 2534,
+      "ms": 216,
+      "bytes": 1396,
       "status": "ok",
-      "text": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjYgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbmd0aCAxMTYKPj4Kc3RyZWFtCnicHcq7CgJBDIXhPk+RWhAzmVxmQCzUBQsbIS8gsorLWiji8++MHPj5ivOGfQBh3+cBm9M4/8bv83ZdO9UihbxUTIJxB249Q/pfE3KLEsYLtsKmNli2YgerTcrU5dYlR8lKTC6mnl12GBPECoaACywXnRuICmVuZHN0cmVhbQplbmRvYmoKCjggMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL1R5cGUgL09ialN0bQovTiA2Ci9GaXJzdCAzMgovTGVuZ3RoIDM4MQo+PgpzdHJlYW0KeJzVU0t",
-      "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjYgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(1196 chars)\",\"pageCount\":2,\"bytes\":896}",
+      "text": "{\"data\":\"<base64, about 1 KB: full value in structuredContent.data>\",\"pageCount\":2,\"bytes\":897}",
+      "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjYgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(1196 chars)\",\"pageCount\":2,\"bytes\":897}",
       "contentTypes": [
         "text"
       ]
@@ -797,11 +797,11 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 267,
-      "bytes": 5814,
+      "ms": 572,
+      "bytes": 11255,
       "status": "ok",
-      "text": "{\"images\":[{\"name\":\"file-1.png\",\"data\":\"iVBORw0KGgoAAAANSUhEUgAAASwAAADICAYAAABS39xVAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAAKpSURBVHic7dRBDQAgEMAwwL/nwwI/sqRVsNf2zMwCCDi/AwBeGRaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYF",
-      "structured": "{\"images\":[{\"name\":\"file-1.png\",\"data\":\"iVBORw0KGgoAAAANSUhEUgAAASwAAADICAYAAABS39xVAAAABHNCSVQICAgI…(1024 chars)\",\"width\":300,\"height\":200},{\"name\":\"file-2.png\",\"data\":\"iVBORw0KGgoAAAANSUhEUgAAASwAAADICAYAAABS39xVAAAABH…",
+      "text": "{\"images\":[{\"name\":\"file-1.png\",\"data\":\"<base64, about 4 KB: full value in structuredContent.images[0].data>\",\"width\":300,\"height\":200},{\"name\":\"file-2.png\",\"data\":\"<base64, about 1 KB: full value in structuredContent.images[1].data>\",\"width\":300,\"height\":200}],\"zip\":\"<base64, about 3 KB: full value in structuredContent.zip>\",\"pageCount\":2}",
+      "structured": "{\"images\":[{\"name\":\"file-1.png\",\"data\":\"iVBORw0KGgoAAAANSUhEUgAAASwAAADICAYAAABS39xVAAAABHNCSVQICAgI…(5096 chars)\",\"width\":300,\"height\":200},{\"name\":\"file-2.png\",\"data\":\"iVBORw0KGgoAAAANSUhEUgAAASwAAADICAYAAABS39xVAAAABH…",
       "contentTypes": [
         "text"
       ]
@@ -818,10 +818,10 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 401,
-      "bytes": 5294,
+      "ms": 273,
+      "bytes": 2780,
       "status": "ok",
-      "text": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjEgMCBvYmoKPDwKL1R5cGUgL1BhZ2VzCi9LaWRzIFsgNSAwIFIgNyAwIFIgXQovQ291bnQgMgo+PgplbmRvYmoKCjIgMCBvYmoKPDwKL1R5cGUgL0NhdGFsb2cKL1BhZ2VzIDEgMCBSCi9FeHRlbnNpb25zIDw8Ci9BREJFIDw8Ci9CYXNlVmVyc2lvbiAvMS43Ci9FeHRlbnNpb25MZXZlbCA4Cj4+Cj4+Cj4+CmVuZG9iagoKNSAwIG9iago8PAovVHlwZSAvUGFnZQovUGFyZW50IDEgMCBSCi9SZXNvdXJjZXMgPDwKL0ZvbnQgPDwKL0hlbHZldGljYS03MDk4NDgwNzg5IDQgMCBSCj4+Ci9YT2J",
+      "text": "{\"data\":\"<base64, about 2 KB: full value in structuredContent.data>\",\"bytes\":1928,\"encrypted\":true}",
       "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjEgMCBvYmoKPDwKL1R5cGUgL1BhZ2VzCi9LaWRz…(2572 chars)\",\"bytes\":1928,\"encrypted\":true}",
       "contentTypes": [
         "text"
@@ -839,7 +839,7 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 257,
+      "ms": 213,
       "bytes": 245,
       "status": "ok",
       "text": "{\"output\":\"<h1>Hi</h1>\\n<ul>\\n<li>one</li>\\n<li>two</li>\\n</ul>\\n\",\"direction\":\"html\"}",
@@ -862,7 +862,7 @@
         "url"
       ],
       "sampled": true,
-      "ms": 346,
+      "ms": 329,
       "bytes": 958,
       "status": "ok",
       "text": "{\"url\":\"https://example.com/\",\"title\":\"Example Domain\",\"markdown\":\"# Example Domain\\n\\nThis domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes.\",\"excerpt\":\"This domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitori",
@@ -885,7 +885,7 @@
         "file"
       ],
       "sampled": true,
-      "ms": 304,
+      "ms": 327,
       "bytes": 108,
       "status": "ok",
       "text": "{\"count\":0,\"codes\":[]}",
@@ -906,7 +906,7 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 269,
+      "ms": 261,
       "bytes": 534,
       "status": "ok",
       "text": "{\"svg\":\"<svg xmlns=\\\"http://www.w3.org/2000/svg\\\" width=\\\"10\\\" height=\\\"10\\\" viewBox=\\\"0 0 10 10\\\"><path fill=\\\"#fff\\\" d=\\\"M0 0h10v10H0z\\\"/></svg>\",\"beforeBytes\":144,\"afterBytes\":126,\"savedBytes\":18,\"savedPercent\":12.5}",
@@ -929,7 +929,7 @@
         "file"
       ],
       "sampled": true,
-      "ms": 227,
+      "ms": 301,
       "bytes": 1028,
       "status": "ok",
       "text": "{\"filename\":\"dot.png\",\"mime\":\"image/png\",\"width\":1,\"height\":1,\"bytes\":0,\"data\":\"\",\"stripped\":\"none\",\"camera\":\"\",\"when\":\"\",\"gps\":null,\"tags\":[{\"name\":\"BitDepth\",\"value\":\"8\"},{\"name\":\"ColorType\",\"value\":\"RGB with Alpha\"},{\"name\":\"Compression\",\"value\":\"Deflate/Inflate\"},{\"name\":\"Filter\",\"value\":\"Adaptive\"},{\"name\":\"ImageHeight\",\"value\":\"1\"},{\"name\":\"ImageWidth\",\"value\":\"1\"},{\"name\":\"Interlace\",\"value",
@@ -952,7 +952,7 @@
         "file"
       ],
       "sampled": true,
-      "ms": 204,
+      "ms": 198,
       "bytes": 532,
       "status": "ok",
       "text": "{\"filename\":\"dot.png\",\"mime\":\"image/png\",\"extension\":\"png\",\"width\":1,\"height\":1,\"bytes\":91,\"data\":\"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVQImWP4z8BQDwAEgAF/W4IYuQAAAABJRU5ErkJggg==\"}",
@@ -973,11 +973,11 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 872,
-      "bytes": 54299,
+      "ms": 815,
+      "bytes": 29174,
       "status": "ok",
-      "text": "{\"filename\":\"favicon-pack.zip\",\"mime\":\"application/zip\",\"bytes\":18888,\"data\":\"UEsDBBQAAAAAABBIeF1tw4WEpQgAAKUIAAALAAAAZmF2aWNvbi5pY28AAAEAAwAQEAAAAQAgAJkBAAA2AAAAICAAAAEAIACbAgAAzwEAADAwAAABACAAOwQAAGoEAACJUE5HDQoaCgAAAA1JSERSAAAAEAAAABAIBgAAAB/z/2EAAAAJcEhZcwAAA+gAAAPoAbV7UmsAAAFLSURBVDiNYxCzEv+PjMWtJXBidLUgzIDMEbUU/y9oIvxfwFgIFRsJ/RcxF/0vbiOB3QBxa/H/wuai/5XdFf+3rc/537e9+P+EnSVgDGLPOFT136vA/j+nLu",
-      "structured": "{\"filename\":\"favicon-pack.zip\",\"mime\":\"application/zip\",\"bytes\":18888,\"data\":\"UEsDBBQAAAAAABBIeF1tw4WEpQgAAKUIAAALAAAAZmF2aWNvbi5pY28AAAEA…(25184 chars)\",\"html\":\"<link rel=\\\"icon\\\" href=\\\"/favicon.ico\\\" sizes=\\\"any\\\">\\n<…",
+      "text": "{\"filename\":\"favicon-pack.zip\",\"mime\":\"application/zip\",\"bytes\":18888,\"data\":\"<base64, about 18 KB: full value in structuredContent.data>\",\"html\":\"<link rel=\\\"icon\\\" href=\\\"/favicon.ico\\\" sizes=\\\"any\\\">\\n<link rel=\\\"icon\\\" href=\\\"/favicon-32x32.png\\\" type=\\\"image/png\\\" sizes=\\\"32x32\\\">\\n<link rel=\\\"apple-touch-icon\\\" href=\\\"/apple-touch-icon.png\\\">\\n<link rel=\\\"manifest\\\" href=\\\"/site.webmanifest\\",
+      "structured": "{\"filename\":\"favicon-pack.zip\",\"mime\":\"application/zip\",\"bytes\":18888,\"data\":\"UEsDBBQAAAAAACNLeF1tw4WEpQgAAKUIAAALAAAAZmF2aWNvbi5pY28AAAEA…(25184 chars)\",\"html\":\"<link rel=\\\"icon\\\" href=\\\"/favicon.ico\\\" sizes=\\\"any\\\">\\n<…",
       "contentTypes": [
         "text"
       ]
@@ -996,7 +996,7 @@
         "file"
       ],
       "sampled": true,
-      "ms": 1302,
+      "ms": 239,
       "bytes": 156,
       "status": "ok",
       "text": "{\"text\":\"\",\"confidence\":0,\"language\":\"eng\"}",
@@ -1019,7 +1019,7 @@
         "file"
       ],
       "sampled": true,
-      "ms": 312,
+      "ms": 234,
       "bytes": 1010,
       "status": "ok",
       "text": "{\"filename\":\"dot.png\",\"mime\":\"image/png\",\"width\":1,\"height\":1,\"bytes\":91,\"data\":\"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAADUlEQVQImWP4z8DAAAAEAQEAZVHBSgAAAABJRU5ErkJggg==\",\"method\":\"solid\",\"note\":\"Serverless removal uses a border flood fill on a solid or near-solid background. The portrait model (MODNet, Apache-2.0) runs in the browser. RMBG-1.4 is non-commercial",
@@ -1042,7 +1042,7 @@
         "text"
       ],
       "sampled": true,
-      "ms": 195,
+      "ms": 286,
       "bytes": 1424,
       "status": "ok",
       "text": "{\"words\":5,\"uniqueWords\":5,\"characters\":31,\"charactersNoSpaces\":27,\"graphemes\":31,\"sentences\":2,\"paragraphs\":1,\"lines\":1,\"readingLabel\":\"1 sec\",\"speakingLabel\":\"2 sec\",\"platforms\":[{\"id\":\"seo-title\",\"label\":\"SEO title\",\"limit\":60,\"count\":31,\"over\":false},{\"id\":\"meta-description\",\"label\":\"Meta description\",\"limit\":160,\"count\":31,\"over\":false},{\"id\":\"x\",\"label\":\"X post\",\"limit\":280,\"count\":31,\"over\"",
@@ -1065,7 +1065,7 @@
         "text"
       ],
       "sampled": true,
-      "ms": 199,
+      "ms": 188,
       "bytes": 2592,
       "status": "ok",
       "text": "{\"cases\":[{\"style\":\"lower\",\"label\":\"lower case\",\"text\":\"hello benchline world\"},{\"style\":\"upper\",\"label\":\"UPPER CASE\",\"text\":\"HELLO BENCHLINE WORLD\"},{\"style\":\"sentence\",\"label\":\"Sentence case\",\"text\":\"Hello benchline world\"},{\"style\":\"capital\",\"label\":\"Capital Case\",\"text\":\"Hello Benchline World\"},{\"style\":\"title-ap\",\"label\":\"Title case (AP)\",\"text\":\"Hello Benchline World\"},{\"style\":\"title-chicag",
@@ -1086,7 +1086,7 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 521,
+      "ms": 195,
       "bytes": 204,
       "status": "ok",
       "text": "{\"output\":\"cur suppellex a cognatus arca\",\"format\":\"text\",\"rows\":5}",
@@ -1110,7 +1110,7 @@
         "text"
       ],
       "sampled": true,
-      "ms": 220,
+      "ms": 190,
       "bytes": 500,
       "status": "ok",
       "text": "{\"matches\":[{\"index\":1,\"length\":3,\"value\":\"aaa\",\"groups\":[]},{\"index\":7,\"length\":2,\"value\":\"aa\",\"groups\":[]}],\"truncated\":false,\"explanation\":[\"One or more:\",\"  The character \\\"a\\\"\"],\"replacement\":null}",
@@ -1133,7 +1133,7 @@
         "sql"
       ],
       "sampled": true,
-      "ms": 334,
+      "ms": 257,
       "bytes": 210,
       "status": "ok",
       "text": "{\"sql\":\"SELECT\\n  a,\\n  b\\nFROM\\n  t\\nWHERE\\n  a = 1\\nORDER BY\\n  b\"}",
@@ -1156,7 +1156,7 @@
         "json"
       ],
       "sampled": true,
-      "ms": 188,
+      "ms": 213,
       "bytes": 993,
       "status": "ok",
       "text": "{\"valid\":true,\"schema\":\"{\\n  \\\"type\\\": \\\"object\\\",\\n  \\\"properties\\\": {\\n    \\\"a\\\": {\\n      \\\"type\\\": \\\"integer\\\"\\n    }\\n  },\\n  \\\"required\\\": [\\n    \\\"a\\\"\\n  ],\\n  \\\"additionalProperties\\\": false\\n}\",\"typescript\":\"export type Root = {\\n  a: number;\\n};\\n\",\"zod\":\"import * as z from \\\"zod\\\";\\n\\nexport const RootSchema = z.object({\\n  a: z.number().int(),\\n});\\n\\nexport type Root = z.infer<typeof ",
@@ -1181,7 +1181,7 @@
         "months"
       ],
       "sampled": true,
-      "ms": 312,
+      "ms": 193,
       "bytes": 4318,
       "status": "ok",
       "text": "{\"emi\":\"8791.59\",\"totalPayment\":\"105499.05\",\"totalInterest\":\"5499.05\",\"totalPrincipal\":\"100000.00\",\"payoffMonths\":12,\"schedule\":[{\"month\":1,\"payment\":\"8791.59\",\"principal\":\"7958.26\",\"interest\":\"833.33\",\"extra\":\"0.00\",\"balance\":\"92041.74\"},{\"month\":2,\"payment\":\"8791.59\",\"principal\":\"8024.58\",\"interest\":\"767.01\",\"extra\":\"0.00\",\"balance\":\"84017.16\"},{\"month\":3,\"payment\":\"8791.59\",\"principal\":\"8091.45",
@@ -1205,7 +1205,7 @@
         "b"
       ],
       "sampled": true,
-      "ms": 185,
+      "ms": 204,
       "bytes": 212,
       "status": "ok",
       "text": "{\"result\":\"20\",\"unit\":\"number\",\"formula\":\"10% × 200 = 20\",\"parts\":[]}",
@@ -1231,7 +1231,7 @@
         "value"
       ],
       "sampled": true,
-      "ms": 191,
+      "ms": 251,
       "bytes": 936,
       "status": "ok",
       "text": "{\"result\":\"150.00\",\"rows\":[{\"id\":\"mm\",\"label\":\"Millimeter\",\"value\":\"1500.00\"},{\"id\":\"cm\",\"label\":\"Centimeter\",\"value\":\"150.00\"},{\"id\":\"m\",\"label\":\"Meter\",\"value\":\"1.50\"},{\"id\":\"km\",\"label\":\"Kilometer\",\"value\":\"0.00\"},{\"id\":\"in\",\"label\":\"Inch\",\"value\":\"59.06\"},{\"id\":\"ft\",\"label\":\"Foot\",\"value\":\"4.92\"},{\"id\":\"yd\",\"label\":\"Yard\",\"value\":\"1.64\"},{\"id\":\"mi\",\"label\":\"Mile\",\"value\":\"0.00\"}]}",
@@ -1254,11 +1254,11 @@
         "name"
       ],
       "sampled": true,
-      "ms": 376,
+      "ms": 395,
       "bytes": 11574,
       "status": "ok",
-      "text": "{\"name\":\"github.com\",\"resolver\":\"cloudflare\",\"records\":[{\"type\":\"A\",\"name\":\"github.com\",\"ttl\":59,\"data\":\"140.82.121.3\"},{\"type\":\"MX\",\"name\":\"github.com\",\"ttl\":300,\"data\":\"0 github-com.mail.protection.outlook.com\"},{\"type\":\"TXT\",\"name\":\"github.com\",\"ttl\":227,\"data\":\"00Dd0000000hHE0=1TBKg000000TN2r\"},{\"type\":\"TXT\",\"name\":\"github.com\",\"ttl\":227,\"data\":\"MS=6BF03E6AF5CB689E315FB6199603BABF2C88D805\"},{\"",
-      "structured": "{\"name\":\"github.com\",\"resolver\":\"cloudflare\",\"records\":[{\"type\":\"A\",\"name\":\"github.com\",\"ttl\":59,\"data\":\"140.82.121.3\"},{\"type\":\"MX\",\"name\":\"github.com\",\"ttl\":300,\"data\":\"0 github-com.mail.protection.outlook.com\"},{\"type…",
+      "text": "{\"name\":\"github.com\",\"resolver\":\"cloudflare\",\"records\":[{\"type\":\"A\",\"name\":\"github.com\",\"ttl\":12,\"data\":\"140.82.121.3\"},{\"type\":\"MX\",\"name\":\"github.com\",\"ttl\":116,\"data\":\"0 github-com.mail.protection.outlook.com\"},{\"type\":\"TXT\",\"name\":\"github.com\",\"ttl\":300,\"data\":\"00Dd0000000hHE0=1TBKg000000TN2r\"},{\"type\":\"TXT\",\"name\":\"github.com\",\"ttl\":300,\"data\":\"MS=6BF03E6AF5CB689E315FB6199603BABF2C88D805\"},{\"",
+      "structured": "{\"name\":\"github.com\",\"resolver\":\"cloudflare\",\"records\":[{\"type\":\"A\",\"name\":\"github.com\",\"ttl\":12,\"data\":\"140.82.121.3\"},{\"type\":\"MX\",\"name\":\"github.com\",\"ttl\":116,\"data\":\"0 github-com.mail.protection.outlook.com\"},{\"type…",
       "contentTypes": [
         "text"
       ]
@@ -1277,7 +1277,7 @@
         "cidr"
       ],
       "sampled": true,
-      "ms": 227,
+      "ms": 195,
       "bytes": 788,
       "status": "ok",
       "text": "{\"summary\":{\"version\":4,\"input\":\"192.168.1.0/24\",\"network\":\"192.168.1.0/24\",\"prefix\":24,\"netmask\":\"255.255.255.0\",\"wildcard\":\"0.0.0.255\",\"broadcast\":\"192.168.1.255\",\"firstHost\":\"192.168.1.1\",\"lastHost\":\"192.168.1.254\",\"addressCount\":\"256\",\"usableHosts\":\"254\"},\"contains\":null,\"containsDetail\":\"\",\"split\":[],\"splitCount\":\"0\",\"merged\":[]}",
@@ -1300,11 +1300,11 @@
         "password"
       ],
       "sampled": true,
-      "ms": 214,
+      "ms": 253,
       "bytes": 438,
       "status": "ok",
-      "text": "{\"algorithm\":\"bcrypt\",\"hash\":\"$2a$04$vuds4kCt70uG00ECiNrm4.CWGSop/3ZVl9ity79.jBU5MMr6wN.0O\",\"htpasswd\":\"$2a$04$vuds4kCt70uG00ECiNrm4.CWGSop/3ZVl9ity79.jBU5MMr6wN.0O\",\"verified\":null}",
-      "structured": "{\"algorithm\":\"bcrypt\",\"hash\":\"$2a$04$vuds4kCt70uG00ECiNrm4.CWGSop/3ZVl9ity79.jBU5MMr6wN.0O\",\"htpasswd\":\"$2a$04$vuds4kCt70uG00ECiNrm4.CWGSop/3ZVl9ity79.jBU5MMr6wN.0O\",\"verified\":null}",
+      "text": "{\"algorithm\":\"bcrypt\",\"hash\":\"$2a$04$HcD1teR44A9nOBTFhugayOhKvHUWTtRPugStpSesJcINKRipsHRFu\",\"htpasswd\":\"$2a$04$HcD1teR44A9nOBTFhugayOhKvHUWTtRPugStpSesJcINKRipsHRFu\",\"verified\":null}",
+      "structured": "{\"algorithm\":\"bcrypt\",\"hash\":\"$2a$04$HcD1teR44A9nOBTFhugayOhKvHUWTtRPugStpSesJcINKRipsHRFu\",\"htpasswd\":\"$2a$04$HcD1teR44A9nOBTFhugayOhKvHUWTtRPugStpSesJcINKRipsHRFu\",\"verified\":null}",
       "contentTypes": [
         "text"
       ]
@@ -1321,10 +1321,10 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 207,
+      "ms": 229,
       "bytes": 3178,
       "status": "ok",
-      "text": "{\"alg\":\"ES256\",\"publicPem\":\"-----BEGIN PUBLIC KEY-----\\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEWyHDsTWB3GWPN/69ifOnMfqTpwTs\\nkpZH+STnUzjg7p3PevkjQ4Fx/NUs5ntUrQ98zaytpdz2BYAIqkBKgIiydA==\\n-----END PUBLIC KEY-----\",\"privatePem\":\"-----BEGIN PRIVATE KEY-----\\nMIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgK0IyXsM85ic0YBmW\\na8jU1g1V0wOCOb2Ub3WxzRfjMdChRANCAARbIcOxNYHcZY83/r2J86cx+pOnBOyS\\nlkf5JOdTOODunc9",
+      "text": "{\"alg\":\"ES256\",\"publicPem\":\"-----BEGIN PUBLIC KEY-----\\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAExdJhlydS//NWXwKd/ZYh/xQuk7Q0\\nkah6M7J36Xn8Oxj2JKq8I0ym7JT47vepNddwglZ/ibLjtvxEE1XwCJj6vQ==\\n-----END PUBLIC KEY-----\",\"privatePem\":\"-----BEGIN PRIVATE KEY-----\\nMIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg/sVsR1BmFOx8N/v8\\nm8ZfGbvTOyc2iqKtqkwIRHY5JP2hRANCAATF0mGXJ1L/81ZfAp39liH/FC6TtDSR\\nqHozsnfpefw7GPY",
       "structured": "{\"alg\":\"ES256\",\"publicPem\":\"-----BEGIN PUBLIC KEY-----\\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQ…(177 chars)\",\"privatePem\":\"-----BEGIN PRIVATE KEY-----\\nMIGHAgEAMBMGByqGSM49AgEGCCqGSM49…(240 chars)\",\"publicJwk\":\"{\\n  \\\"kty\\\": \\…",
       "contentTypes": [
         "text"
@@ -1342,7 +1342,7 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 190,
+      "ms": 220,
       "bytes": 2056,
       "status": "ok",
       "text": "{\"policy\":\"default-src 'self'; object-src 'none'; base-uri 'none'\",\"header\":\"Content-Security-Policy: default-src 'self'; object-src 'none'; base-uri 'none'\",\"nextConfig\":\"const contentSecurityPolicy = `default-src 'self'; object-src 'none'; base-uri 'none'`;\\n\\nconst nextConfig = {\\n  async headers() {\\n    return [\\n      {\\n        source: \\\"/:path*\\\",\\n        headers: [\\n          { key: \\\"Co",
@@ -1363,7 +1363,7 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 1183,
+      "ms": 2504,
       "bytes": 13156,
       "status": "ok",
       "text": "{\"kind\":\"urlset\",\"urlCount\":282,\"sitemapCount\":0,\"urls\":[{\"loc\":\"https://benchline.fabwaseem.com/\",\"lastmod\":\"2026-10-18\",\"changefreq\":\"weekly\",\"priority\":\"1\"},{\"loc\":\"https://benchline.fabwaseem.com/tools\",\"lastmod\":\"2026-10-18\",\"changefreq\":\"weekly\",\"priority\":\"0.95\"},{\"loc\":\"https://benchline.fabwaseem.com/categories\",\"lastmod\":\"2026-10-18\",\"changefreq\":\"weekly\",\"priority\":\"0.7\"},{\"loc\":\"https:",
@@ -1386,8 +1386,8 @@
         "url"
       ],
       "sampled": true,
-      "ms": 344,
-      "bytes": 14128,
+      "ms": 273,
+      "bytes": 14098,
       "status": "ok",
       "text": "{\"finalUrl\":\"https://github.com/\",\"status\":200,\"redirects\":[],\"headers\":[{\"name\":\"accept-ranges\",\"value\":\"bytes\"},{\"name\":\"cache-control\",\"value\":\"max-age=0, private, must-revalidate\"},{\"name\":\"content-language\",\"value\":\"en-US\"},{\"name\":\"content-security-policy\",\"value\":\"default-src 'none'; base-uri 'self'; child-src github.githubassets.com github.com/assets-cdn/worker/ github.com/assets/ gist.git",
       "structured": "{\"finalUrl\":\"https://github.com/\",\"status\":200,\"redirects\":[],\"headers\":[{\"name\":\"accept-ranges\",\"value\":\"bytes\"},{\"name\":\"cache-control\",\"value\":\"max-age=0, private, must-revalidate\"},{\"name\":\"content-language\",\"value\":…",
@@ -1409,7 +1409,7 @@
         "host"
       ],
       "sampled": true,
-      "ms": 257,
+      "ms": 251,
       "bytes": 3422,
       "status": "ok",
       "text": "{\"host\":\"github.com\",\"authorized\":true,\"protocol\":\"TLSv1.3\",\"authorizationError\":\"\",\"subject\":\"github.com\",\"commonName\":\"github.com\",\"issuer\":\"Sectigo Public Server Authentication CA DV E36 · Sectigo Limited\",\"validFrom\":\"2026-10-30T00:00:00.000Z\",\"validTo\":\"2027-01-27T23:59:59.000Z\",\"sans\":[\"github.com\",\"www.github.com\"],\"fingerprint\":\"7D:C4:D8:5C:F1:E3:10:97:12:25:BC:9A:92:57:67:90:43:A2:43:D7:0",
@@ -1432,11 +1432,11 @@
         "secret"
       ],
       "sampled": true,
-      "ms": 211,
+      "ms": 252,
       "bytes": 268,
       "status": "ok",
-      "text": "{\"code\":\"643747\",\"mode\":\"totp\",\"secondsRemaining\":28,\"period\":30,\"digits\":6,\"algorithm\":\"SHA1\"}",
-      "structured": "{\"code\":\"643747\",\"mode\":\"totp\",\"secondsRemaining\":28,\"period\":30,\"digits\":6,\"algorithm\":\"SHA1\"}",
+      "text": "{\"code\":\"305361\",\"mode\":\"totp\",\"secondsRemaining\":24,\"period\":30,\"digits\":6,\"algorithm\":\"SHA1\"}",
+      "structured": "{\"code\":\"305361\",\"mode\":\"totp\",\"secondsRemaining\":24,\"period\":30,\"digits\":6,\"algorithm\":\"SHA1\"}",
       "contentTypes": [
         "text"
       ]
@@ -1456,7 +1456,7 @@
         "query"
       ],
       "sampled": true,
-      "ms": 226,
+      "ms": 217,
       "bytes": 410,
       "status": "ok",
       "text": "{\"count\":2,\"truncated\":false,\"warning\":\"\",\"matches\":[{\"path\":\"$['store']['book'][0]['title']\",\"value\":\"A\"},{\"path\":\"$['store']['book'][1]['title']\",\"value\":\"B\"}]}",
@@ -1477,7 +1477,7 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 186,
+      "ms": 201,
       "bytes": 292,
       "status": "ok",
       "text": "{\"decimal\":\"31\",\"hex\":\"0x1f\",\"octal\":\"0o37\",\"binary\":\"0b11111\",\"unsigned\":\"31\",\"signed\":\"31\",\"bits\":64}",
@@ -1501,11 +1501,11 @@
         "passphrase"
       ],
       "sampled": true,
-      "ms": 249,
+      "ms": 246,
       "bytes": 440,
       "status": "ok",
-      "text": "{\"mode\":\"encrypt\",\"bundle\":\"eyJ2IjoxLCJpdGVyIjoxMDAwMDAsInNhbHQiOiJaRFNHZHl1Z1ZIZGZFbG0rN1JPZUdBPT0iLCJpdiI6IklIZEd3M3ZBeEN6MTJUK2giLCJjdCI6IjRSbjJVSEZRalBwR3pvSE9Udm52ZE1md2I5WkEifQ==\"}",
-      "structured": "{\"mode\":\"encrypt\",\"bundle\":\"eyJ2IjoxLCJpdGVyIjoxMDAwMDAsInNhbHQiOiJaRFNHZHl1Z1ZIZGZFbG0r…(156 chars)\"}",
+      "text": "{\"mode\":\"encrypt\",\"bundle\":\"eyJ2IjoxLCJpdGVyIjoxMDAwMDAsInNhbHQiOiIwR252TDRDcCtYeXc4WVEyd1JtbzZRPT0iLCJpdiI6IkYwcXdycDM0R3ZZUjFXc3IiLCJjdCI6InphYnFNam5pK1JYandXNGNsZ282UktFSm9ZUm4ifQ==\"}",
+      "structured": "{\"mode\":\"encrypt\",\"bundle\":\"eyJ2IjoxLCJpdGVyIjoxMDAwMDAsInNhbHQiOiIwR252TDRDcCtYeXc4WVEy…(156 chars)\"}",
       "contentTypes": [
         "text"
       ]
@@ -1524,7 +1524,7 @@
         "har"
       ],
       "sampled": true,
-      "ms": 233,
+      "ms": 222,
       "bytes": 1322,
       "status": "ok",
       "text": "{\"totalRequests\":1,\"totalTimeMs\":100,\"totalBytes\":10,\"truncated\":false,\"statusGroups\":{\"2xx\":1,\"3xx\":0,\"4xx\":0,\"5xx\":0,\"other\":0},\"slowest\":[{\"method\":\"GET\",\"url\":\"https://example.com/\",\"host\":\"example.com\",\"status\":200,\"timeMs\":100,\"sizeBytes\":10,\"timings\":{\"blocked\":1,\"dns\":2,\"connect\":3,\"send\":4,\"wait\":80,\"receive\":10}}],\"largest\":[{\"method\":\"GET\",\"url\":\"https://example.com/\",\"host\":\"example.co",
@@ -1547,7 +1547,7 @@
         "json"
       ],
       "sampled": true,
-      "ms": 199,
+      "ms": 197,
       "bytes": 668,
       "status": "ok",
       "text": "{\"outputs\":{\"typescript\":\"export interface Root {\\n  name: string;\\n  tags: string[];\\n}\\n\",\"zod\":\"import { z } from \\\"zod\\\";\\n\\nexport const RootSchema = z.object({\\n  name: z.string(),\\n  tags: z.array(z.string()),\\n});\\n\\nexport type Root = z.infer<typeof RootSchema>;\\n\"},\"warnings\":[]}",
@@ -1571,7 +1571,7 @@
         "code"
       ],
       "sampled": true,
-      "ms": 237,
+      "ms": 205,
       "bytes": 272,
       "status": "ok",
       "text": "{\"code\":\"function foo(){return 3}\",\"beforeBytes\":47,\"afterBytes\":24,\"savedBytes\":23,\"savedPct\":48.9}",
@@ -1594,7 +1594,7 @@
         "command"
       ],
       "sampled": true,
-      "ms": 191,
+      "ms": 214,
       "bytes": 899,
       "status": "ok",
       "text": "{\"url\":\"https://example.com/api\",\"method\":\"POST\",\"headers\":[{\"name\":\"content-type\",\"value\":\"application/json\"}],\"body\":\"{\\\"a\\\":1}\",\"snippet\":\"const res = await fetch(\\\"https://example.com/api\\\", {\\n  method: \\\"POST\\\",\\n  headers: {\\n    \\\"content-type\\\": \\\"application/json\\\",\\n  },\\n  body: \\\"{\\\\\\\"a\\\\\\\":1}\\\",\\n});\\n\\nconst data = await res.json();\\nconsole.log(data);\",\"warnings\":[]}",
@@ -1618,11 +1618,11 @@
         "query"
       ],
       "sampled": true,
-      "ms": 509,
+      "ms": 315,
       "bytes": 282,
       "status": "ok",
-      "text": "{\"ok\":true,\"status\":200,\"durationMs\":302,\"data\":{\"country\":{\"capital\":\"Islamabad\",\"name\":\"Pakistan\"}}}",
-      "structured": "{\"ok\":true,\"status\":200,\"durationMs\":302,\"data\":{\"country\":{\"capital\":\"Islamabad\",\"name\":\"Pakistan\"}}}",
+      "text": "{\"ok\":true,\"status\":200,\"durationMs\":117,\"data\":{\"country\":{\"capital\":\"Islamabad\",\"name\":\"Pakistan\"}}}",
+      "structured": "{\"ok\":true,\"status\":200,\"durationMs\":117,\"data\":{\"country\":{\"capital\":\"Islamabad\",\"name\":\"Pakistan\"}}}",
       "contentTypes": [
         "text"
       ]
@@ -1641,7 +1641,7 @@
         "url"
       ],
       "sampled": true,
-      "ms": 181,
+      "ms": 198,
       "bytes": 268,
       "status": "ok",
       "text": "{\"valid\":true,\"protocol\":\"wss\",\"secure\":true,\"host\":\"echo.websocket.org\",\"port\":443,\"path\":\"/\"}",
@@ -1664,10 +1664,10 @@
         "resume"
       ],
       "sampled": true,
-      "ms": 415,
-      "bytes": 3312,
+      "ms": 214,
+      "bytes": 1786,
       "status": "ok",
-      "text": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjggMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbmd0aCAyOTUKPj4Kc3RyZWFtCniclZJNSwNBDIbv+RVzFrpmZvIxA+Kh260evKh7kx7EVlG6SEX075vRXdaWFi0LL5kZNk/eJBuYtoCVFzfK2xOcXq7WH6v354f7yfR1vZwo5kQJNWUXyLWPUPQKvEP7vCNxqr6y17aDM/JC4gNSLXMVYanFSxQ+d+0LtCfQtHANmx8wBTfKNjgrBUmBJTkf9jNZqtgzWRpRyaYsrOFIVkDEhJyTuFzxfhjFASbfBgkNlCyeKZpFDo2ZnMtsB42VFuQgNxflht0n3C0s9RJK6hhL77qtmClXIQ3nNdyORv6",
+      "text": "{\"data\":\"<base64, about 1 KB: full value in structuredContent.data>\",\"pageCount\":1,\"bytes\":1186}",
       "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjggMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(1584 chars)\",\"pageCount\":1,\"bytes\":1186}",
       "contentTypes": [
         "text"
@@ -1687,10 +1687,10 @@
         "invoice"
       ],
       "sampled": true,
-      "ms": 305,
-      "bytes": 4832,
+      "ms": 248,
+      "bytes": 2570,
       "status": "ok",
-      "text": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjcgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbmd0aCA3NjUKPj4Kc3RyZWFtCnicnZZLbxMxEMfv+yl8RuoynrclxKFtAgcuQG6IA+qDh1ohEIKvzzib7G5Sp22SVZx1Xj//x/+Z8a/ufNVBnzVBTxiDpt9fu5dvb+7+3vz5fvXl7Pzn3fWZQXF2MC8JNa1uO+S0etflBHHlxJ6sUB+fru67V1x4IcrLeCWW12n1o1u96Bar7n33a0OjtB24hSvGqI6inuJbTZyWLQ5pAOIlQVy5BWRJ28H2gAgADlJcU4YGS3OfMRmXSZ5RXKKhEQGBkOqz8jPlGGNBR66hmABrQbD2Ggx7pDI9JBnpuB6",
+      "text": "{\"data\":\"<base64, about 2 KB: full value in structuredContent.data>\",\"totalCents\":33000,\"currency\":\"USD\",\"bytes\":1738}",
       "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjcgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(2320 chars)\",\"totalCents\":33000,\"currency\":\"USD\",\"bytes\":1738}",
       "contentTypes": [
         "text"
@@ -1712,11 +1712,11 @@
         "placements"
       ],
       "sampled": true,
-      "ms": 198,
-      "bytes": 4440,
+      "ms": 203,
+      "bytes": 2350,
       "status": "ok",
-      "text": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjYgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbmd0aCAxMTYKPj4Kc3RyZWFtCnicHcq7CgJBDIXhPk+RWhAzmVxmQCzUBQsbIS8gsorLWiji8++MHPj5ivOGfQBh3+cBm9M4/8bv83ZdO9UihbxUTIJxB249Q/pfE3KLEsYLtsKmNli2YgerTcrU5dYlR8lKTC6mnl12GBPECoaACywXnRuICmVuZHN0cmVhbQplbmRvYmoKCjggMCBvYmoKPDwKL1R5cGUgL1hPYmplY3QKL1N1YnR5cGUgL0ltYWdlCi9CaXRzUGVyQ29tcG9uZW50IDgKL1dpZHRoIDEKL0hlaWdodCAxCi9Db2xvclN",
-      "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjYgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(2148 chars)\",\"pageCount\":2,\"bytes\":1610}",
+      "text": "{\"data\":\"<base64, about 2 KB: full value in structuredContent.data>\",\"pageCount\":2,\"bytes\":1609}",
+      "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjYgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(2148 chars)\",\"pageCount\":2,\"bytes\":1609}",
       "contentTypes": [
         "text"
       ]
@@ -1736,10 +1736,10 @@
         "preset"
       ],
       "sampled": true,
-      "ms": 273,
-      "bytes": 68102,
+      "ms": 334,
+      "bytes": 34197,
       "status": "ok",
-      "text": "{\"data\":\"iVBORw0KGgoAAAANSUhEUgAABDgAAAQ4CAYAAADsEGyPAAAACXBIWXMAAAsSAAALEgHS3X78AAAgAElEQVR4nOzasQ0DMAwDwd88oztjRAGvYG/QBxWCevURHTDAAAMMMMAAAwwwwAADDDDAwPvjDvr1A0QHDDDAAAMMMMAAAwwwwAADDDDwLDggMAgYYIABBhhggAEGGGCAAQYYeOMduOA48AmiAwYYYIABBhhggAEGGGCAAQay4IDAIGCAAQYYYIABBhhggAEGGGCg6Q5ccBz4BNEBAwwwwAADDDDAAAMMMMAAA1lwQGAQMMAAAwwwwAADDDDAAAMMMNB0By44DnyC6IABBhhggAEGGGCAAQYYYICBLDggMAgYYIABBhhggAEGGGC",
+      "text": "{\"data\":\"<base64, about 25 KB: full value in structuredContent.data>\",\"width\":1080,\"height\":1080,\"bytes\":25473}",
       "structured": "{\"data\":\"iVBORw0KGgoAAAANSUhEUgAABDgAAAQ4CAYAAADsEGyPAAAACXBIWXMAAAsS…(33964 chars)\",\"width\":1080,\"height\":1080,\"bytes\":25473}",
       "contentTypes": [
         "text"
@@ -1761,7 +1761,7 @@
         "endSec"
       ],
       "sampled": true,
-      "ms": 202,
+      "ms": 190,
       "bytes": 528,
       "status": "ok",
       "text": "{\"data\":\"UklGRnQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YVAAAAAAADsN5hifIV4mlCY7ItUZYQ46Ae7zD+gF3+HZP9ky3UPlffCN/eUK9RZOINUl4yZYI58boRCtA0r2DOpm4H7aBNkn3IfjRe4b+4UI7hTdHg==\",\"durationSec\":0.005,\"sampleRate\":8000,\"bytes\":124}",
@@ -1773,7 +1773,7 @@
     {
       "name": "convert_currency",
       "title": "Convert an amount between currencies",
-      "description": "Convert money between ISO 4217 currencies using live exchange rates from the Frankfurter API, fetched through the SSRF-safe outbound guard. Supports historical dates.",
+      "description": "Convert money between ISO 4217 currencies with daily exchange rates. ECB reference rates (via Frankfurter) are used for USD, EUR, GBP, JPY, CHF, CAD, AUD, CNY, INR, CZK, HUF, ILS, ISK, RON, BRL, MXN, SGD, HKD, NZD, SEK, NOK, DKK, ZAR, TRY, KRW, THB, MYR, IDR, PHP, PLN; other codes such as PKR, AED, SAR or NGN use the free fawazahmed0 currency API. The result says which source answered. Supports historical dates (YYYY-MM-DD).",
       "annotations": {
         "readOnlyHint": true,
         "idempotentHint": true,
@@ -1782,11 +1782,11 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 182,
-      "bytes": 156,
+      "ms": 296,
+      "bytes": 350,
       "status": "ok",
-      "text": "{\"ok\":false,\"error\":\"Unknown currency: PKR.\"}",
-      "structured": "{\"ok\":false,\"error\":\"Unknown currency: PKR.\"}",
+      "text": "{\"ok\":true,\"amount\":100,\"from\":\"USD\",\"to\":\"PKR\",\"rate\":276.38228878,\"result\":27638.228878,\"date\":\"2026-11-23\",\"source\":\"fawazahmed0\"}",
+      "structured": "{\"ok\":true,\"amount\":100,\"from\":\"USD\",\"to\":\"PKR\",\"rate\":276.38228878,\"result\":27638.228878,\"date\":\"2026-11-23\",\"source\":\"fawazahmed0\"}",
       "contentTypes": [
         "text"
       ]
@@ -1803,10 +1803,10 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 904,
-      "bytes": 607264,
+      "ms": 780,
+      "bytes": 303787,
       "status": "ok",
-      "text": "{\"png\":\"iVBORw0KGgoAAAANSUhEUgAABDgAAAQ4CAYAAADsEGyPAAN5CklEQVR4nOz9e/Cv2VXeB377ohZSty4NmJtJdNozg7ANRrIcjKfKUcshFZAxaib2xOCLWlUGZ2biINlO1UyVx2qmkr/MjE0mNQMzmahlE/DEnkESsT0TY6shFYMNWBIQW7jKcGTwBQxSt1oXpBb88r6/s89+99rfZ631rLX2uXTr96n6aa/L8zznnO73+57qrXO551N/5gsuTgb55QEpcxE5ouFJ2gQXK0I2UjGTaWpTUBmOyFnTwBw41AnKIT2jFzlK9mZuR4lwBjDIkewiuE5XQElcYAYc6gTlKiveKemIwTiUJegcQ2isaMwMc3lAylxEjmh4kjbBimdtJxUzmaY2",
+      "text": "{\"png\":\"<base64, about 222 KB: full value in structuredContent.png>\",\"width\":1080,\"height\":1080,\"mimeType\":\"image/png\"}",
       "structured": "{\"png\":\"iVBORw0KGgoAAAANSUhEUgAABDgAAAQ4CAYAAADsEGyPAAN5CklEQVR4nOz9…(303536 chars)\",\"width\":1080,\"height\":1080,\"mimeType\":\"image/png\"}",
       "contentTypes": [
         "text"
@@ -1824,11 +1824,11 @@
       "hasOutputSchema": true,
       "required": [],
       "sampled": true,
-      "ms": 186,
+      "ms": 220,
       "bytes": 484,
       "status": "ok",
-      "text": "{\"mode\":\"zip\",\"zip\":\"UEsDBBQAAAAIACxIeF2sKpPYBAAAAAIAAAAFAAAAYS50eHTLyAQAUEsBAhQAFAAAAAgALEh4Xawqk9gEAAAAAgAAAAUAAAAAAAAAAAAAAAAAAAAAAGEudHh0UEsFBgAAAAABAAEAMwAAACcAAAAAAA==\",\"fileCount\":1,\"totalBytes\":112}",
-      "structured": "{\"mode\":\"zip\",\"zip\":\"UEsDBBQAAAAIACxIeF2sKpPYBAAAAAIAAAAFAAAAYS50eHTLyAQAUEsBAhQA…(152 chars)\",\"fileCount\":1,\"totalBytes\":112}",
+      "text": "{\"mode\":\"zip\",\"zip\":\"UEsDBBQAAAAIAD1LeF2sKpPYBAAAAAIAAAAFAAAAYS50eHTLyAQAUEsBAhQAFAAAAAgAPUt4Xawqk9gEAAAAAgAAAAUAAAAAAAAAAAAAAAAAAAAAAGEudHh0UEsFBgAAAAABAAEAMwAAACcAAAAAAA==\",\"fileCount\":1,\"totalBytes\":112}",
+      "structured": "{\"mode\":\"zip\",\"zip\":\"UEsDBBQAAAAIAD1LeF2sKpPYBAAAAAIAAAAFAAAAYS50eHTLyAQAUEsBAhQA…(152 chars)\",\"fileCount\":1,\"totalBytes\":112}",
       "contentTypes": [
         "text"
       ]
@@ -1847,10 +1847,10 @@
         "images"
       ],
       "sampled": true,
-      "ms": 316,
-      "bytes": 6650,
+      "ms": 304,
+      "bytes": 3487,
       "status": "ok",
-      "text": "{\"png\":\"iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAJH0lEQVR4nO2UsQ3AAAyD8rlPb0/oVluCgT3CEZe7RzgO7oP2fXL//oPCWU9nAPobZAgDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7",
+      "text": "{\"png\":\"<base64, about 2 KB: full value in structuredContent.png>\",\"width\":256,\"height\":256,\"mimeType\":\"image/png\",\"cells\":2}",
       "structured": "{\"png\":\"iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAACXBIWXMAAAPo…(3220 chars)\",\"width\":256,\"height\":256,\"mimeType\":\"image/png\",\"cells\":2}",
       "contentTypes": [
         "text"
@@ -1870,7 +1870,7 @@
         "file"
       ],
       "sampled": true,
-      "ms": 206,
+      "ms": 231,
       "bytes": 388,
       "status": "ok",
       "text": "{\"fields\":[{\"name\":\"name\",\"type\":\"text\",\"page\":1,\"required\":false,\"readOnly\":false,\"value\":\"\"}],\"filled\":0,\"pageCount\":1,\"mimeType\":\"application/pdf\"}",
@@ -1887,8 +1887,8 @@
       "expect": "ok",
       "status": "ok",
       "pass": true,
-      "ms": 415,
-      "text": "{\"files\":[{\"name\":\"document-extract.pdf\",\"data\":\"JVBERi0xLjcKJYGBgYEKCjggMCBvYmoKPDwKL0xlbmd0aCAxMDgyNQovRmlsdGVyIC9GbGF0ZURlY29kZQovTGVuZ3RoMSAyMzE2NAo+PgpzdHJlYW0KeJztfHl8W9WV/7n3PS12vMi7vEXPUbwqXuLYcRYTy/FCUjeJEzvUDqSxLCuxim0plhQT2iZhK2CWhmFpKUwxtOxtI8sBnAQaA2W6zFDSYdrSThnya6GUlvzKdChlWmL9vvfqeSOBaWd+f/w+n1+k3HfPPfds95xzz31PihUcDnkogQ6RQk73oMu/JDEzlYj+iYiluvcFtT/cnrUU8Gki05rd/j2DX3jy3+8jissjMvx"
+      "ms": 958,
+      "text": "{\"files\":[{\"name\":\"document-extract.pdf\",\"data\":\"<base64, about 12 KB: full value in structuredContent.files[0].data>\"}],\"zip\":null,\"pageCount\":1}"
     },
     {
       "label": "extract_pdf_text from a public URL",
@@ -1896,7 +1896,7 @@
       "expect": "ok",
       "status": "ok",
       "pass": true,
-      "ms": 290,
+      "ms": 438,
       "text": "{\"pageCount\":1,\"pages\":[{\"page\":1,\"text\":\"Dummy PDF file\",\"markdown\":\"Dummy PDF file\"}],\"text\":\"Dummy PDF file\",\"markdown\":\"Dummy PDF file\",\"tokens\":3,\"emptyPages\":0}"
     },
     {
@@ -1905,7 +1905,7 @@
       "expect": "error",
       "status": "error",
       "pass": true,
-      "ms": 197,
+      "ms": 342,
       "text": "That address is not public.\nInput schema and an example: https://benchline.fabwaseem.com/api/v1/tools/pdf-split (GET). Docs: https://benchline.fabwaseem.com/t/pdf-split.md"
     },
     {
@@ -1914,7 +1914,7 @@
       "expect": "error",
       "status": "error",
       "pass": true,
-      "ms": 179,
+      "ms": 349,
       "text": "That address is not public.\nInput schema and an example: https://benchline.fabwaseem.com/api/v1/tools/html-to-markdown-url (GET). Docs: https://benchline.fabwaseem.com/t/html-to-markdown-url.md"
     },
     {
@@ -1923,7 +1923,7 @@
       "expect": "error",
       "status": "error",
       "pass": true,
-      "ms": 182,
+      "ms": 277,
       "text": "MCP error -32602: Input validation error: Invalid arguments for tool decode_jwt: Invalid input: expected string, received undefined at token"
     },
     {
@@ -1932,7 +1932,7 @@
       "expect": "error",
       "status": "ok",
       "pass": false,
-      "ms": 183,
+      "ms": 228,
       "text": "{\"output\":\"\",\"valid\":false,\"errors\":[{\"message\":\"Invalid symbol\",\"line\":1,\"column\":2},{\"message\":\"Expected a closing brace\",\"line\":1,\"column\":5}]}"
     },
     {
@@ -1941,7 +1941,7 @@
       "expect": "error",
       "status": "error",
       "pass": true,
-      "ms": 199,
+      "ms": 305,
       "text": "MCP error -32602: Tool no_such_tool not found"
     }
   ],

@@ -92,14 +92,19 @@ await check("convert_currency USD → EUR returns a rate", async () => {
   return { pass: r.data.ok !== false && !r.isError, detail: JSON.stringify(r.data).slice(0, 160) };
 });
 
-await check("convert_currency with an unsupported code is flagged as an error", async () => {
+await check("convert_currency USD → PKR uses the wider fallback source", async () => {
   const r = await call("convert_currency", { amount: 100, from: "USD", to: "PKR" });
+  return { pass: r.data.ok === true && r.data.source === "fawazahmed0", detail: JSON.stringify(r.data).slice(0, 160) };
+});
+
+await check("convert_currency with an unknown code is flagged as an error", async () => {
+  const r = await call("convert_currency", { amount: 100, from: "USD", to: "XYZ" });
   return { pass: r.isError, detail: `isError=${r.isError} ${JSON.stringify(r.data)}` };
 });
 
-await check("format_json with broken JSON is flagged as an error", async () => {
+await check("format_json with broken JSON answers valid:false with positions", async () => {
   const r = await call("format_json", { json: "{bad" });
-  return { pass: r.isError, detail: `isError=${r.isError} valid=${r.data.valid}` };
+  return { pass: !r.isError && r.data.valid === false && r.data.errors?.length > 0, detail: `isError=${r.isError} valid=${r.data.valid}` };
 });
 
 await check("check_ssl on an expired certificate reports it", async () => {

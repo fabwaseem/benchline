@@ -30,7 +30,24 @@
 | 5 | Codes outside the ECB list fall back to the free fawazahmed0 rates (about 200 currencies, dated snapshots). The result has a `source` field. | `currency-converter/lib/currency.ts`, `mcp.ts` |
 | 6 | The original is returned when a same-format, same-size re-encode comes out bigger (`keptOriginal`, `note`). If a format change was asked for, the converted file is still returned, with a note. | `image-compress/lib/compress.ts`, `src/lib/mcp/image.ts` |
 
-Re-run `run.mjs`, `chain.mjs` and `render-probe.mjs` after the next deploy to confirm on the live server.
+### Live re-test after deploy (`cc1acd6`)
+
+| Check | Before | After |
+|---|---|---|
+| All 82 tools | 82 ok | 82 ok (median 225 ms) |
+| Helvetica / Times text in `render_pdf_pages` | blank | **drawn** |
+| PDF → PNG → OCR | `""` | **"BENCHLINE 2026", 93% confidence** |
+| `convert_currency` USD → PKR | `ok:false`, not flagged | **27,638.23 PKR** (source `fawazahmed0`) |
+| `convert_currency` USD → XYZ | — | `isError: true`, "Unknown currency: XYZ." |
+| `generate_meme` reply | 593 KB | **297 KB** (the image is sent once) |
+| `build_open_graph` / `resize_social_image` reply | 57 / 67 KB | **33 / 33 KB** |
+| Round-trip checks | 11 / 15 | **16 / 16**. `check_ssl` on expired.badssl.com hit one connection reset from that site and passed on retry |
+
+`render-probe.mjs` after the deploy: rectangle, Helvetica, Times and the embedded-font PDF all render.
+
+### Follow-up: bad input counted as server errors (`4951970`)
+
+The admin Errors page listed AES encryption ×2 (this test's wrong-passphrase check) and JSONPath tester ×1 (an invalid query or invalid JSON). Neither was a fault. The tools answered with a clear message, but they threw a plain `Error`, which analytics counts as `error`. All 68 input checks in `src/tools/*/mcp.ts` now throw `InputError` (`src/lib/input-error.ts`), which analytics records as `rejected / invalid_input`. Rows recorded before the deploy stay on the page.
 
 ## Issues found
 

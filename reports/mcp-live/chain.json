@@ -6,8 +6,8 @@
   },
   {
     "label": "PDF page → PNG → read_image_text (OCR) reads the words",
-    "pass": false,
-    "detail": "text: \"\" conf 0"
+    "pass": true,
+    "detail": "text: \"BENCHLINE 2026\" conf 93"
   },
   {
     "label": "aes_crypt encrypt → decrypt returns the plaintext",
@@ -42,22 +42,27 @@
   {
     "label": "convert_currency USD → EUR returns a rate",
     "pass": true,
-    "detail": "{\"ok\":true,\"amount\":100,\"from\":\"USD\",\"to\":\"EUR\",\"rate\":0.91416,\"result\":91.416,\"date\":\"2026-11-23\"}"
+    "detail": "{\"ok\":true,\"amount\":100,\"from\":\"USD\",\"to\":\"EUR\",\"rate\":0.91416,\"result\":91.416,\"date\":\"2026-11-23\",\"source\":\"ecb\"}"
   },
   {
-    "label": "convert_currency with an unsupported code is flagged as an error",
-    "pass": false,
-    "detail": "isError=false {\"ok\":false,\"error\":\"Unknown currency: PKR.\"}"
+    "label": "convert_currency USD → PKR uses the wider fallback source",
+    "pass": true,
+    "detail": "{\"ok\":true,\"amount\":100,\"from\":\"USD\",\"to\":\"PKR\",\"rate\":276.38228878,\"result\":27638.228878,\"date\":\"2026-11-23\",\"source\":\"fawazahmed0\"}"
   },
   {
-    "label": "format_json with broken JSON is flagged as an error",
-    "pass": false,
+    "label": "convert_currency with an unknown code is flagged as an error",
+    "pass": true,
+    "detail": "isError=true {\"ok\":false,\"error\":\"Unknown currency: XYZ.\"}"
+  },
+  {
+    "label": "format_json with broken JSON answers valid:false with positions",
+    "pass": true,
     "detail": "isError=false valid=false"
   },
   {
     "label": "check_ssl on an expired certificate reports it",
-    "pass": true,
-    "detail": "authorized=false CERT_HAS_EXPIRED "
+    "pass": false,
+    "detail": "authorized=undefined  read ECONNRESET\nInput schema and an example: https://benchline.fabwaseem.com/api/v1/tools/ssl-checke"
   },
   {
     "label": "lookup_dns for a missing domain answers without crashing",
@@ -71,7 +76,7 @@
   },
   {
     "label": "generate_meme response size",
-    "pass": false,
-    "detail": "607264 bytes for a 1080x1080 PNG"
+    "pass": true,
+    "detail": "303787 bytes for a 1080x1080 PNG"
   }
 ]
