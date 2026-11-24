@@ -6,25 +6,25 @@ import { cn } from "@/lib/utils";
 import { Spinner } from "@/components/kit/primitives/spinner";
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center gap-2 rounded-sm border border-transparent font-medium whitespace-nowrap transition-[background-color,color,box-shadow,transform] duration-150 outline-none select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-40 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/30 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button ki-trigger inline-flex shrink-0 items-center justify-center gap-2 rounded-md border border-transparent font-medium tracking-[-0.005em] whitespace-nowrap transition-[background-color,color,box-shadow,transform] duration-150 outline-none select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-40 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/30 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
-        primary: "bg-brand text-brand-foreground hover:bg-[color-mix(in_srgb,var(--accent-brand)_88%,var(--foreground))]",
-        solid: "bg-foreground text-background hover:bg-foreground/90",
-        default: "bg-foreground text-background hover:bg-foreground/90",
-        outline: "border-border-strong bg-surface text-foreground hover:bg-sunken",
+        primary: "bg-brand text-brand-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.16),var(--shadow-1)] hover:bg-[color-mix(in_srgb,var(--accent-brand)_90%,var(--foreground))]",
+        solid: "bg-foreground text-background shadow-[inset_0_1px_0_rgb(255_255_255/0.14),var(--shadow-1)] hover:bg-foreground/88",
+        default: "bg-foreground text-background shadow-[inset_0_1px_0_rgb(255_255_255/0.14),var(--shadow-1)] hover:bg-foreground/88",
+        outline: "border-border-strong bg-surface text-foreground shadow-[var(--shadow-1)] hover:border-[color-mix(in_srgb,var(--foreground)_28%,transparent)] hover:bg-raised",
         secondary: "bg-sunken text-foreground hover:bg-raised",
         ghost: "bg-transparent text-foreground hover:bg-sunken",
         destructive: "bg-destructive text-destructive-foreground hover:bg-[color-mix(in_srgb,var(--danger)_88%,var(--foreground))]",
         link: "h-auto rounded-none bg-transparent px-0 text-brand-text underline-offset-4 hover:underline",
       },
       size: {
-        sm: "h-control-sm px-2.5 text-[12.5px] [&_svg:not([class*='size-'])]:size-3.5",
-        md: "h-control-md px-3 text-[13px]",
-        default: "h-control-md px-3 text-[13px]",
-        lg: "h-control-lg px-4 text-sm",
-        xs: "h-control-sm px-2 text-[12px] [&_svg:not([class*='size-'])]:size-3.5",
+        sm: "h-control-sm px-3 text-[13px] [&_svg:not([class*='size-'])]:size-3.5",
+        md: "h-control-md px-3.5 text-[13.5px]",
+        default: "h-control-md px-3.5 text-[13.5px]",
+        lg: "h-control-lg px-5 text-[14.5px]",
+        xs: "h-control-sm px-2.5 text-[12.5px] [&_svg:not([class*='size-'])]:size-3.5",
         icon: "h-control-md w-control-md p-0",
         "icon-sm": "h-control-sm w-control-sm p-0",
         "icon-xs": "h-control-sm w-control-sm p-0",

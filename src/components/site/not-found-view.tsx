@@ -1,28 +1,35 @@
 import Link from "next/link";
+import { ArrowRight } from "kineticons";
 import { tools } from "@/registry";
 
 export function NotFoundView() {
   const popular = tools.slice(0, 4);
   return (
-    <div className="mx-auto flex min-h-[70vh] w-full max-w-xl flex-col justify-center px-4 py-16">
-      <p className="font-mono text-[12px] tracking-[0.08em] text-faint uppercase">404</p>
-      <h1 className="mt-2 text-[32px] font-semibold tracking-[-0.045em]">That page is not in the directory.</h1>
-      <p className="mt-3 text-[15px] leading-6 text-muted-foreground">
-        The address does not match a tool, a category, or a tag.
-      </p>
-      <Link href="/" className="btn btn-accent mt-6 self-start">
-        Browse tools
-      </Link>
-      <ul className="mt-8 grid gap-2 sm:grid-cols-2">
-        {popular.map((tool) => (
-          <li key={tool.slug}>
-            <Link href={`/t/${tool.slug}`} className="block rounded-xl border border-border bg-surface px-4 py-3 transition-colors duration-150 hover:border-border-strong">
-              <span className="text-[14.5px] font-medium">{tool.name}</span>
-              <span className="mt-0.5 block font-mono text-[11px] text-faint">{tool.category}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <div className="relative isolate overflow-hidden">
+      <div aria-hidden className="ground-grid absolute inset-0 -z-10 [mask-image:radial-gradient(60%_70%_at_50%_40%,#000_10%,transparent_75%)]" />
+      <div data-enter className="mx-auto flex min-h-[72vh] w-full max-w-2xl flex-col justify-center px-4 py-20">
+        <p className="font-mono text-[13px] font-medium text-brand-text">404</p>
+        <h1 className="d2 mt-4">That page is not on the bench.</h1>
+        <p className="mt-4 max-w-[48ch] text-[16px] leading-7 text-muted-foreground">
+          The address does not match a tool, a category, or a tag. These four are where most people start.
+        </p>
+        <ul className="mt-8 grid gap-2 sm:grid-cols-2">
+          {popular.map((tool) => (
+            <li key={tool.slug}>
+              <Link
+                href={`/t/${tool.slug}`}
+                className="ki-trigger lift group flex items-center justify-between gap-3 rounded-xl border border-border bg-surface px-4 py-3.5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+              >
+                <span className="text-[14.5px] font-semibold tracking-[-0.01em]">{tool.name}</span>
+                <ArrowRight size={15} aria-hidden className="text-faint transition-transform group-hover:translate-x-0.5 group-hover:text-brand-text" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <Link href="/tools" className="btn btn-brand mt-8 self-start">
+          Browse all tools
+        </Link>
+      </div>
     </div>
   );
 }

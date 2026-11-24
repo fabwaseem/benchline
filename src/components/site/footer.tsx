@@ -4,61 +4,74 @@ import { GITHUB_URL } from "@/lib/site";
 import { navEntries } from "@/lib/taxonomy";
 import { tools } from "@/registry";
 
-export function Footer() {
-  const featured = tools.slice(0, 5);
+const linkClass = "u-draw mt-2.5 block w-fit text-[14px] text-muted-foreground transition-colors duration-150 hover:text-foreground focus-visible:text-foreground focus-visible:outline-none";
+
+function Column({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <footer className="relative overflow-hidden border-t border-border">
-      <div className="page-x pt-12 pb-7 min-[700px]:pt-[72px] min-[700px]:pb-10">
-      <div className="grid gap-8 min-[700px]:grid-cols-[1.6fr_repeat(4,1fr)]">
-        <div>
-          <Logo />
-          <p className="mt-4 max-w-[30ch] text-[13.5px] text-muted-foreground">
-            Exact tools for people who ship the web. Free, no signup, nothing hidden.
-          </p>
-          <div className="mt-5">
-            <span className="chip">
-              <span className="dot" />
+    <div>
+      <p className="font-mono text-[11px] font-medium tracking-[0.1em] text-faint uppercase">{title}</p>
+      <div className="mt-3">{children}</div>
+    </div>
+  );
+}
+
+export function Footer() {
+  const featured = tools.filter((tool) => tool.status !== "new").slice(0, 5);
+  const local = tools.filter((tool) => tool.runsLocally).length;
+  return (
+    <footer className="relative overflow-hidden border-t border-border bg-well">
+      <div className="page-x frame relative pt-16 pb-8 md:pt-20">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-12 md:grid-cols-4 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
+          <div className="col-span-2 md:col-span-4 lg:col-span-1">
+            <Logo />
+            <p className="mt-5 max-w-[32ch] text-[14.5px] leading-6 text-muted-foreground">
+              {tools.length} tools for people who ship the web. {local} run entirely in your browser. No account, no upload.
+            </p>
+            <p className="mt-6 inline-flex items-center gap-2 font-mono text-[12px] text-faint">
+              <span className="dot" aria-hidden />
               All tools operational
-            </span>
+            </p>
           </div>
+          <Column title="Tools">
+            <Link href="/tools" className={linkClass}>All tools</Link>
+            {featured.map((tool) => (
+              <Link key={tool.slug} href={`/t/${tool.slug}`} className={linkClass}>
+                {tool.name}
+              </Link>
+            ))}
+          </Column>
+          <Column title="Categories">
+            <Link href="/categories" className={linkClass}>All categories</Link>
+            {navEntries().slice(0, 5).map((category) => (
+              <Link key={category.slug} href={`/${category.slug}`} className={linkClass}>
+                {category.name}
+              </Link>
+            ))}
+          </Column>
+          <Column title="For agents">
+            <Link href="/mcp/guide" className={linkClass}>MCP setup</Link>
+            <Link href="/ai" className={linkClass}>AI access</Link>
+            <Link href="/llms.txt" className={linkClass}>llms.txt</Link>
+            <Link href="/llms-full.txt" className={linkClass}>llms-full.txt</Link>
+            <Link href="/openapi.json" className={linkClass}>OpenAPI</Link>
+          </Column>
+          <Column title="Benchline">
+            <Link href="/about" className={linkClass}>About</Link>
+            <Link href="/about#data" className={linkClass}>Privacy</Link>
+            <a href={GITHUB_URL} className={linkClass}>GitHub</a>
+            <Link href="/sitemap.xml" className={linkClass}>Sitemap</Link>
+          </Column>
         </div>
-        <div>
-          <b className="mb-3.5 block text-[13px] font-medium">Tools</b>
-          <Link href="/" className="mt-2 block text-[13.5px] text-muted-foreground">All tools</Link>
-          {featured.map((tool) => (
-            <Link key={tool.slug} href={`/t/${tool.slug}`} className="mt-2 block text-[13.5px] text-muted-foreground">
-              {tool.name}
-            </Link>
-          ))}
+        <p
+          aria-hidden
+          className="pointer-events-none mt-16 select-none text-center text-[22vw] leading-[0.78] font-semibold tracking-[-0.07em] text-transparent [-webkit-text-stroke:1px_var(--border-strong)] min-[1440px]:text-[310px]"
+        >
+          benchline
+        </p>
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-6 text-[12.5px] text-faint">
+          <span>© 2026 Benchline. MIT licensed.</span>
+          <span className="font-mono">Built for the browser, callable over MCP.</span>
         </div>
-        <div>
-          <b className="mb-3.5 block text-[13px] font-medium">Categories</b>
-          <Link href="/categories" className="mt-2 block text-[13.5px] text-muted-foreground">All categories</Link>
-          {navEntries().slice(0, 5).map((category) => (
-            <Link key={category.slug} href={`/${category.slug}`} className="mt-2 block text-[13.5px] text-muted-foreground">
-              {category.name}
-            </Link>
-          ))}
-        </div>
-        <div>
-          <b className="mb-3.5 block text-[13px] font-medium">Resources</b>
-          <Link href="/ai" className="mt-2 block text-[13.5px] text-muted-foreground">AI access</Link>
-          <Link href="/mcp/guide" className="mt-2 block text-[13.5px] text-muted-foreground">MCP</Link>
-          <Link href="/llms.txt" className="mt-2 block text-[13.5px] text-muted-foreground">llms.txt</Link>
-          <Link href="/llms-full.txt" className="mt-2 block text-[13.5px] text-muted-foreground">llms-full.txt</Link>
-          <Link href="/openapi.json" className="mt-2 block text-[13.5px] text-muted-foreground">OpenAPI</Link>
-          <Link href="/sitemap.xml" className="mt-2 block text-[13.5px] text-muted-foreground">Sitemap</Link>
-        </div>
-        <div>
-          <b className="mb-3.5 block text-[13px] font-medium">Benchline</b>
-          <Link href="/about" className="mt-2 block text-[13.5px] text-muted-foreground">About</Link>
-          <Link href="/about#data" className="mt-2 block text-[13.5px] text-muted-foreground">Privacy</Link>
-          <a href={GITHUB_URL} className="mt-2 block text-[13.5px] text-muted-foreground">GitHub</a>
-        </div>
-      </div>
-      <div className="mt-10 border-t border-border pt-5 text-[12.5px] text-faint">
-        <span>© 2026 Benchline</span>
-      </div>
       </div>
     </footer>
   );

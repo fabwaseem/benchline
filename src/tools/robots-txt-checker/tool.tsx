@@ -113,11 +113,17 @@ export default function RobotsTool() {
       <div className="flex flex-col gap-3 border-b border-border p-3">
         <p className="text-[12.5px] text-muted-foreground">Allow and Disallow paths, sitemap links, and the mistakes that change what crawlers fetch.</p>
         {mode === "url" ? (
-          <div className="flex flex-col gap-2 min-[700px]:flex-row min-[700px]:items-end">
-            <FieldRow label="Domain or robots.txt URL" htmlFor="robots-url" className="min-w-0 flex-1" help="A bare domain is fetched at /robots.txt." error={blocked ? error : undefined}>
+          <div className="flex flex-col gap-2">
+            <FieldRow
+              label="Domain or robots.txt URL" htmlFor="robots-url" help="A bare domain is fetched at /robots.txt." error={blocked ? error : undefined}
+              trailing={
+                <>
+                <ActionButton type="button" className="btn btn-ink" aria-busy={busy} disabled={!url.trim() || busy} onClick={() => void run()}>Fetch</ActionButton>
+                </>
+              }
+            >
               <TextInput ref={urlRef} id="robots-url" value={url} autoFocus aria-invalid={blocked || undefined} onChange={(event) => setUrl(event.target.value)} />
             </FieldRow>
-            <ActionButton type="button" className="btn btn-ink" aria-busy={busy} disabled={!url.trim() || busy} onClick={() => void run()}>Fetch</ActionButton>
           </div>
         ) : (
           <FieldRow label="robots.txt" htmlFor="robots-paste" help="Audited in the browser. Nothing is sent.">

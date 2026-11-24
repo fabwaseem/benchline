@@ -1,19 +1,17 @@
 import { ImageResponse } from "next/og";
-import { OG_INK, OG_PAPER, OG_RULE, oklchToRgb } from "@/lib/og-color";
 import { SITE_NAME } from "@/lib/site";
+import { tools } from "@/registry";
 
-export const alt = `${SITE_NAME} — a quiet bench for exact work`;
+export const alt = `${SITE_NAME}: free browser tools for web work`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-function rgb({ r, g, b }: { r: number; g: number; b: number }) {
-  return `rgb(${r}, ${g}, ${b})`;
-}
+const FOREST = "#0A0A0A";
+const LIME = "#C6F19D";
+const INK = "#EDEDED";
+const MUTED = "#A1A1A1";
 
 export default function OpenGraphImage() {
-  const paper = rgb(oklchToRgb(OG_PAPER.l, OG_PAPER.c, OG_PAPER.h));
-  const ink = rgb(oklchToRgb(OG_INK.l, OG_INK.c, OG_INK.h));
-  const rule = rgb(oklchToRgb(OG_RULE.l, OG_RULE.c, OG_RULE.h));
   return new ImageResponse(
     (
       <div
@@ -23,23 +21,33 @@ export default function OpenGraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: paper,
-          color: ink,
+          background: FOREST,
+          backgroundImage: "radial-gradient(circle at 82% 22%, rgba(198,241,157,0.18), rgba(10,10,10,0) 55%)",
+          color: INK,
           padding: 72,
-          fontFamily: "Geist, sans-serif",
+          fontFamily: "sans-serif",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <div style={{ width: 28, height: 28, borderRadius: 8, background: "rgb(196, 92, 42)" }} />
-          <div style={{ fontSize: 28, letterSpacing: -0.6 }}>{SITE_NAME.toLowerCase()}</div>
+          <svg width="44" height="44" viewBox="0 0 32 32">
+            <rect width="32" height="32" rx="8" fill={LIME} />
+            <rect x="6" y="20" width="20" height="3" rx="1.5" fill={FOREST} />
+            <rect x="16.5" y="9.5" width="8" height="8" rx="2" fill={FOREST} />
+            <rect x="8.5" y="13.5" width="5" height="4" rx="1.25" fill={FOREST} opacity="0.55" />
+          </svg>
+          <div style={{ fontSize: 34, fontWeight: 600, letterSpacing: -1.2 }}>benchline</div>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={{ fontSize: 76, letterSpacing: -2.4, lineHeight: 0.95 }}>A quiet bench</div>
-          <div style={{ fontSize: 76, letterSpacing: -2.4, lineHeight: 0.95, color: "rgb(120, 124, 132)" }}>
-            for exact work.
-          </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+          <div style={{ fontSize: 76, fontWeight: 600, letterSpacing: -3, lineHeight: 1 }}>{`${tools.length} browser tools for web work.`}</div>
+          <div style={{ fontSize: 34, letterSpacing: -0.8, color: MUTED }}>PDF, images, JSON, security, SEO. Free, and callable over MCP.</div>
         </div>
-        <div style={{ height: 1, background: rule }} />
+        <div style={{ display: "flex", gap: 12 }}>
+          {["Runs in your browser", "No signup", "MCP ready"].map((label) => (
+            <div key={label} style={{ display: "flex", padding: "10px 18px", borderRadius: 999, border: `1px solid rgba(198,241,157,0.35)`, color: LIME, fontSize: 22 }}>
+              {label}
+            </div>
+          ))}
+        </div>
       </div>
     ),
     size,

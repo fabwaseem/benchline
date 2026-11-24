@@ -19,7 +19,7 @@ export function Cover({
       className={cn("cover", className)}
       style={{ width: size, height: size, borderRadius: radius, ["--h" as string]: String(hue) }}
     >
-      {createElement(iconFor(icon), { size: Math.round(size * 0.46), strokeWidth: 1.75, "aria-hidden": true })}
+      {createElement(iconFor(icon), { size: Math.round(size * 0.5), variant: "duotone", "aria-hidden": true })}
     </span>
   );
 }

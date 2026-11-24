@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 
 const toHsv = converter("hsv");
 const RECENT_KEY = "benchline.colors";
-const PRESETS = ["#E8590C", "#16130F", "#F6F4EF", "#9A3412", "#C2410C", "#1D4ED8", "#0F766E", "#B91C1C", "#A8A29E", "#44403C"];
+const PRESETS = ["#C6F19D", "#0F1F10", "#F2F4ED", "#2F6512", "#E8590C", "#1D4ED8", "#0F766E", "#B91C1C", "#A8A29E", "#44403C"];
 
 type Hsv = { h: number; s: number; v: number; alpha: number };
 type Channels = { h?: number; s?: number; v?: number; alpha?: number };
@@ -34,7 +34,7 @@ function paint(hsv: Hsv) {
 function cssOf(hsv: Hsv) {
   const color = paint(hsv);
   const next = hsv.alpha < 1 ? formatCss(color) : formatHex(color);
-  return next ?? "#E8590C";
+  return next ?? "#C6F19D";
 }
 
 function channel(hsv: Hsv, mode: "rgb" | "hsl" | "oklch") {

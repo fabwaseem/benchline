@@ -100,7 +100,7 @@ export function resolveListing(slug: string): Listing | null {
         hue: group.hue,
         filter: child.slug,
         breadcrumbs: [
-          { href: "/", label: "Tools" },
+          { href: "/tools", label: "Tools" },
           { href: `/${child.slug}`, label: group.name },
         ],
         chips: null,
@@ -117,7 +117,7 @@ export function resolveListing(slug: string): Listing | null {
       hue: group.hue,
       filter: child.slug,
       breadcrumbs: [
-        { href: "/", label: "Tools" },
+        { href: "/tools", label: "Tools" },
         { href: `/${group.slug}`, label: group.name },
         { href: `/${child.slug}`, label: child.name },
       ],
@@ -142,7 +142,7 @@ export function resolveListing(slug: string): Listing | null {
     hue: parent.hue,
     filter: parent.slug,
     breadcrumbs: [
-      { href: "/", label: "Tools" },
+      { href: "/tools", label: "Tools" },
       { href: `/${parent.slug}`, label: parent.name },
     ],
     chips: children,

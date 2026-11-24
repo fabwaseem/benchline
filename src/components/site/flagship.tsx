@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "kineticons";
 import { renderLlmsTxt } from "@/tools/llms-txt-generator/lib/llms";
 import { decodeJwt, isDecoded } from "@/tools/jwt-decoder/lib/jwt";
 import { explainCron } from "@/tools/cron-expression-builder/lib/cron";

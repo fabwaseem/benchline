@@ -49,15 +49,21 @@ export default async function TagPage({ params }: { params: Promise<{ tag: strin
         })}
       />
       <DirectoryFrame categories={catalog.categories} total={catalog.tools.length} active="all">
-        <div className="px-4 pt-6 lg:px-8">
-          <p className="font-mono text-[11px] tracking-[0.08em] text-faint uppercase">Tag</p>
-          <h1 className="mt-2 text-[28px] font-semibold tracking-[-0.04em]">#{label(tag)}</h1>
-          <p className="mt-1 text-[14px] text-muted-foreground">
+        <div data-enter className="border-b border-border pt-8 pb-8 lg:pl-8">
+          <p className="eyebrow">
+            <span className="dot" aria-hidden />
+            Tag
+          </p>
+          <h1 className="h-page mt-4">
+            <span className="text-brand-text">#</span>
+            {label(tag)}
+          </h1>
+          <p className="mt-2 text-[15px] text-muted-foreground">
             {known.count} {known.count === 1 ? "tool" : "tools"} with this tag.
             {known.count < 3 ? " This page is not indexed." : ""}
           </p>
         </div>
-        <Suspense fallback={<div className="mx-4 mt-5 h-40 animate-pulse rounded-xl bg-sunken lg:mx-8" />}>
+        <Suspense fallback={<div className="mt-5 h-40 animate-pulse rounded-xl bg-sunken lg:ml-8" />}>
           <DirectoryBrowser
             tools={catalog.tools}
             categories={catalog.categories}

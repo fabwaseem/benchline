@@ -12,6 +12,7 @@ export function FieldRow({
   className,
   variant = "plain",
   actions,
+  trailing,
 }: {
   label: string;
   htmlFor?: string;
@@ -21,6 +22,8 @@ export function FieldRow({
   className?: string;
   variant?: "plain" | "well";
   actions?: ReactNode;
+  /** Buttons that belong on the input's own row (Check, Fetch). They line up with the input, not with the help text under it. */
+  trailing?: ReactNode;
 }) {
   const helpId = useId();
   const errorId = useId();
@@ -38,7 +41,14 @@ export function FieldRow({
         </label>
         {actions}
       </div>
-      {field}
+      {trailing ? (
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-stretch">
+          <div className="min-w-0 flex-1">{field}</div>
+          <div className="flex shrink-0 gap-2 [&>*]:h-control-lg [&>*]:flex-1 sm:[&>*]:h-auto sm:[&>*]:flex-none">{trailing}</div>
+        </div>
+      ) : (
+        field
+      )}
       {error ? (
         <p id={errorId} className="text-xs text-status-bad">
           {error}

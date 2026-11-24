@@ -1,4 +1,5 @@
 import { FaqAccordion } from "@/components/kit/faq-accordion";
+import { SectionHeading } from "@/components/site/section-heading";
 import type { Faq, HowToStep } from "@/registry/schema";
 
 export function HowItWorks({
@@ -12,17 +13,20 @@ export function HowItWorks({
 }) {
   if (steps.length === 0 && faqs.length === 0 && !description) return null;
   return (
-    <section className="grid gap-10 min-[900px]:grid-cols-2">
+    <section className="grid gap-12 lg:grid-cols-2">
       <div>
-        <h2 id="how-to" className="text-[15px] font-medium">How it works</h2>
-        {description ? <p className="mt-3 max-w-[62ch] text-[14px] leading-6 text-muted-foreground">{description}</p> : null}
+        <SectionHeading id="how-to" eyebrow="Guide" title="How it works">
+          {description}
+        </SectionHeading>
         {steps.length > 0 ? (
-          <ol className="mt-4 grid gap-3">
+          <ol className="mt-5 grid gap-3">
             {steps.map((step, index) => (
-              <li key={step.name} className="rounded-xl border border-border bg-surface p-4">
-                <span className="font-mono text-[11px] text-faint">{String(index + 1).padStart(2, "0")}</span>
-                <p className="mt-2 text-[14px] font-medium">{step.name}</p>
-                <p className="mt-1 text-[13px] leading-5 text-muted-foreground">{step.text}</p>
+              <li key={step.name} className="grid grid-cols-[36px_1fr] gap-3 rounded-xl border border-border bg-surface p-4">
+                <span className="grid size-7 place-items-center rounded-md bg-brand-wash font-mono text-[11.5px] font-medium text-brand-text">{index + 1}</span>
+                <span>
+                  <span className="block text-[14.5px] font-semibold tracking-[-0.01em]">{step.name}</span>
+                  <span className="mt-1 block text-[13.5px] leading-[1.55] text-muted-foreground">{step.text}</span>
+                </span>
               </li>
             ))}
           </ol>
@@ -30,7 +34,7 @@ export function HowItWorks({
       </div>
       {faqs.length > 0 ? (
         <div>
-          <h2 id="questions" className="mb-2 text-[15px] font-medium">FAQ</h2>
+          <SectionHeading id="questions" eyebrow="FAQ" title="Questions people ask" className="mb-4" />
           <FaqAccordion faqs={faqs} />
         </div>
       ) : null}

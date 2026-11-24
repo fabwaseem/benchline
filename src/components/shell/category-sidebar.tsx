@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { LayoutGrid } from "lucide-react";
+import { LayoutGrid } from "kineticons";
 import { ToolIcon } from "@/components/site/icons";
 import type { DirectoryCategory } from "@/lib/catalog";
 import { cn } from "@/lib/utils";
@@ -17,9 +17,9 @@ export function CategorySidebar({
   onNavigate?: () => void;
 }) {
   return (
-    <div className="flex h-full flex-col gap-1 px-3 py-4">
-      <p className="px-2.5 pb-2 font-mono text-[11px] tracking-[0.08em] text-faint uppercase">Categories</p>
-      <SidebarLink href="/" label="All tools" count={total} icon={<LayoutGrid size={16} strokeWidth={1.75} aria-hidden />} active={active === "all"} onNavigate={onNavigate} />
+    <div className="flex h-full flex-col gap-0.5 py-6 pr-4">
+      <p className="px-2.5 pb-3 font-mono text-[11px] font-medium tracking-[0.1em] text-faint uppercase">Categories</p>
+      <SidebarLink href="/tools" label="All tools" count={total} icon={<LayoutGrid size={16} strokeWidth={1.75} aria-hidden />} active={active === "all"} onNavigate={onNavigate} />
       {categories.map((category) => (
         <SidebarLink
           key={category.slug}
@@ -34,10 +34,10 @@ export function CategorySidebar({
       <Link
         href="/mcp/guide"
         onClick={onNavigate}
-        className="lift mt-4 rounded-xl border border-border p-3 text-[13px] leading-snug focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+        className="lift mt-6 rounded-xl border border-border bg-brand-wash p-4 text-[13px] leading-snug focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
       >
-        <span className="block text-foreground">Use every tool from your AI agent</span>
-        <span className="mt-1 block text-muted-foreground">Connect MCP</span>
+        <span className="block font-semibold text-foreground">Use every tool from your AI agent</span>
+        <span className="mt-2 inline-flex items-center gap-1 font-medium text-brand-text">Connect MCP →</span>
       </Link>
     </div>
   );
@@ -64,13 +64,13 @@ function SidebarLink({
       aria-current={active ? "page" : undefined}
       onClick={onNavigate}
       className={cn(
-        "flex h-8 items-center gap-2.5 rounded-lg px-2 text-[13px] text-muted-foreground transition-colors duration-150 hover:bg-sunken hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
-        active && "bg-[color-mix(in_oklch,var(--accent-brand)_12%,transparent)] text-foreground shadow-[inset_2px_0_0_var(--accent-brand)]",
+        "ki-trigger flex h-9 items-center gap-2.5 rounded-md px-2.5 text-[13.5px] font-medium text-muted-foreground transition-colors duration-150 hover:bg-sunken hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+        active && "bg-brand-wash font-semibold text-foreground hover:bg-brand-wash",
       )}
     >
       <span className={cn("text-faint", active && "text-brand-text")}>{icon}</span>
       <span className="min-w-0 flex-1 truncate">{label}</span>
-      <span className="font-mono text-[12px] text-faint tabular-nums">{count}</span>
+      <span className={cn("font-mono text-[12px] text-faint tabular-nums", active && "text-brand-text")}>{count}</span>
     </Link>
   );
 }

@@ -1,4 +1,4 @@
-import { AlertTriangle, Check, Info, X } from "lucide-react";
+import { Alert as AlertTriangle, Check, Info, X } from "kineticons";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 

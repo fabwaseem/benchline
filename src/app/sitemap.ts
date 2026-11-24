@@ -6,6 +6,7 @@ import { allTags, tools } from "@/registry";
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages: MetadataRoute.Sitemap = [
     { url: absoluteUrl("/"), changeFrequency: "weekly", priority: 1 },
+    { url: absoluteUrl("/tools"), changeFrequency: "weekly", priority: 0.95 },
     { url: absoluteUrl("/explore"), changeFrequency: "weekly", priority: 0.9 },
     { url: absoluteUrl("/categories"), changeFrequency: "weekly", priority: 0.7 },
     { url: absoluteUrl("/about"), changeFrequency: "monthly", priority: 0.4 },

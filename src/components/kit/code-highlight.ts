@@ -2,37 +2,47 @@ import type { ThemeRegistration, ThemedTokenWithVariants } from "shiki/core";
 
 export const PLAIN_BYTE_LIMIT = 200 * 1024;
 
-const light = "#16130F";
-const lightMuted = "#6B645B";
-const lightAccent = "#9A3412";
-const lightString = "#0E6B45";
+const light = "#0F1F10";
+const lightMuted = "#5A6655";
+const lightAccent = "#2F6512";
+const lightString = "#9A4B12";
+const lightProperty = "#1F5A8A";
+const lightNumber = "#0E6E68";
+const lightPunct = "#6B7766";
 const lightFunction = "#1E4E8C";
-const lightType = "#6D28D9";
+const lightType = "#8A4B0F";
 
-const dark = "#F6F4EF";
-const darkMuted = "#A39C91";
-const darkAccent = "#FF9A55";
-const darkString = "#8FDBB2";
+const dark = "#EDEDED";
+const darkMuted = "#7D7D7D";
+const darkAccent = "#C6F19D";
+const darkString = "#F2C98A";
 const darkFunction = "#9CC7FF";
-const darkType = "#D2B4FF";
+const darkType = "#FFB49A";
+const darkProperty = "#9CC7FF";
+const darkNumber = "#7FD8CF";
+const darkPunct = "#8A8A8A";
 
 export const benchLight: ThemeRegistration = {
   name: "bench-light",
   type: "light",
   colors: {
-    "editor.background": "#F3F0E9",
+    "editor.background": "#EEF1E8",
     "editor.foreground": light,
   },
   tokenColors: [
     { scope: ["comment", "punctuation.definition.comment"], settings: { foreground: lightMuted, fontStyle: "italic" } },
     { scope: ["keyword", "storage", "storage.type"], settings: { foreground: lightAccent } },
     { scope: ["string", "string.quoted"], settings: { foreground: lightString } },
-    { scope: ["constant.numeric", "constant.language"], settings: { foreground: lightAccent } },
+    { scope: ["constant.numeric"], settings: { foreground: lightNumber } },
+    { scope: ["constant.language"], settings: { foreground: lightAccent, fontStyle: "bold" } },
     { scope: ["entity.name.function", "support.function"], settings: { foreground: lightFunction } },
     { scope: ["entity.name.type", "entity.name.class", "support.type", "support.class"], settings: { foreground: lightType } },
     { scope: ["entity.name.tag", "punctuation.definition.tag"], settings: { foreground: lightAccent } },
     { scope: ["variable", "variable.other"], settings: { foreground: light } },
-    { scope: ["punctuation", "meta.brace"], settings: { foreground: "#3A342C" } },
+    { scope: ["punctuation", "meta.brace"], settings: { foreground: lightPunct } },
+    { scope: ["support.type.property-name", "meta.object-literal.key", "entity.other.attribute-name", "variable.other.property", "meta.mapping.key string", "entity.name.tag.yaml"], settings: { foreground: lightProperty } },
+    { scope: ["support.type.property-name punctuation", "punctuation.support.type.property-name"], settings: { foreground: lightProperty } },
+    { scope: ["variable.parameter", "variable.other.readwrite.shell", "punctuation.definition.variable"], settings: { foreground: lightType } },
   ],
 };
 
@@ -40,19 +50,23 @@ export const benchDark: ThemeRegistration = {
   name: "bench-dark",
   type: "dark",
   colors: {
-    "editor.background": "#181512",
+    "editor.background": "#0E0E0E",
     "editor.foreground": dark,
   },
   tokenColors: [
     { scope: ["comment", "punctuation.definition.comment"], settings: { foreground: darkMuted, fontStyle: "italic" } },
     { scope: ["keyword", "storage", "storage.type"], settings: { foreground: darkAccent } },
     { scope: ["string", "string.quoted"], settings: { foreground: darkString } },
-    { scope: ["constant.numeric", "constant.language"], settings: { foreground: darkAccent } },
+    { scope: ["constant.numeric"], settings: { foreground: darkNumber } },
+    { scope: ["constant.language"], settings: { foreground: darkAccent, fontStyle: "bold" } },
     { scope: ["entity.name.function", "support.function"], settings: { foreground: darkFunction } },
     { scope: ["entity.name.type", "entity.name.class", "support.type", "support.class"], settings: { foreground: darkType } },
     { scope: ["entity.name.tag", "punctuation.definition.tag"], settings: { foreground: darkAccent } },
     { scope: ["variable", "variable.other"], settings: { foreground: dark } },
-    { scope: ["punctuation", "meta.brace"], settings: { foreground: "#C8C1B6" } },
+    { scope: ["punctuation", "meta.brace"], settings: { foreground: darkPunct } },
+    { scope: ["support.type.property-name", "meta.object-literal.key", "entity.other.attribute-name", "variable.other.property", "meta.mapping.key string", "entity.name.tag.yaml"], settings: { foreground: darkProperty } },
+    { scope: ["support.type.property-name punctuation", "punctuation.support.type.property-name"], settings: { foreground: darkProperty } },
+    { scope: ["variable.parameter", "variable.other.readwrite.shell", "punctuation.definition.variable"], settings: { foreground: darkType } },
   ],
 };
 

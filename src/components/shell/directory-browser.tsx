@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { MobileCategories } from "@/components/shell/directory-frame";
-import { DirectorySearch as SearchField, FilterChip, SortSelect, TagMenu, ViewToggle } from "@/components/shell/filter-bar";
+import { ClearTag, DirectorySearch as SearchField, SortSelect, ViewToggle } from "@/components/shell/filter-bar";
 import { ToolCard, ToolRow } from "@/components/shell/tool-card";
 import { EmptyState } from "@/components/kit/empty-state";
 import { Button } from "@/components/kit/primitives/button";
@@ -22,7 +21,6 @@ import {
 export function DirectoryBrowser({
   tools,
   categories,
-  tags,
   lockedCategory = "all",
   lockedTag,
   defaultView = "grid",
@@ -101,74 +99,53 @@ export function DirectoryBrowser({
   const heading = !filtering && parsed.sort === "popular" ? "Popular" : "Results";
 
   return (
-    <div className={mode === "home" ? "px-4 py-6 lg:px-8" : "px-4 pt-5 pb-8 lg:px-8"}>
+    <div className={mode === "home" ? "pt-8 pb-16 lg:pl-8" : "pt-5 pb-8 lg:pl-8"}>
       {mode === "home" ? (
-        <header className="mb-5">
-          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <h1 className="text-[28px] font-semibold tracking-[-0.04em]">All tools</h1>
-            <p className="text-[14px] text-muted-foreground" aria-live="polite">
-              {results.length} {results.length === 1 ? "tool" : "tools"}
+        <header data-enter className="mb-7 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="eyebrow">
+              <span className="dot" aria-hidden />
+              Directory
             </p>
+            <h1 className="h-page mt-4">Every tool, one search away</h1>
           </div>
-          <p className="mt-1 max-w-[62ch] text-[14px] text-muted-foreground">
-            Free tools that run in your browser. Search, filter, and open one. Files stay on this device unless a tool says it fetches a public URL.
+          <p className="max-w-[44ch] text-[15px] leading-6 text-muted-foreground">
+            <span className="font-semibold text-foreground tabular-nums" aria-live="polite">
+              {results.length} {results.length === 1 ? "tool" : "tools"}
+            </span>{" "}
+            shown. Press <kbd className="keycap">/</kbd> to search, or pick a category.
           </p>
         </header>
       ) : null}
 
-      <div className="flex flex-wrap items-center gap-2">
-        <MobileCategories categories={categories} total={tools.length} active={lockedCategory} />
-        <SearchField
-          value={draft}
-          onChange={(query) => {
-            setDraft(query);
-            setEpoch((value) => value + 1);
-            scheduleSearchTrack(query);
-            if (queryTimer.current) window.clearTimeout(queryTimer.current);
-            queryTimer.current = window.setTimeout(() => write({ query }), 80);
-          }}
-          placeholder={searchPlaceholder}
-          inputRef={inputRef}
-        />
-        <FilterChip pressed={parsed.browser} onClick={() => write({ browser: !parsed.browser })}>
-          In browser
-        </FilterChip>
-        <FilterChip pressed={parsed.mcp} onClick={() => write({ mcp: !parsed.mcp })}>
-          MCP ready
-        </FilterChip>
-        <FilterChip pressed={parsed.fresh} onClick={() => write({ fresh: !parsed.fresh })}>
-          New
-        </FilterChip>
-        {lockedTag ? (
-          <Link href="/" className="inline-flex h-8 items-center rounded-lg border border-brand-text bg-[color-mix(in_oklch,var(--accent-brand)_10%,var(--surface))] px-2.5 font-mono text-[12px]">
-            #{lockedTag}
-            <span className="sr-only">Clear tag</span>
-            <span aria-hidden className="ml-1.5 text-faint">×</span>
-          </Link>
-        ) : (
-          <TagMenu tags={tags} value={parsed.tag} onChange={(next) => write({ tag: next })} />
-        )}
-        <div className="ml-auto flex items-center gap-2">
+      <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center">
+        <div className="flex min-w-0 flex-1 items-center gap-2">
+          <div className="min-w-0 flex-1 sm:max-w-md">
+            <SearchField
+              value={draft}
+              onChange={(query) => {
+                setDraft(query);
+                setEpoch((value) => value + 1);
+                scheduleSearchTrack(query);
+                if (queryTimer.current) window.clearTimeout(queryTimer.current);
+                queryTimer.current = window.setTimeout(() => write({ query }), 80);
+              }}
+              placeholder={searchPlaceholder}
+              inputRef={inputRef}
+            />
+          </div>
+          <MobileCategories categories={categories} total={tools.length} active={lockedCategory} />
+          {lockedTag ? <ClearTag tag={lockedTag} href="/tools" /> : null}
+        </div>
+        <div className="flex items-center justify-between gap-2 sm:justify-end">
           <SortSelect value={parsed.sort} onChange={(sort) => write({ sort })} />
           <ViewToggle value={view} onChange={(next) => write({ view: next })} />
         </div>
       </div>
 
       <div className="mt-6">
-        {mode === "home" && heading === "Popular" && results.length > 0 ? (
-          <section className="mb-8">
-            <h2 className="mb-3 text-[15px] font-medium tracking-[-0.02em]">Popular</h2>
-            <div className="flex gap-3 overflow-x-auto pb-1">
-              {results.slice(0, 8).map((tool) => (
-                <div key={tool.slug} className="w-[260px] shrink-0">
-                  <ToolCard tool={tool} />
-                </div>
-              ))}
-            </div>
-          </section>
-        ) : null}
-        {mode === "home" ? <h2 className="mb-3 text-[15px] font-medium tracking-[-0.02em]">{heading === "Popular" ? "All tools" : heading}</h2> : (
-          <p className="mb-3 text-[13px] text-muted-foreground" aria-live="polite">
+        {mode === "home" ? <h2 className="sr-only">{heading === "Popular" ? "All tools" : heading}</h2> : (
+          <p className={filtering ? "mb-3 text-[13px] text-muted-foreground" : "sr-only"} aria-live="polite">
             {results.length} {results.length === 1 ? "tool" : "tools"}
           </p>
         )}
@@ -191,7 +168,7 @@ export function DirectoryBrowser({
             }
           />
         ) : view === "grid" ? (
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          <div className={mode === "home" ? "grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : "grid gap-3 sm:grid-cols-2 xl:grid-cols-3"}>
             {results.map((tool) => (
               <ToolCard key={tool.slug} tool={tool} />
             ))}

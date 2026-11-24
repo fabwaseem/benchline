@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Search } from "lucide-react";
+import { Search } from "kineticons";
 import { ChipButton, Select } from "@/components/kit/controls";
 import { Input } from "@/components/kit/primitives/input";
 import { Cover } from "@/components/site/cover";
@@ -38,10 +38,13 @@ export function ExploreBrowser({
   );
 
   return (
-    <div className="page-x pb-20">
-      <header className="py-10 min-[700px]:py-16">
-        <p className="eyebrow">Directory</p>
-        <h1 className="d2 mt-4">Every tool.</h1>
+    <div className="page-x frame pb-24">
+      <header data-enter className="py-14 md:py-20">
+        <p className="eyebrow">
+          <span className="dot" aria-hidden />
+          Directory
+        </p>
+        <h1 className="d2 mt-5">Every tool on the bench.</h1>
         <p className="lede mt-4 max-w-[46ch]">Search the bench, then narrow by category, tag, or the order you want them in.</p>
       </header>
       <Input

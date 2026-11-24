@@ -1,6 +1,6 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "kineticons";
 import { useTheme } from "next-themes";
 import { useSyncExternalStore } from "react";
 import { IconButton } from "@/components/kit/primitives/icon-button";

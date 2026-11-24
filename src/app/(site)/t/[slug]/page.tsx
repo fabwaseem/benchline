@@ -109,20 +109,20 @@ export default async function ToolScreen({ params }: { params: Promise<{ slug: s
           mcpName={mcp?.name ?? null}
           slug={tool.slug}
         />
-        <div className="mt-6">
+        <div className="mt-8">
           <Suspense fallback={<WorkspaceSkeleton />}>
             <ToolHost slug={tool.slug} />
           </Suspense>
         </div>
         {mcp && call ? (
-          <div className="mt-8">
+          <div className="mt-14">
             <AgentSection name={mcp.name} endpoint={`${SITE_URL}/mcp`} call={call} />
           </div>
         ) : null}
-        <div className="mt-10">
+        <div className="mt-16">
           <RelatedTools tools={related} />
         </div>
-        <div className="mt-10">
+        <div className="mt-16 border-t border-border pt-14">
           <HowItWorks description={tool.description} steps={tool.howTo} faqs={tool.faqs} />
         </div>
       </ToolPage>

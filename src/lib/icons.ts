@@ -1,8 +1,9 @@
+import type { ComponentType } from "react";
 import {
   Aperture,
   AppWindow,
   ArrowLeftRight,
-  AudioWaveform,
+  AudioLines,
   Binary,
   Bot,
   Box,
@@ -15,7 +16,7 @@ import {
   Container,
   Crop,
   Database,
-  Dices,
+  DiceSix,
   Diff,
   Eraser,
   FileCode,
@@ -51,7 +52,7 @@ import {
   ScanText,
   Scissors,
   Search,
-  Share2,
+  ShareNodes,
   Shield,
   ShieldCheck,
   Shrink,
@@ -62,14 +63,17 @@ import {
   Type,
   Waypoints,
   WholeWord,
-  type LucideIcon,
-} from "lucide-react";
+  type KineticIconProps,
+} from "kineticons";
+
+/** A tool or category icon. Names are the registry keys; each maps to an animated kineticons component. */
+export type SiteIcon = ComponentType<Omit<KineticIconProps, "icon">>;
 
 export const ICONS = {
   Aperture,
   AppWindow,
   ArrowLeftRight,
-  AudioWaveform,
+  AudioWaveform: AudioLines,
   Binary,
   Bot,
   Box,
@@ -82,7 +86,7 @@ export const ICONS = {
   Container,
   Crop,
   Database,
-  Dices,
+  Dices: DiceSix,
   Diff,
   Eraser,
   FileCode,
@@ -118,7 +122,7 @@ export const ICONS = {
   ScanText,
   Scissors,
   Search,
-  Share2,
+  Share2: ShareNodes,
   Shield,
   ShieldCheck,
   Shrink,
@@ -129,10 +133,10 @@ export const ICONS = {
   Type,
   Waypoints,
   WholeWord,
-} as const satisfies Record<string, LucideIcon>;
+} as const satisfies Record<string, SiteIcon>;
 
 export const ICON_NAMES = Object.keys(ICONS);
 
-export function iconFor(name: string): LucideIcon {
+export function iconFor(name: string): SiteIcon {
   return ICONS[name as keyof typeof ICONS] ?? FileText;
 }

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Search } from "lucide-react";
+import { Menu, Search } from "kineticons";
 import { Button } from "@/components/kit/primitives/button";
 import { IconButton } from "@/components/kit/primitives/icon-button";
 import { Kbd } from "@/components/kit/kbd";
@@ -16,7 +16,7 @@ import { categories } from "@/registry/categories";
 import { cn } from "@/lib/utils";
 
 const links = [
-  { href: "/", label: "Tools", match: (path: string) => path === "/" },
+  { href: "/tools", label: "Tools", match: (path: string) => path === "/tools" },
   { href: "/explore", label: "Explore", match: (path: string) => path === "/explore" },
   { href: "/categories", label: "Categories", match: (path: string) => path === "/categories" || categories.some((item) => path === `/${item.slug}`) },
 ];

@@ -8,7 +8,7 @@ import { Kbd } from "@/components/kit/kbd";
 import { cn } from "@/lib/utils";
 
 const fieldClass =
-  "h-control-lg w-full min-w-0 rounded-sm border border-border-strong bg-surface px-2.5 text-[13px] text-foreground outline-none transition-[box-shadow,border-color] duration-150 placeholder:text-faint focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-ring/40 disabled:cursor-not-allowed disabled:opacity-40 aria-invalid:border-destructive min-[700px]:h-control-md";
+  "h-control-lg w-full min-w-0 rounded-md border border-border-strong bg-surface px-3 text-[13.5px] text-foreground shadow-[inset_0_1px_2px_oklch(0%_0_0/0.04)] outline-none transition-[box-shadow,border-color] duration-150 placeholder:text-faint hover:border-[color-mix(in_srgb,var(--foreground)_26%,transparent)] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/20 disabled:cursor-not-allowed disabled:opacity-40 aria-invalid:border-destructive min-[700px]:h-control-md";
 
 function Input({
   className,
@@ -36,7 +36,7 @@ function Input({
       data-slot="input-wrap"
       className={cn(
         fieldClass,
-        "flex items-center gap-2 px-2 focus-within:border-brand focus-within:ring-2 focus-within:ring-ring/40",
+        "flex items-center gap-2 px-2.5 focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/20",
         className,
       )}
     >

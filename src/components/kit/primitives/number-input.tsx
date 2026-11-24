@@ -39,7 +39,7 @@ export function NumberInput({
       max={max}
       step={step}
       disabled={disabled}
-      className={cn("flex h-control-lg items-center overflow-hidden rounded-sm border border-border-strong bg-surface min-[700px]:h-control-md", className)}
+      className={cn("flex h-control-lg items-center overflow-hidden rounded-md border border-border-strong bg-surface min-[700px]:h-control-md", className)}
     >
       <NumberField.Decrement aria-label="Decrease" className="grid h-full w-control-md place-items-center text-muted-foreground hover:bg-sunken hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:opacity-40">
         <Minus className="size-3.5" />

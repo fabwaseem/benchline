@@ -1,6 +1,6 @@
 "use client";
 
-import { Search } from "lucide-react";
+import { Search } from "kineticons";
 import { Button } from "@/components/ui/button";
 import { openCommandK } from "@/components/site/open-command";
 

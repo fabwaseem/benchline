@@ -3,6 +3,8 @@ import Link from "next/link";
 import { categories } from "@/registry/categories";
 import { tools } from "@/registry";
 import { FaqAccordion } from "@/components/kit/faq-accordion";
+import { PageHero } from "@/components/site/page-hero";
+import { SectionHeading } from "@/components/site/section-heading";
 import { JsonLd } from "@/lib/jsonld";
 import { GITHUB_URL, SITE_NAME, SITE_URL } from "@/lib/site";
 
@@ -34,7 +36,7 @@ const principles = [
 export default function AboutPage() {
   const local = tools.filter((tool) => tool.runsLocally).length;
   return (
-    <div className="page-x pb-24">
+    <div className="pb-24">
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -64,41 +66,46 @@ export default function AboutPage() {
           ],
         }}
       />
-      <header className="grid gap-10 py-16 lg:grid-cols-[1.1fr_.9fr] lg:py-24">
-        <div>
-          <p className="eyebrow">
-            <span className="font-mono">01</span> The bench
-          </p>
-          <h1 className="mt-4 text-[40px] font-semibold tracking-[-0.045em]">
-            A directory,
-            <br />
-            kept exact.
-          </h1>
-        </div>
-        <p className="lede self-end">
-          {SITE_NAME} is a directory of exact tools at {SITE_URL.replace("https://", "")}.
-          {` ${tools.length} tools, ${categories.length} categories, ${local} of them entirely in the browser.`}
-        </p>
-      </header>
+      <PageHero
+        eyebrow="About"
+        title={<>A directory of web tools, <span className="mark-lime">kept exact.</span></>}
+        aside={
+          <dl className="grid grid-cols-3 gap-px overflow-hidden rounded-xl bg-border shadow-[0_0_0_1px_var(--border)]">
+            {[
+              { v: tools.length, k: "tools" },
+              { v: categories.length, k: "categories" },
+              { v: local, k: "in browser" },
+            ].map((item) => (
+              <div key={item.k} className="flex flex-col-reverse bg-surface p-5">
+                <dt className="mt-1 text-[13px] text-muted-foreground">{item.k}</dt>
+                <dd className="text-[34px] font-semibold tracking-[-0.04em] tabular-nums">{item.v}</dd>
+              </div>
+            ))}
+          </dl>
+        }
+      >
+        {SITE_NAME} lives at {SITE_URL.replace("https://", "")}. Each tool is a pure function you can open in a tab or call from an agent, and every number it shows comes from your input.
+      </PageHero>
 
-      <section id="principles" className="grid border-y border-border sm:grid-cols-2 lg:grid-cols-4">
+      <section id="principles" aria-label="Principles" className="page-x frame mt-16 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
         {principles.map((item, i) => (
-          <article key={item.t} className="border-border p-6 sm:[&:nth-child(odd)]:border-r lg:border-r lg:last:border-r-0">
-            <p className="font-mono text-[11px] text-faint">0{i + 1}</p>
-            <h2 className="mt-3 text-[22px] font-medium tracking-[-0.03em]">{item.t}</h2>
+          <article key={item.t} className="border-t-2 border-border pt-6 first:border-brand-text">
+            <p className="font-mono text-[11px] text-brand-text">0{i + 1}</p>
+            <h2 className="mt-3 text-[22px] font-semibold tracking-[-0.03em]">{item.t}</h2>
             <p className="mt-2 text-[14.5px] leading-relaxed text-muted-foreground">{item.d}</p>
           </article>
         ))}
       </section>
 
-      <section id="data" className="mt-16 grid gap-8 lg:grid-cols-[.7fr_1.3fr]">
+      <section id="data" className="page-x frame mt-24 grid scroll-mt-24 gap-8 lg:grid-cols-[.7fr_1.3fr]">
         <div>
           <p className="eyebrow">Data</p>
-          <h2 className="d3 mt-3">What leaves the tab.</h2>
+          <h2 className="d3 mt-4">What leaves the tab.</h2>
+          <p className="mt-4 max-w-[40ch] text-[15px] leading-6 text-muted-foreground">Every tool, where it runs, and what it sends. Local tools send nothing at all.</p>
         </div>
-        <div className="overflow-x-auto rounded-[14px] border border-border">
+        <div className="max-h-[640px] overflow-auto rounded-xl border border-border bg-surface">
           <table className="w-full min-w-[560px] text-left text-[14px]">
-            <thead className="bg-sunken font-mono text-[10px] tracking-[0.12em] text-faint uppercase">
+            <thead className="sticky top-0 bg-sunken font-mono text-[10.5px] tracking-[0.12em] text-faint uppercase">
               <tr>
                 <th className="px-4 py-3 font-normal">Tool</th>
                 <th className="px-4 py-3 font-normal">Where it runs</th>
@@ -109,14 +116,14 @@ export default function AboutPage() {
               {tools.map((tool) => (
                 <tr key={tool.slug} className="border-t border-border">
                   <td className="px-4 py-3">
-                    <Link href={`/t/${tool.slug}`} className="hover:text-brand">
+                    <Link href={`/t/${tool.slug}`} className="u-draw font-medium hover:text-brand-text">
                       {tool.name}
                     </Link>
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">
                     {tool.runsLocally ? "This browser" : "This browser, then one public fetch"}
                   </td>
-                  <td className="px-4 py-3 font-mono text-[12px] text-muted-foreground">
+                  <td className={tool.runsLocally ? "px-4 py-3 font-mono text-[12px] text-brand-text" : "px-4 py-3 font-mono text-[12px] text-muted-foreground"}>
                     {tool.runsLocally ? "Nothing" : "The URL you submit"}
                   </td>
                 </tr>
@@ -126,20 +133,21 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="mt-16 grid gap-8 lg:grid-cols-2">
-        <div className="card p-7">
-          <p className="eyebrow">Open bench</p>
-          <h2 className="mt-3 text-[28px] font-medium tracking-[-0.03em]">{SITE_NAME}</h2>
+      <section className="page-x frame mt-24 grid gap-8 lg:grid-cols-2">
+        <div className="relative isolate overflow-hidden rounded-2xl border border-border bg-brand-wash p-8">
+          <div aria-hidden className="ground-glow absolute inset-0 -z-10" />
+          <p className="eyebrow">Open source</p>
+          <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.035em]">The whole bench is public.</h2>
           <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
             An independent tool bench. The source is public, the registry is generated, and the
             prices say when they were last checked.
           </p>
-          <a href={GITHUB_URL} className="btn btn-ink mt-5">
-            Read the source
+          <a href={GITHUB_URL} className="btn btn-brand mt-6">
+            Read the source on GitHub
           </a>
         </div>
         <div>
-          <p className="eyebrow">Notes</p>
+          <SectionHeading eyebrow="Notes" title="Common questions" className="mb-4" />
           <FaqAccordion
             faqs={[
               {

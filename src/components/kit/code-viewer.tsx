@@ -58,9 +58,9 @@ export function CodeViewer({
   const marked = new Set(highlightLines ?? []);
   const lines = code.length > 0 ? code.split("\n") : [""];
   return (
-    <div className={cn("flex min-h-0 min-w-0 flex-col overflow-hidden bg-well", chrome && "rounded-lg border border-border", fill && "h-full min-h-[280px]", className)}>
+    <div className={cn("flex min-h-0 min-w-0 flex-col overflow-hidden bg-well", chrome && "rounded-lg border border-border shadow-[var(--in-hi)]", fill && "h-full min-h-[280px]", className)}>
       {chrome ? (
-        <div className="flex items-center gap-2 border-b border-border px-2 py-1.5">
+        <div className="flex items-center gap-2 border-b border-border bg-surface/60 py-1.5 pr-1.5 pl-3">
           <span className="truncate font-mono text-[11px] tracking-[0.06em] text-muted-foreground uppercase">{label}</span>
           <span className="font-mono text-[11px] text-faint">{lang}</span>
           <div className="ml-auto flex gap-1">
@@ -76,7 +76,7 @@ export function CodeViewer({
         {diff?.view === "split" ? <SplitDiff rows={diff.rows} wrap={wrap} /> : null}
         {diff?.view === "inline" ? <InlineDiff pieces={diff.pieces} wrap={wrap} /> : null}
         {diff ? null : (
-          <div className={cn("min-w-full font-mono text-[12.5px] leading-6", dense && "text-[12px] leading-5")}>
+          <div className={cn("min-w-full py-2 font-mono text-[12.5px] leading-6", dense && "text-[12px] leading-5")}>
             {lines.map((line, index) => (
               <div key={index} className={cn("flex", marked.has(index + 1) && "bg-[color-mix(in_srgb,var(--accent-brand)_16%,transparent)]")}>
                 <span className="sticky left-0 w-10 shrink-0 bg-well pr-2 text-right text-faint tabular-nums select-none">{index + 1}</span>

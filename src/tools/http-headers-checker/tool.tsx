@@ -61,14 +61,18 @@ export default function HeadersTool() {
 
   return (
     <ToolCard>
-      <div className="flex flex-col gap-3 border-b border-border p-3 min-[700px]:flex-row min-[700px]:items-end">
-        <FieldRow label="Public URL" htmlFor="hdr-url" className="min-w-0 flex-1" help="Private addresses are refused. The body is discarded." error={error || undefined}>
+      <div className="flex flex-col gap-3 border-b border-border p-3">
+        <FieldRow
+          label="Public URL" htmlFor="hdr-url" help="Private addresses are refused. The body is discarded." error={error || undefined}
+          trailing={
+            <>
+            <ActionButton type="button" className="btn btn-ink" disabled={!url.trim() || busy} onClick={() => void run()}>Check headers</ActionButton>
+            {busy ? <ActionButton type="button" variant="outline" onClick={cancel}>Cancel</ActionButton> : null}
+            </>
+          }
+        >
           <TextInput ref={urlRef} id="hdr-url" value={url} autoFocus className="font-mono" aria-invalid={Boolean(error) || undefined} onChange={(event) => setUrl(event.target.value)} />
         </FieldRow>
-        <div className="flex flex-wrap gap-2">
-          <ActionButton type="button" className="btn btn-ink" disabled={!url.trim() || busy} onClick={() => void run()}>Check headers</ActionButton>
-          {busy ? <ActionButton type="button" variant="outline" onClick={cancel}>Cancel</ActionButton> : null}
-        </div>
       </div>
       <ToolPanes ratio="35/65">
         <Pane label="Response">

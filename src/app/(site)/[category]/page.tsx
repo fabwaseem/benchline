@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowRight } from "kineticons";
 import { Suspense } from "react";
 import { notFound, redirect } from "next/navigation";
 import { CategoryHeader } from "@/components/shell/category-header";
@@ -7,6 +8,7 @@ import { DirectoryBrowser } from "@/components/shell/directory-browser";
 import { DirectoryFrame } from "@/components/shell/directory-frame";
 import { FaqAccordion } from "@/components/kit/faq-accordion";
 import { Cover } from "@/components/site/cover";
+import { SectionHeading } from "@/components/site/section-heading";
 import { JsonLd, collectionGraph } from "@/lib/jsonld";
 import { directoryCatalog } from "@/lib/catalog";
 import { categoryFaqs } from "@/lib/directory";
@@ -76,37 +78,35 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
           localCount={local}
           mcpCount={mcp}
           breadcrumbs={listing.breadcrumbs}
-          chips={listing.chips}
-          activeChip={listing.activeChip}
-          parentSlug={listing.parentSlug}
         />
-        <Suspense fallback={<div className="mx-4 mt-5 h-40 animate-pulse rounded-xl bg-sunken lg:mx-8" />}>
+        <Suspense fallback={<div className="mt-5 h-40 animate-pulse rounded-xl bg-sunken lg:ml-8" />}>
           <DirectoryBrowser
             tools={catalog.tools}
             categories={catalog.categories}
             tags={catalog.tags}
             lockedCategory={listing.filter}
-            defaultView="list"
+            defaultView="grid"
             mode="embedded"
             searchPlaceholder={`Search ${listing.name} tools`}
           />
         </Suspense>
-        <section className="px-4 pb-6 lg:px-8">
-          <h2 className="font-mono text-[11px] tracking-[0.08em] text-faint uppercase">Related categories</h2>
-          <div className="mt-3 grid gap-3 sm:grid-cols-3">
+        <section className="pt-6 pb-10 lg:pl-8">
+          <SectionHeading eyebrow="Nearby" title="Related categories" />
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
             {related.map((item) => (
-              <Link key={item.slug} href={`/${item.slug}`} className="lift flex items-center gap-3 rounded-xl border border-border bg-surface p-3 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none">
-                <Cover hue={item.hue} icon={item.icon} size={36} />
-                <span>
-                  <span className="block text-[14px] font-medium">{item.name}</span>
-                  <span className="font-mono text-[12px] text-faint tabular-nums">{item.count} {item.count === 1 ? "tool" : "tools"}</span>
+              <Link key={item.slug} href={`/${item.slug}`} className="ki-trigger lift group flex items-center gap-3.5 rounded-xl border border-border bg-surface p-4 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none">
+                <Cover hue={item.hue} icon={item.icon} size={44} />
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-[15px] font-semibold tracking-[-0.015em]">{item.name}</span>
+                  <span className="mt-0.5 block text-[13px] text-muted-foreground tabular-nums">{item.count} {item.count === 1 ? "tool" : "tools"}</span>
                 </span>
+                <ArrowRight size={16} aria-hidden className="shrink-0 text-faint transition-[transform,color] group-hover:translate-x-0.5 group-hover:text-brand-text" />
               </Link>
             ))}
           </div>
         </section>
-        <section className="px-4 pb-16 lg:px-8">
-          <h2 className="mb-2 text-[15px] font-medium">FAQ</h2>
+        <section className="border-t border-border pt-10 pb-20 lg:pl-8">
+          <SectionHeading eyebrow="FAQ" title={`About ${listing.name.toLowerCase()} tools`} className="mb-4" />
           <FaqAccordion faqs={faqs} />
         </section>
       </DirectoryFrame>

@@ -110,6 +110,9 @@ importers:
       jsonpath-plus:
         specifier: ^11.2.1
         version: 11.2.1
+      kineticons:
+        specifier: ^0.4.0
+        version: 0.4.0(react@19.3.0)
       linkedom:
         specifier: ^0.18.13
         version: 0.18.13
@@ -965,6 +968,10 @@ packages:
     engines: {node: '>= 10.16.0'}
     peerDependencies:
       jsep: ^0.4.0||^1.0.0
+
+  '@kineticons/core@0.4.0':
+    resolution: {integrity: sha512-wts/SznJvgIZFwTP+KmZWK+aSWC5UZh9Sux0ZdU3G2GiQvPKx7SGE0fPtxelBL165BMlwN4pE3R3Px2lYLwDtw==}
+    engines: {node: '>=18'}
 
   '@mediapipe/tasks-vision@0.10.17':
     resolution: {integrity: sha512-CZWV/q6TTe8ta61cZXjfnnHsfWIdFhms03M9T7Cnd5y2mdpylJM0rF1qRq+wsQVRMLz1OYPVEBU9ph2Bx8cxrg==}
@@ -3621,6 +3628,12 @@ packages:
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
+  kineticons@0.4.0:
+    resolution: {integrity: sha512-ZhtdYhWiDtZYqvNtsL6PDxIyktnOAHsoSLWCFplfyn4bEjSd+gEfhtZgZQiXHojabO7D/idy+Oqaz5pVgUP6eA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      react: '>=18'
+
   kleur@3.0.3:
     resolution: {integrity: sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==}
     engines: {node: '>=6'}
@@ -6101,6 +6114,8 @@ snapshots:
   '@jsep-plugin/regex@1.1.0(jsep@1.6.0)':
     dependencies:
       jsep: 1.6.0
+
+  '@kineticons/core@0.4.0': {}
 
   '@mediapipe/tasks-vision@0.10.17': {}
 
@@ -8779,6 +8794,11 @@ snapshots:
   keyv@4.5.4:
     dependencies:
       json-buffer: 3.0.1
+
+  kineticons@0.4.0(react@19.3.0):
+    dependencies:
+      '@kineticons/core': 0.4.0
+      react: 19.3.0
 
   kleur@3.0.3: {}
 

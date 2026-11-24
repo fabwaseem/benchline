@@ -34,7 +34,7 @@ export function ToolHeader({
         <div className="min-w-0">
           <Breadcrumbs
             items={[
-              { href: "/", label: "Tools" },
+              { href: "/tools", label: "Tools" },
               ...(parent ? [parent] : []),
               { href: `/${categorySlug}`, label: categoryName },
               { href: `/t/${slug}`, label: name },

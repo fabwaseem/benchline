@@ -132,11 +132,17 @@ export default function MetaTool() {
         }
       />
       {mode === "url" ? (
-        <div className="flex flex-col gap-3 border-b border-border p-3 min-[700px]:flex-row min-[700px]:items-end">
-          <FieldRow label="Page URL" htmlFor="meta-url" className="min-w-0 flex-1" help="A bare domain is fine. The image itself is loaded in your browser." error={blocked ? error : undefined}>
+        <div className="flex flex-col gap-3 border-b border-border p-3">
+          <FieldRow
+            label="Page URL" htmlFor="meta-url" help="A bare domain is fine. The image itself is loaded in your browser." error={blocked ? error : undefined}
+            trailing={
+              <>
+              <ActionButton type="button" className="btn btn-ink" aria-busy={busy} disabled={!url.trim() || busy} onClick={() => void run()}>Inspect</ActionButton>
+              </>
+            }
+          >
             <TextInput ref={urlRef} id="meta-url" value={url} autoFocus aria-invalid={blocked || undefined} onChange={(event) => setUrl(event.target.value)} />
           </FieldRow>
-          <ActionButton type="button" className="btn btn-ink" aria-busy={busy} disabled={!url.trim() || busy} onClick={() => void run()}>Inspect</ActionButton>
         </div>
       ) : null}
       <ToolPanes ratio={mode === "write" ? "50/50" : "40/60"}>

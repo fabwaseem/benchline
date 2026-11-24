@@ -42,10 +42,13 @@ export function SearchView() {
     .filter((group) => group.items.length > 0);
 
   return (
-    <div className="page-x pb-20">
-      <header className="py-12">
-        <p className="eyebrow">Search</p>
-        <h1 className="d2 mt-3">Find a tool.</h1>
+    <div className="page-x frame pb-24">
+      <header data-enter className="py-14 md:py-20">
+        <p className="eyebrow">
+          <span className="dot" aria-hidden />
+          Search
+        </p>
+        <h1 className="d2 mt-5">Find a tool, or paste what you have.</h1>
       </header>
       <Input
         value={query}
@@ -96,7 +99,7 @@ export function SearchView() {
       <div className="mt-8 grid gap-10">
         {grouped.map((group) => (
           <section key={group.cat.slug}>
-            <h2 className="font-mono text-[11px] tracking-[0.14em] text-faint uppercase">{group.cat.name}</h2>
+            <h2 className="font-mono text-[11px] font-medium tracking-[0.12em] text-brand-text uppercase">{group.cat.name}</h2>
             <ul className="mt-3 grid gap-3 sm:grid-cols-2">
               {group.items.map(({ tool }) => {
                 const cat = categories.find((item) => item.slug === tool.category);
@@ -121,7 +124,7 @@ export function SearchView() {
       </div>
 
       <section className="mt-12">
-        <h2 className="font-mono text-[11px] tracking-[0.14em] text-faint uppercase">Tags</h2>
+        <h2 className="font-mono text-[11px] font-medium tracking-[0.12em] text-brand-text uppercase">Tags</h2>
         <div className="mt-3 flex flex-wrap gap-2">
           {allTags()
             .slice(0, 16)

@@ -90,11 +90,17 @@ export default function AiSeoTool() {
       />
       <div className="flex flex-col gap-3 border-b border-border p-3">
         <p className="text-[12.5px] text-muted-foreground">Pass, warn, or fail for crawler access, llms.txt, structured data, and the on-page signals.</p>
-        <div className="flex flex-col gap-2 min-[700px]:flex-row min-[700px]:items-end">
-          <FieldRow label="Page URL" htmlFor="seo-url" className="min-w-0 flex-1" help="A bare domain is fine. The check reads the page, robots.txt, llms.txt, and the sitemap." error={blocked ? "Private addresses are refused." : undefined}>
+        <div className="flex flex-col gap-2">
+          <FieldRow
+            label="Page URL" htmlFor="seo-url" help="A bare domain is fine. The check reads the page, robots.txt, llms.txt, and the sitemap." error={blocked ? "Private addresses are refused." : undefined}
+            trailing={
+              <>
+              <ActionButton type="button" className="btn btn-ink" aria-busy={busy} disabled={!url.trim() || busy} onClick={() => void run()}>Check</ActionButton>
+              </>
+            }
+          >
             <TextInput ref={urlRef} id="seo-url" value={url} aria-invalid={blocked || undefined} autoFocus onChange={(event) => setUrl(event.target.value)} />
           </FieldRow>
-          <ActionButton type="button" className="btn btn-ink" aria-busy={busy} disabled={!url.trim() || busy} onClick={() => void run()}>Check</ActionButton>
         </div>
         <div className="flex flex-wrap gap-1.5">
           {CRAWLERS.map((name) => (

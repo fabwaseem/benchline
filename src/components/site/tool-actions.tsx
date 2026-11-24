@@ -1,15 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Share2 } from "lucide-react";
+import { Check, Share as Share2 } from "kineticons";
 import { Button } from "@/components/kit/primitives/button";
+import { cn } from "@/lib/utils";
 
-export function ToolActions({ title }: { slug: string; title: string }) {
+export function ToolActions({ title, className }: { slug: string; title: string; className?: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <Button
       type="button"
       variant="outline"
+      size="lg"
+      className={cn("sm:h-control-md sm:px-3.5 sm:text-[13.5px]", className)}
       onClick={() => {
         const url = window.location.href;
         const share = navigator.share?.({ title, url });
@@ -23,8 +26,8 @@ export function ToolActions({ title }: { slug: string; title: string }) {
         });
       }}
     >
-      <Share2 size={15} strokeWidth={1.75} />
-      {copied ? "Copied" : "Share"}
+      {copied ? <Check size={15} aria-hidden /> : <Share2 size={15} aria-hidden />}
+      {copied ? "Link copied" : "Share"}
     </Button>
   );
 }

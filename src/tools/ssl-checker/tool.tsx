@@ -69,14 +69,18 @@ export default function SslTool() {
 
   return (
     <ToolCard>
-      <div className="flex flex-col gap-3 border-b border-border p-3 min-[700px]:flex-row min-[700px]:items-end">
-        <FieldRow label="Hostname" htmlFor="ssl-host" className="min-w-0 flex-1" help="Port 443 only. Private addresses are refused." error={error || undefined}>
+      <div className="flex flex-col gap-3 border-b border-border p-3">
+        <FieldRow
+          label="Hostname" htmlFor="ssl-host" help="Port 443 only. Private addresses are refused." error={error || undefined}
+          trailing={
+            <>
+            <ActionButton type="button" className="btn btn-ink" disabled={!host.trim() || busy} onClick={() => void run()}>Check certificate</ActionButton>
+            {busy ? <ActionButton type="button" variant="outline" onClick={cancel}>Cancel</ActionButton> : null}
+            </>
+          }
+        >
           <TextInput ref={hostRef} id="ssl-host" value={host} autoFocus className="font-mono" aria-invalid={Boolean(error) || undefined} onChange={(event) => setHost(event.target.value)} />
         </FieldRow>
-        <div className="flex flex-wrap gap-2">
-          <ActionButton type="button" className="btn btn-ink" disabled={!host.trim() || busy} onClick={() => void run()}>Check certificate</ActionButton>
-          {busy ? <ActionButton type="button" variant="outline" onClick={cancel}>Cancel</ActionButton> : null}
-        </div>
       </div>
       <ToolPanes ratio="35/65">
         <Pane label="Certificate">

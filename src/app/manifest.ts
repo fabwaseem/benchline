@@ -8,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Free browser tools. Search the directory, or call the same tools over MCP.",
     start_url: "/",
     display: "standalone",
-    background_color: "#F6F4EF",
-    theme_color: "#F6F4EF",
+    background_color: "#0A0A0A",
+    theme_color: "#0A0A0A",
     icons: [
       { src: "/app-icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
       { src: "/app-icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },

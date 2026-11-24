@@ -1,40 +1,24 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
-import { DirectoryBrowser } from "@/components/shell/directory-browser";
-import { DirectoryFrame } from "@/components/shell/directory-frame";
+import { AgentBand } from "@/components/landing/agent-band";
+import { CategoryGrid } from "@/components/landing/category-grid";
+import { Hero } from "@/components/landing/hero";
+import { PopularTools } from "@/components/landing/popular-tools";
+import { PrivacyBand } from "@/components/landing/privacy-band";
 import { JsonLd, collectionGraph } from "@/lib/jsonld";
 import { directoryCatalog } from "@/lib/catalog";
 import { absoluteUrl, SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: `${SITE_NAME} — free browser tools`,
-  description: "Search free browser tools for PDF, images, JSON, security, and SEO. Files stay on your device unless a tool fetches a public URL.",
+  title: `${SITE_NAME}: free browser tools for web work`,
+  description: "Free browser tools for PDF, images, JSON, security, and SEO. Files stay on your device, and every tool is callable from your AI agent over MCP.",
   alternates: { canonical: "/" },
 };
 
-function DirectoryFallback() {
-  return (
-    <div className="px-4 py-6 lg:px-8" aria-hidden>
-      <div className="h-8 w-40 animate-pulse rounded-md bg-sunken" />
-      <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-        {Array.from({ length: 6 }, (_, index) => (
-          <div key={index} className="h-36 animate-pulse rounded-xl border border-border bg-surface p-4">
-            <div className="flex gap-3">
-              <div className="size-10 rounded-sm bg-sunken" />
-              <div className="flex-1 space-y-2 pt-1">
-                <div className="h-3 w-2/3 rounded-sm bg-sunken" />
-                <div className="h-3 w-full rounded-sm bg-sunken" />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export default function HomePage() {
-  const { tools, categories, tags } = directoryCatalog();
+  const { tools, categories } = directoryCatalog();
+  const popular = [...tools].sort((x, y) => x.popularity - y.popularity).slice(0, 8);
+  const local = tools.filter((tool) => tool.runsLocally).length;
+  const mcp = tools.filter((tool) => tool.mcpName).length;
   const description = "Free browser tools. Search, filter, and open one. Files stay on your device unless a tool fetches a public URL.";
   return (
     <>
@@ -46,11 +30,11 @@ export default function HomePage() {
           items: tools.map((tool) => ({ name: tool.name, url: absoluteUrl(`/t/${tool.slug}`) })),
         })}
       />
-      <DirectoryFrame categories={categories} total={tools.length} active="all">
-        <Suspense fallback={<DirectoryFallback />}>
-          <DirectoryBrowser tools={tools} categories={categories} tags={tags} />
-        </Suspense>
-      </DirectoryFrame>
+      <Hero total={tools.length} local={local} mcp={mcp} />
+      <CategoryGrid categories={categories} tools={tools} />
+      <PopularTools tools={popular} total={tools.length} />
+      <AgentBand endpoint={`${SITE_URL}/mcp`} total={tools.length} />
+      <PrivacyBand local={local} network={tools.length - local} />
     </>
   );
 }

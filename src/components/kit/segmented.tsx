@@ -38,7 +38,7 @@ export function Segmented<T extends string>({
       className={cn("seg max-w-full flex-wrap", className)}
     >
       {options.map((option) => (
-        <Toggle key={option.value} value={option.value} className="shrink-0 max-[699px]:h-control-lg">
+        <Toggle key={option.value} value={option.value} className="min-w-fit max-[699px]:h-control-lg">
           {option.label}
         </Toggle>
       ))}

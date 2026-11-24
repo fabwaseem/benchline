@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, LayoutGrid, List, Search } from "lucide-react";
+import { ArrowRight, LayoutGrid, List, Search } from "kineticons";
 import { Select } from "@/components/kit/controls";
 import { Input } from "@/components/kit/primitives/input";
 import { Toggle } from "@/components/kit/primitives/toggle";

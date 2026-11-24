@@ -75,6 +75,31 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
+  experimental: {
+    // Load only the kineticons a page uses instead of the whole 2,800-icon barrel.
+    optimizePackageImports: ["kineticons"],
+    // Keep visited pages in the client router cache so back-and-forth navigation is instant.
+    staleTimes: { dynamic: 30, static: 600 },
+  },
+  // Static art and brand files change rarely: cache them for a week, serve stale for a day while revalidating.
+  async headers() {
+    const longCache = [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=86400" }];
+    return [
+      { source: "/tools/:slug/:file*", headers: longCache },
+      { source: "/brand/:file*", headers: longCache },
+      { source: "/fonts/:file*", headers: longCache },
+      { source: "/:icon(favicon.ico|favicon.svg|apple-touch-icon.png|app-icon-192.png|app-icon-512.png)", headers: longCache },
+    ];
+  },
+  // The directory moved from the home page to /tools. Old filtered links keep their query string.
+  async redirects() {
+    return ["q", "tag", "sort", "view", "browser", "mcp", "fresh"].map((key) => ({
+      source: "/",
+      has: [{ type: "query" as const, key }],
+      destination: "/tools",
+      permanent: true,
+    }));
+  },
   turbopack: {
     resolveAlias: {
       "onnxruntime-node": { browser: "./src/lib/onnx-stub.ts" },
