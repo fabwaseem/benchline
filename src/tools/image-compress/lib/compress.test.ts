@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { compressionPlan } from "@/tools/image-compress/lib/compress";
+import { compressionPlan, keepsOriginal } from "@/tools/image-compress/lib/compress";
 
 describe("image compress", () => {
   it("keeps the original format, caps the long edge, and reports savings", () => {
@@ -53,5 +53,19 @@ describe("image compress", () => {
       beforeBytes: 10,
       afterBytes: 4,
     }).format).toBe("webp");
+  });
+});
+
+describe("keepsOriginal", () => {
+  const base = { source: "png", format: "png", sourceWidth: 10, sourceHeight: 10, width: 10, height: 10, beforeBytes: 100 };
+
+  it("keeps the original when a same-format, same-size re-encode is bigger", () => {
+    expect(keepsOriginal({ ...base, afterBytes: 140 })).toBe(true);
+  });
+
+  it("returns the new file when it is smaller, resized, or a format change was asked for", () => {
+    expect(keepsOriginal({ ...base, afterBytes: 60 })).toBe(false);
+    expect(keepsOriginal({ ...base, width: 5, height: 5, afterBytes: 140 })).toBe(false);
+    expect(keepsOriginal({ ...base, format: "webp", afterBytes: 140 })).toBe(false);
   });
 });

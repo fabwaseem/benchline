@@ -27,3 +27,25 @@ export function compressionPlan(input: {
     ...savings(input.beforeBytes, input.afterBytes),
   };
 }
+
+/**
+ * True when re-encoding only made the file bigger and nothing else was asked for
+ * (same format, same size), so the original is the better answer.
+ */
+export function keepsOriginal(input: {
+  source: string;
+  format: string;
+  sourceWidth: number;
+  sourceHeight: number;
+  width: number;
+  height: number;
+  beforeBytes: number;
+  afterBytes: number;
+}): boolean {
+  return (
+    input.afterBytes >= input.beforeBytes &&
+    input.source === input.format &&
+    input.width === input.sourceWidth &&
+    input.height === input.sourceHeight
+  );
+}

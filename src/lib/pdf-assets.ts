@@ -1,5 +1,4 @@
 import path from "node:path";
-import { pathToFileURL } from "node:url";
 
 const FOLDERS = {
   standard_fonts: "standard_fonts",
@@ -15,9 +14,13 @@ function pdfPath(...parts: string[]) {
   return path.join(pdfjsRoot(), ...parts);
 }
 
-export function pdfjsFolderUrl(folder: keyof typeof FOLDERS) {
-  const name = folder === "cmaps" ? "cmaps" : folder === "wasm" ? "wasm" : "standard_fonts";
-  return pathToFileURL(pdfPath(name) + path.sep).href;
+/**
+ * A folder for pdf.js running in Node. Its Node data factories call fs.readFile on the string,
+ * which treats a "file://" string as a literal path and fails, so this is a plain path.
+ * pdf.js requires a trailing "/", which fs also accepts on Windows.
+ */
+export function pdfjsFolderPath(folder: keyof typeof FOLDERS) {
+  return `${pdfPath(FOLDERS[folder])}/`;
 }
 
 function safeName(name: string) {

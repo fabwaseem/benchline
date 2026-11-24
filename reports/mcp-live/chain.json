@@ -1,0 +1,77 @@
+[
+  {
+    "label": "QR code → read_barcode decodes the same URL",
+    "pass": true,
+    "detail": "decoded: https://benchline.fabwaseem.com/tools"
+  },
+  {
+    "label": "PDF page → PNG → read_image_text (OCR) reads the words",
+    "pass": false,
+    "detail": "text: \"\" conf 0"
+  },
+  {
+    "label": "aes_crypt encrypt → decrypt returns the plaintext",
+    "pass": true,
+    "detail": "{\"mode\":\"decrypt\",\"plaintext\":\"secret message\"}"
+  },
+  {
+    "label": "aes_crypt decrypt with the wrong passphrase fails cleanly",
+    "pass": true,
+    "detail": "isError=true Decryption failed. The passphrase is wrong or the data was tampered with.\nInput schema and an example: https://benchline"
+  },
+  {
+    "label": "hash_password verify accepts the right password",
+    "pass": true,
+    "detail": "verified=true"
+  },
+  {
+    "label": "base64 encode → decode round-trips",
+    "pass": true,
+    "detail": "decoded: \"héllo ✓\""
+  },
+  {
+    "label": "merge two 1-page PDFs → read back 2 pages",
+    "pass": true,
+    "detail": "merged pages 2, read back 2"
+  },
+  {
+    "label": "protect_pdf → unlock with the password",
+    "pass": true,
+    "detail": "{\"bytes\":1047,\"encrypted\":false}"
+  },
+  {
+    "label": "convert_currency USD → EUR returns a rate",
+    "pass": true,
+    "detail": "{\"ok\":true,\"amount\":100,\"from\":\"USD\",\"to\":\"EUR\",\"rate\":0.91416,\"result\":91.416,\"date\":\"2026-11-23\"}"
+  },
+  {
+    "label": "convert_currency with an unsupported code is flagged as an error",
+    "pass": false,
+    "detail": "isError=false {\"ok\":false,\"error\":\"Unknown currency: PKR.\"}"
+  },
+  {
+    "label": "format_json with broken JSON is flagged as an error",
+    "pass": false,
+    "detail": "isError=false valid=false"
+  },
+  {
+    "label": "check_ssl on an expired certificate reports it",
+    "pass": true,
+    "detail": "authorized=false CERT_HAS_EXPIRED "
+  },
+  {
+    "label": "lookup_dns for a missing domain answers without crashing",
+    "pass": true,
+    "detail": "isError=false records=0 "
+  },
+  {
+    "label": "inspect_meta_tags on a 404 page reports the status",
+    "pass": true,
+    "detail": "status=undefined isError=true The page returned 404.\nInput schema and an example: https://benchline.fabwaseem.com/api/v1/tools/met"
+  },
+  {
+    "label": "generate_meme response size",
+    "pass": false,
+    "detail": "607264 bytes for a 1080x1080 PNG"
+  }
+]

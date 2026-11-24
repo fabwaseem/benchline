@@ -1,0 +1,1999 @@
+{
+  "endpoint": "https://benchline.fabwaseem.com/mcp",
+  "ranAt": "2026-11-24T09:01:42.022Z",
+  "connectMs": 444,
+  "listMs": 486,
+  "server": {
+    "name": "benchline",
+    "title": "Benchline",
+    "version": "1.0.0",
+    "websiteUrl": "https://benchline.fabwaseem.com/",
+    "capabilities": {
+      "tools": {
+        "listChanged": true
+      }
+    },
+    "instructions": "Benchline exposes 82 deterministic tools for PDF, images, JSON and data formats, encoding, hashing, security, networking, SEO, and AI search.\nPick the tool whose name matches the job (for example merge_pdf, format_json, decode_jwt, check_robots_txt). Every tool is read-only and idempotent: the same input gives the same output, and nothing is stored.\nFiles go in as base64 or as a public https URL. Decoded files are capped at 10 MB and private or local addresses are refused. Binary results come back as base64.\nTools marked openWorld fetch the public URL you pass; the rest only transform their arguments.\nNo key is needed. Limit: 60 calls per minute per address. A failed call returns the exact field that was wrong.\nDocs: https://benchline.fabwaseem.com/ai (every tool), https://benchline.fabwaseem.com/llms.txt (index), and /t/<slug>.md for one tool in Markdown."
+  },
+  "resourceCount": "error: MCP error -32601: Method not found",
+  "promptCount": "error: MCP error -32601: Method not found",
+  "toolCount": 82,
+  "indexCount": 82,
+  "results": [
+    {
+      "name": "generate_llms_txt",
+      "title": "Generate llms.txt",
+      "description": "Render llms.txt and llms-full.txt from a site name, a summary, and a list of pages. It does not crawl. Grouping follows the page URLs.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "siteName",
+        "summary",
+        "pages"
+      ],
+      "sampled": true,
+      "ms": 185,
+      "bytes": 582,
+      "status": "ok",
+      "text": "{\"llms\":\"# Benchline\\n\\n> Free web tools for people and agents.\\n\\n## Pages\\n\\n- [Tools](https://benchline.fabwaseem.com/tools)\\n\",\"full\":\"# Benchline\\n\\n> Free web tools for people and agents.\\n\\n## Tools\\n\\nhttps://benchline.fabwaseem.com/tools\\n\"}",
+      "structured": "{\"llms\":\"# Benchline\\n\\n> Free web tools for people and agents.\\n\\n## Pages\\n\\n- [Tools](https://benchline.fabwaseem.com/tools)\\n\",\"full\":\"# Benchline\\n\\n> Free web tools for people and agents.\\n\\n## Tools\\n\\nhttps://ben…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "score_ai_seo",
+      "title": "Score a page for AI search",
+      "description": "Fetch a public page plus its robots.txt, sitemap, and llms.txt, then score how ready it is for AI search crawlers. Use this when you have a live URL.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "url"
+      ],
+      "sampled": true,
+      "ms": 476,
+      "bytes": 6374,
+      "status": "ok",
+      "text": "{\"finalUrl\":\"https://fabwaseem.com/\",\"status\":200,\"score\":98,\"checks\":[{\"id\":\"https\",\"level\":\"pass\",\"label\":\"HTTPS\",\"detail\":\"The final URL is https.\",\"weight\":8},{\"id\":\"time\",\"level\":\"pass\",\"label\":\"Response time\",\"detail\":\"The page responded in 113 ms.\",\"weight\":4},{\"id\":\"title\",\"level\":\"pass\",\"label\":\"Title\",\"detail\":\"49 characters.\",\"weight\":8},{\"id\":\"description\",\"level\":\"pass\",\"label\":\"Meta ",
+      "structured": "{\"finalUrl\":\"https://fabwaseem.com/\",\"status\":200,\"score\":98,\"checks\":[{\"id\":\"https\",\"level\":\"pass\",\"label\":\"HTTPS\",\"detail\":\"The final URL is https.\",\"weight\":8},{\"id\":\"time\",\"level\":\"pass\",\"label\":\"Response time\",\"deta…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "build_open_graph",
+      "title": "Build an Open Graph card",
+      "description": "Render one of the Open Graph templates as a PNG and a Next.js opengraph-image.tsx file. Pass a template id from list_og_templates, the fields that template uses, colors, a size, and optional base64 images.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 604,
+      "bytes": 57867,
+      "status": "ok",
+      "text": "{\"template\":\"editorial\",\"png\":\"iVBORw0KGgoAAAANSUhEUgAABLAAAAJ2CAYAAABPQHtcAABG70lEQVR4nO3dbcweV2E3+NmvJc63GC1GasIjFWeT9EvBYdVKm9hB4jWJq+U9JGmgqxKbJEgPAcfQUprYkFbiLYFHW+BpQiiQrnASClTCd9KVulIw6ZcCjan0JKmEqZJ+2pj06+78r7snmXs8c73d120fx7+fdOK5r7nmzJkzM4jz15m5/qf/+H//7f9rAAAAAKBSAiwAAAAAqibAAgAAAKBqAiwAAAAAqibAAgAAAKBqAiwAAAAAqibAAgAAAKBqAiwAAAAAqibAAgAAAKBqAiwAAAAAqibAAgAAAKBqAiwAAAAAqibAAgAAAKBqAiwAA",
+      "structured": "{\"template\":\"editorial\",\"png\":\"iVBORw0KGgoAAAANSUhEUgAABLAAAAJ2CAYAAABPQHtcAABG70lEQVR4nO3d…(24288 chars)\",\"mimeType\":\"image/png\",\"width\":1200,\"height\":630,\"source\":\"import { ImageResponse } from \\\"next/og\\\";\\n\\nexport c…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "list_og_templates",
+      "title": "List Open Graph templates",
+      "description": "List Open Graph card templates with ids, names, categories, defaults, color presets, and field schemas.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 206,
+      "bytes": 39478,
+      "status": "ok",
+      "text": "{\"templates\":[{\"id\":\"editorial\",\"name\":\"Editorial\",\"category\":\"Blog\",\"fields\":[{\"key\":\"title\",\"label\":\"Title\",\"kind\":\"text\"},{\"key\":\"author\",\"label\":\"Author\",\"kind\":\"text\"},{\"key\":\"readTime\",\"label\":\"Read time\",\"kind\":\"text\"},{\"key\":\"brand\",\"label\":\"Brand\",\"kind\":\"text\"}],\"images\":[\"logo\"],\"defaults\":{\"title\":\"Designing tools people return to\",\"author\":\"Waseem Anjum\",\"readTime\":\"8 min read\",\"brand",
+      "structured": "{\"templates\":[{\"id\":\"editorial\",\"name\":\"Editorial\",\"category\":\"Blog\",\"fields\":[{\"key\":\"title\",\"label\":\"Title\",\"kind\":\"text\"},{\"key\":\"author\",\"label\":\"Author\",\"kind\":\"text\"},{\"key\":\"readTime\",\"label\":\"Read time\",\"kind\":\"t…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "decode_jwt",
+      "title": "Decode a JWT",
+      "description": "Decode a signed JSON Web Token into its header, payload, and registered claims. Dates are absolute ISO timestamps. The signature is not checked.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "token"
+      ],
+      "sampled": true,
+      "ms": 174,
+      "bytes": 854,
+      "status": "ok",
+      "text": "{\"ok\":true,\"error\":\"\",\"kind\":\"\",\"header\":{\"alg\":\"HS256\",\"typ\":\"JWT\"},\"payload\":{\"sub\":\"1234567890\",\"name\":\"Ada\",\"iat\":1516239022,\"exp\":2000000000},\"signature\":\"signature\",\"claims\":[{\"name\":\"sub\",\"iso\":\"\",\"raw\":\"1234567890\"},{\"name\":\"exp\",\"iso\":\"2033-05-18T03:33:20.000Z\",\"raw\":\"2000000000\"},{\"name\":\"iat\",\"iso\":\"2018-01-18T01:30:22.000Z\",\"raw\":\"1516239022\"}]}",
+      "structured": "{\"ok\":true,\"error\":\"\",\"kind\":\"\",\"header\":{\"alg\":\"HS256\",\"typ\":\"JWT\"},\"payload\":{\"sub\":\"1234567890\",\"name\":\"Ada\",\"iat\":1516239022,\"exp\":2000000000},\"signature\":\"signature\",\"claims\":[{\"name\":\"sub\",\"iso\":\"\",\"raw\":\"123456789…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "check_robots_txt",
+      "title": "Check robots.txt",
+      "description": "Fetch a public robots.txt and report whether the wildcard group blocks the site and whether Sitemap lines are absolute. Use this when you have a URL, not a pasted file.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "url"
+      ],
+      "sampled": true,
+      "ms": 373,
+      "bytes": 112582,
+      "status": "ok",
+      "text": "{\"finalUrl\":\"https://github.com/robots.txt\",\"status\":200,\"text\":\"# If you would like to crawl GitHub contact us via https://support.github.com?tags=dotcom-robots\\n# We also provide an extensive API: https://docs.github.com\\nSitemap: https://github.com/sitemap_marketing.xml\\n\\nUser-agent: GPTBot\\nUser-agent: OAI-SearchBot\\nUser-agent: ChatGPT-User\\nUser-agent: ClaudeBot\\nUser-agent: Claude-SearchBo",
+      "structured": "{\"finalUrl\":\"https://github.com/robots.txt\",\"status\":200,\"text\":\"# If you would like to crawl GitHub contact us via https://s…(30190 chars)\",\"document\":{\"groups\":[{\"agents\":[\"GPTBot\",\"OAI-SearchBot\",\"ChatGPT-User\",\"Claud…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "inspect_meta_tags",
+      "title": "Inspect meta tags",
+      "description": "Fetch one public HTML page and report title, description, canonical, Open Graph, Twitter, and JSON-LD. Use this to see what a live URL advertises.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "url"
+      ],
+      "sampled": true,
+      "ms": 309,
+      "bytes": 6820,
+      "status": "ok",
+      "text": "{\"status\":200,\"redirects\":[],\"finalUrl\":\"https://fabwaseem.com/\",\"title\":\"Waseem Anjum: Full Stack & AI Automation Engineer\",\"description\":\"Waseem Anjum is a full stack and AI automation engineer in Lahore, Pakistan, building AI agents, MCP servers and Next.js, NestJS and TypeScript products.\",\"canonical\":\"https://fabwaseem.com/\",\"robots\":\"index, follow\",\"viewport\":\"width=device-width, initial-sca",
+      "structured": "{\"status\":200,\"redirects\":[],\"finalUrl\":\"https://fabwaseem.com/\",\"title\":\"Waseem Anjum: Full Stack & AI Automation Engineer\",\"description\":\"Waseem Anjum is a full stack and AI automation engineer in L…(153 chars)\",\"canon…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "build_json_ld",
+      "title": "Build JSON-LD",
+      "description": "Build schema.org JSON-LD for one type, plus a script tag and a list of missing fields. Use this when you already know the fields. It does not fetch a page.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "type",
+        "values"
+      ],
+      "sampled": true,
+      "ms": 188,
+      "bytes": 1072,
+      "status": "ok",
+      "text": "{\"json\":{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"Benchline\",\"url\":\"https://benchline.fabwaseem.com\"},\"script\":\"<script type=\\\"application/ld+json\\\">\\n{\\n  \\\"@context\\\": \\\"https://schema.org\\\",\\n  \\\"@type\\\": \\\"Organization\\\",\\n  \\\"name\\\": \\\"Benchline\\\",\\n  \\\"url\\\": \\\"https://benchline.fabwaseem.com\\\"\\n}\\n</script>\\n\",\"checks\":[{\"level\":\"pass\",\"label\":\"name\",\"detail\":\"Present.",
+      "structured": "{\"json\":{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"Benchline\",\"url\":\"https://benchline.fabwaseem.com\"},\"script\":\"<script type=\\\"application/ld+json\\\">\\n{\\n  \\\"@context\\\": \\\"https:/…(179 chars)\",\"chec…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "count_tokens",
+      "title": "Count tokens",
+      "description": "Count tokens with the o200k or cl100k encoder and price the count against the published model table. Claude and Gemini rows are estimates, not those vendors' tokenizers.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "text"
+      ],
+      "sampled": true,
+      "ms": 214,
+      "bytes": 942,
+      "status": "ok",
+      "text": "{\"count\":10,\"chars\":44,\"words\":9,\"encoding\":\"o200k\",\"prices\":[{\"id\":\"gpt-6.1-sol\",\"label\":\"GPT-6.1 Sol\",\"inputUsd\":0.00002,\"outputUsd\":0,\"requestUsd\":0.00002,\"monthUsd\":0},{\"id\":\"claude-sonnet-5-5\",\"label\":\"Claude Sonnet 5.5\",\"inputUsd\":0.00002,\"outputUsd\":0,\"requestUsd\":0.00002,\"monthUsd\":0},{\"id\":\"gemini-4-argon\",\"label\":\"Gemini 4 Argon\",\"inputUsd\":0.00002,\"outputUsd\":0,\"requestUsd\":0.00002,\"mon",
+      "structured": "{\"count\":10,\"chars\":44,\"words\":9,\"encoding\":\"o200k\",\"prices\":[{\"id\":\"gpt-6.1-sol\",\"label\":\"GPT-6.1 Sol\",\"inputUsd\":0.00002,\"outputUsd\":0,\"requestUsd\":0.00002,\"monthUsd\":0},{\"id\":\"claude-sonnet-5-5\",\"label\":\"Claude Sonnet…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "explain_cron",
+      "title": "Explain a cron expression",
+      "description": "Turn a cron expression into English, the next UTC run times, and snippets for crontab, GitHub Actions, Vercel, Kubernetes, and node-cron.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "expression"
+      ],
+      "sampled": true,
+      "ms": 303,
+      "bytes": 2309,
+      "status": "ok",
+      "text": "{\"valid\":true,\"english\":\"At 09:00, only on Monday\",\"error\":\"\",\"fields\":[{\"name\":\"minute\",\"value\":\"0\"},{\"name\":\"hour\",\"value\":\"9\"},{\"name\":\"day of month\",\"value\":\"*\"},{\"name\":\"month\",\"value\":\"*\"},{\"name\":\"day of week\",\"value\":\"1\"}],\"runs\":[{\"utc\":\"30 Nov 2026, 09:00\"},{\"utc\":\"07 Dec 2026, 09:00\"},{\"utc\":\"14 Dec 2026, 09:00\"},{\"utc\":\"21 Dec 2026, 09:00\"},{\"utc\":\"28 Dec 2026, 09:00\"},{\"utc\":\"04 Jan 2",
+      "structured": "{\"valid\":true,\"english\":\"At 09:00, only on Monday\",\"error\":\"\",\"fields\":[{\"name\":\"minute\",\"value\":\"0\"},{\"name\":\"hour\",\"value\":\"9\"},{\"name\":\"day of month\",\"value\":\"*\"},{\"name\":\"month\",\"value\":\"*\"},{\"name\":\"day of week\",\"va…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "build_nextjs_dockerfile",
+      "title": "Build a Next.js Dockerfile",
+      "description": "Generate a production Dockerfile, dockerignore, compose file, and next.config snippet for a Next.js app. Defaults match a pnpm standalone image.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 180,
+      "bytes": 3601,
+      "status": "ok",
+      "text": "{\"dockerfile\":\"FROM node:22-bookworm-slim AS deps\\nWORKDIR /app\\nRUN corepack enable\\nENV NEXT_TELEMETRY_DISABLED=1\\nCOPY package.json pnpm-lock.yaml* package-lock.json* yarn.lock* bun.lock* ./\\nRUN --mount=type=cache,target=/pnpm/store pnpm install --frozen-lockfile\\n\\nFROM node:22-bookworm-slim AS builder\\nWORKDIR /app\\nRUN corepack enable\\nENV NEXT_TELEMETRY_DISABLED=1\\nCOPY --from=deps /app/no",
+      "structured": "{\"dockerfile\":\"FROM node:22-bookworm-slim AS deps\\nWORKDIR /app\\nRUN corepack…(1102 chars)\",\"dockerignore\":\"node_modules\\n.next\\n.git\\nDockerfile*\\ndocker-compose*.yml\\nnpm-…(122 chars)\",\"compose\":\"services:\\n  app:\\n   …",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "format_json",
+      "title": "Format and validate JSON",
+      "description": "Pretty-print or minify JSON. A number that does not fit in a JavaScript number keeps the digits you sent. Returns the formatted text when it is valid, or the line and column of each syntax error.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "json"
+      ],
+      "sampled": true,
+      "ms": 217,
+      "bytes": 331,
+      "status": "ok",
+      "text": "{\"output\":\"{\\n  \\\"b\\\": 2,\\n  \\\"a\\\": [\\n    1,\\n    2,\\n    {\\n      \\\"c\\\": true\\n    }\\n  ]\\n}\",\"valid\":true,\"errors\":[]}",
+      "structured": "{\"output\":\"{\\n  \\\"b\\\": 2,\\n  \\\"a\\\": [\\n    1,\\n    2,\\n    {\\n      \\\"c\\\": true\\n    }\\n  ]\\n}\",\"valid\":true,\"errors\":[]}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "convert_data_format",
+      "title": "Convert JSON, YAML, TOML, or XML",
+      "description": "Convert between JSON, YAML, TOML, and XML. Auto-detects the source. Numbers that do not fit in a JavaScript number keep their digits. Errors include a line and column. TOML refuses null and a non-table root.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "text"
+      ],
+      "sampled": true,
+      "ms": 197,
+      "bytes": 286,
+      "status": "ok",
+      "text": "{\"ok\":true,\"output\":\"a: 1\\nb:\\n  - 1\\n  - 2\\n\",\"detected\":\"json\",\"error\":\"\",\"line\":null,\"column\":null}",
+      "structured": "{\"ok\":true,\"output\":\"a: 1\\nb:\\n  - 1\\n  - 2\\n\",\"detected\":\"json\",\"error\":\"\",\"line\":null,\"column\":null}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "convert_csv_json",
+      "title": "Convert CSV and JSON",
+      "description": "Convert CSV to JSON or JSON to CSV. Supports comma, tab, semicolon, and pipe delimiters, an optional header, type inference, and dotted flattening. Inferred numbers that do not fit in a JavaScript number keep their digits.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "text"
+      ],
+      "sampled": true,
+      "ms": 215,
+      "bytes": 499,
+      "status": "ok",
+      "text": "{\"ok\":true,\"output\":\"[\\n  {\\n    \\\"name\\\": \\\"Ada\\\",\\n    \\\"age\\\": 36\\n  },\\n  {\\n    \\\"name\\\": \\\"Alan\\\",\\n    \\\"age\\\": 41\\n  }\\n]\",\"error\":\"\",\"warning\":\"\",\"rows\":2,\"columns\":2,\"delimiter\":\",\"}",
+      "structured": "{\"ok\":true,\"output\":\"[\\n  {\\n    \\\"name\\\": \\\"Ada\\\",\\n    \\\"age\\\": 36\\n  },\\n  {\\n    \\\"name\\\": \\\"Alan\\\",\\n    \\\"age\\\": 41\\n  }\\n]\",\"error\":\"\",\"warning\":\"\",\"rows\":2,\"columns\":2,\"delimiter\":\",\"}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "diff_text",
+      "title": "Diff two texts",
+      "description": "Compare two texts by line, word, or character, or compare JSON so object key order does not matter. Returns an inline diff, side-by-side rows for line and JSON modes, and a unified patch.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "left",
+        "right"
+      ],
+      "sampled": true,
+      "ms": 204,
+      "bytes": 1674,
+      "status": "ok",
+      "text": "{\"ok\":true,\"error\":\"\",\"unchanged\":false,\"added\":2,\"removed\":1,\"unit\":\"lines\",\"patch\":\"===================================================================\\n--- original\\n+++ changed\\n@@ -1,3 +1,4 @@\\n alpha\\n-beta\\n+BETA\\n gamma\\n+delta\\n\",\"pieces\":[{\"type\":\"same\",\"value\":\"alpha\\n\"},{\"type\":\"remove\",\"value\":\"beta\\n\"},{\"type\":\"add\",\"value\":\"BETA\\n\"},{\"type\":\"same\",\"value\":\"gamma\\n\"},{\"type\":\"add\",\"v",
+      "structured": "{\"ok\":true,\"error\":\"\",\"unchanged\":false,\"added\":2,\"removed\":1,\"unit\":\"lines\",\"patch\":\"============================================================…(142 chars)\",\"pieces\":[{\"type\":\"same\",\"value\":\"alpha\\n\"},{\"type\":\"remove\"…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "base64_codec",
+      "title": "Encode or decode Base64",
+      "description": "Encode UTF-8 text as Base64, or decode Base64 and data URIs. URL-safe output uses - and _ and omits padding. Decode reports the sniffed media type and whether the bytes are UTF-8 text.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "text"
+      ],
+      "sampled": true,
+      "ms": 187,
+      "bytes": 266,
+      "status": "ok",
+      "text": "{\"ok\":true,\"error\":\"\",\"output\":\"aGVsbG8gYmVuY2hsaW5l\",\"mime\":\"\",\"filename\":\"\",\"binary\":false}",
+      "structured": "{\"ok\":true,\"error\":\"\",\"output\":\"aGVsbG8gYmVuY2hsaW5l\",\"mime\":\"\",\"filename\":\"\",\"binary\":false}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "convert_image",
+      "title": "Convert an image",
+      "description": "Convert an image to JPEG, PNG, WebP, or AVIF. Send base64 or a public URL. Private addresses are refused and the decoded file is capped at 10 MB. Returns the image as base64. HEIC is not decoded here.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "file"
+      ],
+      "sampled": true,
+      "ms": 223,
+      "bytes": 1186,
+      "status": "ok",
+      "text": "{\"source\":\"png\",\"filename\":\"dot.jpg\",\"mime\":\"image/jpeg\",\"extension\":\"jpg\",\"width\":1,\"height\":1,\"bytes\":324,\"data\":\"/9j/2wBDAAMDAwMDAwMDAwMEBAQEBAYFBQUFBgkGBwYHBgkOCAoICAoIDgwPDAsMDwwWEQ8PERYZFRQVGR4bGx4mJCYyMkP/2wBDAQMDAwMDAwMDAwMEBAQEBAYFBQUFBgkGBwYHBgkOCAoICAoIDgwPDAsMDwwWEQ8PERYZFRQVGR4bGx4mJCYyMkP/wgARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAj/xAAVAQEBAAAAAAAAAAAAAAAAAAAGCP/aAAwDAQAC",
+      "structured": "{\"source\":\"png\",\"filename\":\"dot.jpg\",\"mime\":\"image/jpeg\",\"extension\":\"jpg\",\"width\":1,\"height\":1,\"bytes\":324,\"data\":\"/9j/2wBDAAMDAwMDAwMDAwMEBAQEBAYFBQUFBgkGBwYHBgkOCAoICAoIDgwP…(432 chars)\"}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "compress_image",
+      "title": "Compress an image",
+      "description": "Re-encode an image at a quality from 1 to 100, optionally capping the longest edge. Send base64 or a public URL. Private addresses are refused and the decoded file is capped at 10 MB. Returns the image as base64.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "file"
+      ],
+      "sampled": true,
+      "ms": 189,
+      "bytes": 814,
+      "status": "ok",
+      "text": "{\"filename\":\"dot.webp\",\"mime\":\"image/webp\",\"extension\":\"webp\",\"format\":\"webp\",\"quality\":60,\"width\":1,\"height\":1,\"bytes\":94,\"before\":70,\"after\":94,\"savedBytes\":-24,\"savedPercent\":-34.285714285714285,\"label\":\"34% larger\",\"data\":\"UklGRlYAAABXRUJQVlA4WAoAAAAQAAAAAAAAAAAAQUxQSAIAAAAAf1ZQOCAuAAAA0AEAnQEqAQABAAKAQiWgAnS6AfgAA7AA/u921/4VbhiGar/72C+7Bfdgv9bAAA==\"}",
+      "structured": "{\"filename\":\"dot.webp\",\"mime\":\"image/webp\",\"extension\":\"webp\",\"format\":\"webp\",\"quality\":60,\"width\":1,\"height\":1,\"bytes\":94,\"before\":70,\"after\":94,\"savedBytes\":-24,\"savedPercent\":-34.285714285714285,\"label\":\"34% larger\",\"…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "resize_image",
+      "title": "Resize an image",
+      "description": "Resize an image by pixels or percent. Fit is contain, cover, or stretch. Send base64 or a public URL. Private addresses are refused and the decoded file is capped at 10 MB. Returns the image as base64.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "file"
+      ],
+      "sampled": true,
+      "ms": 216,
+      "bytes": 578,
+      "status": "ok",
+      "text": "{\"filename\":\"dot.png\",\"mime\":\"image/png\",\"extension\":\"png\",\"width\":16,\"height\":16,\"bytes\":107,\"data\":\"iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsSAAALEgHS3X78AAAAHUlEQVQ4jWP4z8BQTwlmGDWgfjQMGEbDgGFYhAEA4Yh+EKbUM4sAAAAASUVORK5CYII=\"}",
+      "structured": "{\"filename\":\"dot.png\",\"mime\":\"image/png\",\"extension\":\"png\",\"width\":16,\"height\":16,\"bytes\":107,\"data\":\"iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsS…(144 chars)\"}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "convert_color",
+      "title": "Convert a color and check contrast",
+      "description": "Convert HEX, RGB, HSL, OKLCH, or CMYK into every format, name the nearest Tailwind token, and report the WCAG 2 contrast ratio against a background.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "color"
+      ],
+      "sampled": true,
+      "ms": 207,
+      "bytes": 714,
+      "status": "ok",
+      "text": "{\"ok\":true,\"hex\":\"#163a17\",\"rgb\":\"rgb(22, 58, 23)\",\"hsl\":\"hsl(121.67, 45%, 15.69%)\",\"oklch\":\"oklch(31.21% 0.0728 144.08)\",\"cmyk\":\"cmyk(62.1%, 0%, 60.3%, 77.3%)\",\"tailwind\":\"lime-950\",\"contrastRatio\":12.714100861093979,\"contrastText\":\"12.71:1\",\"aaNormal\":true,\"aaLarge\":true,\"aaaNormal\":true,\"aaaLarge\":true}",
+      "structured": "{\"ok\":true,\"hex\":\"#163a17\",\"rgb\":\"rgb(22, 58, 23)\",\"hsl\":\"hsl(121.67, 45%, 15.69%)\",\"oklch\":\"oklch(31.21% 0.0728 144.08)\",\"cmyk\":\"cmyk(62.1%, 0%, 60.3%, 77.3%)\",\"tailwind\":\"lime-950\",\"contrastRatio\":12.714100861093979,\"c…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "convert_unix_timestamp",
+      "title": "Convert a unix timestamp",
+      "description": "Convert epoch seconds, milliseconds, microseconds, or nanoseconds to ISO-8601 and RFC 2822 in an IANA time zone, or convert a calendar time back to epoch.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 224,
+      "bytes": 656,
+      "status": "ok",
+      "text": "{\"seconds\":\"1700000000\",\"milliseconds\":\"1700000000000\",\"isoUtc\":\"2023-11-14T22:13:20.000Z\",\"isoLocal\":\"2023-11-14T22:13:20Z\",\"rfc2822\":\"Tue, 14 Nov 2023 22:13:20 +0000\",\"relative\":\"3 years ago\",\"weekday\":\"Tuesday\",\"offset\":\"Z\",\"timeZone\":\"UTC\",\"unit\":\"s\",\"alternateIsoUtc\":\"\"}",
+      "structured": "{\"seconds\":\"1700000000\",\"milliseconds\":\"1700000000000\",\"isoUtc\":\"2023-11-14T22:13:20.000Z\",\"isoLocal\":\"2023-11-14T22:13:20Z\",\"rfc2822\":\"Tue, 14 Nov 2023 22:13:20 +0000\",\"relative\":\"3 years ago\",\"weekday\":\"Tuesday\",\"offse…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "date_difference",
+      "title": "Difference between two dates",
+      "description": "Count calendar days, elapsed time, and business days between two dates. Business days skip weekends and any YYYY-MM-DD holidays you list.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "startDate",
+        "endDate"
+      ],
+      "sampled": true,
+      "ms": 424,
+      "bytes": 506,
+      "status": "ok",
+      "text": "{\"sign\":1,\"years\":0,\"months\":10,\"days\":23,\"totalDays\":327,\"countedDays\":327,\"weeks\":46,\"extraDays\":5,\"hours\":0,\"minutes\":0,\"seconds\":0,\"totalHours\":\"7848\",\"businessDays\":233,\"weekendDays\":94,\"holidayDays\":0}",
+      "structured": "{\"sign\":1,\"years\":0,\"months\":10,\"days\":23,\"totalDays\":327,\"countedDays\":327,\"weeks\":46,\"extraDays\":5,\"hours\":0,\"minutes\":0,\"seconds\":0,\"totalHours\":\"7848\",\"businessDays\":233,\"weekendDays\":94,\"holidayDays\":0}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "hash_data",
+      "title": "Hash text or bytes",
+      "description": "Compute MD5, SHA-1, SHA-256, and SHA-512 for UTF-8 text or base64 bytes. Pass hmacKey for HMAC and expected to see which digest matches.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 184,
+      "bytes": 1434,
+      "status": "ok",
+      "text": "{\"hashes\":[{\"algorithm\":\"MD5\",\"hex\":\"5d41402abc4b2a76b9719d911017c592\",\"base64\":\"XUFAKrxLKna5cZ2REBfFkg==\"},{\"algorithm\":\"SHA-1\",\"hex\":\"aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d\",\"base64\":\"qvTGHdzF6KLavt4PO0gs2a6pQ00=\"},{\"algorithm\":\"SHA-256\",\"hex\":\"2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824\",\"base64\":\"LPJNul+wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ=\"},{\"algorithm\":\"SHA-512\",\"hex\"",
+      "structured": "{\"hashes\":[{\"algorithm\":\"MD5\",\"hex\":\"5d41402abc4b2a76b9719d911017c592\",\"base64\":\"XUFAKrxLKna5cZ2REBfFkg==\"},{\"algorithm\":\"SHA-1\",\"hex\":\"aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d\",\"base64\":\"qvTGHdzF6KLavt4PO0gs2a6pQ00=\"},{…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "generate_uuid",
+      "title": "Generate or inspect a UUID",
+      "description": "Generate UUID version 4 or version 7 from cryptographic randomness, up to 10,000 at once, or inspect the version, variant, and v7 timestamp.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 188,
+      "bytes": 426,
+      "status": "ok",
+      "text": "{\"ids\":[\"de60b4d6-b291-4d07-bf87-7322d083f794\",\"fbc29a3a-d6ae-4865-98c9-345f7d3f46a2\",\"cff14a9e-df55-4198-85ae-3687663efe6e\"],\"version\":4,\"variant\":\"RFC 4122\",\"timestamp\":\"\"}",
+      "structured": "{\"ids\":[\"de60b4d6-b291-4d07-bf87-7322d083f794\",\"fbc29a3a-d6ae-4865-98c9-345f7d3f46a2\",\"cff14a9e-df55-4198-85ae-3687663efe6e\"],\"version\":4,\"variant\":\"RFC 4122\",\"timestamp\":\"\"}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "url_codec",
+      "title": "Encode, decode, or parse a URL",
+      "description": "Percent-encode or decode text, or parse a URL into its host, path, hash, and query parameters.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "value"
+      ],
+      "sampled": true,
+      "ms": 185,
+      "bytes": 572,
+      "status": "ok",
+      "text": "{\"value\":\"https://example.com/a%20b?q=%C3%BC&x=1\",\"protocol\":\"https:\",\"username\":\"\",\"hostname\":\"example.com\",\"port\":\"\",\"pathname\":\"/a%20b\",\"hash\":\"\",\"query\":\"q=%C3%BC&x=1\",\"params\":[{\"key\":\"q\",\"value\":\"ü\"},{\"key\":\"x\",\"value\":\"1\"}]}",
+      "structured": "{\"value\":\"https://example.com/a%20b?q=%C3%BC&x=1\",\"protocol\":\"https:\",\"username\":\"\",\"hostname\":\"example.com\",\"port\":\"\",\"pathname\":\"/a%20b\",\"hash\":\"\",\"query\":\"q=%C3%BC&x=1\",\"params\":[{\"key\":\"q\",\"value\":\"ü\"},{\"key\":\"x\",\"va…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "generate_password",
+      "title": "Generate a password or passphrase",
+      "description": "Generate cryptographic passwords or EFF-wordlist passphrases and report the entropy in bits. Randomness comes from the platform CSPRNG.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 305,
+      "bytes": 274,
+      "status": "ok",
+      "text": "{\"values\":[\"acFMmgipDWWDz7KFpKGx\",\"6ugYyGM6E7fYitnf3gTj\"],\"bits\":116.1,\"label\":\"Strong\",\"score\":100}",
+      "structured": "{\"values\":[\"acFMmgipDWWDz7KFpKGx\",\"6ugYyGM6E7fYitnf3gTj\"],\"bits\":116.1,\"label\":\"Strong\",\"score\":100}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "explain_chmod",
+      "title": "Explain a chmod mode",
+      "description": "Convert an octal or symbolic file mode into octal, symbolic notation, and a chmod command, including setuid, setgid, and the sticky bit.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "mode"
+      ],
+      "sampled": true,
+      "ms": 228,
+      "bytes": 298,
+      "status": "ok",
+      "text": "{\"octal\":\"755\",\"symbolic\":\"rwxr-xr-x\",\"command\":\"chmod 755 file\",\"setuid\":false,\"setgid\":false,\"sticky\":false}",
+      "structured": "{\"octal\":\"755\",\"symbolic\":\"rwxr-xr-x\",\"command\":\"chmod 755 file\",\"setuid\":false,\"setgid\":false,\"sticky\":false}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "merge_pdf",
+      "title": "Merge PDF files",
+      "description": "Combine PDF files. Each file is base64 or a public URL, and can keep a page range such as 1-3,5. Private addresses are refused. Returns one PDF as base64.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "files"
+      ],
+      "sampled": true,
+      "ms": 297,
+      "bytes": 3120,
+      "status": "ok",
+      "text": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjUgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbmd0aCAxMTYKPj4Kc3RyZWFtCnicHcq7CgJBDIXhPk+RWhAzmVxmQCzUBQsbIS8gsorLWiji8++MHPj5ivOGfQBh3+cBm9M4/8bv83ZdO9UihbxUTIJxB249Q/pfE3KLEsYLtsKmNli2YgerTcrU5dYlR8lKTC6mnl12GBPECoaACywXnRuICmVuZHN0cmVhbQplbmRvYmoKCjkgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbmd0aCAxMTYKPj4Kc3RyZWFtCnicHcq7CgJBDIXhPk+RWhAzmVxmQCzUBQsbIS8gsorLWij",
+      "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjUgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(1488 chars)\",\"pageCount\":4,\"bytes\":1115}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "split_pdf",
+      "title": "Split a PDF",
+      "description": "Extract a page range into one PDF, or split into single pages or chunks of N. Send base64 or a public URL. Private addresses are refused. Returns PDF base64 and a ZIP when there are several files.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 208,
+      "bytes": 2584,
+      "status": "ok",
+      "text": "{\"files\":[{\"name\":\"a-extract.pdf\",\"data\":\"JVBERi0xLjcKJYGBgYEKCjUgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbmd0aCAxMTYKPj4Kc3RyZWFtCnicHcq7CgJBDIXhPk+RWhAzmVxmQCzUBQsbIS8gsorLWiji8++MHPj5ivOGfQBh3+cBm9M4/8bv83ZdO9UihbxUTIJxB249Q/pfE3KLEsYLtsKmNli2YgerTcrU5dYlR8lKTC6mnl12GBPECoaACywXnRuICmVuZHN0cmVhbQplbmRvYmoKCjggMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL1R5cGUgL09ialN0bQovTiA2Ci9GaXJzdCAzMgovTG",
+      "structured": "{\"files\":[{\"name\":\"a-extract.pdf\",\"data\":\"JVBERi0xLjcKJYGBgYEKCjUgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(1184 chars)\"}],\"zip\":null,\"pageCount\":2}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "compress_pdf",
+      "title": "Compress a PDF",
+      "description": "Recompress embedded images in a PDF. Presets are light, medium, and strong. Send base64 or a public URL. Private addresses are refused. An optional target size tries harder. Returns the PDF and the sizes before and after.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 294,
+      "bytes": 2866,
+      "status": "ok",
+      "text": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjYgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbmd0aCAxMTYKPj4Kc3RyZWFtCnicHcq7CgJBDIXhPk+RWhAzmVxmQCzUBQsbIS8gsorLWiji8++MHPj5ivOGfQBh3+cBm9M4/8bv83ZdO9UihbxUTIJxB249Q/pfE3KLEsYLtsKmNli2YgerTcrU5dYlR8lKTC6mnl12GBPECoaACywXnRuICmVuZHN0cmVhbQplbmRvYmoKCjggMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL1R5cGUgL09ialN0bQovTiA2Ci9GaXJzdCAzMgovTGVuZ3RoIDM3MQo+PgpzdHJlYW0KeJyVUt9",
+      "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjYgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(1184 chars)\",\"before\":887,\"after\":886,\"saved\":1,\"percent\":0.1,\"pages\":2,\"images\":0,\"recompressed\":0,\"metTarget\":true,\"keptOriginal\":false,\"note\":\"No …",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "images_to_pdf",
+      "title": "Build a PDF from images",
+      "description": "Turn images, sent as base64 or public URLs in order, into one PDF. JPEG and PNG are embedded directly. Other formats are converted to PNG first. Page size is A4, Letter, or fit. Private addresses are refused. Returns the PDF as base64.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "images"
+      ],
+      "sampled": true,
+      "ms": 223,
+      "bytes": 3256,
+      "status": "ok",
+      "text": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjQgMCBvYmoKPDwKL1R5cGUgL1hPYmplY3QKL1N1YnR5cGUgL0ltYWdlCi9CaXRzUGVyQ29tcG9uZW50IDgKL1dpZHRoIDEKL0hlaWdodCAxCi9Db2xvclNwYWNlIC9EZXZpY2VSR0IKL1NNYXNrIDcgMCBSCi9GaWx0ZXIgL0ZsYXRlRGVjb2RlCi9MZW5ndGggMTEKPj4Kc3RyZWFtCnic+8/AAAADAAEACmVuZHN0cmVhbQplbmRvYmoKCjYgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbmd0aCA2NAo+PgpzdHJlYW0KeJwr5DJUMABCEGloZKxnbKiQnIskZgDimlqa6hlZgHlITEx",
+      "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjQgMCBvYmoKPDwKL1R5cGUgL1hPYmplY3QKL1N1…(1556 chars)\",\"pageCount\":1,\"bytes\":1167}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "generate_qr_code",
+      "title": "Generate a QR code",
+      "description": "Build a static QR code for text, a URL, Wi-Fi, or a vCard. Returns the payload, an SVG string, and a PNG as base64.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 523,
+      "bytes": 12101,
+      "status": "ok",
+      "text": "{\"payload\":\"https://benchline.fabwaseem.com/\",\"svg\":\"<svg xmlns=\\\"http://www.w3.org/2000/svg\\\" width=\\\"512\\\" height=\\\"512\\\" viewBox=\\\"0 0 33 33\\\" shape-rendering=\\\"crispEdges\\\"><path fill=\\\"#ffffff\\\" d=\\\"M0 0h33v33H0z\\\"/><path stroke=\\\"#111111\\\" d=\\\"M2 2.5h7m1 0h1m2 0h5m2 0h3m1 0h7M2 3.5h1m5 0h1m1 0h1m3 0h2m2 0h2m4 0h1m5 0h1M2 4.5h1m1 0h3m1 0h1m2 0h3m4 0h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1M2 5.5h1m1 0",
+      "structured": "{\"payload\":\"https://benchline.fabwaseem.com/\",\"svg\":\"<svg xmlns=\\\"http://www.w3.org/2000/svg\\\" width=\\\"512\\\" height=\\\"…(1627 chars)\",\"pngBase64\":\"iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAAAklEQVR4Aewa…(4280 chars)\"…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "extract_pdf_text",
+      "title": "Extract PDF text",
+      "description": "Read the selectable text layer of a PDF. Returns per-page text, markdown-style headings, and an o200k token count. Does not OCR scans. Send base64 or a public URL. Private addresses are refused.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 760,
+      "bytes": 706,
+      "status": "ok",
+      "text": "{\"pageCount\":2,\"pages\":[{\"page\":1,\"text\":\"Benchline live MCP test\",\"markdown\":\"Benchline live MCP test\"},{\"page\":2,\"text\":\"\",\"markdown\":\"\"}],\"text\":\"Benchline live MCP test\",\"markdown\":\"## Page 1\\n\\nBenchline live MCP test\\n\\n## Page 2\\n\\n_No selectable text on this page._\",\"tokens\":23,\"emptyPages\":1}",
+      "structured": "{\"pageCount\":2,\"pages\":[{\"page\":1,\"text\":\"Benchline live MCP test\",\"markdown\":\"Benchline live MCP test\"},{\"page\":2,\"text\":\"\",\"markdown\":\"\"}],\"text\":\"Benchline live MCP test\",\"markdown\":\"## Page 1\\n\\nBenchline live MCP te…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "organize_pdf",
+      "title": "Organize PDF pages",
+      "description": "Reorder, rotate, or drop PDF pages. Each entry names a 1-based source page and a rotation of 0, 90, 180, or 270. The same page may be listed twice. Send base64 or a public URL. Private addresses are refused.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "pages"
+      ],
+      "sampled": true,
+      "ms": 213,
+      "bytes": 2534,
+      "status": "ok",
+      "text": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjYgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbmd0aCAxMTYKPj4Kc3RyZWFtCnicHcq7CgJBDIXhPk+RWhAzmVxmQCzUBQsbIS8gsorLWiji8++MHPj5ivOGfQBh3+cBm9M4/8bv83ZdO9UihbxUTIJxB249Q/pfE3KLEsYLtsKmNli2YgerTcrU5dYlR8lKTC6mnl12GBPECoaACywXnRuICmVuZHN0cmVhbQplbmRvYmoKCjggMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL1R5cGUgL09ialN0bQovTiA2Ci9GaXJzdCAzMgovTGVuZ3RoIDM4MQo+PgpzdHJlYW0KeJzVU0t",
+      "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjYgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(1196 chars)\",\"pageCount\":2,\"bytes\":896}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "render_pdf_pages",
+      "title": "Render PDF pages",
+      "description": "Render PDF pages to PNG or JPEG. DPI is 72 to 216. A page range such as 1-3,5 is optional. At most 24 pages and 25 MB of images. Send base64 or a public URL. Private addresses are refused. Returns image base64 and a ZIP when there is more than one page.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 267,
+      "bytes": 5814,
+      "status": "ok",
+      "text": "{\"images\":[{\"name\":\"file-1.png\",\"data\":\"iVBORw0KGgoAAAANSUhEUgAAASwAAADICAYAAABS39xVAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAAKpSURBVHic7dRBDQAgEMAwwL/nwwI/sqRVsNf2zMwCCDi/AwBeGRaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYF",
+      "structured": "{\"images\":[{\"name\":\"file-1.png\",\"data\":\"iVBORw0KGgoAAAANSUhEUgAAASwAAADICAYAAABS39xVAAAABHNCSVQICAgI…(1024 chars)\",\"width\":300,\"height\":200},{\"name\":\"file-2.png\",\"data\":\"iVBORw0KGgoAAAANSUhEUgAAASwAAADICAYAAABS39xVAAAABH…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "protect_pdf",
+      "title": "Protect or unlock a PDF",
+      "description": "Protect a PDF with AES-256, or unlock one when the password is known. action is protect or unlock. password is the user password. ownerPassword is optional. permissions cover printing, copying, modifying, annotating, filling forms, accessibility, and assembly. Send base64 or a public URL. Private addresses are refused.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 401,
+      "bytes": 5294,
+      "status": "ok",
+      "text": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjEgMCBvYmoKPDwKL1R5cGUgL1BhZ2VzCi9LaWRzIFsgNSAwIFIgNyAwIFIgXQovQ291bnQgMgo+PgplbmRvYmoKCjIgMCBvYmoKPDwKL1R5cGUgL0NhdGFsb2cKL1BhZ2VzIDEgMCBSCi9FeHRlbnNpb25zIDw8Ci9BREJFIDw8Ci9CYXNlVmVyc2lvbiAvMS43Ci9FeHRlbnNpb25MZXZlbCA4Cj4+Cj4+Cj4+CmVuZG9iagoKNSAwIG9iago8PAovVHlwZSAvUGFnZQovUGFyZW50IDEgMCBSCi9SZXNvdXJjZXMgPDwKL0ZvbnQgPDwKL0hlbHZldGljYS03MDk4NDgwNzg5IDQgMCBSCj4+Ci9YT2J",
+      "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjEgMCBvYmoKPDwKL1R5cGUgL1BhZ2VzCi9LaWRz…(2572 chars)\",\"bytes\":1928,\"encrypted\":true}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "convert_markdown_html",
+      "title": "Convert Markdown and HTML",
+      "description": "Convert GitHub-flavored Markdown to HTML, or HTML to Markdown. to is html or markdown. sanitize strips scripts from the text output. The conversion does not fetch a URL.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 257,
+      "bytes": 245,
+      "status": "ok",
+      "text": "{\"output\":\"<h1>Hi</h1>\\n<ul>\\n<li>one</li>\\n<li>two</li>\\n</ul>\\n\",\"direction\":\"html\"}",
+      "structured": "{\"output\":\"<h1>Hi</h1>\\n<ul>\\n<li>one</li>\\n<li>two</li>\\n</ul>\\n\",\"direction\":\"html\"}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "fetch_page_markdown",
+      "title": "Fetch a page as Markdown",
+      "description": "Fetch a public HTML page and return the article as Markdown, plus a title, excerpt, and o200k token count. Private and local addresses are refused. The response is capped at 800 KB.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "url"
+      ],
+      "sampled": true,
+      "ms": 346,
+      "bytes": 958,
+      "status": "ok",
+      "text": "{\"url\":\"https://example.com/\",\"title\":\"Example Domain\",\"markdown\":\"# Example Domain\\n\\nThis domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes.\",\"excerpt\":\"This domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitori",
+      "structured": "{\"url\":\"https://example.com/\",\"title\":\"Example Domain\",\"markdown\":\"# Example Domain\\n\\nThis domain is for use in documentation ex…(174 chars)\",\"excerpt\":\"This domain is for use in documentation examples without nee…(156 …",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "read_barcode",
+      "title": "Read a QR code or barcode",
+      "description": "Read QR codes and barcodes from an image. Send base64 or a public URL. Private addresses are refused and the decoded file is capped at 10 MB. Returns each code's text and format. An image with no code returns an empty list.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "file"
+      ],
+      "sampled": true,
+      "ms": 304,
+      "bytes": 108,
+      "status": "ok",
+      "text": "{\"count\":0,\"codes\":[]}",
+      "structured": "{\"count\":0,\"codes\":[]}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "optimize_svg",
+      "title": "Optimize an SVG",
+      "description": "Minify an SVG with SVGO. Send markup or a file as base64 or a public URL. Private addresses are refused and the file is capped at 10 MB. The viewBox is kept unless removeViewBox is true. Returns the optimized markup and the byte counts.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 269,
+      "bytes": 534,
+      "status": "ok",
+      "text": "{\"svg\":\"<svg xmlns=\\\"http://www.w3.org/2000/svg\\\" width=\\\"10\\\" height=\\\"10\\\" viewBox=\\\"0 0 10 10\\\"><path fill=\\\"#fff\\\" d=\\\"M0 0h10v10H0z\\\"/></svg>\",\"beforeBytes\":144,\"afterBytes\":126,\"savedBytes\":18,\"savedPercent\":12.5}",
+      "structured": "{\"svg\":\"<svg xmlns=\\\"http://www.w3.org/2000/svg\\\" width=\\\"10\\\" height=\\\"1…(126 chars)\",\"beforeBytes\":144,\"afterBytes\":126,\"savedBytes\":18,\"savedPercent\":12.5}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "read_exif",
+      "title": "Read or strip photo metadata",
+      "description": "Read EXIF tags, including GPS, or strip them. action is read or strip. scope is all or gps. gps-only removal keeps the other JPEG tags. Other formats are re-encoded, which drops every tag. Send base64 or a public URL. Private addresses are refused and the decoded file is capped at 10 MB.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "file"
+      ],
+      "sampled": true,
+      "ms": 227,
+      "bytes": 1028,
+      "status": "ok",
+      "text": "{\"filename\":\"dot.png\",\"mime\":\"image/png\",\"width\":1,\"height\":1,\"bytes\":0,\"data\":\"\",\"stripped\":\"none\",\"camera\":\"\",\"when\":\"\",\"gps\":null,\"tags\":[{\"name\":\"BitDepth\",\"value\":\"8\"},{\"name\":\"ColorType\",\"value\":\"RGB with Alpha\"},{\"name\":\"Compression\",\"value\":\"Deflate/Inflate\"},{\"name\":\"Filter\",\"value\":\"Adaptive\"},{\"name\":\"ImageHeight\",\"value\":\"1\"},{\"name\":\"ImageWidth\",\"value\":\"1\"},{\"name\":\"Interlace\",\"value",
+      "structured": "{\"filename\":\"dot.png\",\"mime\":\"image/png\",\"width\":1,\"height\":1,\"bytes\":0,\"data\":\"\",\"stripped\":\"none\",\"camera\":\"\",\"when\":\"\",\"gps\":null,\"tags\":[{\"name\":\"BitDepth\",\"value\":\"8\"},{\"name\":\"ColorType\",\"value\":\"RGB with Alpha\"},{…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "crop_image",
+      "title": "Crop an image",
+      "description": "Crop an image to a pixel box or a 0 to 1 ratio box. circle cuts a round mask. format is png, jpeg, or webp. Send base64 or a public URL. Private addresses are refused and the decoded file is capped at 10 MB. Returns the image as base64.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "file"
+      ],
+      "sampled": true,
+      "ms": 204,
+      "bytes": 532,
+      "status": "ok",
+      "text": "{\"filename\":\"dot.png\",\"mime\":\"image/png\",\"extension\":\"png\",\"width\":1,\"height\":1,\"bytes\":91,\"data\":\"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsSAAALEgHS3X78AAAADUlEQVQImWP4z8BQDwAEgAF/W4IYuQAAAABJRU5ErkJggg==\"}",
+      "structured": "{\"filename\":\"dot.png\",\"mime\":\"image/png\",\"extension\":\"png\",\"width\":1,\"height\":1,\"bytes\":91,\"data\":\"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsS…(124 chars)\"}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "generate_favicon",
+      "title": "Generate a favicon pack",
+      "description": "Build a favicon pack from an image or up to three letters. The ZIP contains favicon.ico, PNG sizes, a web manifest, an HTML snippet, and a Next.js metadata snippet. Letters are drawn with a built-in bitmap font so the result does not depend on a system font. Send base64 or a public URL. Private addresses are refused and the decoded file is capped at 10 MB.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 872,
+      "bytes": 54299,
+      "status": "ok",
+      "text": "{\"filename\":\"favicon-pack.zip\",\"mime\":\"application/zip\",\"bytes\":18888,\"data\":\"UEsDBBQAAAAAABBIeF1tw4WEpQgAAKUIAAALAAAAZmF2aWNvbi5pY28AAAEAAwAQEAAAAQAgAJkBAAA2AAAAICAAAAEAIACbAgAAzwEAADAwAAABACAAOwQAAGoEAACJUE5HDQoaCgAAAA1JSERSAAAAEAAAABAIBgAAAB/z/2EAAAAJcEhZcwAAA+gAAAPoAbV7UmsAAAFLSURBVDiNYxCzEv+PjMWtJXBidLUgzIDMEbUU/y9oIvxfwFgIFRsJ/RcxF/0vbiOB3QBxa/H/wuai/5XdFf+3rc/537e9+P+EnSVgDGLPOFT136vA/j+nLu",
+      "structured": "{\"filename\":\"favicon-pack.zip\",\"mime\":\"application/zip\",\"bytes\":18888,\"data\":\"UEsDBBQAAAAAABBIeF1tw4WEpQgAAKUIAAALAAAAZmF2aWNvbi5pY28AAAEA…(25184 chars)\",\"html\":\"<link rel=\\\"icon\\\" href=\\\"/favicon.ico\\\" sizes=\\\"any\\\">\\n<…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "read_image_text",
+      "title": "Read text from an image",
+      "description": "Extract text from an image with Tesseract. language defaults to eng. Other codes in the list are fetched when first used. Send base64 or a public URL. Private addresses are refused and the decoded file is capped at 10 MB. Returns the text and a confidence from 0 to 100. An image with no text returns an empty string.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "file"
+      ],
+      "sampled": true,
+      "ms": 1302,
+      "bytes": 156,
+      "status": "ok",
+      "text": "{\"text\":\"\",\"confidence\":0,\"language\":\"eng\"}",
+      "structured": "{\"text\":\"\",\"confidence\":0,\"language\":\"eng\"}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "remove_background",
+      "title": "Remove a solid image background",
+      "description": "Remove a solid or near-solid background by flood-filling from the border. color is an optional #rrggbb. The portrait model runs in the browser, not in this handler: MODNet is Apache-2.0, RMBG-1.4 is non-commercial, and the ONNX runtime is too large for the serverless function. Send base64 or a public URL. Private addresses are refused and the decoded file is capped at 10 MB. Returns a PNG as base64.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "file"
+      ],
+      "sampled": true,
+      "ms": 312,
+      "bytes": 1010,
+      "status": "ok",
+      "text": "{\"filename\":\"dot.png\",\"mime\":\"image/png\",\"width\":1,\"height\":1,\"bytes\":91,\"data\":\"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAADUlEQVQImWP4z8DAAAAEAQEAZVHBSgAAAABJRU5ErkJggg==\",\"method\":\"solid\",\"note\":\"Serverless removal uses a border flood fill on a solid or near-solid background. The portrait model (MODNet, Apache-2.0) runs in the browser. RMBG-1.4 is non-commercial",
+      "structured": "{\"filename\":\"dot.png\",\"mime\":\"image/png\",\"width\":1,\"height\":1,\"bytes\":91,\"data\":\"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAPo…(124 chars)\",\"method\":\"solid\",\"note\":\"Serverless removal uses a border flood f…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "count_text",
+      "title": "Count words and characters",
+      "description": "Count words, code points, graphemes, sentences, and paragraphs, and compare the length with SEO and social limits.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "text"
+      ],
+      "sampled": true,
+      "ms": 195,
+      "bytes": 1424,
+      "status": "ok",
+      "text": "{\"words\":5,\"uniqueWords\":5,\"characters\":31,\"charactersNoSpaces\":27,\"graphemes\":31,\"sentences\":2,\"paragraphs\":1,\"lines\":1,\"readingLabel\":\"1 sec\",\"speakingLabel\":\"2 sec\",\"platforms\":[{\"id\":\"seo-title\",\"label\":\"SEO title\",\"limit\":60,\"count\":31,\"over\":false},{\"id\":\"meta-description\",\"label\":\"Meta description\",\"limit\":160,\"count\":31,\"over\":false},{\"id\":\"x\",\"label\":\"X post\",\"limit\":280,\"count\":31,\"over\"",
+      "structured": "{\"words\":5,\"uniqueWords\":5,\"characters\":31,\"charactersNoSpaces\":27,\"graphemes\":31,\"sentences\":2,\"paragraphs\":1,\"lines\":1,\"readingLabel\":\"1 sec\",\"speakingLabel\":\"2 sec\",\"platforms\":[{\"id\":\"seo-title\",\"label\":\"SEO title\",\"…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "convert_case",
+      "title": "Convert text case",
+      "description": "Convert text to camelCase, snake_case, kebab-case, CONSTANT_CASE, and AP or Chicago title case. Returns every style unless one is requested.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "text"
+      ],
+      "sampled": true,
+      "ms": 199,
+      "bytes": 2592,
+      "status": "ok",
+      "text": "{\"cases\":[{\"style\":\"lower\",\"label\":\"lower case\",\"text\":\"hello benchline world\"},{\"style\":\"upper\",\"label\":\"UPPER CASE\",\"text\":\"HELLO BENCHLINE WORLD\"},{\"style\":\"sentence\",\"label\":\"Sentence case\",\"text\":\"Hello benchline world\"},{\"style\":\"capital\",\"label\":\"Capital Case\",\"text\":\"Hello Benchline World\"},{\"style\":\"title-ap\",\"label\":\"Title case (AP)\",\"text\":\"Hello Benchline World\"},{\"style\":\"title-chicag",
+      "structured": "{\"cases\":[{\"style\":\"lower\",\"label\":\"lower case\",\"text\":\"hello benchline world\"},{\"style\":\"upper\",\"label\":\"UPPER CASE\",\"text\":\"HELLO BENCHLINE WORLD\"},{\"style\":\"sentence\",\"label\":\"Sentence case\",\"text\":\"Hello benchline wo…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "generate_fake_data",
+      "title": "Generate lorem ipsum or fake rows",
+      "description": "Generate seeded lorem ipsum, or fake JSON, CSV, or SQL rows from a list of field types.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 521,
+      "bytes": 204,
+      "status": "ok",
+      "text": "{\"output\":\"cur suppellex a cognatus arca\",\"format\":\"text\",\"rows\":5}",
+      "structured": "{\"output\":\"cur suppellex a cognatus arca\",\"format\":\"text\",\"rows\":5}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "test_regex",
+      "title": "Test a JavaScript regular expression",
+      "description": "Run a JavaScript regular expression against a sample and return every match, capture group, a short explanation, and an optional replacement.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "pattern",
+        "text"
+      ],
+      "sampled": true,
+      "ms": 220,
+      "bytes": 500,
+      "status": "ok",
+      "text": "{\"matches\":[{\"index\":1,\"length\":3,\"value\":\"aaa\",\"groups\":[]},{\"index\":7,\"length\":2,\"value\":\"aa\",\"groups\":[]}],\"truncated\":false,\"explanation\":[\"One or more:\",\"  The character \\\"a\\\"\"],\"replacement\":null}",
+      "structured": "{\"matches\":[{\"index\":1,\"length\":3,\"value\":\"aaa\",\"groups\":[]},{\"index\":7,\"length\":2,\"value\":\"aa\",\"groups\":[]}],\"truncated\":false,\"explanation\":[\"One or more:\",\"  The character \\\"a\\\"\"],\"replacement\":null}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "format_sql",
+      "title": "Format SQL",
+      "description": "Format SQL for PostgreSQL, MySQL, BigQuery, Snowflake, and other dialects. Choose keyword case and an indent of 2 or 4 spaces.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "sql"
+      ],
+      "sampled": true,
+      "ms": 334,
+      "bytes": 210,
+      "status": "ok",
+      "text": "{\"sql\":\"SELECT\\n  a,\\n  b\\nFROM\\n  t\\nWHERE\\n  a = 1\\nORDER BY\\n  b\"}",
+      "structured": "{\"sql\":\"SELECT\\n  a,\\n  b\\nFROM\\n  t\\nWHERE\\n  a = 1\\nORDER BY\\n  b\"}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "validate_json_schema",
+      "title": "Infer or validate JSON Schema",
+      "description": "Infer a JSON Schema from a sample, or validate JSON against a schema. Returns error paths plus TypeScript and Zod generated from the sample.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "json"
+      ],
+      "sampled": true,
+      "ms": 188,
+      "bytes": 993,
+      "status": "ok",
+      "text": "{\"valid\":true,\"schema\":\"{\\n  \\\"type\\\": \\\"object\\\",\\n  \\\"properties\\\": {\\n    \\\"a\\\": {\\n      \\\"type\\\": \\\"integer\\\"\\n    }\\n  },\\n  \\\"required\\\": [\\n    \\\"a\\\"\\n  ],\\n  \\\"additionalProperties\\\": false\\n}\",\"typescript\":\"export type Root = {\\n  a: number;\\n};\\n\",\"zod\":\"import * as z from \\\"zod\\\";\\n\\nexport const RootSchema = z.object({\\n  a: z.number().int(),\\n});\\n\\nexport type Root = z.infer<typeof ",
+      "structured": "{\"valid\":true,\"schema\":\"{\\n  \\\"type\\\": \\\"object\\\",\\n  \\\"properties\\\": {\\n    \\\"a\\\": {\\n      \\\"ty…(148 chars)\",\"typescript\":\"export type Root = {\\n  a: number;\\n};\\n\",\"zod\":\"import * as z from \\\"zod\\\";\\n\\nexport const Ro…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "calculate_emi",
+      "title": "Calculate a loan EMI",
+      "description": "Calculate a reducing-balance loan installment and its amortization schedule. Money is rounded half up to cents. An optional extra monthly payment reduces principal.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "principal",
+        "annualRate",
+        "months"
+      ],
+      "sampled": true,
+      "ms": 312,
+      "bytes": 4318,
+      "status": "ok",
+      "text": "{\"emi\":\"8791.59\",\"totalPayment\":\"105499.05\",\"totalInterest\":\"5499.05\",\"totalPrincipal\":\"100000.00\",\"payoffMonths\":12,\"schedule\":[{\"month\":1,\"payment\":\"8791.59\",\"principal\":\"7958.26\",\"interest\":\"833.33\",\"extra\":\"0.00\",\"balance\":\"92041.74\"},{\"month\":2,\"payment\":\"8791.59\",\"principal\":\"8024.58\",\"interest\":\"767.01\",\"extra\":\"0.00\",\"balance\":\"84017.16\"},{\"month\":3,\"payment\":\"8791.59\",\"principal\":\"8091.45",
+      "structured": "{\"emi\":\"8791.59\",\"totalPayment\":\"105499.05\",\"totalInterest\":\"5499.05\",\"totalPrincipal\":\"100000.00\",\"payoffMonths\":12,\"schedule\":[{\"month\":1,\"payment\":\"8791.59\",\"principal\":\"7958.26\",\"interest\":\"833.33\",\"extra\":\"0.00\",\"ba…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "calculate_percentage",
+      "title": "Calculate a percentage",
+      "description": "Calculate percent of a value, what percent one number is of another, percent change, the reverse, an increase or decrease, and margin versus markup.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "a",
+        "b"
+      ],
+      "sampled": true,
+      "ms": 185,
+      "bytes": 212,
+      "status": "ok",
+      "text": "{\"result\":\"20\",\"unit\":\"number\",\"formula\":\"10% × 200 = 20\",\"parts\":[]}",
+      "structured": "{\"result\":\"20\",\"unit\":\"number\",\"formula\":\"10% × 200 = 20\",\"parts\":[]}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "convert_units",
+      "title": "Convert units",
+      "description": "Convert length, mass, volume, temperature, area, speed, time, and data size. Decimal bytes (kB, MB) and binary bytes (KiB, MiB) are separate categories.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "category",
+        "from",
+        "to",
+        "value"
+      ],
+      "sampled": true,
+      "ms": 191,
+      "bytes": 936,
+      "status": "ok",
+      "text": "{\"result\":\"150.00\",\"rows\":[{\"id\":\"mm\",\"label\":\"Millimeter\",\"value\":\"1500.00\"},{\"id\":\"cm\",\"label\":\"Centimeter\",\"value\":\"150.00\"},{\"id\":\"m\",\"label\":\"Meter\",\"value\":\"1.50\"},{\"id\":\"km\",\"label\":\"Kilometer\",\"value\":\"0.00\"},{\"id\":\"in\",\"label\":\"Inch\",\"value\":\"59.06\"},{\"id\":\"ft\",\"label\":\"Foot\",\"value\":\"4.92\"},{\"id\":\"yd\",\"label\":\"Yard\",\"value\":\"1.64\"},{\"id\":\"mi\",\"label\":\"Mile\",\"value\":\"0.00\"}]}",
+      "structured": "{\"result\":\"150.00\",\"rows\":[{\"id\":\"mm\",\"label\":\"Millimeter\",\"value\":\"1500.00\"},{\"id\":\"cm\",\"label\":\"Centimeter\",\"value\":\"150.00\"},{\"id\":\"m\",\"label\":\"Meter\",\"value\":\"1.50\"},{\"id\":\"km\",\"label\":\"Kilometer\",\"value\":\"0.00\"},{\"i…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "lookup_dns",
+      "title": "Look up DNS records",
+      "description": "Query A, AAAA, MX, TXT, CNAME, and CAA for a public hostname over DNS-over-HTTPS, and parse SPF and DMARC. Private names are refused. The resolver is Cloudflare or Google.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "name"
+      ],
+      "sampled": true,
+      "ms": 376,
+      "bytes": 11574,
+      "status": "ok",
+      "text": "{\"name\":\"github.com\",\"resolver\":\"cloudflare\",\"records\":[{\"type\":\"A\",\"name\":\"github.com\",\"ttl\":59,\"data\":\"140.82.121.3\"},{\"type\":\"MX\",\"name\":\"github.com\",\"ttl\":300,\"data\":\"0 github-com.mail.protection.outlook.com\"},{\"type\":\"TXT\",\"name\":\"github.com\",\"ttl\":227,\"data\":\"00Dd0000000hHE0=1TBKg000000TN2r\"},{\"type\":\"TXT\",\"name\":\"github.com\",\"ttl\":227,\"data\":\"MS=6BF03E6AF5CB689E315FB6199603BABF2C88D805\"},{\"",
+      "structured": "{\"name\":\"github.com\",\"resolver\":\"cloudflare\",\"records\":[{\"type\":\"A\",\"name\":\"github.com\",\"ttl\":59,\"data\":\"140.82.121.3\"},{\"type\":\"MX\",\"name\":\"github.com\",\"ttl\":300,\"data\":\"0 github-com.mail.protection.outlook.com\"},{\"type…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "calculate_cidr",
+      "title": "Calculate a CIDR block",
+      "description": "Return the network, broadcast, host range, and host count for an IPv4 or IPv6 CIDR. Optionally test whether an address is inside it, split it, or merge it with other CIDRs.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "cidr"
+      ],
+      "sampled": true,
+      "ms": 227,
+      "bytes": 788,
+      "status": "ok",
+      "text": "{\"summary\":{\"version\":4,\"input\":\"192.168.1.0/24\",\"network\":\"192.168.1.0/24\",\"prefix\":24,\"netmask\":\"255.255.255.0\",\"wildcard\":\"0.0.0.255\",\"broadcast\":\"192.168.1.255\",\"firstHost\":\"192.168.1.1\",\"lastHost\":\"192.168.1.254\",\"addressCount\":\"256\",\"usableHosts\":\"254\"},\"contains\":null,\"containsDetail\":\"\",\"split\":[],\"splitCount\":\"0\",\"merged\":[]}",
+      "structured": "{\"summary\":{\"version\":4,\"input\":\"192.168.1.0/24\",\"network\":\"192.168.1.0/24\",\"prefix\":24,\"netmask\":\"255.255.255.0\",\"wildcard\":\"0.0.0.255\",\"broadcast\":\"192.168.1.255\",\"firstHost\":\"192.168.1.1\",\"lastHost\":\"192.168.1.254\",\"a…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "hash_password",
+      "title": "Hash or verify a password",
+      "description": "Hash a password with bcrypt or argon2id, or verify a hash. Returns an htpasswd line when a username is set. The password is not stored or logged. The page in the browser never sends the password; this call only hashes the arguments you send.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "password"
+      ],
+      "sampled": true,
+      "ms": 214,
+      "bytes": 438,
+      "status": "ok",
+      "text": "{\"algorithm\":\"bcrypt\",\"hash\":\"$2a$04$vuds4kCt70uG00ECiNrm4.CWGSop/3ZVl9ity79.jBU5MMr6wN.0O\",\"htpasswd\":\"$2a$04$vuds4kCt70uG00ECiNrm4.CWGSop/3ZVl9ity79.jBU5MMr6wN.0O\",\"verified\":null}",
+      "structured": "{\"algorithm\":\"bcrypt\",\"hash\":\"$2a$04$vuds4kCt70uG00ECiNrm4.CWGSop/3ZVl9ity79.jBU5MMr6wN.0O\",\"htpasswd\":\"$2a$04$vuds4kCt70uG00ECiNrm4.CWGSop/3ZVl9ity79.jBU5MMr6wN.0O\",\"verified\":null}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "generate_keypair",
+      "title": "Generate or convert a key pair",
+      "description": "Generate an RSA, EC, or Ed25519 key pair as PEM and JWK, or convert between PEM and JWK. The private key is returned in the result and is not stored. The page in the browser generates keys locally and does not send them.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 207,
+      "bytes": 3178,
+      "status": "ok",
+      "text": "{\"alg\":\"ES256\",\"publicPem\":\"-----BEGIN PUBLIC KEY-----\\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEWyHDsTWB3GWPN/69ifOnMfqTpwTs\\nkpZH+STnUzjg7p3PevkjQ4Fx/NUs5ntUrQ98zaytpdz2BYAIqkBKgIiydA==\\n-----END PUBLIC KEY-----\",\"privatePem\":\"-----BEGIN PRIVATE KEY-----\\nMIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgK0IyXsM85ic0YBmW\\na8jU1g1V0wOCOb2Ub3WxzRfjMdChRANCAARbIcOxNYHcZY83/r2J86cx+pOnBOyS\\nlkf5JOdTOODunc9",
+      "structured": "{\"alg\":\"ES256\",\"publicPem\":\"-----BEGIN PUBLIC KEY-----\\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQ…(177 chars)\",\"privatePem\":\"-----BEGIN PRIVATE KEY-----\\nMIGHAgEAMBMGByqGSM49AgEGCCqGSM49…(240 chars)\",\"publicJwk\":\"{\\n  \\\"kty\\\": \\…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "build_csp",
+      "title": "Build a Content-Security-Policy",
+      "description": "Build a Content-Security-Policy from directives, or lint an existing policy. Returns the header line, a Next.js headers() snippet, and warnings for unsafe sources.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 190,
+      "bytes": 2056,
+      "status": "ok",
+      "text": "{\"policy\":\"default-src 'self'; object-src 'none'; base-uri 'none'\",\"header\":\"Content-Security-Policy: default-src 'self'; object-src 'none'; base-uri 'none'\",\"nextConfig\":\"const contentSecurityPolicy = `default-src 'self'; object-src 'none'; base-uri 'none'`;\\n\\nconst nextConfig = {\\n  async headers() {\\n    return [\\n      {\\n        source: \\\"/:path*\\\",\\n        headers: [\\n          { key: \\\"Co",
+      "structured": "{\"policy\":\"default-src 'self'; object-src 'none'; base-uri 'none'\",\"header\":\"Content-Security-Policy: default-src 'self'; object-src 'none'; base-uri 'none'\",\"nextConfig\":\"const contentSecurityPolicy = `default-src 'self…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "validate_sitemap",
+      "title": "Validate or generate a sitemap",
+      "description": "Validate sitemap XML or a public sitemap URL, including a sitemap index and a sample of HTTP statuses. Or generate a urlset from a list of URLs. Private addresses are refused and responses are size-capped.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 1183,
+      "bytes": 13156,
+      "status": "ok",
+      "text": "{\"kind\":\"urlset\",\"urlCount\":282,\"sitemapCount\":0,\"urls\":[{\"loc\":\"https://benchline.fabwaseem.com/\",\"lastmod\":\"2026-10-18\",\"changefreq\":\"weekly\",\"priority\":\"1\"},{\"loc\":\"https://benchline.fabwaseem.com/tools\",\"lastmod\":\"2026-10-18\",\"changefreq\":\"weekly\",\"priority\":\"0.95\"},{\"loc\":\"https://benchline.fabwaseem.com/categories\",\"lastmod\":\"2026-10-18\",\"changefreq\":\"weekly\",\"priority\":\"0.7\"},{\"loc\":\"https:",
+      "structured": "{\"kind\":\"urlset\",\"urlCount\":282,\"sitemapCount\":0,\"urls\":[{\"loc\":\"https://benchline.fabwaseem.com/\",\"lastmod\":\"2026-10-18\",\"changefreq\":\"weekly\",\"priority\":\"1\"},{\"loc\":\"https://benchline.fabwaseem.com/tools\",\"lastmod\":\"20…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "check_http_headers",
+      "title": "Check HTTP response headers",
+      "description": "Fetch a public URL, follow redirects, and grade HSTS, Content-Security-Policy, framing, nosniff, and Referrer-Policy. Private addresses are refused. The body is not stored.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "url"
+      ],
+      "sampled": true,
+      "ms": 344,
+      "bytes": 14128,
+      "status": "ok",
+      "text": "{\"finalUrl\":\"https://github.com/\",\"status\":200,\"redirects\":[],\"headers\":[{\"name\":\"accept-ranges\",\"value\":\"bytes\"},{\"name\":\"cache-control\",\"value\":\"max-age=0, private, must-revalidate\"},{\"name\":\"content-language\",\"value\":\"en-US\"},{\"name\":\"content-security-policy\",\"value\":\"default-src 'none'; base-uri 'self'; child-src github.githubassets.com github.com/assets-cdn/worker/ github.com/assets/ gist.git",
+      "structured": "{\"finalUrl\":\"https://github.com/\",\"status\":200,\"redirects\":[],\"headers\":[{\"name\":\"accept-ranges\",\"value\":\"bytes\"},{\"name\":\"cache-control\",\"value\":\"max-age=0, private, must-revalidate\"},{\"name\":\"content-language\",\"value\":…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "check_ssl",
+      "title": "Check a TLS certificate",
+      "description": "Connect to a public host on port 443 and report certificate expiry, subject alternative names, protocol, and chain. Private addresses are refused. The handshake times out after 8 seconds.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "host"
+      ],
+      "sampled": true,
+      "ms": 257,
+      "bytes": 3422,
+      "status": "ok",
+      "text": "{\"host\":\"github.com\",\"authorized\":true,\"protocol\":\"TLSv1.3\",\"authorizationError\":\"\",\"subject\":\"github.com\",\"commonName\":\"github.com\",\"issuer\":\"Sectigo Public Server Authentication CA DV E36 · Sectigo Limited\",\"validFrom\":\"2026-10-30T00:00:00.000Z\",\"validTo\":\"2027-01-27T23:59:59.000Z\",\"sans\":[\"github.com\",\"www.github.com\"],\"fingerprint\":\"7D:C4:D8:5C:F1:E3:10:97:12:25:BC:9A:92:57:67:90:43:A2:43:D7:0",
+      "structured": "{\"host\":\"github.com\",\"authorized\":true,\"protocol\":\"TLSv1.3\",\"authorizationError\":\"\",\"subject\":\"github.com\",\"commonName\":\"github.com\",\"issuer\":\"Sectigo Public Server Authentication CA DV E36 · Sectigo Limited\",\"validFrom\"…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "generate_totp",
+      "title": "Generate a TOTP/HOTP one-time code",
+      "description": "Compute RFC 4226/6238 one-time passcodes from a base32 secret. Supports 6/8 digits, SHA1/SHA256/SHA512, and custom periods.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "secret"
+      ],
+      "sampled": true,
+      "ms": 211,
+      "bytes": 268,
+      "status": "ok",
+      "text": "{\"code\":\"643747\",\"mode\":\"totp\",\"secondsRemaining\":28,\"period\":30,\"digits\":6,\"algorithm\":\"SHA1\"}",
+      "structured": "{\"code\":\"643747\",\"mode\":\"totp\",\"secondsRemaining\":28,\"period\":30,\"digits\":6,\"algorithm\":\"SHA1\"}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "query_jsonpath",
+      "title": "Run a JSONPath query",
+      "description": "Evaluate a JSONPath Plus query against a JSON document and return the matches with their paths. A number that does not fit in a JavaScript number is returned as its original digits, with a precision warning.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "json",
+        "query"
+      ],
+      "sampled": true,
+      "ms": 226,
+      "bytes": 410,
+      "status": "ok",
+      "text": "{\"count\":2,\"truncated\":false,\"warning\":\"\",\"matches\":[{\"path\":\"$['store']['book'][0]['title']\",\"value\":\"A\"},{\"path\":\"$['store']['book'][1]['title']\",\"value\":\"B\"}]}",
+      "structured": "{\"count\":2,\"truncated\":false,\"warning\":\"\",\"matches\":[{\"path\":\"$['store']['book'][0]['title']\",\"value\":\"A\"},{\"path\":\"$['store']['book'][1]['title']\",\"value\":\"B\"}]}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "calculate_programmer",
+      "title": "Evaluate a programmer expression",
+      "description": "Evaluate integer expressions with C-like precedence (hex/octal/binary literals, bitwise ops, shifts) and report base conversions plus signed/unsigned interpretations.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 186,
+      "bytes": 292,
+      "status": "ok",
+      "text": "{\"decimal\":\"31\",\"hex\":\"0x1f\",\"octal\":\"0o37\",\"binary\":\"0b11111\",\"unsigned\":\"31\",\"signed\":\"31\",\"bits\":64}",
+      "structured": "{\"decimal\":\"31\",\"hex\":\"0x1f\",\"octal\":\"0o37\",\"binary\":\"0b11111\",\"unsigned\":\"31\",\"signed\":\"31\",\"bits\":64}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "aes_crypt",
+      "title": "Encrypt or decrypt with AES-GCM",
+      "description": "AES-256-GCM encryption with PBKDF2-SHA256 key derivation. Encrypt returns a base64 bundle (salt, IV, ciphertext); decrypt reverses it.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "mode",
+        "passphrase"
+      ],
+      "sampled": true,
+      "ms": 249,
+      "bytes": 440,
+      "status": "ok",
+      "text": "{\"mode\":\"encrypt\",\"bundle\":\"eyJ2IjoxLCJpdGVyIjoxMDAwMDAsInNhbHQiOiJaRFNHZHl1Z1ZIZGZFbG0rN1JPZUdBPT0iLCJpdiI6IklIZEd3M3ZBeEN6MTJUK2giLCJjdCI6IjRSbjJVSEZRalBwR3pvSE9Udm52ZE1md2I5WkEifQ==\"}",
+      "structured": "{\"mode\":\"encrypt\",\"bundle\":\"eyJ2IjoxLCJpdGVyIjoxMDAwMDAsInNhbHQiOiJaRFNHZHl1Z1ZIZGZFbG0r…(156 chars)\"}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "analyze_har",
+      "title": "Analyze a HAR file",
+      "description": "Parse a HAR (HTTP Archive) capture and summarize it: request counts, status distribution, slowest and largest requests, top hosts, and per-request timings.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "har"
+      ],
+      "sampled": true,
+      "ms": 233,
+      "bytes": 1322,
+      "status": "ok",
+      "text": "{\"totalRequests\":1,\"totalTimeMs\":100,\"totalBytes\":10,\"truncated\":false,\"statusGroups\":{\"2xx\":1,\"3xx\":0,\"4xx\":0,\"5xx\":0,\"other\":0},\"slowest\":[{\"method\":\"GET\",\"url\":\"https://example.com/\",\"host\":\"example.com\",\"status\":200,\"timeMs\":100,\"sizeBytes\":10,\"timings\":{\"blocked\":1,\"dns\":2,\"connect\":3,\"send\":4,\"wait\":80,\"receive\":10}}],\"largest\":[{\"method\":\"GET\",\"url\":\"https://example.com/\",\"host\":\"example.co",
+      "structured": "{\"totalRequests\":1,\"totalTimeMs\":100,\"totalBytes\":10,\"truncated\":false,\"statusGroups\":{\"2xx\":1,\"3xx\":0,\"4xx\":0,\"5xx\":0,\"other\":0},\"slowest\":[{\"method\":\"GET\",\"url\":\"https://example.com/\",\"host\":\"example.com\",\"status\":200,…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "convert_json_to_types",
+      "title": "Convert JSON to type definitions",
+      "description": "Infer types from a JSON document and generate TypeScript interfaces, Zod schemas, Python Pydantic models or dataclasses, and Go structs.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "json"
+      ],
+      "sampled": true,
+      "ms": 199,
+      "bytes": 668,
+      "status": "ok",
+      "text": "{\"outputs\":{\"typescript\":\"export interface Root {\\n  name: string;\\n  tags: string[];\\n}\\n\",\"zod\":\"import { z } from \\\"zod\\\";\\n\\nexport const RootSchema = z.object({\\n  name: z.string(),\\n  tags: z.array(z.string()),\\n});\\n\\nexport type Root = z.infer<typeof RootSchema>;\\n\"},\"warnings\":[]}",
+      "structured": "{\"outputs\":{\"typescript\":\"export interface Root {\\n  name: string;\\n  tags: string[];\\n}\\n\",\"zod\":\"import { z } from \\\"zod\\\";\\n\\nexport const RootSchema = z.object…(164 chars)\"},\"warnings\":[]}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "minify_code",
+      "title": "Minify JavaScript, CSS, or HTML",
+      "description": "Minify source code with Terser (JS), csso (CSS), or a structural HTML pass and report before/after byte counts.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "language",
+        "code"
+      ],
+      "sampled": true,
+      "ms": 237,
+      "bytes": 272,
+      "status": "ok",
+      "text": "{\"code\":\"function foo(){return 3}\",\"beforeBytes\":47,\"afterBytes\":24,\"savedBytes\":23,\"savedPct\":48.9}",
+      "structured": "{\"code\":\"function foo(){return 3}\",\"beforeBytes\":47,\"afterBytes\":24,\"savedBytes\":23,\"savedPct\":48.9}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "convert_curl",
+      "title": "Convert a curl command to code",
+      "description": "Parse a curl command and generate equivalent JavaScript fetch, Python requests, Go, PHP, or Rust code.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "command"
+      ],
+      "sampled": true,
+      "ms": 191,
+      "bytes": 899,
+      "status": "ok",
+      "text": "{\"url\":\"https://example.com/api\",\"method\":\"POST\",\"headers\":[{\"name\":\"content-type\",\"value\":\"application/json\"}],\"body\":\"{\\\"a\\\":1}\",\"snippet\":\"const res = await fetch(\\\"https://example.com/api\\\", {\\n  method: \\\"POST\\\",\\n  headers: {\\n    \\\"content-type\\\": \\\"application/json\\\",\\n  },\\n  body: \\\"{\\\\\\\"a\\\\\\\":1}\\\",\\n});\\n\\nconst data = await res.json();\\nconsole.log(data);\",\"warnings\":[]}",
+      "structured": "{\"url\":\"https://example.com/api\",\"method\":\"POST\",\"headers\":[{\"name\":\"content-type\",\"value\":\"application/json\"}],\"body\":\"{\\\"a\\\":1}\",\"snippet\":\"const res = await fetch(\\\"https://example.com/api\\\", {\\n  metho…(204 chars)\",\"…",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "execute_graphql",
+      "title": "Execute a GraphQL query",
+      "description": "Send a GraphQL query with optional variables and headers to a public http or https endpoint on port 80 or 443 and return the response data or errors. Local, private, and internal addresses are refused.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "endpoint",
+        "query"
+      ],
+      "sampled": true,
+      "ms": 509,
+      "bytes": 282,
+      "status": "ok",
+      "text": "{\"ok\":true,\"status\":200,\"durationMs\":302,\"data\":{\"country\":{\"capital\":\"Islamabad\",\"name\":\"Pakistan\"}}}",
+      "structured": "{\"ok\":true,\"status\":200,\"durationMs\":302,\"data\":{\"country\":{\"capital\":\"Islamabad\",\"name\":\"Pakistan\"}}}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "validate_websocket_url",
+      "title": "Validate a WebSocket URL",
+      "description": "Validate and parse a ws:// or wss:// URL into its components, and optionally decode a WebSocket close code.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "url"
+      ],
+      "sampled": true,
+      "ms": 181,
+      "bytes": 268,
+      "status": "ok",
+      "text": "{\"valid\":true,\"protocol\":\"wss\",\"secure\":true,\"host\":\"echo.websocket.org\",\"port\":443,\"path\":\"/\"}",
+      "structured": "{\"valid\":true,\"protocol\":\"wss\",\"secure\":true,\"host\":\"echo.websocket.org\",\"port\":443,\"path\":\"/\"}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "generate_resume",
+      "title": "Generate a resume PDF",
+      "description": "Build a resume PDF from profile, experience, education, and skills. A name plus at least one experience, education, or skills entry is required. Choose the clean, modern, or compact template. Returns the A4 PDF as base64.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "resume"
+      ],
+      "sampled": true,
+      "ms": 415,
+      "bytes": 3312,
+      "status": "ok",
+      "text": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjggMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbmd0aCAyOTUKPj4Kc3RyZWFtCniclZJNSwNBDIbv+RVzFrpmZvIxA+Kh260evKh7kx7EVlG6SEX075vRXdaWFi0LL5kZNk/eJBuYtoCVFzfK2xOcXq7WH6v354f7yfR1vZwo5kQJNWUXyLWPUPQKvEP7vCNxqr6y17aDM/JC4gNSLXMVYanFSxQ+d+0LtCfQtHANmx8wBTfKNjgrBUmBJTkf9jNZqtgzWRpRyaYsrOFIVkDEhJyTuFzxfhjFASbfBgkNlCyeKZpFDo2ZnMtsB42VFuQgNxflht0n3C0s9RJK6hhL77qtmClXIQ3nNdyORv6",
+      "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjggMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(1584 chars)\",\"pageCount\":1,\"bytes\":1186}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "generate_invoice",
+      "title": "Generate an invoice or quote PDF",
+      "description": "Build an invoice or quote PDF from company and client details, line items with quantities and rates, a tax rate, and an optional percent or flat discount. All money is computed in integer cents, so there are no float rounding errors. Returns the PDF as base64 plus the total.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "invoice"
+      ],
+      "sampled": true,
+      "ms": 305,
+      "bytes": 4832,
+      "status": "ok",
+      "text": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjcgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbmd0aCA3NjUKPj4Kc3RyZWFtCnicnZZLbxMxEMfv+yl8RuoynrclxKFtAgcuQG6IA+qDh1ohEIKvzzib7G5Sp22SVZx1Xj//x/+Z8a/ufNVBnzVBTxiDpt9fu5dvb+7+3vz5fvXl7Pzn3fWZQXF2MC8JNa1uO+S0etflBHHlxJ6sUB+fru67V1x4IcrLeCWW12n1o1u96Bar7n33a0OjtB24hSvGqI6inuJbTZyWLQ5pAOIlQVy5BWRJ28H2gAgADlJcU4YGS3OfMRmXSZ5RXKKhEQGBkOqz8jPlGGNBR66hmABrQbD2Ggx7pDI9JBnpuB6",
+      "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjcgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(2320 chars)\",\"totalCents\":33000,\"currency\":\"USD\",\"bytes\":1738}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "sign_pdf",
+      "title": "Sign a PDF with a PNG signature",
+      "description": "Stamp a PNG signature image onto one or more PDF pages at given positions (fractions of the page, x and y measured from the top-left, width as a fraction of page width). The signature keeps its aspect ratio. Returns the signed PDF as base64.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "file",
+        "signature",
+        "placements"
+      ],
+      "sampled": true,
+      "ms": 198,
+      "bytes": 4440,
+      "status": "ok",
+      "text": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjYgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbmd0aCAxMTYKPj4Kc3RyZWFtCnicHcq7CgJBDIXhPk+RWhAzmVxmQCzUBQsbIS8gsorLWiji8++MHPj5ivOGfQBh3+cBm9M4/8bv83ZdO9UihbxUTIJxB249Q/pfE3KLEsYLtsKmNli2YgerTcrU5dYlR8lKTC6mnl12GBPECoaACywXnRuICmVuZHN0cmVhbQplbmRvYmoKCjggMCBvYmoKPDwKL1R5cGUgL1hPYmplY3QKL1N1YnR5cGUgL0ltYWdlCi9CaXRzUGVyQ29tcG9uZW50IDgKL1dpZHRoIDEKL0hlaWdodCAxCi9Db2xvclN",
+      "structured": "{\"data\":\"JVBERi0xLjcKJYGBgYEKCjYgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNv…(2148 chars)\",\"pageCount\":2,\"bytes\":1610}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "resize_social_image",
+      "title": "Resize an image to social media dimensions",
+      "description": "Crop and resize an image to an exact social media preset: instagram-post (1080x1080), instagram-portrait (1080x1350), instagram-story (1080x1920), youtube-thumbnail (1280x720), x-post (1200x675), x-header (1500x500), linkedin-post (1200x627), or facebook-post (1200x630). The cover crop keeps the center subject. Send base64 or a public URL. Private addresses are refused and the decoded file is capped at 10 MB. Returns the image as base64 PNG.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "file",
+        "preset"
+      ],
+      "sampled": true,
+      "ms": 273,
+      "bytes": 68102,
+      "status": "ok",
+      "text": "{\"data\":\"iVBORw0KGgoAAAANSUhEUgAABDgAAAQ4CAYAAADsEGyPAAAACXBIWXMAAAsSAAALEgHS3X78AAAgAElEQVR4nOzasQ0DMAwDwd88oztjRAGvYG/QBxWCevURHTDAAAMMMMAAAwwwwAADDDDAwPvjDvr1A0QHDDDAAAMMMMAAAwwwwAADDDDwLDggMAgYYIABBhhggAEGGGCAAQYYeOMduOA48AmiAwYYYIABBhhggAEGGGCAAQay4IDAIGCAAQYYYIABBhhggAEGGGCg6Q5ccBz4BNEBAwwwwAADDDDAAAMMMMAAA1lwQGAQMMAAAwwwwAADDDDAAAMMMNB0By44DnyC6IABBhhggAEGGGCAAQYYYICBLDggMAgYYIABBhhggAEGGGC",
+      "structured": "{\"data\":\"iVBORw0KGgoAAAANSUhEUgAABDgAAAQ4CAYAAADsEGyPAAAACXBIWXMAAAsS…(33964 chars)\",\"width\":1080,\"height\":1080,\"bytes\":25473}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "trim_audio",
+      "title": "Trim a WAV audio file",
+      "description": "Trim a WAV audio file to a time range with optional fade in and out, returning a 16-bit PCM WAV as base64. Only WAV is accepted; the web UI handles MP3/OGG/M4A.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "file",
+        "startSec",
+        "endSec"
+      ],
+      "sampled": true,
+      "ms": 202,
+      "bytes": 528,
+      "status": "ok",
+      "text": "{\"data\":\"UklGRnQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YVAAAAAAADsN5hifIV4mlCY7ItUZYQ46Ae7zD+gF3+HZP9ky3UPlffCN/eUK9RZOINUl4yZYI58boRCtA0r2DOpm4H7aBNkn3IfjRe4b+4UI7hTdHg==\",\"durationSec\":0.005,\"sampleRate\":8000,\"bytes\":124}",
+      "structured": "{\"data\":\"UklGRnQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YVAAAAAA…(168 chars)\",\"durationSec\":0.005,\"sampleRate\":8000,\"bytes\":124}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "convert_currency",
+      "title": "Convert an amount between currencies",
+      "description": "Convert money between ISO 4217 currencies using live exchange rates from the Frankfurter API, fetched through the SSRF-safe outbound guard. Supports historical dates.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 182,
+      "bytes": 156,
+      "status": "ok",
+      "text": "{\"ok\":false,\"error\":\"Unknown currency: PKR.\"}",
+      "structured": "{\"ok\":false,\"error\":\"Unknown currency: PKR.\"}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "generate_meme",
+      "title": "Generate a meme image",
+      "description": "Render a classic top/bottom-caption meme as a PNG. Give it an image (base64, data URI, or public URL) or pick a gradient style, and it returns captioned meme artwork.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 904,
+      "bytes": 607264,
+      "status": "ok",
+      "text": "{\"png\":\"iVBORw0KGgoAAAANSUhEUgAABDgAAAQ4CAYAAADsEGyPAAN5CklEQVR4nOz9e/Cv2VXeB377ohZSty4NmJtJdNozg7ANRrIcjKfKUcshFZAxaib2xOCLWlUGZ2biINlO1UyVx2qmkr/MjE0mNQMzmahlE/DEnkESsT0TY6shFYMNWBIQW7jKcGTwBQxSt1oXpBb88r6/s89+99rfZ631rLX2uXTr96n6aa/L8zznnO73+57qrXO551N/5gsuTgb55QEpcxE5ouFJ2gQXK0I2UjGTaWpTUBmOyFnTwBw41AnKIT2jFzlK9mZuR4lwBjDIkewiuE5XQElcYAYc6gTlKiveKemIwTiUJegcQ2isaMwMc3lAylxEjmh4kjbBimdtJxUzmaY2",
+      "structured": "{\"png\":\"iVBORw0KGgoAAAANSUhEUgAABDgAAAQ4CAYAAADsEGyPAAN5CklEQVR4nOz9…(303536 chars)\",\"width\":1080,\"height\":1080,\"mimeType\":\"image/png\"}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "zip_files",
+      "title": "Zip files or unzip an archive",
+      "description": "Create a ZIP archive from files or list and extract the contents of a ZIP archive. Everything is handled in memory; no files are stored.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [],
+      "sampled": true,
+      "ms": 186,
+      "bytes": 484,
+      "status": "ok",
+      "text": "{\"mode\":\"zip\",\"zip\":\"UEsDBBQAAAAIACxIeF2sKpPYBAAAAAIAAAAFAAAAYS50eHTLyAQAUEsBAhQAFAAAAAgALEh4Xawqk9gEAAAAAgAAAAUAAAAAAAAAAAAAAAAAAAAAAGEudHh0UEsFBgAAAAABAAEAMwAAACcAAAAAAA==\",\"fileCount\":1,\"totalBytes\":112}",
+      "structured": "{\"mode\":\"zip\",\"zip\":\"UEsDBBQAAAAIACxIeF2sKpPYBAAAAAIAAAAFAAAAYS50eHTLyAQAUEsBAhQA…(152 chars)\",\"fileCount\":1,\"totalBytes\":112}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "make_collage",
+      "title": "Make a photo collage",
+      "description": "Arrange up to 9 photos into a collage layout (duo, trio, focus, quad, six, nine) with a gap and background color, and get back a square PNG.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "images"
+      ],
+      "sampled": true,
+      "ms": 316,
+      "bytes": 6650,
+      "status": "ok",
+      "text": "{\"png\":\"iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAJH0lEQVR4nO2UsQ3AAAyD8rlPb0/oVluCgT3CEZe7RzgO7oP2fXL//oPCWU9nAPobZAgDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7CRQDMDCCAeh7",
+      "structured": "{\"png\":\"iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAACXBIWXMAAAPo…(3220 chars)\",\"width\":256,\"height\":256,\"mimeType\":\"image/png\",\"cells\":2}",
+      "contentTypes": [
+        "text"
+      ]
+    },
+    {
+      "name": "fill_pdf_form",
+      "title": "Fill a PDF form",
+      "description": "Fill an interactive PDF form's text fields, checkboxes, dropdowns, and radios by field name, with an option to flatten the result. Pass inspectOnly to list the fields first.",
+      "annotations": {
+        "readOnlyHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "hasOutputSchema": true,
+      "required": [
+        "file"
+      ],
+      "sampled": true,
+      "ms": 206,
+      "bytes": 388,
+      "status": "ok",
+      "text": "{\"fields\":[{\"name\":\"name\",\"type\":\"text\",\"page\":1,\"required\":false,\"readOnly\":false,\"value\":\"\"}],\"filled\":0,\"pageCount\":1,\"mimeType\":\"application/pdf\"}",
+      "structured": "{\"fields\":[{\"name\":\"name\",\"type\":\"text\",\"page\":1,\"required\":false,\"readOnly\":false,\"value\":\"\"}],\"filled\":0,\"pageCount\":1,\"mimeType\":\"application/pdf\"}",
+      "contentTypes": [
+        "text"
+      ]
+    }
+  ],
+  "extras": [
+    {
+      "label": "split_pdf from a public URL",
+      "name": "split_pdf",
+      "expect": "ok",
+      "status": "ok",
+      "pass": true,
+      "ms": 415,
+      "text": "{\"files\":[{\"name\":\"document-extract.pdf\",\"data\":\"JVBERi0xLjcKJYGBgYEKCjggMCBvYmoKPDwKL0xlbmd0aCAxMDgyNQovRmlsdGVyIC9GbGF0ZURlY29kZQovTGVuZ3RoMSAyMzE2NAo+PgpzdHJlYW0KeJztfHl8W9WV/7n3PS12vMi7vEXPUbwqXuLYcRYTy/FCUjeJEzvUDqSxLCuxim0plhQT2iZhK2CWhmFpKUwxtOxtI8sBnAQaA2W6zFDSYdrSThnya6GUlvzKdChlWmL9vvfqeSOBaWd+f/w+n1+k3HfPPfds95xzz31PihUcDnkogQ6RQk73oMu/JDEzlYj+iYiluvcFtT/cnrUU8Gki05rd/j2DX3jy3+8jissjMvx"
+    },
+    {
+      "label": "extract_pdf_text from a public URL",
+      "name": "extract_pdf_text",
+      "expect": "ok",
+      "status": "ok",
+      "pass": true,
+      "ms": 290,
+      "text": "{\"pageCount\":1,\"pages\":[{\"page\":1,\"text\":\"Dummy PDF file\",\"markdown\":\"Dummy PDF file\"}],\"text\":\"Dummy PDF file\",\"markdown\":\"Dummy PDF file\",\"tokens\":3,\"emptyPages\":0}"
+    },
+    {
+      "label": "private address is refused",
+      "name": "split_pdf",
+      "expect": "error",
+      "status": "error",
+      "pass": true,
+      "ms": 197,
+      "text": "That address is not public.\nInput schema and an example: https://benchline.fabwaseem.com/api/v1/tools/pdf-split (GET). Docs: https://benchline.fabwaseem.com/t/pdf-split.md"
+    },
+    {
+      "label": "metadata address is refused",
+      "name": "fetch_page_markdown",
+      "expect": "error",
+      "status": "error",
+      "pass": true,
+      "ms": 179,
+      "text": "That address is not public.\nInput schema and an example: https://benchline.fabwaseem.com/api/v1/tools/html-to-markdown-url (GET). Docs: https://benchline.fabwaseem.com/t/html-to-markdown-url.md"
+    },
+    {
+      "label": "missing required field",
+      "name": "decode_jwt",
+      "expect": "error",
+      "status": "error",
+      "pass": true,
+      "ms": 182,
+      "text": "MCP error -32602: Input validation error: Invalid arguments for tool decode_jwt: Invalid input: expected string, received undefined at token"
+    },
+    {
+      "label": "invalid JSON input",
+      "name": "format_json",
+      "expect": "error",
+      "status": "ok",
+      "pass": false,
+      "ms": 183,
+      "text": "{\"output\":\"\",\"valid\":false,\"errors\":[{\"message\":\"Invalid symbol\",\"line\":1,\"column\":2},{\"message\":\"Expected a closing brace\",\"line\":1,\"column\":5}]}"
+    },
+    {
+      "label": "unknown tool name",
+      "name": "no_such_tool",
+      "expect": "error",
+      "status": "error",
+      "pass": true,
+      "ms": 199,
+      "text": "MCP error -32602: Tool no_such_tool not found"
+    }
+  ],
+  "httpChecks": [
+    {
+      "label": "GET /mcp (browser-less)",
+      "status": 405,
+      "contentType": "text/plain; charset=utf-8",
+      "allow": "POST",
+      "body": "405 Method Not Allowed\n\nThis is the Benchline MCP endpoint (Streamable HTTP, JSON-RPC 2.0). Send requests with POST.\nNo key is needed. 60 calls per minute per address.\n\nSetup for Claude, Cursor, VS Code, and ChatGPT: https://benchline.fabwaseem.com/mcp/guide\nEvery tool, its MCP name, and what it rea"
+    },
+    {
+      "label": "POST tools/list without initialize",
+      "status": 200,
+      "contentType": "application/json",
+      "allow": null,
+      "body": "{\"result\":{\"tools\":[{\"name\":\"generate_llms_txt\",\"title\":\"Generate llms.txt\",\"description\":\"Render llms.txt and llms-full.txt from a site name, a summary, and a list of pages. It does not crawl. Grouping follows the page URLs.\",\"inputSchema\":{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\""
+    },
+    {
+      "label": "POST from a foreign Origin",
+      "status": 403,
+      "contentType": "application/json",
+      "allow": null,
+      "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Origin is not allowed.\"},\"id\":null}"
+    },
+    {
+      "label": "POST with unsupported protocol version",
+      "status": 400,
+      "contentType": "application/json",
+      "allow": null,
+      "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: Unsupported protocol version: 1999-01-01 (supported versions: 2025-11-25, 2025-06-18, 2025-03-26, 2024-11-05, 2024-10-07)\"},\"id\":null}"
+    },
+    {
+      "label": "GET /.well-known/mcp.json",
+      "status": 200,
+      "contentType": "application/json",
+      "allow": null,
+      "body": "{\"name\":\"benchline\",\"title\":\"Benchline\",\"description\":\"82 free tools for PDF, images, JSON, security, and SEO, as an MCP server.\",\"version\":\"1.0.0\",\"websiteUrl\":\"https://benchline.fabwaseem.com/\",\"endpoint\":\"https://benchline.fabwaseem.com/mcp\",\"transport\":\"streamable-http\",\"authentication\":{\"requir"
+    },
+    {
+      "label": "GET /api/v1/tools",
+      "status": 200,
+      "contentType": "application/json",
+      "allow": null,
+      "body": "{\"name\":\"Benchline\",\"description\":\"Free tools for PDF, images, JSON, security, and SEO. Each one runs over MCP (https://benchline.fabwaseem.com/mcp) or as POST https://benchline.fabwaseem.com/api/v1/tools/<slug>. GET a tool's URL for its schemas and an example.\",\"auth\":\"none\",\"rate\":\"60 calls per mi"
+    },
+    {
+      "label": "GET /llms.txt",
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "allow": null,
+      "body": "# Benchline\n\n> 82 free browser tools for PDF, images, JSON, security, and SEO. Files stay on the user's device. Every tool is also an MCP tool and a JSON endpoint, with no key. Canonical site: https://benchline.fabwaseem.com\n\nFounder: Waseem Anjum, Full Stack & AI Automation Engineer (https://fabwas"
+    }
+  ]
+}

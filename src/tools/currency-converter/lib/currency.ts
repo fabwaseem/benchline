@@ -104,6 +104,29 @@ export function parseTimeSeries(json: unknown, symbol: string): RatePoint[] {
   return points;
 }
 
+/**
+ * Wider coverage (about 200 fiat codes, plus some crypto) for codes the ECB list in Frankfurter lacks,
+ * such as PKR, AED or SAR. Free, no key, daily rates, dated snapshots back to 2024-03.
+ */
+const FALLBACK = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api";
+
+export function isCurrencyShape(code: string): boolean {
+  return /^[A-Za-z]{3}$/.test(code);
+}
+
+export function fallbackUrl(base: string, date?: string): string {
+  const version = date ?? "latest";
+  return `${FALLBACK}@${version}/v1/currencies/${base.toLowerCase()}.min.json`;
+}
+
+export function parseFallback(json: unknown, base: string, to: string): { date: string; rate: number | null } {
+  if (!isRecord(json) || typeof json.date !== "string") throw new Error("Unexpected rates response.");
+  const table = json[base.toLowerCase()];
+  if (!isRecord(table)) throw new Error("Unexpected rates response.");
+  const rate = table[to.toLowerCase()];
+  return { date: json.date, rate: typeof rate === "number" && Number.isFinite(rate) && rate > 0 ? rate : null };
+}
+
 export function convertAmount(amount: number, rate: number): number {
   return amount * rate;
 }

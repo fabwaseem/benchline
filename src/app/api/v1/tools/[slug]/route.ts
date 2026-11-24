@@ -7,6 +7,7 @@ import { clientIp } from "@/lib/net/fetch-public";
 import { rateLimit } from "@/lib/net/rate-limit";
 import { AGENT_LINKS, resolveApiSlug, toolApiDoc } from "@/lib/mcp/agent-docs";
 import { mcpToolBySlug } from "@/registry/mcp-registry";
+import { failureOf, strictInput } from "@/lib/mcp/result";
 
 function messageOf(error: unknown) {
   if (error instanceof ZodError) {
@@ -101,18 +102,24 @@ export async function POST(request: Request, context: { params: Promise<{ slug: 
     return Response.json({ error: "Send a JSON object.", docs: AGENT_LINKS.api() + `/${slug}` }, { status: 400, headers: { "cache-control": "no-store" } });
   }
   try {
+    // Validate strictly first so an unknown key is an error, then let the tool parse its own input.
+    strictInput(tool.inputSchema).parse(body);
     const output = tool.outputSchema.parse(await tool.run(body));
+    const failure = failureOf(output);
     safe(() =>
       recordRun(requestContext(request), {
         slug,
         source: "api",
-        outcome: "ok",
-        errorCode: null,
+        outcome: failure ? "rejected" : "ok",
+        errorCode: failure ? "invalid_input" : null,
         durationMs: Math.round(performance.now() - started),
         inputBytes,
         outputBytes: byteSize(output),
       }),
     );
+    if (failure) {
+      return Response.json(output, { status: 422, headers: { "cache-control": "no-store" } });
+    }
     return Response.json(output, { headers: { "cache-control": "no-store" } });
   } catch (error) {
     const classified = classifyError(error);

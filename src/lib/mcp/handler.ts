@@ -7,6 +7,7 @@ import { knownMcpTool, loadMcpAnalytics, recordMcpTool, runWithMcpContext } from
 import { recordRun } from "@/lib/analytics/record";
 import { errorHint, serverInstructions } from "@/lib/mcp/agent-docs";
 import { originAllowed } from "@/lib/mcp/origin";
+import { failureOf, strictInput, textCopy } from "@/lib/mcp/result";
 import { absoluteUrl } from "@/lib/site";
 import { clientIp } from "@/lib/net/fetch-public";
 import { rateLimit } from "@/lib/net/rate-limit";
@@ -38,7 +39,7 @@ function createServer() {
       {
         title: tool.title,
         description: tool.description,
-        inputSchema: tool.inputSchema,
+        inputSchema: strictInput(tool.inputSchema),
         outputSchema: tool.outputSchema,
         annotations: {
           readOnlyHint: true,
@@ -51,18 +52,26 @@ function createServer() {
         const inputBytes = byteSize(args);
         try {
           const structured = tool.outputSchema.parse(await tool.run(args));
+          const failure = failureOf(structured);
           safe(() =>
             recordMcpTool({
               slug: tool.slug,
-              outcome: "ok",
-              errorCode: null,
+              outcome: failure ? "rejected" : "ok",
+              errorCode: failure ? "invalid_input" : null,
               durationMs: Math.round(performance.now() - started),
               inputBytes,
               outputBytes: byteSize(structured),
             }),
           );
+          if (failure) {
+            return {
+              isError: true,
+              content: [{ type: "text" as const, text: `${failure}\n${errorHint(tool.slug)}` }],
+              structuredContent: structured as Record<string, unknown>,
+            };
+          }
           return {
-            content: [{ type: "text" as const, text: JSON.stringify(structured) }],
+            content: [{ type: "text" as const, text: textCopy(structured) }],
             structuredContent: structured as Record<string, unknown>,
           };
         } catch (error) {

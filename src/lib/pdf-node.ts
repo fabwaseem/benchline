@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { pdfjsFolderUrl } from "@/lib/pdf-assets";
+import { pdfjsFolderPath } from "@/lib/pdf-assets";
 
 type PdfPage = {
   getTextContent: () => Promise<{ items: unknown[] }>;
@@ -73,9 +73,9 @@ async function openDocument(data: Uint8Array, extra: Record<string, unknown>) {
   pdfjs.GlobalWorkerOptions.workerSrc = pdfWorkerSrc();
   return pdfjs.getDocument({
     data: data.slice(),
-    standardFontDataUrl: pdfjsFolderUrl("standard_fonts"),
-    cMapUrl: pdfjsFolderUrl("cmaps"),
-    wasmUrl: pdfjsFolderUrl("wasm"),
+    standardFontDataUrl: pdfjsFolderPath("standard_fonts"),
+    cMapUrl: pdfjsFolderPath("cmaps"),
+    wasmUrl: pdfjsFolderPath("wasm"),
     cMapPacked: true,
     verbosity: 0,
     ...extra,

@@ -109,6 +109,12 @@ function installFetch() {
         headers: { "content-type": "application/xml" },
       });
     }
+    if (url.includes("frankfurter")) {
+      return new Response(JSON.stringify({ amount: 1, base: "USD", date: "2026-01-02", rates: { EUR: 0.9 } }), { status: 200, headers: { "content-type": "application/json" } });
+    }
+    if (url.includes("graphql")) {
+      return new Response(JSON.stringify({ data: { hello: "world" } }), { status: 200, headers: { "content-type": "application/json" } });
+    }
     if (url.includes("llms.txt")) {
       return new Response("# Example\n", { status: 200, headers: { "content-type": "text/plain" } });
     }
@@ -237,7 +243,7 @@ describe("MCP endpoint", () => {
       convert_json_to_types: { json: "{\"name\":\"Ada\"}", targets: ["typescript"] },
       minify_code: { language: "js", code: "function foo() { return 1; }" },
       convert_curl: { command: "curl https://example.com", target: "fetch" },
-      execute_graphql: { endpoint: "https://1.1.1.1/", query: "{ hello }" },
+      execute_graphql: { endpoint: "https://1.1.1.1/graphql", query: "{ hello }" },
       validate_websocket_url: { url: "wss://echo.example.com/chat" },
       generate_resume: {
         resume: {
@@ -313,6 +319,31 @@ describe("MCP endpoint", () => {
     const blocked = await client.callTool({ name: "split_pdf", arguments: { url: "http://127.0.0.1/secret.pdf" } });
     expect(blocked.isError).toBe(true);
     expect(textOf(blocked)).toMatch(/not public|private|address/i);
+  });
+
+  it("rejects an unknown argument instead of ignoring it", async () => {
+    resetRateLimit();
+    const result = await client.callTool({ name: "base64_codec", arguments: { text: "aGk=", mode: "decode" } }).catch((error: unknown) => ({
+      isError: true,
+      content: [{ type: "text", text: error instanceof Error ? error.message : String(error) }],
+    }));
+    expect(result.isError).toBe(true);
+    expect(textOf(result)).toMatch(/mode/);
+  });
+
+  it("flags an ok:false result as an error and keeps the detail", async () => {
+    resetRateLimit();
+    const result = await client.callTool({ name: "base64_codec", arguments: { action: "decode", text: "%%%not base64%%%" } });
+    expect(result.isError, textOf(result)).toBe(true);
+    expect(result.structuredContent).toMatchObject({ ok: false });
+  });
+
+  it("does not repeat base64 files in the text copy", async () => {
+    resetRateLimit();
+    const result = await client.callTool({ name: "generate_qr_code", arguments: { type: "text", text: "hello" } });
+    expect(result.isError).not.toBe(true);
+    expect(textOf(result)).toContain("structuredContent.pngBase64");
+    expect(textOf(result).length).toBeLessThan(JSON.stringify(result.structuredContent).length / 2);
   });
 
   it("rejects an unsupported protocol version and a foreign origin", async () => {

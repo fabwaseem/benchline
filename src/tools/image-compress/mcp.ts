@@ -25,6 +25,8 @@ export const outputSchema = z.object({
   savedBytes: z.number().int(),
   savedPercent: z.number(),
   label: z.string(),
+  keptOriginal: z.boolean().describe("True when compressing only made the file larger, so the original was returned."),
+  note: z.string(),
   data: z.string().describe("Compressed image as base64."),
 });
 

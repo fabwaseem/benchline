@@ -13,7 +13,7 @@ import {
   sniffFormat,
   type OutputFormat,
 } from "@/lib/image-format";
-import { compressionPlan, type CompressChoice } from "@/tools/image-compress/lib/compress";
+import { compressionPlan, keepsOriginal, type CompressChoice } from "@/tools/image-compress/lib/compress";
 import { conversionPlan } from "@/tools/image-convert/lib/convert";
 import { placement, planResize, type FitMode, type ResizeMode } from "@/tools/image-resize/lib/resize";
 
@@ -136,16 +136,34 @@ export async function compressImage(input: {
   });
   const resized = image.resize(plan.width, plan.height, { fit: "fill" });
   const encoded = await encode(resized, plan.format, plan.quality);
-  const saved = savings(input.bytes.byteLength, encoded.bytes.byteLength);
+  const keep = keepsOriginal({
+    source: plan.source,
+    format: plan.format,
+    sourceWidth: size.width,
+    sourceHeight: size.height,
+    width: plan.width,
+    height: plan.height,
+    beforeBytes: input.bytes.byteLength,
+    afterBytes: encoded.bytes.byteLength,
+  });
+  const result = keep ? { bytes: input.bytes, width: size.width, height: size.height } : encoded;
+  const saved = savings(input.bytes.byteLength, result.bytes.byteLength);
+  const larger = !keep && result.bytes.byteLength > input.bytes.byteLength;
   return {
-    ...packed(input.filename, plan.format, encoded),
+    ...packed(input.filename, plan.format, result),
     format: plan.format,
     quality: clampQuality(input.quality),
     before: input.bytes.byteLength,
-    after: encoded.bytes.byteLength,
+    after: result.bytes.byteLength,
     savedBytes: saved.savedBytes,
     savedPercent: saved.savedPercent,
     label: saved.label,
+    keptOriginal: keep,
+    note: keep
+      ? "Re-encoding made the file larger, so the original is returned unchanged."
+      : larger
+        ? `The ${plan.format.toUpperCase()} is larger than the original. Send choice "original" to keep the format, or lower the quality.`
+        : "",
   };
 }
 

@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
   convertAmount,
+  fallbackUrl,
+  isCurrencyShape,
+  parseFallback,
   formatMoney,
   historicalUrl,
   isCurrencyCode,
@@ -114,5 +117,25 @@ describe("math and formatting", () => {
   it("computes iso dates", () => {
     expect(isoDateDaysAgo(0, new Date("2024-05-10T12:00:00Z"))).toBe("2024-05-10");
     expect(isoDateDaysAgo(30, new Date("2024-05-10T12:00:00Z"))).toBe("2024-04-10");
+  });
+});
+
+describe("fallback rates", () => {
+  it("builds latest and dated URLs", () => {
+    expect(fallbackUrl("USD")).toBe("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.min.json");
+    expect(fallbackUrl("PKR", "2026-01-15")).toBe("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@2026-01-15/v1/currencies/pkr.min.json");
+  });
+
+  it("reads a rate and reports a missing code as null", () => {
+    const json = { date: "2026-11-23", usd: { pkr: 276.38, aed: 3.6725 } };
+    expect(parseFallback(json, "USD", "PKR")).toEqual({ date: "2026-11-23", rate: 276.38 });
+    expect(parseFallback(json, "USD", "XYZ")).toEqual({ date: "2026-11-23", rate: null });
+    expect(() => parseFallback({ date: "2026-11-23" }, "USD", "PKR")).toThrow();
+  });
+
+  it("accepts only 3-letter codes", () => {
+    expect(isCurrencyShape("pkr")).toBe(true);
+    expect(isCurrencyShape("PK")).toBe(false);
+    expect(isCurrencyShape("P1R")).toBe(false);
   });
 });
