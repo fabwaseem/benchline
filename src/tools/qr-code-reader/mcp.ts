@@ -6,6 +6,7 @@ import { mcpFileSchema, readMcpBytes } from "@/lib/mcp/bytes";
 import type { BenchTool } from "@/lib/mcp/types";
 import { prepareZXingModule } from "zxing-wasm/reader";
 import { scanBarcodes } from "@/tools/qr-code-reader/lib/scan";
+import { InputError } from "@/lib/input-error";
 
 const MAX_EDGE = 4096;
 
@@ -43,12 +44,12 @@ async function run(input: unknown) {
   try {
     const image = sharp(file.bytes, { failOn: "none", limitInputPixels: MAX_EDGE * MAX_EDGE, animated: false }).rotate();
     const meta = await image.metadata();
-    if (!meta.width || !meta.height) throw new Error("The image has no pixels.");
-    if (meta.width > MAX_EDGE || meta.height > MAX_EDGE) throw new Error("The image is larger than 4096 pixels on a side.");
+    if (!meta.width || !meta.height) throw new InputError("The image has no pixels.");
+    if (meta.width > MAX_EDGE || meta.height > MAX_EDGE) throw new InputError("The image is larger than 4096 pixels on a side.");
     png = new Uint8Array(await image.png().toBuffer());
   } catch (error) {
     if (error instanceof Error && /4096|no pixels/.test(error.message)) throw error;
-    throw new Error("This image could not be decoded. Use a PNG, JPEG, WebP, or GIF.");
+    throw new InputError("This image could not be decoded. Use a PNG, JPEG, WebP, or GIF.");
   }
   const codes = await scanBarcodes(png);
   return outputSchema.parse({ count: codes.length, codes });

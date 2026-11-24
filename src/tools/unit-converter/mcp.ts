@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { convertUnits, unitCategories } from "@/tools/unit-converter/lib/units";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 const categoryIds = unitCategories.map((category) => category.id) as [(typeof unitCategories)[number]["id"], ...(typeof unitCategories)[number]["id"][]];
 
@@ -25,7 +26,7 @@ async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   const value = typeof parsed.value === "number" ? String(parsed.value) : parsed.value;
   const result = convertUnits(parsed.category, parsed.from, parsed.to, value, parsed.precision);
-  if ("error" in result) throw new Error(result.error);
+  if ("error" in result) throw new InputError(result.error);
   return outputSchema.parse(result);
 }
 

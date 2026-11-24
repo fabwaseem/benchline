@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { decodeUrl, encodeModes, encodeUrl, parseUrl, serializeQuery } from "@/tools/url-codec/lib/url";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   action: z.enum(["encode", "decode", "parse"]).default("parse"),
@@ -28,11 +29,11 @@ async function run(input: unknown) {
   }
   if (parsed.action === "decode") {
     const decoded = decodeUrl(parsed.value, parsed.plusAsSpace);
-    if ("error" in decoded) throw new Error(decoded.error);
+    if ("error" in decoded) throw new InputError(decoded.error);
     return outputSchema.parse(emptyParts(decoded.value));
   }
   const url = parseUrl(parsed.value);
-  if ("error" in url) throw new Error(url.error);
+  if ("error" in url) throw new InputError(url.error);
   return outputSchema.parse({ ...url, value: url.href, query: serializeQuery(url.params) });
 }
 

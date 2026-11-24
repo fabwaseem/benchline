@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { convertJsonToTypes, TARGETS, type Target } from "@/tools/json-to-types/lib/convert";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 const targetEnum = z.enum(TARGETS);
 
@@ -18,7 +19,7 @@ export const outputSchema = z.object({
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   const result = convertJsonToTypes(parsed.json, { rootName: parsed.rootName, targets: parsed.targets });
-  if ("error" in result) throw new Error(result.error);
+  if ("error" in result) throw new InputError(result.error);
   return outputSchema.parse({ outputs: result.outputs, warnings: result.warnings });
 }
 

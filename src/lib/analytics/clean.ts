@@ -1,4 +1,5 @@
 import { ZodError } from "zod";
+import { InputError } from "@/lib/input-error";
 import { PublicUrlError } from "@/lib/net/ssrf";
 import { cleanErrorCode } from "@/lib/analytics/text";
 import type { RunOutcome } from "@/lib/analytics/types";
@@ -31,6 +32,9 @@ export function classifyError(error: unknown): { outcome: Extract<RunOutcome, "e
   if (error instanceof ZodError) return { outcome: "rejected", errorCode: "validation" };
   if (error instanceof PublicUrlError || (error instanceof Error && error.name === "PublicUrlError")) {
     return { outcome: "rejected", errorCode: "public_url" };
+  }
+  if (error instanceof InputError || (error instanceof Error && error.name === "InputError")) {
+    return { outcome: "rejected", errorCode: "invalid_input" };
   }
   if (error instanceof Error && error.name === "TimeoutError") return { outcome: "error", errorCode: "timeout" };
   const named = error instanceof Error ? cleanErrorCode(error.name) : null;

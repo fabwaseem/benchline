@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { BenchTool } from "@/lib/mcp/types";
 import { calculateCidr } from "@/tools/ip-cidr-calculator/lib/cidr";
+import { InputError } from "@/lib/input-error";
 
 const summary = z.object({
   version: z.union([z.literal(4), z.literal(6)]),
@@ -35,7 +36,7 @@ export const outputSchema = z.object({
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   const result = calculateCidr(parsed);
-  if ("error" in result) throw new Error(result.error);
+  if ("error" in result) throw new InputError(result.error);
   return outputSchema.parse(result);
 }
 

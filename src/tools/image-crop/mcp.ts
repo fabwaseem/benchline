@@ -5,6 +5,7 @@ import { extensionFor, mimeFor, outputFilename } from "@/lib/image-format";
 import { mcpFileSchema, readMcpBytes } from "@/lib/mcp/bytes";
 import type { BenchTool } from "@/lib/mcp/types";
 import { clampCrop, cropFormats, cropUnits, type CropFormat } from "@/tools/image-crop/lib/crop";
+import { InputError } from "@/lib/input-error";
 
 const MAX_EDGE = 8192;
 
@@ -43,8 +44,8 @@ async function run(input: unknown) {
     const meta = await image.metadata();
     const sourceWidth = meta.width ?? 0;
     const sourceHeight = meta.height ?? 0;
-    if (sourceWidth < 1 || sourceHeight < 1) throw new Error("The image has no pixels.");
-    if (sourceWidth > MAX_EDGE || sourceHeight > MAX_EDGE) throw new Error("The image is larger than 8192 pixels on a side.");
+    if (sourceWidth < 1 || sourceHeight < 1) throw new InputError("The image has no pixels.");
+    if (sourceWidth > MAX_EDGE || sourceHeight > MAX_EDGE) throw new InputError("The image is larger than 8192 pixels on a side.");
     const box = clampCrop(sourceWidth, sourceHeight, parsed, parsed.unit);
     let pipeline = image.extract({ left: box.x, top: box.y, width: box.width, height: box.height }).ensureAlpha();
     if (parsed.circle) {
@@ -66,7 +67,7 @@ async function run(input: unknown) {
     });
   } catch (error) {
     if (error instanceof Error && /8192|no pixels/.test(error.message)) throw error;
-    throw new Error("This image could not be cropped. Use JPEG, PNG, WebP, AVIF, or GIF.");
+    throw new InputError("This image could not be cropped. Use JPEG, PNG, WebP, AVIF, or GIF.");
   }
 }
 

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { dialects, formatSql, indents, keywordCases } from "@/tools/sql-formatter/lib/sql";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   sql: z.string().describe("SQL to format."),
@@ -17,7 +18,7 @@ async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   const indent = indents.find((item) => item === parsed.indent) ?? 2;
   const result = formatSql(parsed.sql, parsed.dialect, parsed.keywordCase, indent);
-  if ("error" in result) throw new Error(result.error);
+  if ("error" in result) throw new InputError(result.error);
   return outputSchema.parse(result);
 }
 

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { dialects, explainCron } from "@/tools/cron-expression-builder/lib/cron";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   expression: z.string().describe("A cron expression, including @daily or @reboot."),
@@ -22,7 +23,7 @@ export const outputSchema = z.object({
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   const now = parsed.now ? new Date(parsed.now) : new Date();
-  if (Number.isNaN(now.getTime())) throw new Error("now must be an ISO timestamp.");
+  if (Number.isNaN(now.getTime())) throw new InputError("now must be an ISO timestamp.");
   const result = explainCron(parsed.expression, parsed.dialect, parsed.timeZone, now);
   return outputSchema.parse({
     valid: result.valid,

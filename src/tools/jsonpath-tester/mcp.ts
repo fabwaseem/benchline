@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { evaluateJsonPath, JSONPATH_MAX_MATCHES } from "@/tools/jsonpath-tester/lib/jsonpath";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   json: z.string().min(1).describe("JSON document text"),
@@ -23,7 +24,7 @@ export const outputSchema = z.object({
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   const result = evaluateJsonPath(parsed.json, parsed.query, parsed.limit);
-  if ("error" in result) throw new Error(result.error);
+  if ("error" in result) throw new InputError(result.error);
   return outputSchema.parse(result);
 }
 

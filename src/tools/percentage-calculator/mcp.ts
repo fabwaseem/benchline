@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { calculatePercent, percentModes } from "@/tools/percentage-calculator/lib/percent";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 const amount = z.union([z.string(), z.number()]);
 
@@ -20,7 +21,7 @@ export const outputSchema = z.object({
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   const result = calculatePercent(parsed.mode, textOf(parsed.a), textOf(parsed.b));
-  if ("error" in result) throw new Error(result.error);
+  if ("error" in result) throw new InputError(result.error);
   return outputSchema.parse(result);
 }
 

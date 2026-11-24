@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { BenchTool } from "@/lib/mcp/types";
 import { hashAlgorithms, hashPassword } from "@/tools/htpasswd-bcrypt/lib/hash";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   password: z.string().describe("Password to hash or verify. It is used only for this call and is not stored."),
@@ -23,7 +24,7 @@ export const outputSchema = z.object({
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   const result = await hashPassword(parsed);
-  if ("error" in result) throw new Error(result.error);
+  if ("error" in result) throw new InputError(result.error);
   return outputSchema.parse(result);
 }
 

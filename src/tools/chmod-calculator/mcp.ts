@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { parseMode } from "@/tools/chmod-calculator/lib/chmod";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   mode: z.string().describe("Octal such as 755 or 4755, or symbolic such as rwxr-xr-x."),
@@ -19,7 +20,7 @@ export const outputSchema = z.object({
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   const result = parseMode(parsed.mode, parsed.path);
-  if ("error" in result) throw new Error(result.error);
+  if ("error" in result) throw new InputError(result.error);
   return outputSchema.parse({
     octal: result.octal,
     symbolic: result.symbolic,

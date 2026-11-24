@@ -11,6 +11,7 @@ import {
   type BitWidth,
 } from "@/tools/programmer-calculator/lib/programmer";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   expression: z.string().optional().describe("Integer expression, e.g. '0xFF & 0x0F | (1 << 4)'"),
@@ -45,22 +46,22 @@ function shape(value: bigint, bits: BitWidth) {
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   const bits = Number(parsed.bits) as BitWidth;
-  if (!BIT_WIDTHS.includes(bits)) throw new Error("bits must be 8, 16, 32, or 64.");
+  if (!BIT_WIDTHS.includes(bits)) throw new InputError("bits must be 8, 16, 32, or 64.");
   if (parsed.expression) {
     const value = evaluateExpression(parsed.expression);
-    if (typeof value !== "bigint") throw new Error(value.error);
+    if (typeof value !== "bigint") throw new InputError(value.error);
     return shape(value, bits);
   }
   if (!parsed.op || !parsed.a) {
-    throw new Error("Provide an expression, or an op with operand a (and b unless op is 'not').");
+    throw new InputError("Provide an expression, or an op with operand a (and b unless op is 'not').");
   }
   const a = parseBigInt(parsed.a);
-  if (typeof a !== "bigint") throw new Error(a.error);
+  if (typeof a !== "bigint") throw new InputError(a.error);
   let b = BigInt("0");
   if (parsed.op !== "not") {
-    if (!parsed.b) throw new Error(`The '${parsed.op}' operation needs operand b.`);
+    if (!parsed.b) throw new InputError(`The '${parsed.op}' operation needs operand b.`);
     const parsedB = parseBigInt(parsed.b);
-    if (typeof parsedB !== "bigint") throw new Error(parsedB.error);
+    if (typeof parsedB !== "bigint") throw new InputError(parsedB.error);
     b = parsedB;
   }
   return shape(applyBitwise(parsed.op as BitwiseOp, a, b, bits), bits);

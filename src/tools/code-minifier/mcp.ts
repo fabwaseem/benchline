@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { LANGUAGES, minifyCode, type Language } from "@/tools/code-minifier/lib/minify";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   language: z.enum(LANGUAGES),
@@ -27,7 +28,7 @@ async function run(input: unknown) {
     cssLevel: parsed.cssLevel,
     htmlAggressive: parsed.htmlAggressive,
   });
-  if (result.error) throw new Error(result.error);
+  if (result.error) throw new InputError(result.error);
   return outputSchema.parse({
     code: result.code,
     beforeBytes: result.beforeBytes,

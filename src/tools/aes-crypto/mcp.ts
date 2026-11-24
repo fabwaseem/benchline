@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { AES_ITERATIONS_DEFAULT, AES_ITERATIONS_MAX, AES_ITERATIONS_MIN, decryptBundle, encryptText } from "@/tools/aes-crypto/lib/aes";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   mode: z.enum(["encrypt", "decrypt"]),
@@ -19,14 +20,14 @@ export const outputSchema = z.object({
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   if (parsed.mode === "encrypt") {
-    if (!parsed.text) throw new Error("Encrypt mode needs 'text'.");
+    if (!parsed.text) throw new InputError("Encrypt mode needs 'text'.");
     const result = await encryptText(parsed.text, parsed.passphrase, parsed.iterations);
-    if ("error" in result) throw new Error(result.error);
+    if ("error" in result) throw new InputError(result.error);
     return outputSchema.parse({ mode: "encrypt", bundle: result.bundle });
   }
-  if (!parsed.bundle) throw new Error("Decrypt mode needs 'bundle'.");
+  if (!parsed.bundle) throw new InputError("Decrypt mode needs 'bundle'.");
   const result = await decryptBundle(parsed.bundle, parsed.passphrase);
-  if ("error" in result) throw new Error(result.error);
+  if ("error" in result) throw new InputError(result.error);
   return outputSchema.parse({ mode: "decrypt", plaintext: result.plaintext });
 }
 

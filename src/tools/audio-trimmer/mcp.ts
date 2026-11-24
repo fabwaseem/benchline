@@ -3,6 +3,7 @@ import { encodeBase64 } from "@/lib/base64";
 import { mcpFileSchema, readMcpBytes } from "@/lib/mcp/bytes";
 import type { BenchTool } from "@/lib/mcp/types";
 import { applyFade, decodeWav, encodeWav, trimSamples } from "@/tools/audio-trimmer/lib/audio";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   file: mcpFileSchema,
@@ -26,7 +27,7 @@ async function run(input: unknown) {
   try {
     info = decodeWav(read.bytes);
   } catch {
-    throw new Error("Only WAV audio is supported over MCP — use the web UI for MP3/OGG/M4A.");
+    throw new InputError("Only WAV audio is supported over MCP — use the web UI for MP3/OGG/M4A.");
   }
   const trimmed = trimSamples(info.samples, info.sampleRate, parsed.startSec, parsed.endSec);
   const faded = applyFade(trimmed, info.sampleRate, parsed.fadeInSec, parsed.fadeOutSec);

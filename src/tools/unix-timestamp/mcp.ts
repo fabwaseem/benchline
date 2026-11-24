@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { convertToDate, convertToEpoch, timeUnits, type WallTime } from "@/tools/unix-timestamp/lib/epoch";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   input: z.string().default("").describe("Unix timestamp, ISO-8601, RFC 2822, or now. Leave it empty when year, month, and day are set."),
@@ -43,7 +44,7 @@ async function run(input: unknown) {
         millisecond: 0,
       } satisfies WallTime, parsed.timeZone, now)
     : convertToDate(parsed.input, parsed.timeZone, parsed.unit, now);
-  if ("error" in result) throw new Error(result.error);
+  if ("error" in result) throw new InputError(result.error);
   return outputSchema.parse(result);
 }
 

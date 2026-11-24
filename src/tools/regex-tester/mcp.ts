@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { testRegex } from "@/tools/regex-tester/lib/regex";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   pattern: z.string().describe("JavaScript regular expression body, without slashes."),
@@ -24,7 +25,7 @@ export const outputSchema = z.object({
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   const result = testRegex(parsed.pattern, parsed.flags, parsed.text, parsed.replacement);
-  if (!result.valid) throw new Error(result.error);
+  if (!result.valid) throw new InputError(result.error);
   return outputSchema.parse({
     matches: result.matches,
     truncated: result.truncated,

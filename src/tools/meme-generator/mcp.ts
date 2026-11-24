@@ -5,6 +5,7 @@ import { mcpFileSchema, readMcpBytes } from "@/lib/mcp/bytes";
 import type { BenchTool } from "@/lib/mcp/types";
 import { isImageMime, MEME_STYLES, normalizeCaption } from "@/tools/meme-generator/lib/meme";
 import { renderMemePng } from "@/tools/meme-generator/lib/meme-png";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   image: mcpFileSchema
@@ -38,11 +39,11 @@ async function run(input: unknown) {
   let imageHeight: number | undefined;
   if (parsed.image) {
     const file = await readMcpBytes(parsed.image, "Image");
-    if (file.mimeType && !isImageMime(file.mimeType)) throw new Error("The image must be an image file.");
+    if (file.mimeType && !isImageMime(file.mimeType)) throw new InputError("The image must be an image file.");
     const meta = await sharp(file.bytes, { failOn: "none" }).metadata();
     const rawWidth = meta.width ?? 0;
     const rawHeight = meta.height ?? 0;
-    if (!rawWidth || !rawHeight) throw new Error("Could not read the image dimensions.");
+    if (!rawWidth || !rawHeight) throw new InputError("Could not read the image dimensions.");
     const scale = Math.min(1, MAX_DIM / Math.max(rawWidth, rawHeight));
     imageWidth = Math.max(1, Math.round(rawWidth * scale));
     imageHeight = Math.max(1, Math.round(rawHeight * scale));

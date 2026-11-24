@@ -4,6 +4,7 @@ import { encodeBase64 } from "@/lib/base64";
 import { mcpFileSchema, readMcpBytes } from "@/lib/mcp/bytes";
 import type { BenchTool } from "@/lib/mcp/types";
 import { layoutCells } from "@/tools/photo-collage/lib/collage";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   images: z
@@ -44,7 +45,7 @@ async function run(input: unknown) {
     try {
       resized = await sharp(file.bytes, { failOn: "none" }).resize(cell.w, cell.h, { fit: "cover" }).png().toBuffer();
     } catch {
-      throw new Error(`Image ${index + 1} could not be decoded.`);
+      throw new InputError(`Image ${index + 1} could not be decoded.`);
     }
     composites.push({ input: resized, left: cell.x, top: cell.y });
   }

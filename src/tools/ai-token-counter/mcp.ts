@@ -3,6 +3,7 @@ import { priceSelected } from "@/tools/ai-token-counter/lib/cost";
 import { DEFAULT_MODEL_IDS, MODELS } from "@/tools/ai-token-counter/lib/prices";
 import { countTokens, type EncodingName } from "@/tools/ai-token-counter/lib/tokenize";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   text: z.string().describe("The prompt or document to count."),
@@ -34,7 +35,7 @@ async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   const known = new Set(MODELS.map((model) => model.id));
   const missing = parsed.modelIds.filter((id) => !known.has(id));
-  if (missing.length > 0) throw new Error(`Unknown model id: ${missing.join(", ")}.`);
+  if (missing.length > 0) throw new InputError(`Unknown model id: ${missing.join(", ")}.`);
   const counted = countTokens(parsed.text, parsed.encoding as EncodingName, 0);
   const prices = priceSelected({
     ids: parsed.modelIds,

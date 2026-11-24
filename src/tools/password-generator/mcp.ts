@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { generatePassphrases, generatePasswords, passwordStrength } from "@/tools/password-generator/lib/password";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   style: z.enum(["password", "passphrase"]).default("password"),
@@ -28,13 +29,13 @@ async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   if (parsed.style === "passphrase") {
     const result = generatePassphrases(parsed, parsed.count);
-    if ("error" in result) throw new Error(result.error);
+    if ("error" in result) throw new InputError(result.error);
     return outputSchema.parse({ values: result.phrases, ...result.strength });
   }
   const values = generatePasswords(parsed, parsed.count);
-  if ("error" in values) throw new Error(values.error);
+  if ("error" in values) throw new InputError(values.error);
   const strength = passwordStrength(parsed);
-  if ("error" in strength) throw new Error(strength.error);
+  if ("error" in strength) throw new InputError(strength.error);
   return outputSchema.parse({ values, ...strength });
 }
 

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { difference } from "@/tools/date-difference/lib/diff";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   startDate: z.string().describe("Start date as YYYY-MM-DD."),
@@ -32,7 +33,7 @@ export const outputSchema = z.object({
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   const result = difference(parsed);
-  if ("error" in result) throw new Error(result.error);
+  if ("error" in result) throw new InputError(result.error);
   return outputSchema.parse(result);
 }
 

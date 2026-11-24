@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { generateHotp, generateTotp, TOTP_ALGORITHMS } from "@/tools/totp-generator/lib/totp";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   secret: z.string().min(1).describe("Base32 TOTP/HOTP secret"),
@@ -25,7 +26,7 @@ async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   if (parsed.mode === "hotp") {
     const code = await generateHotp(parsed.secret, parsed.counter, { digits: parsed.digits, algorithm: parsed.algorithm });
-    if (typeof code !== "string") throw new Error(code.error);
+    if (typeof code !== "string") throw new InputError(code.error);
     return outputSchema.parse({
       code,
       mode: "hotp",
@@ -40,7 +41,7 @@ async function run(input: unknown) {
     { digits: parsed.digits, period: parsed.period, algorithm: parsed.algorithm },
     parsed.at ?? Date.now(),
   );
-  if ("error" in result) throw new Error(result.error);
+  if ("error" in result) throw new InputError(result.error);
   return outputSchema.parse({
     code: result.code,
     mode: "totp",

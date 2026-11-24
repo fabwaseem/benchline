@@ -2,6 +2,7 @@ import { z } from "zod";
 import { decodeBase64, encodeBase64 } from "@/lib/base64";
 import type { BenchTool } from "@/lib/mcp/types";
 import { SERVER_UNZIP_BYTES, unzipEntries, zipEntries } from "@/tools/zip-tools/lib/zip";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   mode: z.enum(["zip", "unzip"]).default("zip"),
@@ -45,7 +46,7 @@ async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   if (parsed.mode === "zip") {
     const files = parsed.files ?? [];
-    if (files.length === 0) throw new Error("Provide files to zip.");
+    if (files.length === 0) throw new InputError("Provide files to zip.");
     const entries = files.map((file) => ({ name: file.name, data: decodeBase64(file.data, file.name) }));
     const zipped = zipEntries(entries);
     return outputSchema.parse({
@@ -55,7 +56,7 @@ async function run(input: unknown) {
       totalBytes: zipped.byteLength,
     });
   }
-  if (!parsed.archive) throw new Error("Provide an archive to unzip.");
+  if (!parsed.archive) throw new InputError("Provide an archive to unzip.");
   const entries = unzipEntries(decodeBase64(parsed.archive.data, parsed.archive.name ?? "archive"), {
     maxBytes: SERVER_UNZIP_BYTES,
   });

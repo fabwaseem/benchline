@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { encodeText, hashAlgorithms, hashAll, matchingAlgorithms } from "@/tools/hash-generator/lib/hash";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   text: z.string().optional().describe("UTF-8 text to hash. Use this or base64."),
@@ -17,8 +18,8 @@ export const outputSchema = z.object({
 
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
-  if (parsed.text === undefined && parsed.base64 === undefined) throw new Error("Provide text or base64.");
-  if (parsed.text !== undefined && parsed.base64 !== undefined) throw new Error("Provide text or base64, not both.");
+  if (parsed.text === undefined && parsed.base64 === undefined) throw new InputError("Provide text or base64.");
+  if (parsed.text !== undefined && parsed.base64 !== undefined) throw new InputError("Provide text or base64, not both.");
   const data = parsed.text !== undefined ? encodeText(parsed.text) : decodeBase64(parsed.base64 ?? "");
   const key = parsed.hmacKey === undefined ? undefined : encodeText(parsed.hmacKey);
   const hashes = await hashAll(data, key);

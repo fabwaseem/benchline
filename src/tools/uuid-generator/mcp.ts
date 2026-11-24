@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { generateUuids, inspectUuid, uuidVersions } from "@/tools/uuid-generator/lib/uuid";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   action: z.enum(["generate", "inspect"]).default("generate"),
@@ -20,11 +21,11 @@ async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   if (parsed.action === "inspect") {
     const info = inspectUuid(parsed.value ?? "");
-    if ("error" in info) throw new Error(info.error);
+    if ("error" in info) throw new InputError(info.error);
     return outputSchema.parse({ ids: [info.uuid], version: info.version, variant: info.variant, timestamp: info.timestamp });
   }
   const ids = generateUuids(parsed.version, parsed.count);
-  if ("error" in ids) throw new Error(ids.error);
+  if ("error" in ids) throw new InputError(ids.error);
   return outputSchema.parse({ ids, version: parsed.version === "v4" ? 4 : 7, variant: "RFC 4122", timestamp: "" });
 }
 

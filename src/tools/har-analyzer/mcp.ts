@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { analyzeHarText } from "@/tools/har-analyzer/lib/har";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 const harEntrySchema = z.object({
   method: z.string(),
@@ -44,7 +45,7 @@ export const outputSchema = z.object({
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   const analysis = analyzeHarText(parsed.har, parsed.top);
-  if ("error" in analysis) throw new Error(analysis.error);
+  if ("error" in analysis) throw new InputError(analysis.error);
   const { summary } = analysis;
   const pick = (entry: (typeof analysis.entries)[number]) => ({
     method: entry.method,

@@ -4,6 +4,7 @@ import { encodeBase64 } from "@/lib/base64";
 import { MCP_MAX_BYTES, mcpFileSchema, readMcpBytes } from "@/lib/mcp/bytes";
 import type { BenchTool } from "@/lib/mcp/types";
 import { parseHexColor, removeSolidBackground } from "@/tools/background-remover/lib/matte";
+import { InputError } from "@/lib/input-error";
 
 const MAX_EDGE = 4096;
 
@@ -31,18 +32,18 @@ async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   const file = await readMcpBytes(parsed.file, "Image");
   const chosen = parsed.color?.trim() ? parseHexColor(parsed.color) : null;
-  if (parsed.color?.trim() && !chosen) throw new Error("Use a background color like #ffffff.");
+  if (parsed.color?.trim() && !chosen) throw new InputError("Use a background color like #ffffff.");
   try {
     const image = sharp(file.bytes, { failOn: "none", limitInputPixels: MAX_EDGE * MAX_EDGE, animated: false }).rotate().ensureAlpha();
     const { data, info } = await image.raw().toBuffer({ resolveWithObject: true });
-    if (info.width > MAX_EDGE || info.height > MAX_EDGE) throw new Error("The image is larger than 4096 pixels on a side.");
+    if (info.width > MAX_EDGE || info.height > MAX_EDGE) throw new InputError("The image is larger than 4096 pixels on a side.");
     const matte = removeSolidBackground(new Uint8Array(data), info.width, info.height, {
       tolerance: parsed.tolerance,
       feather: parsed.feather,
       color: chosen,
     });
     const png = await sharp(matte, { raw: { width: info.width, height: info.height, channels: 4 } }).png().toBuffer();
-    if (png.byteLength > MCP_MAX_BYTES) throw new Error("The result is larger than 10 MB.");
+    if (png.byteLength > MCP_MAX_BYTES) throw new InputError("The result is larger than 10 MB.");
     const stem = (file.filename || "image").replace(/\.[^.]+$/, "") || "image";
     return outputSchema.parse({
       filename: `${stem}.png`,
@@ -56,7 +57,7 @@ async function run(input: unknown) {
     });
   } catch (error) {
     if (error instanceof Error && /4096|10 MB|no pixels|incomplete/.test(error.message)) throw error;
-    throw new Error("This image could not be decoded. Use JPEG, PNG, WebP, AVIF, or GIF.");
+    throw new InputError("This image could not be decoded. Use JPEG, PNG, WebP, AVIF, or GIF.");
   }
 }
 

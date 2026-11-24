@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { BenchTool } from "@/lib/mcp/types";
 import { generateMaterial, jwkToMaterial, keyAlgorithms, pemToMaterial } from "@/tools/rsa-keypair/lib/keys";
+import { InputError } from "@/lib/input-error";
 
 export const inputSchema = z.object({
   action: z.enum(["generate", "to_jwk", "to_pem"]).default("generate"),
@@ -23,12 +24,12 @@ async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   if (parsed.action === "to_jwk") {
     const result = await pemToMaterial(parsed.pem ?? "", parsed.alg);
-    if ("error" in result) throw new Error(result.error);
+    if ("error" in result) throw new InputError(result.error);
     return outputSchema.parse(result);
   }
   if (parsed.action === "to_pem") {
     const result = await jwkToMaterial(parsed.jwk ?? "", parsed.alg);
-    if ("error" in result) throw new Error(result.error);
+    if ("error" in result) throw new InputError(result.error);
     return outputSchema.parse(result);
   }
   return outputSchema.parse(await generateMaterial(parsed.alg, parsed.modulusLength));

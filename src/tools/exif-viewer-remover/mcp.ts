@@ -7,6 +7,7 @@ import type { BenchTool } from "@/lib/mcp/types";
 import { stripJpegGps } from "@/tools/exif-viewer-remover/lib/gps";
 import { readExif } from "@/tools/exif-viewer-remover/lib/read";
 import { isJpeg } from "@/tools/exif-viewer-remover/lib/tags";
+import { InputError } from "@/lib/input-error";
 
 const MAX_EDGE = 8192;
 
@@ -49,13 +50,13 @@ async function measure(bytes: Uint8Array) {
 
 async function stripAll(bytes: Uint8Array, filename: string, mime: string) {
   const kind = sniffFormat(filename, mime);
-  if (kind === "heic") throw new Error("HEIC is not decoded on the server. Convert it to JPEG or PNG first.");
+  if (kind === "heic") throw new InputError("HEIC is not decoded on the server. Convert it to JPEG or PNG first.");
   const format = resolveOutput(kind, "original");
   try {
     const image = sharp(bytes, { failOn: "none", limitInputPixels: MAX_EDGE * MAX_EDGE, animated: false }).rotate();
     const meta = await image.metadata();
     if ((meta.width ?? 0) > MAX_EDGE || (meta.height ?? 0) > MAX_EDGE) {
-      throw new Error("The image is larger than 8192 pixels on a side.");
+      throw new InputError("The image is larger than 8192 pixels on a side.");
     }
     const pipeline = format === "jpeg"
       ? image.jpeg({ quality: 92, mozjpeg: true })
@@ -74,7 +75,7 @@ async function stripAll(bytes: Uint8Array, filename: string, mime: string) {
     };
   } catch (error) {
     if (error instanceof Error && /8192/.test(error.message)) throw error;
-    throw new Error("This image could not be re-encoded. Use JPEG, PNG, WebP, AVIF, or GIF.");
+    throw new InputError("This image could not be re-encoded. Use JPEG, PNG, WebP, AVIF, or GIF.");
   }
 }
 

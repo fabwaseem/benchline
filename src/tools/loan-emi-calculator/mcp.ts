@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { calculateEmi } from "@/tools/loan-emi-calculator/lib/emi";
 import type { BenchTool } from "@/lib/mcp/types";
+import { InputError } from "@/lib/input-error";
 
 const amount = z.union([z.string(), z.number()]);
 
@@ -33,7 +34,7 @@ export const outputSchema = z.object({
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   const result = calculateEmi(textOf(parsed.principal), textOf(parsed.annualRate), parsed.months, textOf(parsed.extraMonthly));
-  if ("error" in result) throw new Error(result.error);
+  if ("error" in result) throw new InputError(result.error);
   return outputSchema.parse(result);
 }
 

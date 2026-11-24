@@ -4,6 +4,7 @@ import { encodeBase64 } from "@/lib/base64";
 import { mcpFileSchema, readMcpBytes } from "@/lib/mcp/bytes";
 import type { BenchTool } from "@/lib/mcp/types";
 import { coverCrop, presetById, SOCIAL_PRESETS, type SocialPresetId } from "@/tools/social-image-resizer/lib/social";
+import { InputError } from "@/lib/input-error";
 
 const MAX_EDGE = 8192;
 
@@ -24,15 +25,15 @@ export const outputSchema = z.object({
 async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   const preset = presetById(parsed.preset);
-  if (!preset) throw new Error("Unknown preset.");
+  if (!preset) throw new InputError("Unknown preset.");
   const file = await readMcpBytes(parsed.file, "Image");
   try {
     const image = sharp(file.bytes, { failOn: "none", limitInputPixels: MAX_EDGE * MAX_EDGE, animated: false }).rotate();
     const meta = await image.metadata();
     const sourceWidth = meta.width ?? 0;
     const sourceHeight = meta.height ?? 0;
-    if (sourceWidth < 1 || sourceHeight < 1) throw new Error("The image has no pixels.");
-    if (sourceWidth > MAX_EDGE || sourceHeight > MAX_EDGE) throw new Error("The image is larger than 8192 pixels on a side.");
+    if (sourceWidth < 1 || sourceHeight < 1) throw new InputError("The image has no pixels.");
+    if (sourceWidth > MAX_EDGE || sourceHeight > MAX_EDGE) throw new InputError("The image is larger than 8192 pixels on a side.");
     const rect = coverCrop(sourceWidth, sourceHeight, preset.width, preset.height, 0.5, 0.5);
     const { data, info } = await image
       .extract({ left: rect.sx, top: rect.sy, width: rect.sw, height: rect.sh })
@@ -47,7 +48,7 @@ async function run(input: unknown) {
     });
   } catch (error) {
     if (error instanceof Error && /8192|no pixels/.test(error.message)) throw error;
-    throw new Error("This image could not be resized. Use JPEG, PNG, WebP, AVIF, or GIF.");
+    throw new InputError("This image could not be resized. Use JPEG, PNG, WebP, AVIF, or GIF.");
   }
 }
 

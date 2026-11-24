@@ -3,6 +3,7 @@ import { z } from "zod";
 import { mcpFileSchema, readMcpBytes } from "@/lib/mcp/bytes";
 import type { BenchTool } from "@/lib/mcp/types";
 import { clampPrecision, defaultSvgOptions, svgConfig, svgPluginIds, svgSavings, type SvgPluginId } from "@/tools/svg-optimizer/lib/svg";
+import { InputError } from "@/lib/input-error";
 
 const MAX_SVG = 1_500_000;
 
@@ -42,8 +43,8 @@ async function run(input: unknown) {
     const file = await readMcpBytes(parsed.file, "SVG");
     markup = new TextDecoder().decode(file.bytes);
   }
-  if (markup.length > MAX_SVG) throw new Error("SVG markup is larger than 1.5 million characters.");
-  if (!markup.includes("<svg")) throw new Error("This file does not look like SVG.");
+  if (markup.length > MAX_SVG) throw new InputError("SVG markup is larger than 1.5 million characters.");
+  if (!markup.includes("<svg")) throw new InputError("This file does not look like SVG.");
   let data: string;
   try {
     data = optimize(markup, svgConfig({
@@ -53,7 +54,7 @@ async function run(input: unknown) {
       removeDimensions: parsed.removeDimensions,
     })).data;
   } catch {
-    throw new Error("This SVG could not be optimized.");
+    throw new InputError("This SVG could not be optimized.");
   }
   return outputSchema.parse({ svg: data, ...svgSavings(markup, data) });
 }

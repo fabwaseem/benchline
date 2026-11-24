@@ -2,6 +2,7 @@ import { z } from "zod";
 import type { BenchTool } from "@/lib/mcp/types";
 import { analyzeSitemap, generateSitemap } from "@/tools/sitemap-validator/lib/sitemap";
 import { inspectSitemap } from "@/tools/sitemap-validator/remote";
+import { InputError } from "@/lib/input-error";
 
 const issue = z.object({ level: z.enum(["pass", "warn", "fail", "info"]), label: z.string(), detail: z.string() });
 const url = z.object({ loc: z.string(), lastmod: z.string(), changefreq: z.string(), priority: z.string() });
@@ -29,12 +30,12 @@ async function run(input: unknown) {
   const parsed = inputSchema.parse(input);
   if (parsed.urls && parsed.urls.length > 0) {
     const generated = generateSitemap(parsed.urls);
-    if ("error" in generated) throw new Error(generated.error);
+    if ("error" in generated) throw new InputError(generated.error);
     return outputSchema.parse({ ...generated.report, xml: generated.xml, source: "", probes: [] });
   }
   if (parsed.xml?.trim() && !parsed.url?.trim()) {
     const report = analyzeSitemap(parsed.xml);
-    if ("error" in report) throw new Error(report.error);
+    if ("error" in report) throw new InputError(report.error);
     return outputSchema.parse({ ...report, xml: parsed.xml, source: "", probes: [] });
   }
   const report = await inspectSitemap({ url: parsed.url, xml: parsed.xml, probe: parsed.probe });
