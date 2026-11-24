@@ -4,6 +4,7 @@ import { adminEnv } from "@/lib/admin/config";
 import { sessionFromRequest } from "@/lib/admin/session";
 import { isAdminPath } from "@/lib/analytics/text";
 import { hostnameFromHost, isHealthPath, isMcpPath, LEGACY_HOST, legacyHostRedirect } from "@/lib/net/legacy-host";
+import { markdownRewrite } from "@/lib/net/negotiate";
 
 function isAdminRoute(pathname: string): boolean {
   return isAdminPath(pathname) || pathname === "/api/admin" || pathname.startsWith("/api/admin/");
@@ -52,6 +53,12 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   if (hostnameFromHost(host) === LEGACY_HOST && isMcpPath(url.pathname)) return NextResponse.next();
   const target = legacyHostRedirect(host, url.pathname, url.search);
   if (target) return NextResponse.redirect(target, 308);
+  const markdown = markdownRewrite(url.pathname, request.method, request.headers.get("accept"));
+  if (markdown) {
+    const next = url.clone();
+    next.pathname = markdown;
+    return NextResponse.rewrite(next);
+  }
   if (url.pathname !== "/mcp" || request.method !== "GET") return continueRequest(request);
   const accept = request.headers.get("accept") ?? "";
   const html = accept.indexOf("text/html");

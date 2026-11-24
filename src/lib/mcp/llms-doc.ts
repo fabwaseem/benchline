@@ -1,5 +1,5 @@
-import { z } from "zod";
 import { FOUNDER } from "@/lib/founder";
+import { jsonSchemaOf } from "@/lib/mcp/agent-docs";
 import { exampleArguments, toolsCallParams } from "@/lib/mcp/example";
 import { toolMarkdownPath } from "@/lib/seo";
 import { absoluteUrl, GITHUB_URL, SITE_NAME, SITE_URL } from "@/lib/site";
@@ -40,6 +40,8 @@ Founder: ${FOUNDER.name}, ${FOUNDER.jobTitle} (${FOUNDER.url})
 Source: ${GITHUB_URL}
 MCP endpoint: ${absoluteUrl("/mcp")} (Streamable HTTP, no auth, 60 calls per minute)
 OpenAPI: ${absoluteUrl("/openapi.json")}
+JSON catalogue: ${absoluteUrl("/api/v1/tools")} (GET any tool URL there for its schemas and an example; POST to run it)
+MCP server card: ${absoluteUrl("/.well-known/mcp.json")}
 Setup for Claude, Cursor, VS Code, and ChatGPT: ${absoluteUrl("/mcp/guide")}
 Tool reference: ${absoluteUrl("/ai")}
 Each tool page has a Markdown copy: append .md to its URL, for example ${absoluteUrl(toolMarkdownPath("jwt-decoder"))}
@@ -82,11 +84,6 @@ ${tool.openWorld ? "This tool fetches a public URL. The browser UI still fetches
 ${blocks}`;
 }
 
-function jsonSchemaOf(schema: z.ZodType) {
-  const json = z.toJSONSchema(schema) as Record<string, unknown>;
-  delete json.$schema;
-  return json;
-}
 
 /** One tool as plain Markdown: what it does, how to use it, and how an agent calls it. Null for an unknown slug. */
 export function toolMarkdown(slug: string): string | null {

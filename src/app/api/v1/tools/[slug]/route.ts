@@ -5,6 +5,7 @@ import { recordRun } from "@/lib/analytics/record";
 import { parseSlug } from "@/lib/analytics/slug";
 import { clientIp } from "@/lib/net/fetch-public";
 import { rateLimit } from "@/lib/net/rate-limit";
+import { AGENT_LINKS, resolveApiSlug, toolApiDoc } from "@/lib/mcp/agent-docs";
 import { mcpToolBySlug } from "@/registry/mcp-registry";
 
 function messageOf(error: unknown) {
@@ -25,7 +26,7 @@ function safe(fn: () => void) {
 export async function POST(request: Request, context: { params: Promise<{ slug: string }> }) {
   const started = performance.now();
   const { slug: rawSlug } = await context.params;
-  const slug = parseSlug(rawSlug) ?? "";
+  const slug = resolveApiSlug(rawSlug) ?? parseSlug(rawSlug) ?? "";
   const limit = rateLimit(`api:${clientIp(request)}`, 60, 60_000);
   if (!limit.ok) {
     safe(() =>
@@ -59,7 +60,10 @@ export async function POST(request: Request, context: { params: Promise<{ slug: 
         }),
       );
     }
-    return Response.json({ error: "No tool uses that slug." }, { status: 404, headers: { "cache-control": "no-store" } });
+    return Response.json(
+      { error: "No tool uses that slug.", tools: AGENT_LINKS.api() },
+      { status: 404, headers: { "cache-control": "no-store" } },
+    );
   }
   let text: string;
   try {
@@ -76,7 +80,7 @@ export async function POST(request: Request, context: { params: Promise<{ slug: 
         outputBytes: null,
       }),
     );
-    return Response.json({ error: "Send a JSON object." }, { status: 400, headers: { "cache-control": "no-store" } });
+    return Response.json({ error: "Send a JSON object.", docs: AGENT_LINKS.api() + `/${slug}` }, { status: 400, headers: { "cache-control": "no-store" } });
   }
   const inputBytes = Buffer.byteLength(text);
   let body: unknown;
@@ -94,7 +98,7 @@ export async function POST(request: Request, context: { params: Promise<{ slug: 
         outputBytes: null,
       }),
     );
-    return Response.json({ error: "Send a JSON object." }, { status: 400, headers: { "cache-control": "no-store" } });
+    return Response.json({ error: "Send a JSON object.", docs: AGENT_LINKS.api() + `/${slug}` }, { status: 400, headers: { "cache-control": "no-store" } });
   }
   try {
     const output = tool.outputSchema.parse(await tool.run(body));
@@ -123,6 +127,18 @@ export async function POST(request: Request, context: { params: Promise<{ slug: 
         outputBytes: null,
       }),
     );
-    return Response.json({ error: messageOf(error) }, { status: 400, headers: { "cache-control": "no-store" } });
+    return Response.json({ error: messageOf(error), docs: AGENT_LINKS.api() + `/${slug}` }, { status: 400, headers: { "cache-control": "no-store" } });
   }
+}
+
+/** GET describes the tool: what it does, its input and output schemas, and an example body. POST runs it. */
+export async function GET(_request: Request, context: { params: Promise<{ slug: string }> }) {
+  const { slug: rawSlug } = await context.params;
+  const doc = toolApiDoc(resolveApiSlug(rawSlug) ?? "");
+  if (!doc) {
+    return Response.json({ error: "No tool uses that slug.", tools: AGENT_LINKS.api() }, { status: 404, headers: { "cache-control": "no-store" } });
+  }
+  return Response.json(doc, {
+    headers: { "cache-control": "public, max-age=3600, stale-while-revalidate=86400", allow: "GET, POST" },
+  });
 }

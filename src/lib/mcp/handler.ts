@@ -5,7 +5,9 @@ import { byteSize, classifyError } from "@/lib/analytics/clean";
 import { requestContext } from "@/lib/analytics/context";
 import { knownMcpTool, loadMcpAnalytics, recordMcpTool, runWithMcpContext } from "@/lib/analytics/mcp-meta";
 import { recordRun } from "@/lib/analytics/record";
+import { errorHint, serverInstructions } from "@/lib/mcp/agent-docs";
 import { originAllowed } from "@/lib/mcp/origin";
+import { absoluteUrl } from "@/lib/site";
 import { clientIp } from "@/lib/net/fetch-public";
 import { rateLimit } from "@/lib/net/rate-limit";
 import { mcpTools } from "@/registry/mcp-registry";
@@ -26,7 +28,10 @@ function safe(fn: () => void) {
 }
 
 function createServer() {
-  const server = new McpServer({ name: "benchline", version: "1.0.0" });
+  const server = new McpServer(
+    { name: "benchline", title: "Benchline", version: "1.0.0", websiteUrl: absoluteUrl("/") },
+    { instructions: serverInstructions() },
+  );
   for (const tool of mcpTools) {
     server.registerTool(
       tool.name,
@@ -72,7 +77,7 @@ function createServer() {
               outputBytes: null,
             }),
           );
-          return { isError: true, content: [{ type: "text" as const, text: messageOf(error) }] };
+          return { isError: true, content: [{ type: "text" as const, text: `${messageOf(error)}\n${errorHint(tool.slug)}` }] };
         }
       },
     );
