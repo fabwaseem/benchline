@@ -1,4 +1,5 @@
 import { gaEvent } from "@/lib/analytics/ga";
+import { TOOL_REQUEST_PATHS } from "@/lib/analytics/run-heuristic";
 import { isAdminPath, sanitizeSearchQuery, slugFromPathname } from "@/lib/analytics/text";
 import { isHealthPath } from "@/lib/net/legacy-host";
 import type { DeviceClass, RunOutcome } from "@/lib/analytics/types";
@@ -147,21 +148,11 @@ export function scheduleSearchTrack(query: string) {
   }, 800);
 }
 
-const TOOL_PATHS: Record<string, string> = {
-  "/api/tools/html-markdown": "html-to-markdown-url",
-  "/api/tools/http-headers": "http-headers-checker",
-  "/api/tools/sitemap": "sitemap-validator",
-  "/api/tools/ssl": "ssl-checker",
-  "/api/tools/dns-lookup": "dns-lookup",
-  "/api/tools/robots-txt": "robots-txt-checker",
-  "/api/tools/ai-seo": "ai-seo-checker",
-  "/api/tools/llms-txt": "llms-txt-generator",
-  "/api/tools/meta-tags": "meta-tags-inspector",
-};
+
 
 export function slugForToolRequest(path: string): string | null {
   if (activeSlug) return activeSlug;
-  return TOOL_PATHS[path] ?? null;
+  return TOOL_REQUEST_PATHS[path] ?? null;
 }
 
 export function toolSlugFromLocation(pathname: string): string | null {
