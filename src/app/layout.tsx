@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { JetBrains_Mono, Urbanist } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { FOUNDER } from "@/lib/founder";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -30,9 +31,16 @@ export const metadata: Metadata = {
   },
   description,
   applicationName: SITE_NAME,
-  authors: [{ name: SITE_NAME, url: SITE_URL }],
-  creator: SITE_NAME,
+  authors: [{ name: FOUNDER.name, url: FOUNDER.url }],
+  creator: FOUNDER.name,
   publisher: SITE_NAME,
+  keywords: ["free online tools", "browser tools", "developer tools", "PDF tools", "image tools", "JSON tools", "SEO tools", "MCP server", "AI agent tools"],
+  category: "technology",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
+  },
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
@@ -43,6 +51,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    creator: FOUNDER.twitter,
     title: `${SITE_NAME} — free browser tools`,
     description,
   },

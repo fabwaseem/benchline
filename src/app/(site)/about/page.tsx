@@ -5,12 +5,14 @@ import { tools } from "@/registry";
 import { FaqAccordion } from "@/components/kit/faq-accordion";
 import { PageHero } from "@/components/site/page-hero";
 import { SectionHeading } from "@/components/site/section-heading";
-import { JsonLd } from "@/lib/jsonld";
+import { ArrowUpRight } from "kineticons";
+import { FOUNDER } from "@/lib/founder";
+import { FOUNDER_ID, JsonLd } from "@/lib/jsonld";
 import { GITHUB_URL, SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About",
-  description: `${SITE_NAME} is a directory of exact, local, current developer tools. Nothing you paste is stored.`,
+  description: `${SITE_NAME} is a directory of exact, local, free browser tools, built by Waseem Anjum. Nothing you paste is stored.`,
   alternates: { canonical: "/about" },
 };
 
@@ -47,6 +49,8 @@ export default function AboutPage() {
               url: `${SITE_URL}/about`,
               name: `About ${SITE_NAME}`,
               about: { "@id": `${SITE_URL}#organization` },
+              author: { "@id": FOUNDER_ID },
+              mainEntity: { "@id": FOUNDER_ID },
               publisher: { "@id": `${SITE_URL}#organization` },
               isPartOf: { "@id": `${SITE_URL}#website` },
             },
@@ -86,6 +90,38 @@ export default function AboutPage() {
       >
         {SITE_NAME} lives at {SITE_URL.replace("https://", "")}. Each tool is a pure function you can open in a tab or call from an agent, and every number it shows comes from your input.
       </PageHero>
+
+      <section id="founder" aria-labelledby="founder-title" className="page-x frame mt-16 scroll-mt-24">
+        <div className="grid gap-8 rounded-2xl border border-border bg-surface p-6 shadow-[var(--shadow-1)] sm:p-8 lg:grid-cols-[auto_1fr_auto] lg:items-center">
+          <span aria-hidden className="grid size-20 place-items-center rounded-2xl bg-brand text-[28px] font-semibold tracking-[-0.04em] text-brand-foreground">
+            WA
+          </span>
+          <div className="min-w-0">
+            <p className="font-mono text-[11px] font-medium tracking-[0.1em] text-brand-text uppercase">Founder</p>
+            <h2 id="founder-title" className="mt-2 text-[26px] font-semibold tracking-[-0.03em]">
+              <a href={FOUNDER.url} rel="author" className="u-draw focus-visible:outline-none">{FOUNDER.name}</a>
+            </h2>
+            <p className="mt-1 text-[14.5px] font-medium text-fg2">{FOUNDER.jobTitle}</p>
+            <p className="mt-3 max-w-[64ch] text-[15px] leading-relaxed text-muted-foreground">
+              {FOUNDER.name} built {SITE_NAME} and keeps it running. {FOUNDER.bio}
+            </p>
+          </div>
+          <ul className="flex flex-wrap gap-2 lg:max-w-[260px] lg:justify-end">
+            {FOUNDER.links.map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  rel={link.label === "Website" ? "author me" : "me noopener"}
+                  className="ki-trigger inline-flex h-9 items-center gap-1.5 rounded-md border border-border bg-background px-3 text-[13px] font-medium text-fg2 transition-colors hover:border-border-strong hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                >
+                  {link.label}
+                  <ArrowUpRight size={13} aria-hidden />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
       <section id="principles" aria-label="Principles" className="page-x frame mt-16 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
         {principles.map((item, i) => (
@@ -150,6 +186,10 @@ export default function AboutPage() {
           <SectionHeading eyebrow="Notes" title="Common questions" className="mb-4" />
           <FaqAccordion
             faqs={[
+              {
+                q: "Who made Benchline?",
+                a: `${FOUNDER.name}, a ${FOUNDER.jobTitle.toLowerCase()}. More of his work is at ${FOUNDER.url.replace("https://", "")}.`,
+              },
               {
                 q: "What is Benchline?",
                 a: "A directory of exact, local, current developer tools, plus an AI access layer. The tools are pure functions.",

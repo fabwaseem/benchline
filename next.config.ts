@@ -91,6 +91,14 @@ const nextConfig: NextConfig = {
       { source: "/:icon(favicon.ico|favicon.svg|apple-touch-icon.png|app-icon-192.png|app-icon-512.png)", headers: longCache },
     ];
   },
+  // /t/<slug>.md is the plain-Markdown copy of a tool page, for agents and LLM crawlers.
+  async rewrites() {
+    return {
+      beforeFiles: [{ source: "/t/:slug.md", destination: "/md/:slug" }],
+      afterFiles: [],
+      fallback: [],
+    };
+  },
   // The directory moved from the home page to /tools. Old filtered links keep their query string.
   async redirects() {
     return ["q", "tag", "sort", "view", "browser", "mcp", "fresh"].map((key) => ({

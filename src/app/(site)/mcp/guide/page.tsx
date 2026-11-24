@@ -13,7 +13,8 @@ import { mcpIndex } from "@/registry/mcp-index";
 export const metadata: Metadata = {
   title: "MCP setup",
   description: `Connect Claude, Cursor, VS Code, or ChatGPT to every ${SITE_NAME} tool with one MCP URL. No key.`,
-  alternates: { canonical: "/mcp" },
+  alternates: { canonical: "/mcp/guide" },
+  openGraph: { url: "/mcp/guide", title: "MCP setup", description: `Connect Claude, Cursor, VS Code, or ChatGPT to every ${SITE_NAME} tool with one MCP URL. No key.` },
 };
 
 const endpoint = `${SITE_URL}/mcp`;

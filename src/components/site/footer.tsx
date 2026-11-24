@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/site/logo";
+import { FOUNDER } from "@/lib/founder";
 import { GITHUB_URL } from "@/lib/site";
 import { navEntries } from "@/lib/taxonomy";
 import { tools } from "@/registry";
@@ -57,6 +58,7 @@ export function Footer() {
           </Column>
           <Column title="Benchline">
             <Link href="/about" className={linkClass}>About</Link>
+            <Link href="/about#founder" className={linkClass}>Founder</Link>
             <Link href="/about#data" className={linkClass}>Privacy</Link>
             <a href={GITHUB_URL} className={linkClass}>GitHub</a>
             <Link href="/sitemap.xml" className={linkClass}>Sitemap</Link>
@@ -69,7 +71,13 @@ export function Footer() {
           benchline
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-6 text-[12.5px] text-faint">
-          <span>© 2026 Benchline. MIT licensed.</span>
+          <span>
+            © 2026 Benchline. Built by{" "}
+            <a href={FOUNDER.url} rel="author" className="u-draw text-muted-foreground hover:text-foreground focus-visible:outline-none">
+              {FOUNDER.name}
+            </a>
+            . MIT licensed.
+          </span>
           <span className="font-mono">Built for the browser, callable over MCP.</span>
         </div>
       </div>

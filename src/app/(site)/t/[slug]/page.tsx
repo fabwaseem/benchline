@@ -12,6 +12,8 @@ import { mcpFor } from "@/registry/mcp-index";
 import { mcpToolBySlug } from "@/registry/mcp-registry";
 import { getTool, relatedTools, tools } from "@/registry";
 import { parentHue, resolveListing } from "@/lib/taxonomy";
+import { FOUNDER } from "@/lib/founder";
+import { toolMarkdownPath, toolTitle } from "@/lib/seo";
 
 export function generateStaticParams() {
   return tools.map((tool) => ({ slug: tool.slug }));
@@ -25,11 +27,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!tool) notFound();
   const title = tool.seo.ogTitle ?? tool.seo.title;
   return {
-    title: tool.seo.title,
+    title: toolTitle(tool.seo.title),
     description: tool.seo.description,
-    keywords: [...tool.keywords],
-    alternates: { canonical: `/t/${tool.slug}` },
+    keywords: [...tool.keywords, `${tool.name} online`, `free ${tool.name.toLowerCase()}`],
+    authors: [{ name: FOUNDER.name, url: FOUNDER.url }],
+    alternates: {
+      canonical: `/t/${tool.slug}`,
+      types: { "text/markdown": toolMarkdownPath(tool.slug) },
+    },
     openGraph: {
+      type: "website",
+      siteName: "Benchline",
       title,
       description: tool.seo.description,
       url: absoluteUrl(`/t/${tool.slug}`),

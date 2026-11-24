@@ -4,8 +4,7 @@ import { AnalyticsListener } from "@/components/site/analytics-listener";
 import { DeferredChrome } from "@/components/site/deferred-chrome";
 import { Footer } from "@/components/site/footer";
 import { GoogleAnalytics } from "@/components/site/google-analytics";
-import { JsonLd, websiteNode } from "@/lib/jsonld";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { JsonLd, founderNode, organizationNode, websiteNode } from "@/lib/jsonld";
 import { searchRecords } from "@/registry";
 
 export function PublicShell({ children }: { children: ReactNode }) {
@@ -15,16 +14,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
       <JsonLd
         data={{
           "@context": "https://schema.org",
-          "@graph": [
-            websiteNode(),
-            {
-              "@type": "Organization",
-              "@id": `${SITE_URL}#organization`,
-              name: SITE_NAME,
-              url: SITE_URL,
-              logo: `${SITE_URL}/app-icon-512.png`,
-            },
-          ],
+          "@graph": [websiteNode(), organizationNode(), founderNode()],
         }}
       />
       <GoogleAnalytics />

@@ -29,8 +29,8 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
     return { alternates: { canonical: listing.href } };
   }
   return {
-    title: `${listing.name} tools`,
-    description: listing.description,
+    title: `${listing.name} tools: free and online`,
+    description: `${listing.description} Free, no signup, and callable from AI agents over MCP.`,
     alternates: { canonical: `/${listing.slug}` },
     openGraph: { url: absoluteUrl(`/${listing.slug}`), title: `${listing.name} tools`, description: listing.description },
   };

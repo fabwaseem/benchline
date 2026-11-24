@@ -1,5 +1,6 @@
 import { toolCover } from "@/lib/assets";
-import { absoluteUrl, SITE_NAME, SITE_URL } from "@/lib/site";
+import { FOUNDER } from "@/lib/founder";
+import { absoluteUrl, GITHUB_URL, SITE_NAME, SITE_URL } from "@/lib/site";
 import type { ToolMeta } from "@/registry/schema";
 
 export function JsonLd({ data }: { data: unknown }) {
@@ -40,10 +41,19 @@ export function toolGraph(
           availability: "https://schema.org/InStock",
         },
         image: absoluteUrl(toolCover(tool.slug)),
-        author: { "@id": `${SITE_URL}#organization` },
+        screenshot: absoluteUrl(toolCover(tool.slug)),
+        keywords: tool.keywords.join(", "),
+        featureList: [tool.tagline, `Input: ${tool.inputs}`, `Output: ${tool.outputs}`, ...(tool.badges ?? [])],
+        datePublished: tool.createdAt,
+        dateModified: tool.updatedAt,
+        inLanguage: "en",
+        mainEntityOfPage: url,
+        author: { "@id": FOUNDER_ID },
+        creator: { "@id": FOUNDER_ID },
         publisher: { "@id": `${SITE_URL}#organization` },
         provider: { "@id": `${SITE_URL}#organization` },
         isPartOf: { "@id": `${SITE_URL}#website` },
+        potentialAction: { "@type": "UseAction", target: url },
       },
       {
         "@type": "FAQPage",
@@ -125,13 +135,47 @@ export function collectionGraph(input: {
   };
 }
 
+export const FOUNDER_ID = `${SITE_URL}#founder`;
+
 export function websiteNode() {
   return {
     "@type": "WebSite",
     "@id": `${SITE_URL}#website`,
     url: SITE_URL,
     name: SITE_NAME,
-    description: "A precise bench of developer tools for AI search, SEO, and shipping Next.js.",
+    description: "Free browser tools for PDF, images, JSON, security, and SEO. Files stay on your device, and every tool is callable over MCP.",
+    inLanguage: "en",
     publisher: { "@id": `${SITE_URL}#organization` },
+    creator: { "@id": FOUNDER_ID },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}/tools?q={search_term_string}` },
+      "query-input": "required name=search_term_string",
+    },
+  };
+}
+
+export function organizationNode() {
+  return {
+    "@type": "Organization",
+    "@id": `${SITE_URL}#organization`,
+    name: SITE_NAME,
+    url: SITE_URL,
+    logo: { "@type": "ImageObject", url: `${SITE_URL}/app-icon-512.png`, width: 512, height: 512 },
+    founder: { "@id": FOUNDER_ID },
+    sameAs: [GITHUB_URL],
+  };
+}
+
+export function founderNode() {
+  return {
+    "@type": "Person",
+    "@id": FOUNDER_ID,
+    name: FOUNDER.name,
+    jobTitle: FOUNDER.jobTitle,
+    description: FOUNDER.bio,
+    url: FOUNDER.url,
+    sameAs: [...FOUNDER.sameAs],
+    worksFor: { "@id": `${SITE_URL}#organization` },
   };
 }
